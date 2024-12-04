@@ -1,3 +1,8 @@
+// URLのパラメータを取得
+const urlParams = new URLSearchParams(window.location.search);
+const num = urlParams.get('num'); // 問題番号
+const level = urlParams.get('level'); // 難易度
+
 ////////////////////
 // リストを作成する //
 ///////////////////
@@ -36,10 +41,6 @@ function createquestionListHtml(level, index, title) {
 ///////////////////////
 
 function renderquestionPage() {
-    // URLのパラメータを取得
-    const urlParams = new URLSearchParams(window.location.search);
-    const num = urlParams.get('num'); // 問題番号
-    const level = urlParams.get('level'); // 難易度
 
     // 初級、中級、上級の名前をマッピング
     const levelNames = {
@@ -58,7 +59,8 @@ function renderquestionPage() {
     document.getElementById('question-title').textContent = title;
     document.getElementById('question-content').textContent = question.question;
     document.getElementById('output-content').textContent = question.output;
-    document.getElementById('func-content').innerHTML = formatLineBreak(question.func) || "なし";
+    document.getElementById('func-content').innerHTML =
+        question.func ? formatLineBreak(question.func) : "なし";
     document.getElementById('code-content').innerHTML = formatCodeWithInput(question.code);
     addLineNumber(question.code);
     document.title = `情報の教室 | ${title}`;
@@ -106,9 +108,6 @@ function addLineNumber(code) {
 
     // 行番号を挿入
     lineNumbers.innerHTML = lineNumberHTML;
-
-    // 行番号の幅を調整（行番号の最大文字数で幅を計算）
-    const maxDigits = String(codeLines).length; // 行数の桁数を取得
 }
 
 //////////
@@ -123,4 +122,34 @@ document.addEventListener('DOMContentLoaded', function () {
         renderquestionPage();
     }
 
+});
+
+///
+///
+document.getElementById("create-url-button").addEventListener("click", function () {
+    let code = [...document.getElementById("code-content").childNodes].map((e) => {
+        if (e.nodeName === "BR") {
+            return "\n"; // <br> を \n に変換
+        }
+        return e.value !== undefined ? e.value : e.textContent
+    }).join("");
+    let url = "https://t-daimon.jp/tsuchinoko/ide/?code=" + TSUCHINOKO.compress(code);
+
+    // ダイアログを表示
+    let dialog = document.getElementById("confirmation-dialog");
+    dialog.showModal();  // ダイアログを表示
+
+    const question = getquestion(num, level); // 問題データを取得
+    document.getElementById('output-content-dialog').textContent = question.output;
+
+    // OKボタンが押された場合
+    document.getElementById("open-tsuchinoko-button").addEventListener("click", function () {
+        window.open(url, '_blank'); // 新しいタブでURLを開く
+        dialog.close(); // ダイアログを閉じる
+    });
+
+    // キャンセルボタンが押された場合
+    document.getElementById("close-button").addEventListener("click", function () {
+        dialog.close(); // ダイアログを閉じる
+    });
 });

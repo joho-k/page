@@ -59,27 +59,27 @@
                 </div>
             </div>
             <div id="submit">
-                <button id="create">URLを生成</button>
-                <a id="link_a" href=""></a>
+                <button id="create-url-button">プログラムを実行する！</button>
             </div>
         </main>
     </div>
 </body>
+
+<dialog id="confirmation-dialog">
+    <p>「つちのこ」を開いたら、コンソールが以下のようになっているかを確認してください！</p>
+    <p class="output-content" id="output-content-dialog" style="padding: 20px 0px; font-size: 18px;"></p>
+    <button id="open-tsuchinoko-button">つちのこを開く（新しいタブで実行する）</button>
+    <p>
+        <span style="background-color:white;color:red">構文エラー</span> などになっている場合は正しいプログラムではありません。
+    </p>
+    <p>もう一度考えてみましょう！</p>
+    <button id="close-button">閉じる</button>
+</dialog>
 
 <!-- 外部ファイルの読み込み(共通) -->
 <script src="../main.js"></script>
 <!-- 外部ファイルの読み込み(共通)ここまで -->
 <script src="./question-list.js"></script>
 <script src="./question.js"></script>
-<script>
-    document.getElementById("create").addEventListener("click", function () {
-        let code = [...document.getElementById("code-content").childNodes].map(e => e.value !== undefined ? e.value : e.textContent).join("");
-        let url = "https://t-daimon.jp/tsuchinoko/ide/?code=" + TSUCHINOKO.compress(code);
-        let link_a = document.getElementById("link_a");
-        link_a.setAttribute("href", url);
-        link_a.setAttribute('target', '_blank');
-        link_a.innerHTML = url;
-    });
-</script>
 
 </html>
