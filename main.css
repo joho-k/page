@@ -6,6 +6,15 @@ body {
     color: #333;
 }
 
+/* スマホの場合はmarginを0に */
+@media (max-width: 768px) {
+
+    /* 画面幅が768px以下の場合 */
+    body {
+        margin: 5px;
+    }
+}
+
 input {
     font-family: "M PLUS Rounded 1c", sans-serif;
 }
