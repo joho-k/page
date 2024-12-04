@@ -115,3 +115,53 @@ li {
     background-color: #e64a19;
     /* ホバー時に色を少し濃くする */
 }
+
+/* 
+ * 問題ページ
+*/
+
+.question-label, .code-label, .output-label, .func-label {
+    color: white;
+    padding: 0px 10px;
+}
+
+.question-label {
+    background-color: #0288d1;
+}
+
+.question-content {
+    background-color: #eaf4ff;
+}
+
+.code-label {
+    background-color: #CD3232;
+}
+
+.code-box {
+    background-color: #F5D6D6;
+    font-size: 20px;
+    overflow: scroll;
+    /* インデントが揃わなくなる */
+    white-space: pre;
+}
+
+.code-box input {
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.output-label {
+    background-color: #4F943B;
+}
+
+.output-content {
+    background-color: #E2F0D9;
+}
+
+.func-label {
+    background-color: #BF9000;
+}
+
+.func-content {
+    background-color: #FFE699;
+}
