@@ -145,11 +145,28 @@ li {
     background-color: #CD3232;
 }
 
-.code-box {
-    background-color: #F5D6D6;
+.code-area {
+    display: flex;
+    max-width: 100%;
+    /* 画面サイズを越えない */
+    border: 1px solid #ddd;
+    /* 境界線を追加 */
+    overflow-x: auto;
+    /* 横スクロール可能 */
+}
+
+.line-numbers {
+    text-align: right;
+    padding-right: 10px;
+    background-color: #f0f0f0;
+    color: gray;
+    user-select: none;
+    /* 選択不可 */
+    white-space: nowrap;
+    flex-shrink: 0;
+    /* 幅を固定 */
     font-size: 20px;
-    padding: 10px 5px;
-    overflow: scroll;
+    padding: 10px 0px;
     /* インデントが揃わなくなる */
     white-space: pre;
 }
@@ -161,18 +178,21 @@ li {
 
 .line-numbers {
     text-align: right;
-    padding-right: 10px;
+    white-space: pre;
     user-select: none;
     /* 行番号を選択不可にする */
     color: gray;
-    font-family: monospace;
 }
 
 .code-box {
     white-space: pre;
     /* 改行とスペースをそのまま表示 */
     overflow-x: auto;
-    font-family: monospace;
+    flex-grow: 1;
+    /*  残りの幅を埋める */
+    background-color: #F5D6D6;
+    font-size: 20px;
+    padding: 10px 15px;
 }
 
 .code-box input {
@@ -180,7 +200,7 @@ li {
     font-size: 20px;
     text-align: center;
     border: 3px solid #aaa;
-    height: 80%;
+    height: 20px;
 }
 
 .short-input {
