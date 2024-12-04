@@ -63,6 +63,8 @@ function renderquestionPage() {
         question.func ? formatLineBreak(question.func) : "なし";
     document.getElementById('code-content').innerHTML = formatCodeWithInput(question.code);
     addLineNumber(question.code);
+    document.getElementById('hint-content').textContent =
+        question.hint ? formatLineBreak(question.hint) : "なし";
     document.title = `情報の教室 | ${title}`;
 
     document.getElementById("prev-question").href = `./question.html?num=${Number(num) - 1}&level=${level}`;
