@@ -130,29 +130,33 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 ///
 document.getElementById("create-url-button").addEventListener("click", function () {
+    const openTsuchinokoButton = document.getElementById("open-tsuchinoko-button");
+    const closeButton = document.getElementById("close-button");
+
     let code = [...document.getElementById("code-content").childNodes].map((e) => {
         if (e.nodeName === "BR") {
             return "\n"; // <br> を \n に変換
         }
-        return e.value !== undefined ? e.value : e.textContent
+        return e.value !== undefined ? e.value : e.textContent;
     }).join("");
     let url = "https://t-daimon.jp/tsuchinoko/ide/?code=" + TSUCHINOKO.compress(code);
 
     // ダイアログを表示
     let dialog = document.getElementById("confirmation-dialog");
-    dialog.showModal();  // ダイアログを表示
+    dialog.showModal(); // ダイアログを表示
 
     const question = getquestion(num, level); // 問題データを取得
     document.getElementById('output-content-dialog').textContent = question.output;
 
-    // OKボタンが押された場合
-    document.getElementById("open-tsuchinoko-button").addEventListener("click", function () {
+    // OKボタンが押された場合（1回だけ実行）
+    openTsuchinokoButton.addEventListener("click", function () {
         window.open(url, '_blank'); // 新しいタブでURLを開く
         dialog.close(); // ダイアログを閉じる
-    });
+    }, { once: true });
 
-    // キャンセルボタンが押された場合
-    document.getElementById("close-button").addEventListener("click", function () {
+    // キャンセルボタンが押された場合（1回だけ実行）
+    closeButton.addEventListener("click", function () {
         dialog.close(); // ダイアログを閉じる
-    });
+    }, { once: true });
 });
+
