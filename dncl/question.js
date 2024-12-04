@@ -64,6 +64,9 @@ function renderquestionPage() {
     document.getElementById('code-content').innerHTML = formatCodeWithInput(question.code);
     addLineNumber(question.code);
     document.title = `情報の教室 | ${title}`;
+
+    document.getElementById("prev-question").href = `./question.html?num=${Number(num) - 1}&level=${level}`;
+    document.getElementById("next-question").href = `./question.html?num=${Number(num) + 1}&level=${level}`;
 };
 
 // 問題データを取得する関数（ダミーデータを返す）
