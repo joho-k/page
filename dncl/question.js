@@ -60,6 +60,7 @@ function renderquestionPage() {
     document.getElementById('output-content').textContent = question.output;
     document.getElementById('func-content').innerHTML = formatLineBreak(question.func) || "なし";
     document.getElementById('code-content').innerHTML = formatCodeWithInput(question.code);
+    addLineNumber(question.code);
     document.title = `情報の教室 | ${title}`;
 };
 
@@ -89,6 +90,25 @@ function formatCodeWithInput(code) {
 
 function formatLineBreak(code) {
     return code.replace(/\n/g, '<br>')
+}
+
+function addLineNumber(code) {
+    const lineNumbers = document.getElementById("line-numbers");
+
+    // コードの行数を取得
+    const codeLines = code.split("\n").length;
+
+    // 行番号を生成
+    let lineNumberHTML = "";
+    for (let i = 1; i <= codeLines; i++) {
+        lineNumberHTML += i + "<br/>";
+    }
+
+    // 行番号を挿入
+    lineNumbers.innerHTML = lineNumberHTML;
+
+    // 行番号の幅を調整（行番号の最大文字数で幅を計算）
+    const maxDigits = String(codeLines).length; // 行数の桁数を取得
 }
 
 //////////
