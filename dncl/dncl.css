@@ -1,0 +1,117 @@
+/* 問題リスト */
+.question-list {
+    width: 80%;
+    /* 外側の四角の横幅を80%に設定 */
+    margin: 0 auto;
+    /* 中央に配置 */
+    height: auto;
+    /* 高さを自動調整 */
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    /* 問題リストが長くなるとスクロールする */
+}
+
+/* 問題カードのスタイル */
+.question-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    /* カードの横幅を100% */
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    /* 横並び */
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px 0;
+    /* カード間のスペース */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    /* カード内が長くなるとスクロール */
+}
+
+/* リスト項目のスタイル */
+ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+li {
+    display: flex;
+    flex-direction: row;
+    /* 横並び */
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px 0;
+    list-style: none;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+/* 
+ *問題リスト 
+*/
+
+
+/* 問題番号 */
+.question-number {
+    background-color: #0288d1;
+    /* 濃い青 */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 60px;
+    /* 数字表示の横幅 */
+    text-align: center;
+    margin-right: 15px;
+    /* 問題番号とタイトルの間にスペース */
+    flex-shrink: 0;
+}
+
+/* 問題タイトル */
+.question-title {
+    flex-grow: 1;
+    padding: 5px 0;
+    color: #333;
+    font-size: 1em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+    margin-right: 15px;
+    /* タイトルとボタンの間にスペース */
+}
+
+.question-title:hover {
+    white-space: normal;
+    /* ホバー時に全文表示 */
+    overflow: visible;
+}
+
+/* 問題解くボタン */
+.question-link-button {
+    background-color: #ff5722;
+    /* 異なる背景色（オレンジ色） */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.question-link-button:hover {
+    background-color: #e64a19;
+    /* ホバー時に色を少し濃くする */
+}
