@@ -1,36 +1,3 @@
-const questions = {
-    beginner: [
-        {
-            title: "足し算を行うプログラム",
-            question: "aとbの値を足した結果を表示せよ。",
-            output: "30",
-            code: `a = 10\nb = 20\n表示する(a + b)`
-        },
-        {
-            title: "掛け算を行うプログラム",
-            question: "aとbの値を掛け算した結果を表示せよ。",
-            output: "300",
-            code: `a = 10\nb = 30\n表示する(a * b)`
-        }
-    ],
-    intermediate: [
-        {
-            title: "割り算を行うプログラム",
-            question: "aをbで割った結果を表示せよ。",
-            output: "5",
-            code: `a = 10\nb = 2\n表示する(a / b)`
-        }
-    ],
-    advanced: [
-        {
-            title: "素数判定プログラム",
-            question: "与えられた数字が素数かどうかを判定するプログラムを作成せよ。",
-            output: "30",
-            code: `function isPrime(n) {\n  for (let i = ***; i < n; i++) {\n       if (*** === 0) return false;\n  }\n  return n > 1;\n}\n\nisPrime(5);`
-        }
-    ]
-};
-
 ////////////////////
 // リストを作成する //
 ///////////////////
