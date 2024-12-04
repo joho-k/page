@@ -40,7 +40,7 @@ function renderquestionList() {
     // 各カテゴリをループ処理
     Object.keys(questions).forEach(level => {
         const questionList = document.querySelector(`#list-${level} ul`); // 対応するulを取得
-        let questionListHtml = "";
+        let questionListHtml = '';
 
         // それぞれの問題をリスト化
         questions[level].forEach((question, index) => {
@@ -107,9 +107,11 @@ function getquestion(num, level) {
 let inputIdCounter = 1;
 function formatCodeWithInput(code) {
     // '***' を <input type="text"> に変換
-    let formattedCode = code.replace(/\*\*\*/g, function () {
-        return `<input type="text" id="input-${inputIdCounter}" placeholder="(${inputIdCounter++})" />`;
+    let formattedCode = code.replace(/\*{3,6}/g, function (match) {
+        const inputClass = match.length === 3 ? "short-input" : "long-input";
+        return `<input type="text" id="input-${inputIdCounter}" class="${inputClass}" placeholder="(${inputIdCounter++})" />`;
     });
+
 
     // 改行 (\n) を <br> に変換
     formattedCode = formatLineBreak(formattedCode);

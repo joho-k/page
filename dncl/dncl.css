@@ -148,14 +148,47 @@ li {
 .code-box {
     background-color: #F5D6D6;
     font-size: 20px;
+    padding: 10px 5px;
     overflow: scroll;
     /* インデントが揃わなくなる */
     white-space: pre;
 }
 
+.code-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.line-numbers {
+    text-align: right;
+    padding-right: 10px;
+    user-select: none;
+    /* 行番号を選択不可にする */
+    color: gray;
+    font-family: monospace;
+}
+
+.code-box {
+    white-space: pre;
+    /* 改行とスペースをそのまま表示 */
+    overflow-x: auto;
+    font-family: monospace;
+}
+
 .code-box input {
-    font-weight: 800;
-    font-size: 24px;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+    border: 3px solid #aaa;
+    height: 80%;
+}
+
+.short-input {
+    width: 60px;
+}
+
+.long-input {
+    width: 180px;
 }
 
 .output-label {
