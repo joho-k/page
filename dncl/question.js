@@ -104,12 +104,13 @@ function getquestion(num, level) {
 }
 
 // コード内の '***' を入力フォームに変換する関数
-let inputIdCounter = 1;
+let inputIdCounter = 0;
 function formatCodeWithInput(code) {
+    const katakana = ['ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ'];
     // '***' を <input type="text"> に変換
     let formattedCode = code.replace(/\*{3,6}/g, function (match) {
         const inputClass = match.length === 3 ? "short-input" : "long-input";
-        return `<input type="text" id="input-${inputIdCounter}" class="${inputClass}" placeholder="(${inputIdCounter++})" />`;
+        return `<input type="text" id="input-${inputIdCounter}" class="${inputClass}" placeholder="(${katakana[inputIdCounter++]})" />`;
     });
 
 
