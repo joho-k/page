@@ -242,6 +242,15 @@ li {
     color: black
 }
 
+.hint-label {
+    background-color: #959595;
+    color: white;
+}
+
+.hint-content {
+    background-color: #ededed;
+}
+
 .prev-next-button {
     background-color: #0288d1;
     color: white;
