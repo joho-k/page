@@ -44,12 +44,27 @@ h1 {
 
 h2 {
     font-size: 2em;
-    color: #1565c0;
-    /* 少し明るい青 */
+    background-color: #1565c0;
+    color: white;
+    border-radius: 20px;
 }
 
 h3 {
     font-size: 1.5em;
+    border-bottom: 4px solid #1e88e5;
     color: #1e88e5;
-    /* 軽い青色 */
+}
+
+h4 {
+    font-size: 1.25em;
+    text-align: center;
+    margin: 0
+}
+
+.joho-no-kyoshitsu {
+    text-align: center;
+}
+
+.go-to-list {
+    text-align: center;
 }
