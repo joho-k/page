@@ -241,3 +241,16 @@ li {
     background-color: #ddd;
     color: black
 }
+
+.prev-next-button {
+    background-color: #0288d1;
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    padding: 5px;
+}
+
+.prev-next-button a {
+    color: white;
+    text-decoration: white;
+}
