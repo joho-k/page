@@ -91,7 +91,7 @@ function renderquestionPage() {
     document.getElementById('question-title').textContent = title;
     document.getElementById('question-content').textContent = question.question;
     document.getElementById('output-content').textContent = question.output;
-    document.getElementById('func-content').textContent = question.func || "なし";
+    document.getElementById('func-content').innerHTML = formatLineBreak(question.func) || "なし";
     document.getElementById('code-content').innerHTML = formatCodeWithInput(question.code);
     document.title = `情報の教室 | ${title}`;
 };
@@ -112,9 +112,13 @@ function formatCodeWithInput(code) {
     });
 
     // 改行 (\n) を <br> に変換
-    formattedCode = formattedCode.replace(/\n/g, '<br>');
+    formattedCode = formatLineBreak(formattedCode);
 
     return formattedCode;
+}
+
+function formatLineBreak(code) {
+    return code.replace(/\n/g, '<br>')
 }
 
 //////////
