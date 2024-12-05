@@ -58,12 +58,12 @@ function renderquestionPage() {
     document.getElementById('difficulty-level').textContent = levelNames[level];
     document.getElementById('question-title').textContent = title;
     document.getElementById('question-content').textContent = question.question;
-    document.getElementById('output-content').textContent = question.output;
+    document.getElementById('output-content').innerHTML = formatLineBreak(question.output);
     document.getElementById('func-content').innerHTML =
         question.func ? formatLineBreak(question.func) : "なし";
     document.getElementById('code-content').innerHTML = formatCodeWithInput(question.code);
     addLineNumber(question.code);
-    document.getElementById('hint-content').textContent =
+    document.getElementById('hint-content').innerHTML =
         question.hint ? formatLineBreak(question.hint) : "なし";
     document.title = `情報の教室 | ${title}`;
 
@@ -148,7 +148,7 @@ document.getElementById("create-url-button").addEventListener("click", function 
     dialog.showModal(); // ダイアログを表示
 
     const question = getquestion(num, level); // 問題データを取得
-    document.getElementById('output-content-dialog').textContent = question.output;
+    document.getElementById('output-content-dialog').innerHTML = formatLineBreak(question.output);
 
     // OKボタンが押された場合（1回だけ実行）
     openTsuchinokoButton.addEventListener("click", function () {
