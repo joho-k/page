@@ -90,7 +90,6 @@ function formatCodeWithInput(code) {
         return `<input type="text" id="input-${inputIdCounter}" class="${inputClass}" placeholder="(${katakana[inputIdCounter++]})" />`;
     });
 
-
     // 改行 (\n) を <br> に変換
     formattedCode = formatLineBreak(formattedCode);
 
@@ -155,7 +154,6 @@ document.getElementById("create-url-button").addEventListener("click", function 
     // OKボタンが押された場合（1回だけ実行）
     openTsuchinokoButton.addEventListener("click", function () {
         window.open(url, '_blank'); // 新しいタブでURLを開く
-        dialog.close(); // ダイアログを閉じる
     }, { once: true });
 
     // キャンセルボタンが押された場合（1回だけ実行）
