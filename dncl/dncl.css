@@ -241,9 +241,10 @@ li {
     color: black
 }
 
-.hint-label {
+.hint-label, .rule-label {
     background-color: #959595;
     color: white;
+    margin: 5px 0px;
 }
 
 .hint-content {
