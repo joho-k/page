@@ -63,8 +63,21 @@ h4 {
 
 .joho-no-kyoshitsu {
     text-align: center;
+    display: flex;
+    /* 水平方向で中央揃え */
+    justify-content: center;
+    /* 垂直方向で中央揃え */
+    align-items: center;
+
+    a {
+        text-decoration: none;
+    }
 }
 
 .go-to-list {
     text-align: center;
+}
+
+.logo {
+    height: 2em;
 }
