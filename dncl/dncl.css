@@ -202,12 +202,20 @@ li {
     height: 20px;
 }
 
-.short-input {
+.input-60 {
     width: 60px;
 }
 
-.long-input {
+.input-180 {
     width: 180px;
+}
+
+.input-270 {
+    width: 270px;
+}
+
+.input-360 {
+    width: 360px;
 }
 
 .output-label {
