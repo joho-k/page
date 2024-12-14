@@ -85,8 +85,24 @@ let inputIdCounter = 0;
 function formatCodeWithInput(code) {
     const katakana = ['ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ'];
     // '***' を <input type="text"> に変換
-    let formattedCode = code.replace(/\*{3,6}/g, function (match) {
-        const inputClass = match.length === 3 ? "short-input" : "long-input";
+    let formattedCode = code.replace(/\*{3,12}/g, function (match) {
+        let width = 0;
+        switch (match.length) {
+            case 3:
+                width = 60;
+                break;
+            case 6:
+                width = 180;
+                break;
+            case 9:
+                width = 270;
+                break;
+            case 12:
+                width = 360;
+                break;
+        }
+
+        const inputClass = `input-${width}`;
         return `<input type="text" id="input-${inputIdCounter}" class="${inputClass}" placeholder="(${katakana[inputIdCounter++]})" />`;
     });
 
