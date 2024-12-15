@@ -53,7 +53,7 @@ function renderquestionPage() {
     const question = getquestion(num, level); // 問題データを取得
 
     // タイトルと内容を更新
-    const title = `実プロ！ | 第${num}問(${levelNames[level]})`
+    const title = `実プロ | 第${num}問(${levelNames[level]})`
     document.getElementById('question-number').textContent = num;
     document.getElementById('difficulty-level').textContent = levelNames[level];
     document.getElementById('question-title').textContent = title;
