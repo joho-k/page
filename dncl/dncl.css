@@ -249,14 +249,29 @@ li {
     color: black
 }
 
-.details-label {
-    background-color: #959595;
-    color: white;
-    margin: 5px 0px;
+summary {
+    display: block;
 }
 
-.hint-content {
-    background-color: #ededed;
+summary::-webkit-details-marker {
+    /* Safariで表示されるデフォルトの三角形アイコンを消します */
+    display: none;
+}
+
+.details-label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border: 2px solid #1565c0;
+    margin-top: 15px;
+}
+
+.details-content {
+    background-color: #f0f2ff;
+    padding: 10px 15px;
 }
 
 .prev-next-button {
