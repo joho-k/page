@@ -81,3 +81,11 @@ h4 {
 .logo {
     height: 2em;
 }
+
+a[target="_blank"]:after {
+    font-family: 'Font Awesome 5 Free';
+    content: '\f35d';
+    font-size: 0.9em;
+    margin: 0px 3px;
+    font-weight: 900;
+}
