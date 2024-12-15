@@ -10,6 +10,7 @@
     <title>情報の教室</title>
     <link rel="icon" href="img/logo.ico">
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="home.css">
 
     <!-- Font Awesome -->
     <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
@@ -46,10 +47,59 @@
             <p>プログラミングや情報のスキルを楽しく学ぼう！</p>
         </header>
         <main>
-            <h2>機能一覧</h2>
-            <h3><a href="./dncl/index.html">実プロ</a></h3>
-            <p><span style="font-size: 25px">実</span>際に動かせる<span style="font-size: 25px">プロ</span>グラミング学習</p>
-        </main>
+            <div class="service">
+                <div class="internal-service">
+                    <h2>サービス一覧</h2>
+                    <div class="service-contents">
+                        <h3><a href="./dncl/index.html">実プロ</a></h3>
+                        <p>
+                            <span style="font-size: 25px">実</span>際に動かせる
+                            <span style="font-size: 25px">プロ</span>グラミング学習ができるサービスです。
+                        </p>
+                        <img src="./dncl/instruction.png" width="100%">
+                    </div>
+                </div>
+                <div class="external-service">
+                    <h2>外部サービス一覧</h2>
+                    <div class="service-contents">
+                        <h3><a href="https://coconala.com/users/3877173" target="_blank">ココナラ</a></h3>
+                        <p>個別Web授業を受けたい人向け。マンツーマン指導を行います！</p>
+                        <!-- ココナラ外部埋め込み -->
+                        <div>
+                            <a class="coconala-widget" href="https://coconala.com/services/3051278"
+                                data-service_id="3051278" data-width="468" data-comment="0" data-invite="1"
+                                data-user_id="3877173">共通テスト必須科目化！情報Iのテスト対策をします 「やらなきゃ」ではなく「もっとやりたい！」を目指します。</a>
+                            <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://coconala.com/js/coconala_widget.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'coconala-wjs');</script>
+                        </div>
+                        <!-- ココナラ外部埋め込みおわり -->
+
+                        <h3><a href="https://www.youtube.com/@joho-no-kyoshitsu" target="_blank"><i
+                                    class="fab fa-youtube"></i>YouTube</a></h3>
+                        <p>情報Iに関する楽しいコンテンツや解説動画を公開しています！</p>
+                        <!-- YouTube埋め込み -->
+                        <div class="youtube-wrapper">
+                            <iframe src="https://www.youtube.com/embed/pGN_-DOgN24" width="300" height="150"
+                                frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                        </div>
+                        <!-- YouTube埋め込みおわり -->
+
+                        <h3><a href="https://www.youtube.com/@joho-no-kyoshitsu" target="_blank"><i
+                                    class="fa-brands fa-x-twitter"></i>X(旧 Twitter)</a></h3>
+                        <p>「情報の教室」に関するお知らせなどを呟いたりします。</p>
+                        <!-- Twitter埋め込み -->
+                        <a class="twitter-timeline" data-height="600"
+                            href="https://twitter.com/johonokyoshitsu?ref_src=twsrc%5Etfw">Tweets by johonokyoshitsu</a>
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                        <!-- Twitter埋め込みおわり -->
+
+                        <h3><a href="https://note.com/johonokyoshitsu" target="_blank">note</a></h3>
+                        <p>オリジナル問題や、情報Iに関連した楽しいコンテンツなどを公開しています。</p>
+                    </div>
+
+                </div>
+            </div>
+    </div>
+    </main>
     </div>
 </body>
 
