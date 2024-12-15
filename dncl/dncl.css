@@ -249,7 +249,7 @@ li {
     color: black
 }
 
-.hint-label, .rule-label {
+.details-label {
     background-color: #959595;
     color: white;
     margin: 5px 0px;
