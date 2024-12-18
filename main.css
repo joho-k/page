@@ -89,3 +89,92 @@ a[target="_blank"]:after {
     margin: 0px 3px;
     font-weight: 900;
 }
+
+/* リスト項目のスタイル */
+ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+li {
+    display: flex;
+    flex-direction: row;
+    /* 横並び */
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px 0;
+    list-style: none;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+/* 
+ *問題リスト 
+*/
+/* 問題番号 */
+.question-number {
+    background-color: #0288d1;
+    /* 濃い青 */
+    color: white;
+    padding: 10px 0px;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 40px;
+    /* 数字表示の横幅 */
+    text-align: center;
+    margin-right: 15px;
+    /* 問題番号とタイトルの間にスペース */
+    flex-shrink: 0;
+}
+
+/* 問題タイトル */
+.question-title {
+    flex-grow: 1;
+    padding: 5px 0;
+    color: #333;
+    font-size: 1em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+    margin-right: 15px;
+    /* タイトルとボタンの間にスペース */
+}
+
+.question-title:hover {
+    white-space: normal;
+    /* ホバー時に全文表示 */
+    overflow: visible;
+}
+
+/* スマホの場合はmarginを0に */
+@media (max-width: 768px) {
+    .question-title {
+        white-space: normal;
+        /* ホバー時に全文表示 */
+        overflow: visible;
+    }
+}
+
+/* 問題解くボタン */
+.question-link-button {
+    background-color: #ff5722;
+    /* 異なる背景色（オレンジ色） */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.question-link-button:hover {
+    background-color: #e64a19;
+    /* ホバー時に色を少し濃くする */
+}
