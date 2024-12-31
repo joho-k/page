@@ -57,7 +57,7 @@ function renderquestionPage() {
     document.getElementById('question-number').textContent = num;
     document.getElementById('difficulty-level').textContent = levelNames[level];
     document.getElementById('question-title').textContent = title;
-    document.getElementById('question-content').textContent = question.question;
+    document.getElementById('question-content').innerHTML = formatLineBreak(question.question);
     document.getElementById('output-content').innerHTML = formatLineBreak(question.output);
     document.getElementById('func-content').innerHTML =
         question.func ? formatLineBreak(question.func) : "なし";
