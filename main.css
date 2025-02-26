@@ -4,6 +4,8 @@ body {
     margin: 30px;
     padding: 0;
     color: #333;
+    /* ヘッダーの高さ分の余白を確保 */
+    padding-top: 60px;
 }
 
 /* スマホの場合はmarginを0に */
@@ -157,6 +159,10 @@ li {
         /* ホバー時に全文表示 */
         overflow: visible;
     }
+
+    .header .menu {
+        display: none;
+    }
 }
 
 /* 問題解くボタン */
@@ -177,4 +183,46 @@ li {
 .question-link-button:hover {
     background-color: #e64a19;
     /* ホバー時に色を少し濃くする */
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #1565c0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.header .title {
+    display: flex;
+    padding-left: 10px;
+    align-items: center;
+}
+
+.header .title .char {
+    padding-left: 10px;
+}
+
+.menu {
+    display: flex;
+    gap: 15px;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    transition: background 0.3s;
+}
+
+.menu a:hover {
+    background-color: #555;
+    border-radius: 5px;
 }
