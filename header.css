@@ -30,6 +30,7 @@
 .menu {
     display: flex;
     gap: 15px;
+    margin-right: 10px;
 }
 
 .menu a {
@@ -85,6 +86,7 @@
         transition: right 0.3s ease;
         z-index: 5;
         box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+        margin-right: 0px;
     }
 
     .menu a {
