@@ -60,7 +60,9 @@ h3 {
 h4 {
     font-size: 1.25em;
     text-align: center;
-    margin: 0
+    margin: 0;
+    border-bottom: 2px solid #000;
+    margin: 10px;
 }
 
 .joho-no-kyoshitsu {
