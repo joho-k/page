@@ -33,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // ヘッダーの内容
     header.innerHTML = `
         <div class="title"><img class="logo" src="${pathPrefix}img/logo_transparent.png"><span class="char">情報の教室</span></div>
+        <div class="hamburger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <nav class="menu">
             <a href="${pathPrefix}index.html">ホーム</a>
             <a href="${pathPrefix}dncl/index.html">実プロ</a>
@@ -42,4 +47,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // body要素の最初の子要素として挿入
     document.body.insertBefore(header, document.body.firstChild);
+
+    // ハンバーガーメニューのクリックイベント
+    const hamburger = header.querySelector('.hamburger-menu');
+    const nav = header.querySelector('.menu');
+
+    hamburger.addEventListener('click', function () {
+        // メニューの開閉
+        hamburger.classList.toggle('active');
+        nav.classList.toggle('active');
+    });
+
+    // メニュー内クリックの伝播を停止
+    nav.addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+
+    // 画面外クリックでメニューを閉じる
+    document.addEventListener('click', function (event) {
+        const isClickInside = hamburger.contains(event.target) || nav.contains(event.target);
+
+        if (!isClickInside && nav.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            nav.classList.remove('active');
+        }
+    });
+
+    // リサイズ対応（PCサイズになった時にメニューをリセット）
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 768 && nav.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            nav.classList.remove('active');
+        }
+    });
 });
