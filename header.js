@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
         <nav class="menu">
             <a href="${pathPrefix}dncl/index.html">実プロ</a>
+            <a href="${pathPrefix}lexicon/index.html">用語の辞典</a>
             <a href="${pathPrefix}sisaku/index.html">試作問題リンク</a>
         </nav>
     `;

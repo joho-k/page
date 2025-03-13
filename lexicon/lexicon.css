@@ -1,0 +1,45 @@
+.word-list-container {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.category-header {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #ccc;
+}
+
+.item-list {
+    list-style-type: none;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+.sub-item-list {
+    list-style-type: none;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+.coming-soon {
+    font-size: 0.8em;
+    color: #888;
+    font-style: italic;
+}
+
+a {
+    text-decoration: none;
+    color: #1565c0;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+li {
+    margin-bottom: 5px;
+}
