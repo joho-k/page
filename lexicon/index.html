@@ -184,35 +184,6 @@
                     }
 
                     itemList.appendChild(listItem);
-
-                    // サブアイテムがある場合
-                    if (item.subitems && item.subitems.length > 0) {
-                        const subItemList = document.createElement('ul');
-                        subItemList.className = 'sub-item-list';
-
-                        item.subitems.forEach(subitem => {
-                            const subListItem = document.createElement('li');
-
-                            if (subitem.link) {
-                                const link = document.createElement('a');
-                                link.href = subitem.link;
-                                link.textContent = subitem.title;
-                                subListItem.appendChild(link);
-                            } else {
-                                const text = document.createTextNode(subitem.title + ' ');
-                                subListItem.appendChild(text);
-
-                                const comingSoon = document.createElement('span');
-                                comingSoon.className = 'coming-soon';
-                                comingSoon.textContent = 'Coming Soon';
-                                subListItem.appendChild(comingSoon);
-                            }
-
-                            subItemList.appendChild(subListItem);
-                        });
-
-                        listItem.appendChild(subItemList);
-                    }
                 });
 
                 categoryList.appendChild(itemList);
