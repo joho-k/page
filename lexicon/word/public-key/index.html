@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!-- ここから全ページ共通 -->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>情報の教室 | 用語の辞典</title>
+    <link rel="icon" href="../../../img/logo.ico">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../word.css">
+
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v6.4.2/css/all.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHYWTV27F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RXHYWTV27F');
+    </script>
+
+    <!-- ヘッダー用 -->
+    <script src="../../../header.js"></script>
+    <link rel="stylesheet" href="../../../header.css">
+
+    <!-- 共通部分ここまで -->
+</head>
+
+<body id="word-body">
+</body>
+<script>
+    // 用語
+    const title = "公開鍵暗号方式"
+    // YouTubeの動画のURL
+    const youtubeURL = "https://www.youtube.com/embed/pGN_-DOgN24";
+    // 関連単語
+    const relatedWords = [
+        { word: "暗号化", url: "encryption" },
+        { word: "共通鍵暗号方式", url: "common-key" },
+    ];
+
+    const image = [
+        {
+            title: "公開鍵暗号方式をイメージしてもらうために...",
+            descriptions: [
+                "暗号方式にはもうひとつあります。それを理解してもらうために、南京錠をイメージしてください。",
+                "鍵をかけるときは、U字型の金属の部分を手で押します。特別な道具は必要ありません。",
+                "鍵を開けるときは、底面の穴に鍵を差し込み、回すことで鍵を開けることができます。"
+            ]
+        },
+        {
+            title: "公開鍵暗号方式のステップ",
+            descriptions: [
+                "まず受信者の南京錠を、送信者に渡します。",
+                "このとき南京錠は、開いた状態です。"
+            ]
+        },
+        {
+            descriptions: [
+                "それを受け取った送信者は、箱の中から南京錠を取り出し、代わりに送りたいデータを入れます。",
+                "その後蓋を閉め、もともと箱の中に入っていた空いたままの南京錠でロックをかけます。",
+                "ロックをかける際は、特別な道具は必要ありません。"
+            ]
+        },
+        {
+            descriptions: [
+                "鍵を閉めたら受信者に箱を渡します。",
+                "開けるための鍵を持っていない人は、中を見ることができません。"
+            ]
+        },
+        {
+            descriptions: [
+                "無事受け取ることができました。",
+                "受信者は、秘密に持っていた鍵を使って、南京錠の鍵を開け、箱の中身(送信者が送ったデータ)を安全に受け取ることができました。",
+            ]
+        },
+        {
+            descriptions: [
+                "このように、暗号化(鍵をかける)と復号(鍵を開ける)で違う種類の鍵を使う方式を、公開鍵暗号方式といいます。",
+            ]
+        },
+        {
+            descriptions: [
+                "暗号化する(=鍵をかける)ことしかできないので誰でも入手してもいい鍵になります。この鍵を、「公開鍵」といいます。",
+                "復号する鍵は暗号化された情報を復号できてしまうので受信者だけが秘密に持っている必要があります。この鍵を、「秘密鍵」といいます。"
+            ]
+        },
+    ]
+</script>
+<script src="../word.js"></script>
+
+</html>
