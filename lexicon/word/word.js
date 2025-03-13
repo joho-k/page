@@ -10,6 +10,12 @@ const h2 = document.createElement('h2');
 h2.textContent = '用語の辞典';
 header.appendChild(h2);
 
+// 注意文の作成
+const warning = document.createElement('div');
+warning.className = "warning";
+warning.innerHTML = `解説は厳密な正確さよりも、伝わりやすさを優先しています。<br />そのため、実際の定義とは多少異なる表現になっている場合があります。ご了承ください。`;
+header.appendChild(warning);
+
 // メインコンテンツの作成
 const main = document.createElement('main');
 
