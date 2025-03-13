@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!-- ここから全ページ共通 -->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>情報の教室 | 用語の辞典</title>
+    <link rel="icon" href="../img/logo.ico">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    <link rel="stylesheet" type="text/css" href="./lexicon.css">
+
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v6.4.2/css/all.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHYWTV27F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RXHYWTV27F');
+    </script>
+
+    <!-- ヘッダー用 -->
+    <script src="../header.js"></script>
+    <link rel="stylesheet" href="../header.css">
+
+    <!-- 共通部分ここまで -->
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <h2>用語の辞典</h2>
+        </header>
+        <main>
+            <h3>目次</h3>
+            <div id="word-list" class="word-list-container"></div>
+        </main>
+    </div>
+</body>
+
+<div id="word-list" class="word-list-container"></div>
+
+<script>
+    // 単語のリストをデータとして管理
+    const wordListData = [
+        {
+            title: "情報とメディア",
+            items: [
+                { title: "情報とは", link: null },
+                { title: "情報源", link: null },
+                { title: "メディア", link: null }
+            ]
+        },
+        {
+            title: "個人情報",
+            items: [
+                { title: "個人情報", link: null },
+            ]
+        },
+        {
+            title: "知的財産権",
+            items: [
+                { title: "産業財産権", link: null },
+                { title: "特許権", link: null },
+                { title: "実用新案権", link: null },
+                { title: "意匠権", link: null },
+                { title: "商標権", link: null },
+                { title: "著作権", link: null },
+            ]
+        },
+        {
+            title: "情報のデジタル表現",
+            items: [
+                { title: "デジタル情報の表現", link: null },
+                { title: "文字のデジタル表現", link: null },
+                { title: "音のデジタル表現", link: null },
+                { title: "画像のデジタル表現", link: null },
+                { title: "動画のデジタル表現", link: null },
+                { title: "データの圧縮", link: null }
+            ]
+        },
+        {
+            title: "コンピュータの仕組み",
+            items: [
+                { title: "コンピュータの構成", link: null },
+                { title: "浮動小数点数", link: null }
+            ]
+        },
+        {
+            title: "プログラミング",
+            items: [
+                { title: "アルゴリズム", link: null },
+                { title: "変数と代入", link: null },
+                { title: "条件分岐", link: null },
+                { title: "繰り返し", link: null },
+                { title: "配列", link: null },
+                { title: "関数", link: null }
+            ]
+        },
+        {
+            title: "モデル化とシミュレーション",
+            items: [
+                { title: "モデル化", link: null },
+                { title: "シミュレーション", link: null }
+            ]
+        },
+        {
+            title: "情報通信ネットワーク",
+            items: [
+                { title: "コンピュータネットワーク", link: null },
+                { title: "通信プロトコル", link: null },
+                { title: "パケット通信", link: null },
+                { title: "通信の信頼性(パリティビット)", link: null },
+                { title: "IPアドレス", link: null },
+                { title: "ドメイン", link: null },
+                { title: "WWW", link: null },
+                { title: "URL", link: null }
+            ]
+        },
+        {
+            title: "情報の暗号化",
+            items: [
+                { title: "暗号化とは", link: null },
+                { title: "共通鍵暗号方式", link: null },
+                { title: "公開鍵暗号方式", link: null }
+            ]
+        }
+    ];
+
+    // 単語リストをHTMLに描画する関数
+    function renderWordList() {
+        const wordListContainer = document.getElementById('word-list');
+
+        wordListData.forEach(category => {
+            // カテゴリのヘッダー作成
+            const categoryHeader = document.createElement('div');
+            categoryHeader.className = 'category-header';
+            categoryHeader.textContent = category.title;
+            wordListContainer.appendChild(categoryHeader);
+
+            // サブアイテムリスト作成
+            if (category.items.length > 0) {
+                const itemList = document.createElement('ul');
+                itemList.className = 'item-list';
+
+                category.items.forEach(item => {
+                    const listItem = document.createElement('li');
+
+                    // リンクがある場合はaタグを作成、ない場合はテキストとComming Soonを表示
+                    if (item.link) {
+                        const link = document.createElement('a');
+                        link.href = item.link;
+                        link.textContent = item.title;
+                        listItem.appendChild(link);
+                    } else {
+                        const text = document.createTextNode(item.title + ' ');
+                        listItem.appendChild(text);
+
+                        const comingSoon = document.createElement('span');
+                        comingSoon.className = 'coming-soon';
+                        comingSoon.textContent = 'Coming Soon';
+                        listItem.appendChild(comingSoon);
+                    }
+
+                    itemList.appendChild(listItem);
+
+                    // サブアイテムがある場合
+                    if (item.subitems && item.subitems.length > 0) {
+                        const subItemList = document.createElement('ul');
+                        subItemList.className = 'sub-item-list';
+
+                        item.subitems.forEach(subitem => {
+                            const subListItem = document.createElement('li');
+
+                            if (subitem.link) {
+                                const link = document.createElement('a');
+                                link.href = subitem.link;
+                                link.textContent = subitem.title;
+                                subListItem.appendChild(link);
+                            } else {
+                                const text = document.createTextNode(subitem.title + ' ');
+                                subListItem.appendChild(text);
+
+                                const comingSoon = document.createElement('span');
+                                comingSoon.className = 'coming-soon';
+                                comingSoon.textContent = 'Coming Soon';
+                                subListItem.appendChild(comingSoon);
+                            }
+
+                            subItemList.appendChild(subListItem);
+                        });
+
+                        listItem.appendChild(subItemList);
+                    }
+                });
+
+                wordListContainer.appendChild(itemList);
+            }
+        });
+    }
+
+    // ページ読み込み完了時にリストを描画
+    document.addEventListener('DOMContentLoaded', renderWordList);
+</script>
+
+</html>
