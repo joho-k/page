@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', function () {
             <a href="${pathPrefix}dncl/index.html">実プロ</a>
             <a href="${pathPrefix}lexicon/index.html">用語の辞典</a>
             <a href="${pathPrefix}sisaku/index.html">試作問題リンク</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd7RzukGDWpTAVr45UYY1EzBKxxvTeRuqfI_XLaBbb0MI4T0A/viewform?usp=dialog"
+            target="_blank" style="background-color: #c01565">
+            お問い合わせ</a>
         </nav>
     `;
 
