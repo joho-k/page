@@ -177,6 +177,7 @@
                     } else {
                         const text = document.createTextNode(item.title + ' ');
                         listItem.appendChild(text);
+                        listItem.className += "coming-soon";
 
                         const comingSoon = document.createElement('span');
                         comingSoon.className = 'coming-soon';
