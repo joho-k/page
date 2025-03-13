@@ -24,19 +24,6 @@ const videoExplanation = document.createElement('div');
 videoExplanation.id = 'video-explanation';
 videoExplanation.className = 'content-item';
 
-// PDFセクション
-const pdfTitle = document.createElement('h4');
-pdfTitle.textContent = 'PDFファイル';
-const pdfDownload = document.createElement('div');
-pdfDownload.id = 'pdf-download';
-pdfDownload.className = 'content-item';
-
-const pdfButton = document.createElement('a');
-pdfButton.id = 'pdf-download-button';
-pdfButton.className = 'link-button';
-pdfButton.textContent = 'ダウンロードする';
-pdfDownload.appendChild(pdfButton);
-
 // 画像セクション
 const imageTitle = document.createElement('h4');
 imageTitle.textContent = '画像で解説';
@@ -50,8 +37,33 @@ main.appendChild(wordTitle);
 main.appendChild(videoTitle);
 main.appendChild(videoExplanation);
 
-main.appendChild(pdfTitle);
-main.appendChild(pdfDownload);
+if (relatedWords.length != 0) {
+    // 関連単語セクション
+    const relatedWordsTitle = document.createElement('h4');
+    relatedWordsTitle.textContent = '関連単語';
+    const relatedWordsList = document.createElement('div');
+    relatedWordsList.id = 'related-words';
+    relatedWordsList.className = 'content-item';
+
+    const list = document.createElement('ul');
+
+    relatedWords.forEach((relatedWord) => {
+        // 単語リストをリンク付きで生成
+        const li = document.createElement('li');
+
+        const aEle = document.createElement('a');
+        aEle.innerHTML = relatedWord.word;
+        aEle.href = `../${relatedWord.url}/index.html`;
+
+        li.appendChild(aEle);
+
+        list.appendChild(li);
+    })
+    relatedWordsList.appendChild(list);
+
+    main.appendChild(relatedWordsTitle);
+    main.appendChild(relatedWordsList);
+}
 
 main.appendChild(imageTitle);
 main.appendChild(imageExplanation);
