@@ -32,14 +32,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ヘッダーの内容
     header.innerHTML = `
-        <div class="title"><img class="logo" src="${pathPrefix}img/logo_transparent.png"><span class="char">情報の教室</span></div>
+        <div class="title">
+            <a href="${pathPrefix}index.html">
+                <img class="logo" src="${pathPrefix}img/logo_transparent.png">
+            </a>
+            <a href="${pathPrefix}index.html" class="char">情報の教室</a>
+        </div>
         <div class="hamburger-menu">
             <span></span>
             <span></span>
             <span></span>
         </div>
         <nav class="menu">
-            <a href="${pathPrefix}index.html">ホーム</a>
             <a href="${pathPrefix}dncl/index.html">実プロ</a>
             <a href="${pathPrefix}sisaku/index.html">試作問題リンク</a>
         </nav>
