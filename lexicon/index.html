@@ -139,9 +139,9 @@
         {
             title: "情報の暗号化",
             items: [
-                { title: "暗号化とは", link: null },
                 { title: "共通鍵暗号方式", link: null },
                 { title: "公開鍵暗号方式", link: null }
+                { title: "暗号化とは", link: "encryption" },
             ]
         }
     ];
@@ -170,7 +170,7 @@
                     // リンクがある場合はaタグを作成、ない場合はテキストとComming Soonを表示
                     if (item.link) {
                         const link = document.createElement('a');
-                        link.href = item.link;
+                        link.href = `word/${item.link}/index.html`;
                         link.textContent = item.title;
                         listItem.appendChild(link);
                     } else {
