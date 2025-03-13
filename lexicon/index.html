@@ -152,10 +152,12 @@
 
         wordListData.forEach(category => {
             // カテゴリのヘッダー作成
-            const categoryHeader = document.createElement('div');
-            categoryHeader.className = 'category-header';
-            categoryHeader.textContent = category.title;
-            wordListContainer.appendChild(categoryHeader);
+            const categoryList = document.createElement('div');
+            categoryList.className = "item"
+
+            const categoryTitle = document.createElement('h4');
+            categoryTitle.textContent = category.title;
+            categoryList.appendChild(categoryTitle)
 
             // サブアイテムリスト作成
             if (category.items.length > 0) {
@@ -213,8 +215,10 @@
                     }
                 });
 
-                wordListContainer.appendChild(itemList);
+                categoryList.appendChild(itemList);
             }
+
+            wordListContainer.appendChild(categoryList);
         });
     }
 
