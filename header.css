@@ -21,10 +21,8 @@
     align-items: center;
 }
 
-.header .title .char {
-    padding-left: 10px;
-    text-decoration: none;
-    color: white;
+.header .title a {
+    display: flex;
 }
 
 .menu {
