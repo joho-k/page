@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <a href="${pathPrefix}index.html">
                 <img class="logo" src="${pathPrefix}img/logo_transparent.png">
             </a>
-            <a href="${pathPrefix}index.html" class="char">情報の教室</a>
+            <a href="${pathPrefix}index.html" class="char"></a>
         </div>
         <div class="hamburger-menu">
             <span></span>
