@@ -53,7 +53,7 @@ function renderquestionPage() {
     const question = getquestion(num, level); // 問題データを取得
 
     // タイトルと内容を更新
-    const title = `実プロ | 第${num}問(${levelNames[level]})`
+    const title = `実プロ問題集 | 情報I対応のプログラミング課題 | 第${num}問(${levelNames[level]})`
     document.getElementById('question-number').textContent = num;
     document.getElementById('difficulty-level').textContent = levelNames[level];
     document.getElementById('question-title').textContent = title;
@@ -65,7 +65,7 @@ function renderquestionPage() {
     addLineNumber(question.code);
     document.getElementById('hint-content').innerHTML =
         question.hint ? formatLineBreak(question.hint) : "なし";
-    document.title = `情報の教室 | ${title}`;
+    document.title = `${title}`;
 
     document.getElementById("prev-question").href = `./question.html?num=${Number(num) - 1}&level=${level}`;
     document.getElementById("next-question").href = `./question.html?num=${Number(num) + 1}&level=${level}`;
