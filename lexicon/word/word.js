@@ -82,9 +82,9 @@ contentDiv.appendChild(main);
 wordTitle.innerHTML = `${title}`
 document.title = `${document.title}「${title}」`
 
-if (youtubeURL !== null) {
+if (youtubeURLID !== null) {
     videoExplanation.innerHTML = `<div class="youtube-wrapper">
-    <iframe src="${youtubeURL}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+    <iframe src="https://youtube.com/embed/${youtubeURLID}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>`
 }
 
