@@ -42,6 +42,10 @@ h5 {
     color: white;
 }
 
+.text-white {
+    color: white;
+}
+
 @media (max-width: 768px) {
     .image-row {
         display: block;
