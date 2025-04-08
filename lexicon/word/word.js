@@ -7,7 +7,11 @@ contentDiv.className = 'content';
 // ヘッダーの作成
 const header = document.createElement('header');
 const h2 = document.createElement('h2');
-h2.textContent = '用語の辞典';
+const a = document.createElement('a');
+a.href = '../../index.html';
+a.className = "text-white";
+a.textContent = '用語の辞典';
+h2.appendChild(a);
 header.appendChild(h2);
 
 // 注意文の作成
