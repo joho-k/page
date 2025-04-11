@@ -249,3 +249,23 @@ function createImageRow(img, index) {
 
     return imgRow;
 }
+// 上に戻るボタン作成
+const scrollTopBtn = document.createElement('button');
+scrollTopBtn.textContent = '上に戻る';
+scrollTopBtn.className = 'scroll-top-btn';
+scrollTopBtn.style.display = 'none'; // 初期は非表示
+
+scrollTopBtn.onclick = () => {
+    bodyEle.scrollIntoView({ behavior: 'smooth' });
+};
+
+document.body.appendChild(scrollTopBtn);
+
+// スクロールで表示制御
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        scrollTopBtn.style.display = 'block';
+    } else {
+        scrollTopBtn.style.display = 'none';
+    }
+});

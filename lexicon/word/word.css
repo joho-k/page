@@ -1,5 +1,6 @@
 .content-item {
-    margin-bottom: 30px;
+    /* 上に戻るボタンが邪魔になるのを防ぐための余白 */
+    margin-bottom: 120px;
 }
 
 .youtube-wrapper {
@@ -87,6 +88,24 @@ h5 {
     }
 }
 
+.scroll-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 100px;
+    height: 100px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    font-size: 20px;
+    line-height: 50px;
+    text-align: center;
+}
+
 @media (max-width: 768px) {
     .image-row {
         display: block;
@@ -99,5 +118,11 @@ h5 {
 
     #slide-row {
         height: 800px;
+    }
+
+    .scroll-top-btn {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
     }
 }
