@@ -46,6 +46,28 @@ h5 {
     color: white;
 }
 
+.toggle-button {
+    margin-bottom: 1em;
+    padding: 6px 12px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.slide-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1em;
+}
+
+#slide-row {
+    height: 400px;
+    overflow: scroll;
+}
+
+
 @media (max-width: 768px) {
     .image-row {
         display: block;
@@ -54,5 +76,9 @@ h5 {
     .image-row .image-row-description {
         padding: 0px;
         margin: 0px;
+    }
+
+    #slide-row {
+        height: 800px;
     }
 }
