@@ -47,7 +47,7 @@ main.appendChild(wordTitle);
 main.appendChild(videoTitle);
 main.appendChild(videoExplanation);
 
-if (relatedWords.length != 0) {
+if (relatedWords.length !== 0) {
     // 関連単語セクション
     const relatedWordsTitle = document.createElement('h4');
     relatedWordsTitle.textContent = '関連単語';
@@ -58,17 +58,13 @@ if (relatedWords.length != 0) {
     const list = document.createElement('ul');
 
     relatedWords.forEach((relatedWord) => {
-        // 単語リストをリンク付きで生成
         const li = document.createElement('li');
-
         const aEle = document.createElement('a');
         aEle.innerHTML = relatedWord.word;
         aEle.href = `../${relatedWord.url}/index.html`;
-
         li.appendChild(aEle);
-
         list.appendChild(li);
-    })
+    });
     relatedWordsList.appendChild(list);
 
     main.appendChild(relatedWordsTitle);
@@ -83,19 +79,24 @@ contentDiv.appendChild(header);
 contentDiv.appendChild(main);
 
 // タイトル関係
-wordTitle.innerHTML = `${title}`
-document.title = `${document.title}「${title}」`
+wordTitle.innerHTML = `${title}`;
+document.title = `${document.title}「${title}」`;
 
+// YouTubeの埋め込み
 if (youtubeURLID !== null) {
     videoExplanation.innerHTML = `<div class="youtube-wrapper">
     <iframe src="https://youtube.com/embed/${youtubeURLID}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    </div>`
+    </div>`;
 }
 
-imageExplanation.appendChild(createImageExplanation(image))
+// 画像の表示を追加
+imageExplanation.appendChild(createImageExplanation(image));
 
-bodyEle.appendChild(contentDiv)
+// 本体にコンテンツを追加
+bodyEle.appendChild(contentDiv);
 
+
+// 表示切り替え可能な画像セクション生成関数
 function createImageExplanation(images) {
     const imageEle = document.createElement("div");
     images.forEach((img, index) => {
