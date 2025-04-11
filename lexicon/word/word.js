@@ -125,10 +125,6 @@ function createImageExplanation(images) {
         // スライド表示
         let currentIndex = 0;
 
-        const imgRow = createImageRow(images[currentIndex], currentIndex);
-        imgRow.id = 'slide-row';
-        imageEle.appendChild(imgRow);
-
         // スライドナビゲーション
         const nav = document.createElement('div');
         nav.className = 'slide-nav';
@@ -157,6 +153,10 @@ function createImageExplanation(images) {
         nav.appendChild(prevBtn);
         nav.appendChild(nextBtn);
         imageEle.appendChild(nav);
+
+        const imgRow = createImageRow(images[currentIndex], currentIndex);
+        imgRow.id = 'slide-row';
+        imageEle.appendChild(imgRow);
 
         function updateSlide() {
             const newRow = createImageRow(images[currentIndex], currentIndex);
