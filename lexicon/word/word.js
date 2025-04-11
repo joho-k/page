@@ -64,6 +64,8 @@ image.forEach((item, index) => {
                 const target = document.getElementById(`slide-${index}`);
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
             } else {
+                const target = document.querySelector('.slide-nav');
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
                 updateSlideToIndex(index);
             }
         };
