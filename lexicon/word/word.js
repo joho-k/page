@@ -1,6 +1,7 @@
 const bodyEle = document.getElementById("word-body");
 
 let displayMode = 'slide'; // 'list' or 'slide'
+let currentIndex = 0; // スライドモードで使用
 
 // コンテナの作成
 const contentDiv = document.createElement('div');
@@ -54,8 +55,18 @@ image.forEach((item, index) => {
     if (item.title) {
         const li = document.createElement('li');
         const a = document.createElement('a');
-        a.href = `#slide-${index}`; // 各スライドにidを振る前提
+        a.href = "#";
         a.textContent = item.title;
+
+        a.onclick = (e) => {
+            e.preventDefault();
+            if (displayMode === 'list') {
+                const target = document.getElementById(`slide-${index}`);
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                updateSlideToIndex(index);
+            }
+        };
 
         li.appendChild(a);
         titleList.appendChild(li);
@@ -140,11 +151,14 @@ function createImageExplanation(images) {
         // 一覧表示（従来通り）
         images.forEach((img, index) => {
             const imgRow = createImageRow(img, index);
+            imgRow.id = `slide-${index}`;
             imageEle.appendChild(imgRow);
         });
     } else {
         // スライド表示
-        let currentIndex = 0;
+        const imgRow = createImageRow(images[currentIndex], currentIndex);
+        imgRow.id = 'slide-row';
+        imageEle.appendChild(imgRow);
 
         // スライドナビゲーション
         const nav = document.createElement('div');
@@ -152,10 +166,11 @@ function createImageExplanation(images) {
 
         const prevBtn = document.createElement('button');
         prevBtn.textContent = '← 前へ';
-        prevBtn.disabled = true;
+        prevBtn.disabled = currentIndex === 0;
 
         const nextBtn = document.createElement('button');
         nextBtn.textContent = '次へ →';
+        nextBtn.disabled = currentIndex === images.length - 1;
 
         prevBtn.onclick = () => {
             if (currentIndex > 0) {
@@ -174,23 +189,34 @@ function createImageExplanation(images) {
         nav.appendChild(prevBtn);
         nav.appendChild(nextBtn);
         imageEle.appendChild(nav);
-
-        const imgRow = createImageRow(images[currentIndex], currentIndex);
-        imgRow.id = 'slide-row';
-        imageEle.appendChild(imgRow);
-
-        function updateSlide() {
-            const newRow = createImageRow(images[currentIndex], currentIndex);
-            const oldRow = document.getElementById('slide-row');
-            imageEle.replaceChild(newRow, oldRow);
-            newRow.id = 'slide-row';
-
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex === images.length - 1;
-        }
     }
 
     return imageEle;
+}
+
+
+// スライド表示更新関数
+function updateSlide() {
+    const newRow = createImageRow(image[currentIndex], currentIndex);
+    const oldRow = document.getElementById('slide-row');
+    newRow.id = 'slide-row';
+    oldRow.parentNode.replaceChild(newRow, oldRow);
+
+    const prevBtn = document.querySelector('.slide-nav button:first-child');
+    const nextBtn = document.querySelector('.slide-nav button:last-child');
+    if (prevBtn && nextBtn) {
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === image.length - 1;
+    }
+}
+
+
+// 任意のインデックスにスライドジャンプ
+function updateSlideToIndex(index) {
+    if (index < 0 || index >= image.length) return;
+    currentIndex = index;
+    imageExplanation.innerHTML = '';
+    imageExplanation.appendChild(createImageExplanation(image));
 }
 
 
