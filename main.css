@@ -31,6 +31,10 @@ button {
     background-color: #1565c0;
 }
 
+button:disabled {
+    background-color: gray;
+}
+
 /* hタグのスタイル (シンプルに) */
 h1, h2, h3 {
     text-align: center;
