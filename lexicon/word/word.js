@@ -43,6 +43,25 @@ const imageExplanation = document.createElement('div');
 imageExplanation.id = 'image-explanation';
 imageExplanation.className = 'content-item';
 
+// タイトルだけ抽出してHTMLリストを作成
+const toc = document.createElement('h4');
+toc.textContent = '目次'
+
+const titleList = document.createElement('ul');
+titleList.className = 'title-list';
+
+image.forEach((item, index) => {
+    if (item.title) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#slide-${index}`; // 各スライドにidを振る前提
+        a.textContent = item.title;
+
+        li.appendChild(a);
+        titleList.appendChild(li);
+    }
+});
+
 // 表示切り替えボタン
 const toggleBtn = document.createElement('button');
 toggleBtn.textContent = '一覧表示に切り替える';
@@ -85,6 +104,8 @@ if (relatedWords.length !== 0) {
     main.appendChild(relatedWordsList);
 }
 
+main.appendChild(toc);
+main.appendChild(titleList);
 main.appendChild(imageTitle);
 main.appendChild(toggleBtn);
 main.appendChild(imageExplanation);

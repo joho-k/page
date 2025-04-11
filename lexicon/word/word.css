@@ -67,6 +67,25 @@ h5 {
     overflow: scroll;
 }
 
+.title-list {
+    /*文字色*/
+    border: dashed 2px #1565c0;
+    /*破線 太さ 色*/
+    background: #f1f8ff;
+
+    li {
+        height: 10px;
+        background-color: white;
+        background: none;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: underline 2px #1565c0;
+
+        a {
+            color: #1565c0;
+        }
+    }
+}
 
 @media (max-width: 768px) {
     .image-row {
