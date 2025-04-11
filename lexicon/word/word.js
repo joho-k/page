@@ -1,5 +1,7 @@
 const bodyEle = document.getElementById("word-body");
 
+let displayMode = 'list'; // 'list' or 'slide'
+
 // コンテナの作成
 const contentDiv = document.createElement('div');
 contentDiv.className = 'content';
@@ -41,6 +43,18 @@ const imageExplanation = document.createElement('div');
 imageExplanation.id = 'image-explanation';
 imageExplanation.className = 'content-item';
 
+// 表示切り替えボタン
+const toggleBtn = document.createElement('button');
+toggleBtn.textContent = 'スライド表示に切り替え';
+toggleBtn.className = 'toggle-button';
+toggleBtn.onclick = () => {
+    displayMode = displayMode === 'list' ? 'slide' : 'list';
+    toggleBtn.textContent = displayMode === 'list' ? 'スライド表示に切り替え' : '一覧表示に切り替え';
+    // 再描画
+    imageExplanation.innerHTML = '';
+    imageExplanation.appendChild(createImageExplanation(image));
+};
+
 // メイン要素に子要素を追加
 main.appendChild(wordTitle);
 
@@ -72,6 +86,7 @@ if (relatedWords.length !== 0) {
 }
 
 main.appendChild(imageTitle);
+main.appendChild(toggleBtn);
 main.appendChild(imageExplanation);
 
 // コンテンツにヘッダーとメインを追加
@@ -99,34 +114,89 @@ bodyEle.appendChild(contentDiv);
 // 表示切り替え可能な画像セクション生成関数
 function createImageExplanation(images) {
     const imageEle = document.createElement("div");
-    images.forEach((img, index) => {
-        // 画像と説明を包括するdiv
-        const imgRow = document.createElement("div");
-        imgRow.className = "image-row"
 
-        // スライドの画像を表示する要素
-        const figure = document.createElement("figure");
+    if (displayMode === 'list') {
+        // 一覧表示（従来通り）
+        images.forEach((img, index) => {
+            const imgRow = createImageRow(img, index);
+            imageEle.appendChild(imgRow);
+        });
+    } else {
+        // スライド表示
+        let currentIndex = 0;
 
-        // スライドの説明
-        const descriptionEle = document.createElement("div");
-        descriptionEle.className = "image-row-description";
-
-        // 画像の連番
-        const serialNum = (index + 1).toString().padStart(2, '0');
-        if (img.title) {
-            figure.innerHTML = `<h5>${img.title}</h5>`
-            descriptionEle.className += " image-row-description-padding-top"
-        }
-        figure.innerHTML += `<img src = "img/${serialNum}.png" />`
-
-        img.descriptions.forEach((description) => {
-            descriptionEle.innerHTML += `<p> ${description}</p>`;
-        })
-
-        imgRow.appendChild(figure);
-        imgRow.appendChild(descriptionEle);
-
+        const imgRow = createImageRow(images[currentIndex], currentIndex);
+        imgRow.id = 'slide-row';
         imageEle.appendChild(imgRow);
-    });
+
+        // スライドナビゲーション
+        const nav = document.createElement('div');
+        nav.className = 'slide-nav';
+
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = '← 前へ';
+        prevBtn.disabled = true;
+
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = '次へ →';
+
+        prevBtn.onclick = () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlide();
+            }
+        };
+
+        nextBtn.onclick = () => {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+                updateSlide();
+            }
+        };
+
+        nav.appendChild(prevBtn);
+        nav.appendChild(nextBtn);
+        imageEle.appendChild(nav);
+
+        function updateSlide() {
+            const newRow = createImageRow(images[currentIndex], currentIndex);
+            const oldRow = document.getElementById('slide-row');
+            imageEle.replaceChild(newRow, oldRow);
+            newRow.id = 'slide-row';
+
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === images.length - 1;
+        }
+    }
+
     return imageEle;
+}
+
+
+// 画像1枚分の表示を作る共通関数
+function createImageRow(img, index) {
+    const imgRow = document.createElement("div");
+    imgRow.className = "image-row";
+
+    const figure = document.createElement("figure");
+    const descriptionEle = document.createElement("div");
+    descriptionEle.className = "image-row-description";
+
+    const serialNum = (index + 1).toString().padStart(2, '0');
+
+    if (img.title) {
+        figure.innerHTML = `<h5>${img.title}</h5>`;
+        descriptionEle.className += " image-row-description-padding-top";
+    }
+
+    figure.innerHTML += `<img src = "img/${serialNum}.png" />`;
+
+    img.descriptions.forEach((description) => {
+        descriptionEle.innerHTML += `<p> ${description}</p>`;
+    });
+
+    imgRow.appendChild(figure);
+    imgRow.appendChild(descriptionEle);
+
+    return imgRow;
 }
