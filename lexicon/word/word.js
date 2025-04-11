@@ -1,6 +1,6 @@
 const bodyEle = document.getElementById("word-body");
 
-let displayMode = 'list'; // 'list' or 'slide'
+let displayMode = 'slide'; // 'list' or 'slide'
 
 // コンテナの作成
 const contentDiv = document.createElement('div');
@@ -45,11 +45,11 @@ imageExplanation.className = 'content-item';
 
 // 表示切り替えボタン
 const toggleBtn = document.createElement('button');
-toggleBtn.textContent = 'スライド表示に切り替え';
+toggleBtn.textContent = '一覧表示に切り替える';
 toggleBtn.className = 'toggle-button';
 toggleBtn.onclick = () => {
     displayMode = displayMode === 'list' ? 'slide' : 'list';
-    toggleBtn.textContent = displayMode === 'list' ? 'スライド表示に切り替え' : '一覧表示に切り替え';
+    toggleBtn.textContent = displayMode === 'list' ? 'スライド表示に切り替える' : '一覧表示に切り替える';
     // 再描画
     imageExplanation.innerHTML = '';
     imageExplanation.appendChild(createImageExplanation(image));
