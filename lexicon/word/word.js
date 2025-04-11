@@ -155,11 +155,6 @@ function createImageExplanation(images) {
             imageEle.appendChild(imgRow);
         });
     } else {
-        // スライド表示
-        const imgRow = createImageRow(images[currentIndex], currentIndex);
-        imgRow.id = 'slide-row';
-        imageEle.appendChild(imgRow);
-
         // スライドナビゲーション
         const nav = document.createElement('div');
         nav.className = 'slide-nav';
@@ -189,6 +184,11 @@ function createImageExplanation(images) {
         nav.appendChild(prevBtn);
         nav.appendChild(nextBtn);
         imageEle.appendChild(nav);
+
+        // スライド表示
+        const imgRow = createImageRow(images[currentIndex], currentIndex);
+        imgRow.id = 'slide-row';
+        imageEle.appendChild(imgRow);
     }
 
     return imageEle;
