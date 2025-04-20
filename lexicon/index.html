@@ -184,6 +184,7 @@
                         const link = document.createElement('a');
                         link.href = `word/${item.link}/index.html`;
                         link.textContent = item.title;
+                        listItem.className += "list-word"
                         listItem.appendChild(link);
                     } else {
                         const text = document.createTextNode(item.title + ' ');
