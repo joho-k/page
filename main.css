@@ -20,6 +20,34 @@ body {
     padding-top: 60px;
 }
 
+.news {
+    max-width: 700px;
+    margin: 0 auto 4rem;
+    padding: 0 1rem;
+}
+
+.news h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--clr-primary);
+    padding-left: 0.5rem;
+}
+
+.news ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.news li {
+    margin-bottom: 0.75rem;
+}
+
+.news time {
+    font-weight: 600;
+    color: var(--clr-primary);
+    margin-right: 0.5rem;
+}
+
 /* スマホの場合はmarginを0に */
 @media (max-width: 768px) {
 
