@@ -1,79 +1,79 @@
-.service {
+body {
+    margin: 0;
+    color: #222;
+    background: #f9fafb;
+    line-height: 1.6;
+}
+
+.hero {
+    background: var(--primary);
+    color: #fff;
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin: 0 0 .5rem;
+}
+
+.hero h1 img {
+    max-width: 50%
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.nav {
     display: flex;
+    justify-content: center;
+    padding: 10px 0px;
+    background-color: var(--primary-light);
 }
 
-.internal-service,
-.external-service {
-    max-width: 50%;
-    margin: 0px 10px;
-    flex-grow: 1;
-    height: 100vh;
+.nav a {
+    margin: 0 .5rem;
+    padding: .5rem 1rem;
+    background: #fff;
+    color: #1e88e5;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
 }
 
-.service-contents {
-    height: 100vh;
-    overflow: scroll;
+.nav .link-button {
+    background-color: var(--primary-yellow);
 }
 
-.youtube-wrapper {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%;
-    position: relative;
+.intro {
+    max-width: 700px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+    text-align: center;
+    font-size: 1.1rem;
 }
 
-.youtube-wrapper iframe {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: .875rem;
+    color: #888;
+    background: #fff;
 }
 
 /* スマホの場合 */
 @media (max-width: 768px) {
-    .service {
-        display: block;
+    .hero h1 img {
+        max-width: 80%
     }
 
-    .internal-service,
-    .external-service {
-        max-width: 100%;
-    }
-}
-
-main {
-    h2 {
-        background: none;
-        color: #1565c0;
-        text-align: center;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
+    .nav {
+        flex-direction: column;
     }
 
-    .h-num {
-        font-family: "Poppins";
-        font-weight: 700;
-        font-size: 80px;
-        font-style: italic;
-        padding-right: 10px;
-    }
-}
-
-section {
-    .inner {
-        text-align: center;
-    }
-}
-
-.intro .description {
-    background-color: #1565c0;
-    border-radius: 20px;
-    color: white;
-    text-align: center;
-    padding: 20px 0px;
-
-    h2 {
-        color: white;
+    .nav a {
+        margin-bottom: 5px;
     }
 }
