@@ -26,11 +26,17 @@ body {
     margin-bottom: 2rem;
 }
 
+.navigation {
+    padding: 20px 0px;
+    background-color: var(--primary-light);
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
 .nav {
     display: flex;
     justify-content: center;
     padding: 10px 0px;
-    background-color: var(--primary-light);
 }
 
 .nav a {
@@ -45,6 +51,11 @@ body {
 
 .nav .link-button {
     background-color: var(--primary-yellow);
+}
+
+.smartphone-description {
+    /* スマホのみ表示 */
+    display: none;
 }
 
 .intro {
@@ -104,5 +115,11 @@ footer {
 
     .nav a {
         margin-bottom: 5px;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .smartphone-description {
+        display: block;
     }
 }

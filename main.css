@@ -116,6 +116,38 @@ a[target="_blank"]:after {
     font-weight: 900;
 }
 
+a[data-tooltip] {
+    position: relative;
+    text-decoration: none;
+    padding: 8px 12px;
+}
+
+a[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    min-width: 300px;
+}
+
+/* PC: ホバー時 or スマホ: JSでクラスが付いたとき */
+a[data-tooltip]:hover::after,
+a[data-tooltip].tooltip-active::after {
+    opacity: 1;
+}
+
+
 /* リスト項目のスタイル */
 ul {
     margin: 0;
