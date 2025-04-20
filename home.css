@@ -93,6 +93,41 @@ body {
     margin-right: 0.5rem;
 }
 
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    font-size: 0.95em;
+}
+
+.description {
+    margin-top: 0.3em;
+
+}
+
+.news .tag {
+    border-radius: 10px;
+    padding: 0px 10px;
+    margin: 0px 5px;
+    width: 80px;
+    text-align: center;
+}
+
+.news .tag.youtube {
+    background-color: #EF0034;
+    color: white;
+}
+
+.news .tag.func {
+    background-color: var(--primary-light);
+    color: black;
+}
+
+.news .tag.common {
+    background-color: var(--primary);
+    color: white;
+}
+
 footer {
     text-align: center;
     padding: 2rem 1rem;
