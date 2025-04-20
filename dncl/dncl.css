@@ -174,7 +174,7 @@ summary::-webkit-details-marker {
     justify-content: space-between;
     align-items: center;
     padding: 16px 24px;
-    border: 2px solid #1565c0;
+    border: 2px solid var(--primary);
     margin-top: 15px;
 }
 
@@ -184,7 +184,7 @@ summary::-webkit-details-marker {
 }
 
 .prev-next-button {
-    background-color: #1565c0;
+    background-color: var(--primary);
     color: white;
     text-decoration: none;
     margin: 10px;

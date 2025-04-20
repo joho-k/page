@@ -1,6 +1,16 @@
 /* 全体のスタイル */
+:root {
+    --primary: #1565c0;
+    --primary-light: #55DCFD;
+    --accent: #F29C32;
+    --bg: #f9fafb;
+    --text: #333;
+    --heading-font: "M PLUS Rounded 1c", "Noto Sans JP", system-ui, sans-serif;
+
+}
+
 body {
-    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-family: var(--heading-font);
     margin: 30px;
     padding: 0;
     color: #333;
@@ -28,7 +38,7 @@ button {
     margin: 10px;
     color: white;
     border-radius: 10px;
-    background-color: #1565c0;
+    background-color: var(--primary);
 }
 
 button:disabled {
@@ -67,6 +77,12 @@ h4 {
     margin: 0;
     border-bottom: 2px solid #000;
     margin: 10px;
+}
+
+h5 {
+    background-color: #1565c0;
+    font-size: 18px;
+    color: white;
 }
 
 .joho-no-kyoshitsu {
