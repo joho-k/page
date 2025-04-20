@@ -59,7 +59,6 @@ body {
 }
 
 .intro {
-    max-width: 700px;
     margin: 3rem auto;
     padding: 0 1rem;
     text-align: center;
@@ -68,7 +67,6 @@ body {
 
 
 .news {
-    max-width: 700px;
     margin: 0 auto 4rem;
     padding: 0 1rem;
 }
