@@ -21,6 +21,15 @@
     margin-top: 5px;
 }
 
+.list-word {
+    font-weight: 700;
+
+    a {
+        font-size: large;
+        color: var(--primary)
+    }
+}
+
 .coming-soon {
     font-size: 0.8em;
     color: #888;
