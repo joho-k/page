@@ -55,6 +55,35 @@ body {
     font-size: 1.1rem;
 }
 
+
+.news {
+    max-width: 700px;
+    margin: 0 auto 4rem;
+    padding: 0 1rem;
+}
+
+.news h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--clr-primary);
+    padding-left: 0.5rem;
+}
+
+.news ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.news li {
+    margin-bottom: 0.75rem;
+}
+
+.news time {
+    font-weight: 500;
+    color: var(--clr-primary);
+    margin-right: 0.5rem;
+}
+
 footer {
     text-align: center;
     padding: 2rem 1rem;
