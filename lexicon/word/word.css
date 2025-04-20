@@ -37,12 +37,6 @@
     padding-top: 60px;
 }
 
-h5 {
-    background-color: #1565c0;
-    font-size: 18px;
-    color: white;
-}
-
 .text-white {
     color: white;
 }
@@ -70,7 +64,7 @@ h5 {
 
 .title-list {
     /*文字色*/
-    border: dashed 2px #1565c0;
+    border: dashed 2px var(--primary);
     /*破線 太さ 色*/
     background: #f1f8ff;
 
@@ -80,10 +74,10 @@ h5 {
         background: none;
         font-weight: bold;
         cursor: pointer;
-        text-decoration: underline 2px #1565c0;
+        text-decoration: underline 2px var(--primary);
 
         a {
-            color: #1565c0;
+            color: var(--primary);
         }
     }
 }
