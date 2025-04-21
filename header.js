@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', function () {
         return '../'.repeat(slashCount - 1);
     }
 
+    // noheaderだったら、ヘッダーをつけない
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('state') === 'noheader') {
+        return;
+    }
+
     // 相対パスのプレフィックスを取得
     const pathPrefix = getPathPrefix();
 
