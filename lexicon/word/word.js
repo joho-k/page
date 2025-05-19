@@ -64,9 +64,11 @@ image.forEach((item, index) => {
                 const target = document.getElementById(`slide-${index}`);
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
             } else {
+                currentIndex = index;
                 const target = document.querySelector('.slide-nav');
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
             }
+            updateDisplayMode();
         };
 
         li.appendChild(a);
@@ -159,6 +161,9 @@ function updateDisplayMode() {
     if (displayMode === 'list') {
         rows.forEach(row => row.classList.add('show'));
         if (nav) nav.classList.remove('show');
+        // 一覧表示をしながら、今まで見ていたスライドまでスクロールする
+        const target = document.getElementById(`slide-${currentIndex}`);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
     } else {
         rows.forEach((row, i) => {
             if (i === currentIndex) {
