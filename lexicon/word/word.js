@@ -66,7 +66,6 @@ image.forEach((item, index) => {
             } else {
                 const target = document.querySelector('.slide-nav');
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
-                updateSlideToIndex(index);
             }
         };
 
@@ -79,6 +78,34 @@ image.forEach((item, index) => {
 const imageTitle = document.createElement('h4');
 imageTitle.textContent = '画像で解説';
 
+// ナビゲーションボタン
+const nav = document.createElement('div');
+nav.className = 'slide-nav';
+
+const prevBtn = document.createElement('button');
+prevBtn.textContent = '← 前へ';
+const pageNum = document.createElement('p');
+// pageNum.textContent は全画像数がわかってから生成する
+const nextBtn = document.createElement('button');
+nextBtn.textContent = '次へ →';
+nav.appendChild(prevBtn);
+nav.appendChild(pageNum);
+nav.appendChild(nextBtn);
+
+prevBtn.onclick = () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+        updateDisplayMode();
+    }
+};
+
+nextBtn.onclick = () => {
+    if (currentIndex < image.length - 1) {
+        currentIndex++;
+        updateDisplayMode();
+    }
+};
+
 // 表示切り替えボタン
 const toggleBtn = document.createElement('button');
 toggleBtn.textContent = '一覧表示に切り替える';
@@ -86,6 +113,7 @@ toggleBtn.className = 'toggle-button';
 toggleBtn.onclick = () => {
     displayMode = displayMode === 'list' ? 'slide' : 'list';
     toggleBtn.textContent = displayMode === 'list' ? 'スライド表示に切り替える' : '一覧表示に切り替える';
+    updateDisplayMode();
 };
 
 if (relatedWords.length !== 0) {
@@ -102,7 +130,7 @@ if (relatedWords.length !== 0) {
         const li = document.createElement('li');
         const aEle = document.createElement('a');
         aEle.innerHTML = relatedWord.word;
-        aEle.href = `../${relatedWord.url}/index.html`;
+        aEle.href = `../ ${relatedWord.url} /index.html`;
         li.appendChild(aEle);
         list.appendChild(li);
     });
@@ -120,7 +148,26 @@ main.insertBefore(toc, main.lastElementChild);
 main.insertBefore(titleList, main.lastElementChild);
 main.insertBefore(imageTitle, main.lastElementChild);
 main.insertBefore(toggleBtn, main.lastElementChild);
-// main.appendChild(imageExplanation);
+main.insertBefore(nav, main.lastElementChild);
+
+const rows = document.querySelectorAll('.image-row');
+
+// 初期段階でスライドモードにしておく
+updateDisplayMode();
+
+function updateDisplayMode() {
+    if (displayMode === 'list') {
+        rows.forEach(row => row.style.display = 'flex');
+        if (nav) nav.style.display = 'none';
+    } else {
+        rows.forEach((row, i) => {
+            row.style.display = (i === currentIndex) ? 'flex' : 'none';
+        });
+        pageNum.textContent = `${currentIndex + 1}/${rows.length}`
+        if (nav) nav.style.display = 'flex';
+    }
+}
+
 
 // HTMLファイルでベタ打ちできるようにinnerHTMLを生成するための関数。
 function createImageHTML(images) {

@@ -54,10 +54,11 @@
 .slide-nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-top: 1em;
 }
 
-#slide-row {
+.image-row {
     /* 授業スライドの高さが足りなかった。400だとわざわざスクロールしなくてはならなくなる */
     height: 600px;
     overflow: scroll;
