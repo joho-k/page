@@ -44,6 +44,33 @@ if (youtubeURLID !== null) {
     videoExplanation.innerHTML = `<div class="youtube-wrapper">
     <iframe src="https://youtube.com/embed/${youtubeURLID}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>`;
+} else {
+    videoExplanation.innerHTML = `<a>なし</a>`;
+}
+
+// 関連単語セクション
+const relatedWordsTitle = document.createElement('h4');
+relatedWordsTitle.textContent = '関連単語';
+const relatedWordsList = document.createElement('div');
+relatedWordsList.id = 'related-words';
+relatedWordsList.className = 'content-item';
+
+if (relatedWords.length !== 0) {
+    const list = document.createElement('ul');
+
+    relatedWords.forEach((relatedWord) => {
+        const li = document.createElement('li');
+        const aEle = document.createElement('a');
+        aEle.innerHTML = relatedWord.word;
+        aEle.href = `../ ${relatedWord.url} /index.html`;
+        li.appendChild(aEle);
+        list.appendChild(li);
+    });
+    relatedWordsList.appendChild(list);
+} else {
+    const textContent = document.createElement('a');
+    textContent.textContent = "なし";
+    relatedWordsList.appendChild(textContent);
 }
 
 // 目次
@@ -118,34 +145,12 @@ toggleBtn.onclick = () => {
     updateDisplayMode();
 };
 
-if (relatedWords.length !== 0) {
-    // 関連単語セクション
-    const relatedWordsTitle = document.createElement('h4');
-    relatedWordsTitle.textContent = '関連単語';
-    const relatedWordsList = document.createElement('div');
-    relatedWordsList.id = 'related-words';
-    relatedWordsList.className = 'content-item';
-
-    const list = document.createElement('ul');
-
-    relatedWords.forEach((relatedWord) => {
-        const li = document.createElement('li');
-        const aEle = document.createElement('a');
-        aEle.innerHTML = relatedWord.word;
-        aEle.href = `../ ${relatedWord.url} /index.html`;
-        li.appendChild(aEle);
-        list.appendChild(li);
-    });
-    relatedWordsList.appendChild(list);
-
-    main.appendChild(relatedWordsTitle);
-    main.appendChild(relatedWordsList);
-}
-
 // メイン要素に子要素を追加
 main.insertBefore(wordTitle, main.lastElementChild);
 main.insertBefore(videoTitle, main.lastElementChild);
 main.insertBefore(videoExplanation, main.lastElementChild);
+main.insertBefore(relatedWordsTitle, main.lastElementChild);
+main.insertBefore(relatedWordsList, main.lastElementChild);
 main.insertBefore(toc, main.lastElementChild);
 main.insertBefore(titleList, main.lastElementChild);
 main.insertBefore(imageTitle, main.lastElementChild);
@@ -179,6 +184,20 @@ function updateDisplayMode() {
 
 
 // HTMLファイルでベタ打ちできるようにinnerHTMLを生成するための関数。
+/* HTMLに以下の内容を追加。
+<body id="word-body">
+    <div class="content">
+        <header>
+        </header>
+        <main>
+            <div id="image-explanation" class="content-item">
+                <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
+                <!-- ここまでベタ打ち -->
+            </div>
+        </main>
+    </div>
+</body> 
+*/
 function createImageHTML(images) {
     const imageEle = document.createElement("div");
     // 一覧表示（従来通り）
