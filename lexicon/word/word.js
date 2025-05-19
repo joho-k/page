@@ -157,14 +157,18 @@ updateDisplayMode();
 
 function updateDisplayMode() {
     if (displayMode === 'list') {
-        rows.forEach(row => row.style.display = 'flex');
-        if (nav) nav.style.display = 'none';
+        rows.forEach(row => row.classList.add('show'));
+        if (nav) nav.classList.remove('show');
     } else {
         rows.forEach((row, i) => {
-            row.style.display = (i === currentIndex) ? 'flex' : 'none';
+            if (i === currentIndex) {
+                row.classList.add('show');
+            } else {
+                row.classList.remove('show');
+            }
         });
         pageNum.textContent = `${currentIndex + 1}/${rows.length}`
-        if (nav) nav.style.display = 'flex';
+        if (nav) nav.classList.add('show');
     }
 }
 
