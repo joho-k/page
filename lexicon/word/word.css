@@ -58,7 +58,8 @@
 }
 
 #slide-row {
-    height: 400px;
+    /* 授業スライドの高さが足りなかった。400だとわざわざスクロールしなくてはならなくなる */
+    height: 600px;
     overflow: scroll;
 }
 
