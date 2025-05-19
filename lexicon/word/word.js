@@ -62,7 +62,7 @@ if (relatedWords.length !== 0) {
         const li = document.createElement('li');
         const aEle = document.createElement('a');
         aEle.innerHTML = relatedWord.word;
-        aEle.href = `../ ${relatedWord.url} /index.html`;
+        aEle.href = `../${relatedWord.url}/index.html`;
         li.appendChild(aEle);
         list.appendChild(li);
     });
