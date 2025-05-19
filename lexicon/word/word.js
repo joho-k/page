@@ -5,10 +5,14 @@ let currentIndex = 0; // スライドモードで使用
 
 // コンテナの作成
 const contentDiv = bodyEle.querySelectorAll(".content")[0];
-
-
 // ヘッダーの作成
 const header = contentDiv.querySelectorAll("header")[0];
+// メインコンテンツの作成
+const main = contentDiv.querySelectorAll("main")[0];
+// 画像セクション
+const imageExplanation = contentDiv.querySelectorAll("#image-explanation")[0];
+
+// コンテナ
 const h2 = document.createElement('h2');
 const a = document.createElement('a');
 a.href = '../../index.html';
@@ -23,12 +27,11 @@ warning.className = "warning";
 warning.innerHTML = `解説は厳密な正確さよりも、伝わりやすさを優先しています。<br />そのため、実際の定義とは多少異なる表現になっている場合があります。ご了承ください。`;
 header.appendChild(warning);
 
-// メインコンテンツの作成
-const main = contentDiv.querySelectorAll("main")[0];
-
 // タイトル部分
 const wordTitle = document.createElement('h3');
 wordTitle.id = 'word-title';
+wordTitle.innerHTML = `${title}`;
+document.title = `${document.title}「${title}」`;
 
 // 動画セクション
 const videoTitle = document.createElement('h4');
@@ -36,19 +39,18 @@ videoTitle.textContent = '動画で解説';
 const videoExplanation = document.createElement('div');
 videoExplanation.id = 'video-explanation';
 videoExplanation.className = 'content-item';
+// YouTubeの埋め込み
+if (youtubeURLID !== null) {
+    videoExplanation.innerHTML = `<div class="youtube-wrapper">
+    <iframe src="https://youtube.com/embed/${youtubeURLID}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+    </div>`;
+}
 
-// 画像セクション
-const imageTitle = document.createElement('h4');
-imageTitle.textContent = '画像で解説';
-const imageExplanation = contentDiv.querySelectorAll("#image-explanation")[0];
-
-// タイトルだけ抽出してHTMLリストを作成
+// 目次
 const toc = document.createElement('h4');
 toc.textContent = '目次'
-
 const titleList = document.createElement('ul');
 titleList.className = 'title-list';
-
 image.forEach((item, index) => {
     if (item.title) {
         const li = document.createElement('li');
@@ -73,6 +75,10 @@ image.forEach((item, index) => {
     }
 });
 
+// 画像セクション
+const imageTitle = document.createElement('h4');
+imageTitle.textContent = '画像で解説';
+
 // 表示切り替えボタン
 const toggleBtn = document.createElement('button');
 toggleBtn.textContent = '一覧表示に切り替える';
@@ -81,12 +87,6 @@ toggleBtn.onclick = () => {
     displayMode = displayMode === 'list' ? 'slide' : 'list';
     toggleBtn.textContent = displayMode === 'list' ? 'スライド表示に切り替える' : '一覧表示に切り替える';
 };
-
-// メイン要素に子要素を追加
-main.insertBefore(wordTitle, main.lastElementChild);
-
-main.insertBefore(videoTitle, main.lastElementChild);
-main.insertBefore(videoExplanation, main.lastElementChild);
 
 if (relatedWords.length !== 0) {
     // 関連単語セクション
@@ -112,22 +112,15 @@ if (relatedWords.length !== 0) {
     main.appendChild(relatedWordsList);
 }
 
+// メイン要素に子要素を追加
+main.insertBefore(wordTitle, main.lastElementChild);
+main.insertBefore(videoTitle, main.lastElementChild);
+main.insertBefore(videoExplanation, main.lastElementChild);
 main.insertBefore(toc, main.lastElementChild);
 main.insertBefore(titleList, main.lastElementChild);
 main.insertBefore(imageTitle, main.lastElementChild);
 main.insertBefore(toggleBtn, main.lastElementChild);
 // main.appendChild(imageExplanation);
-
-// タイトル関係
-wordTitle.innerHTML = `${title}`;
-document.title = `${document.title}「${title}」`;
-
-// YouTubeの埋め込み
-if (youtubeURLID !== null) {
-    videoExplanation.innerHTML = `<div class="youtube-wrapper">
-    <iframe src="https://youtube.com/embed/${youtubeURLID}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    </div>`;
-}
 
 // HTMLファイルでベタ打ちできるようにinnerHTMLを生成するための関数。
 function createImageHTML(images) {
