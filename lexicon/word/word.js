@@ -4,11 +4,11 @@ let displayMode = 'slide'; // 'list' or 'slide'
 let currentIndex = 0; // スライドモードで使用
 
 // コンテナの作成
-const contentDiv = document.createElement('div');
-contentDiv.className = 'content';
+const contentDiv = bodyEle.querySelectorAll(".content")[0];
+
 
 // ヘッダーの作成
-const header = document.createElement('header');
+const header = contentDiv.querySelectorAll("header")[0];
 const h2 = document.createElement('h2');
 const a = document.createElement('a');
 a.href = '../../index.html';
@@ -24,7 +24,7 @@ warning.innerHTML = `解説は厳密な正確さよりも、伝わりやすさ�
 header.appendChild(warning);
 
 // メインコンテンツの作成
-const main = document.createElement('main');
+const main = contentDiv.querySelectorAll("main")[0];
 
 // タイトル部分
 const wordTitle = document.createElement('h3');
@@ -40,9 +40,7 @@ videoExplanation.className = 'content-item';
 // 画像セクション
 const imageTitle = document.createElement('h4');
 imageTitle.textContent = '画像で解説';
-const imageExplanation = document.createElement('div');
-imageExplanation.id = 'image-explanation';
-imageExplanation.className = 'content-item';
+const imageExplanation = contentDiv.querySelectorAll("#image-explanation")[0];
 
 // タイトルだけ抽出してHTMLリストを作成
 const toc = document.createElement('h4');
@@ -82,16 +80,13 @@ toggleBtn.className = 'toggle-button';
 toggleBtn.onclick = () => {
     displayMode = displayMode === 'list' ? 'slide' : 'list';
     toggleBtn.textContent = displayMode === 'list' ? 'スライド表示に切り替える' : '一覧表示に切り替える';
-    // 再描画
-    imageExplanation.innerHTML = '';
-    imageExplanation.appendChild(createImageExplanation(image));
 };
 
 // メイン要素に子要素を追加
-main.appendChild(wordTitle);
+main.insertBefore(wordTitle, main.lastElementChild);
 
-main.appendChild(videoTitle);
-main.appendChild(videoExplanation);
+main.insertBefore(videoTitle, main.lastElementChild);
+main.insertBefore(videoExplanation, main.lastElementChild);
 
 if (relatedWords.length !== 0) {
     // 関連単語セクション
@@ -117,15 +112,11 @@ if (relatedWords.length !== 0) {
     main.appendChild(relatedWordsList);
 }
 
-main.appendChild(toc);
-main.appendChild(titleList);
-main.appendChild(imageTitle);
-main.appendChild(toggleBtn);
-main.appendChild(imageExplanation);
-
-// コンテンツにヘッダーとメインを追加
-contentDiv.appendChild(header);
-contentDiv.appendChild(main);
+main.insertBefore(toc, main.lastElementChild);
+main.insertBefore(titleList, main.lastElementChild);
+main.insertBefore(imageTitle, main.lastElementChild);
+main.insertBefore(toggleBtn, main.lastElementChild);
+// main.appendChild(imageExplanation);
 
 // タイトル関係
 wordTitle.innerHTML = `${title}`;
@@ -138,89 +129,18 @@ if (youtubeURLID !== null) {
     </div>`;
 }
 
-// 画像の表示を追加
-imageExplanation.appendChild(createImageExplanation(image));
-
-// 本体にコンテンツを追加
-bodyEle.appendChild(contentDiv);
-
-
-// 表示切り替え可能な画像セクション生成関数
-function createImageExplanation(images) {
+// HTMLファイルでベタ打ちできるようにinnerHTMLを生成するための関数。
+function createImageHTML(images) {
     const imageEle = document.createElement("div");
-
-    if (displayMode === 'list') {
-        // 一覧表示（従来通り）
-        images.forEach((img, index) => {
-            const imgRow = createImageRow(img, index);
-            imgRow.id = `slide-${index}`;
-            imageEle.appendChild(imgRow);
-        });
-    } else {
-        // スライドナビゲーション
-        const nav = document.createElement('div');
-        nav.className = 'slide-nav';
-
-        const prevBtn = document.createElement('button');
-        prevBtn.textContent = '← 前へ';
-        prevBtn.disabled = currentIndex === 0;
-
-        const nextBtn = document.createElement('button');
-        nextBtn.textContent = '次へ →';
-        nextBtn.disabled = currentIndex === images.length - 1;
-
-        prevBtn.onclick = () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateSlide();
-            }
-        };
-
-        nextBtn.onclick = () => {
-            if (currentIndex < images.length - 1) {
-                currentIndex++;
-                updateSlide();
-            }
-        };
-
-        nav.appendChild(prevBtn);
-        nav.appendChild(nextBtn);
-        imageEle.appendChild(nav);
-
-        // スライド表示
-        const imgRow = createImageRow(images[currentIndex], currentIndex);
-        imgRow.id = 'slide-row';
+    // 一覧表示（従来通り）
+    images.forEach((img, index) => {
+        const imgRow = createImageRow(img, index);
+        imgRow.id = `slide-${index}`;
         imageEle.appendChild(imgRow);
-    }
+    });
 
-    return imageEle;
+    console.log(imageEle.innerHTML);
 }
-
-
-// スライド表示更新関数
-function updateSlide() {
-    const newRow = createImageRow(image[currentIndex], currentIndex);
-    const oldRow = document.getElementById('slide-row');
-    newRow.id = 'slide-row';
-    oldRow.parentNode.replaceChild(newRow, oldRow);
-
-    const prevBtn = document.querySelector('.slide-nav button:first-child');
-    const nextBtn = document.querySelector('.slide-nav button:last-child');
-    if (prevBtn && nextBtn) {
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === image.length - 1;
-    }
-}
-
-
-// 任意のインデックスにスライドジャンプ
-function updateSlideToIndex(index) {
-    if (index < 0 || index >= image.length) return;
-    currentIndex = index;
-    imageExplanation.innerHTML = '';
-    imageExplanation.appendChild(createImageExplanation(image));
-}
-
 
 // 画像1枚分の表示を作る共通関数
 function createImageRow(img, index) {
@@ -237,8 +157,8 @@ function createImageRow(img, index) {
         figure.innerHTML = `<h5>${img.title}</h5>`;
         descriptionEle.className += " image-row-description-padding-top";
     }
-
-    figure.innerHTML += `<img src = "img/${serialNum}.png" />`;
+    const desc = img.descriptions ? img.descriptions.join() : "";
+    figure.innerHTML += `<img src = "img/${serialNum}.png" alt="${desc}" />`;
 
     img.descriptions.forEach((description) => {
         descriptionEle.innerHTML += `<p> ${description}</p>`;
