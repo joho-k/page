@@ -53,6 +53,467 @@
 </head>
 
 <body id="word-body">
+    <div class="content">
+        <header>
+        </header>
+        <main>
+            <div id="image-explanation" class="content-item">
+                <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
+                <div class="image-row" id="slide-0">
+                    <figure>
+                        <h5>コンピュータと2進数の関係</h5><img src="img/01.png" alt="コンピュータの内部では、電流が流れたかそうでないかで処理を制御しています。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> コンピュータの内部では、電流が流れたかそうでないかで処理を制御しています。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-1">
+                    <figure><img src="img/02.png" alt="このとき、電流が流れていない状態を0、電流が流れている状態を1とする2進数を使うのが合理的です。"></figure>
+                    <div class="image-row-description">
+                        <p> このとき、電流が流れていない状態を0、電流が流れている状態を1とする2進数を使うのが合理的です。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-2">
+                    <figure>
+                        <h5>普段使っている「10進数」</h5><img src="img/03.png" alt="普段我々が使っている数は、10進数と言います。まず最初0を使います。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 普段我々が使っている数は、10進数と言います。まず最初0を使います。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-3">
+                    <figure><img src="img/04.png" alt="0の次にくるのは1です。1回使った数字は、一旦使えなくなります。0が使えなくなりました。"></figure>
+                    <div class="image-row-description">
+                        <p> 0の次にくるのは1です。1回使った数字は、一旦使えなくなります。0が使えなくなりました。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-4">
+                    <figure><img src="img/05.png" alt="次は2、次は3と続き、最後は9になります。"></figure>
+                    <div class="image-row-description">
+                        <p> 次は2、次は3と続き、最後は9になります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-5">
+                    <figure><img src="img/06.png"
+                            alt="全ての数を使い切ったので、桁を1つ増やします。増えた数字は、1から始めます。隣の数字が変わった場合、使用できる数字がリセットされます。"></figure>
+                    <div class="image-row-description">
+                        <p> 全ての数を使い切ったので、桁を1つ増やします。増えた数字は、1から始めます。隣の数字が変わった場合、使用できる数字がリセットされます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-6">
+                    <figure><img src="img/07.png" alt="次の数は11となります。右側の数字から変わります。"></figure>
+                    <div class="image-row-description">
+                        <p> 次の数は11となります。右側の数字から変わります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-7">
+                    <figure><img src="img/08.png" alt="何桁になろうが、数の増え方は同じです。"></figure>
+                    <div class="image-row-description">
+                        <p> 何桁になろうが、数の増え方は同じです。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-8">
+                    <figure><img src="img/09.png" alt="全ての数字を使い切ったら、"></figure>
+                    <div class="image-row-description">
+                        <p> 全ての数字を使い切ったら、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-9">
+                    <figure><img src="img/10.png" alt="その左隣の数が進みます。そうなったら、右側の数の使用できる数字がリセットされます。"></figure>
+                    <div class="image-row-description">
+                        <p> その左隣の数が進みます。そうなったら、右側の数の使用できる数字がリセットされます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-10">
+                    <figure>
+                        <h5>2進数での数の進み方</h5><img src="img/11.png"
+                            alt="0と1だけを使う2進数の数の進み方はどうでしょう。0から始まるのは10進数と同じです。比較用に左上に10進数の増え方も記載しておきます。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 0と1だけを使う2進数の数の進み方はどうでしょう。0から始まるのは10進数と同じです。比較用に左上に10進数の増え方も記載しておきます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-11">
+                    <figure><img src="img/12.png" alt="0の次は1です。これも10進数と同じですね。"></figure>
+                    <div class="image-row-description">
+                        <p> 0の次は1です。これも10進数と同じですね。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-12">
+                    <figure><img src="img/13.png"
+                            alt="ここからが異なります。0と1はすでに使い切ってしまったので、10進数の時と同様桁を増やす必要があります。左側の桁は1、右側の桁は使用できる数字がリセットされるので、0から始めて10(イチゼロ)となります。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> ここからが異なります。0と1はすでに使い切ってしまったので、10進数の時と同様桁を増やす必要があります。左側の桁は1、右側の桁は使用できる数字がリセットされるので、0から始めて10(イチゼロ)となります。
+                        </p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-13">
+                    <figure><img src="img/14.png" alt="次の数は11(イチイチ)となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 次の数は11(イチイチ)となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-14">
+                    <figure><img src="img/15.png" alt="一番右の桁、その左隣の桁で使える数字がなくなったので、桁を増やします。以下画像のように数は増え続けます。"></figure>
+                    <div class="image-row-description">
+                        <p> 一番右の桁、その左隣の桁で使える数字がなくなったので、桁を増やします。以下画像のように数は増え続けます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-15">
+                    <figure><img src="img/16.png" alt=""></figure>
+                    <div class="image-row-description">
+                        <p> </p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-16">
+                    <figure><img src="img/17.png" alt=""></figure>
+                    <div class="image-row-description">
+                        <p> </p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-17">
+                    <figure><img src="img/18.png" alt=""></figure>
+                    <div class="image-row-description">
+                        <p> </p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-18">
+                    <figure>
+                        <h5>「位(くらい)」を考える</h5><img src="img/19.png"
+                            alt="ここで、桁が増えるタイミングを見てみましょう。,10進数について、1桁で表すことのできる最大の数は9です。次の数は、1桁から2桁に増やして、">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> ここで、桁が増えるタイミングを見てみましょう。</p>
+                        <p> 10進数について、1桁で表すことのできる最大の数は9です。次の数は、1桁から2桁に増やして、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-19">
+                    <figure><img src="img/20.png" alt="10とするのは先ほど確認しましたね。この時、1と0それぞれを次の通りに考えます。"></figure>
+                    <div class="image-row-description">
+                        <p> 10とするのは先ほど確認しましたね。この時、1と0それぞれを次の通りに考えます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-20">
+                    <figure><img src="img/21.png" alt="まず、左の1は、10のかたまりが1つ存在する、という考え方をします。"></figure>
+                    <div class="image-row-description">
+                        <p> まず、左の1は、10のかたまりが1つ存在する、という考え方をします。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-21">
+                    <figure><img src="img/22.png"
+                            alt="数は進み、例えば36という数字があった場合、10のかたまりが3つ、1のかたまりが6つ存在し、これを足したものがこの数字の大きさを表します。"></figure>
+                    <div class="image-row-description">
+                        <p> 数は進み、例えば36という数字があった場合、10のかたまりが3つ、1のかたまりが6つ存在し、これを足したものがこの数字の大きさを表します。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-22">
+                    <figure><img src="img/23.png"
+                            alt="お金に考えるとわかりやすいでしょう。10のかたまり、つまり10円玉が3枚、1のかたまり、つまり1円玉が6枚あった場合、合計金額は36円ですよね？"></figure>
+                    <div class="image-row-description">
+                        <p> お金に考えるとわかりやすいでしょう。10のかたまり、つまり10円玉が3枚、1のかたまり、つまり1円玉が6枚あった場合、合計金額は36円ですよね？</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-23">
+                    <figure><img src="img/24.png" alt="桁が1つ増えても、100のかたまりと考えられます。そのあとは1000、10000と、10倍ずつ増えているのもわかるでしょう。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> 桁が1つ増えても、100のかたまりと考えられます。そのあとは1000、10000と、10倍ずつ増えているのもわかるでしょう。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-24">
+                    <figure><img src="img/25.png" alt="この 'かたまり' がまさに「位(くらい)」です。右からそれぞれ、1の位、10の位、100の位となります。"></figure>
+                    <div class="image-row-description">
+                        <p> この 'かたまり' がまさに「位(くらい)」です。右からそれぞれ、1の位、10の位、100の位となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-25">
+                    <figure>
+                        <h5>2進数の位</h5><img src="img/26.png"
+                            alt="2進数の桁が増えるタイミングを見てみましょう。,1桁で表すことのできる最大の数は1です。次の数は、1桁から2桁に増やして、">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 2進数の桁が増えるタイミングを見てみましょう。</p>
+                        <p> 1桁で表すことのできる最大の数は1です。次の数は、1桁から2桁に増やして、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-26">
+                    <figure><img src="img/27.png" alt="10(イチゼロ)とするのは先ほど確認しましたね。この時、1と0それぞれを次の通りに考えます。"></figure>
+                    <div class="image-row-description">
+                        <p> 10(イチゼロ)とするのは先ほど確認しましたね。この時、1と0それぞれを次の通りに考えます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-27">
+                    <figure><img src="img/28.png" alt="まず、左の1は、2のかたまりが1つ存在する、という考え方をします。この数字は1の次、10進数だと2を表すためです。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> まず、左の1は、2のかたまりが1つ存在する、という考え方をします。この数字は1の次、10進数だと2を表すためです。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-28">
+                    <figure><img src="img/29.png" alt="次の数11(イチイチ)は、2のかたまりが1つ、1のかたまりが1つ存在し、これを足したものがこの数字の大きさを表します。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> 次の数11(イチイチ)は、2のかたまりが1つ、1のかたまりが1つ存在し、これを足したものがこの数字の大きさを表します。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-29">
+                    <figure><img src="img/30.png"
+                            alt="次の数で桁がまた増えます。これにより、一番左の数は4のかたまりとなります。,それ以降は、8のかたまり、16のかたまり...と、2倍ずつ増えています。"></figure>
+                    <div class="image-row-description">
+                        <p> 次の数で桁がまた増えます。これにより、一番左の数は4のかたまりとなります。</p>
+                        <p> それ以降は、8のかたまり、16のかたまり...と、2倍ずつ増えています。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-30">
+                    <figure><img src="img/31.png"
+                            alt="110(イチイチゼロ)という数は、4のかたまりが1つ、2のかたまりが1つで、それを足し合わせたものが数の大きさを表すので、6となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 110(イチイチゼロ)という数は、4のかたまりが1つ、2のかたまりが1つで、それを足し合わせたものが数の大きさを表すので、6となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-31">
+                    <figure><img src="img/32.png" alt="この 'かたまり' が位(くらい)となるのは先ほど確認しましたね。なので右からそれぞれ、1の位、2の位、4の位となります。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> この 'かたまり' が位(くらい)となるのは先ほど確認しましたね。なので右からそれぞれ、1の位、2の位、4の位となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-32">
+                    <figure><img src="img/33.png" alt="まとめるとこのようになります。"></figure>
+                    <div class="image-row-description">
+                        <p> まとめるとこのようになります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-33">
+                    <figure><img src="img/34.png" alt="ここで、10、100、1000の位を、それぞれ10の1乗、10の2乗、10の3乗の位、と考えることができます。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> ここで、10、100、1000の位を、それぞれ10の1乗、10の2乗、10の3乗の位、と考えることができます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-34">
+                    <figure><img src="img/35.png" alt="つまり2進数も、2、4、8の位を、2の1乗、2の2乗、2の3乗、と考えることができます。"></figure>
+                    <div class="image-row-description">
+                        <p> つまり2進数も、2、4、8の位を、2の1乗、2の2乗、2の3乗、と考えることができます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-35">
+                    <figure><img src="img/36.png" alt="ここで、n進数の位は、一番右の位からnの0乗の位、nの1乗の位、nの2乗の位...と続きます。"></figure>
+                    <div class="image-row-description">
+                        <p> ここで、n進数の位は、一番右の位からnの0乗の位、nの1乗の位、nの2乗の位...と続きます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-36">
+                    <figure><img src="img/37.png"
+                            alt="桁が増えるタイミングは1乗から2乗など、+1乗となります。また、nの0乗は基本的には1になることから、小数点の前の位は必ず1の位となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 桁が増えるタイミングは1乗から2乗など、+1乗となります。また、nの0乗は基本的には1になることから、小数点の前の位は必ず1の位となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-37">
+                    <figure><img src="img/38.png" alt="練習問題です。例えば8進数だった場合、それぞれ何の位になるでしょうか。"></figure>
+                    <div class="image-row-description">
+                        <p> 練習問題です。例えば8進数だった場合、それぞれ何の位になるでしょうか。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-38">
+                    <figure><img src="img/39.png" alt="それぞれの位は、nの何乗の位になるというのは先ほどやりましたね。今回は8進数なので、n=8です。"></figure>
+                    <div class="image-row-description">
+                        <p> それぞれの位は、nの何乗の位になるというのは先ほどやりましたね。今回は8進数なので、n=8です。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-39">
+                    <figure><img src="img/40.png" alt="右からそれぞれ、8の0乗の位、8の1乗の位、8の2乗の位、8の3乗の位となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 右からそれぞれ、8の0乗の位、8の1乗の位、8の2乗の位、8の3乗の位となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-40">
+                    <figure><img src="img/41.png" alt="つまり、右からそれぞれ、1の位、8の位、64の位、512の位となります。"></figure>
+                    <div class="image-row-description">
+                        <p> つまり、右からそれぞれ、1の位、8の位、64の位、512の位となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-41">
+                    <figure>
+                        <h5>2進数を10進数に変換する</h5><img src="img/42.png" alt="今回は10011(イチゼロゼロイチイチ)を10進数に変換します。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 今回は10011(イチゼロゼロイチイチ)を10進数に変換します。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-42">
+                    <figure><img src="img/43.png" alt="まず、それぞれの数字とその桁をかけ算します。"></figure>
+                    <div class="image-row-description">
+                        <p> まず、それぞれの数字とその桁をかけ算します。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-43">
+                    <figure><img src="img/44.png" alt="計算結果はこのようになります。"></figure>
+                    <div class="image-row-description">
+                        <p> 計算結果はこのようになります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-44">
+                    <figure><img src="img/45.png" alt="次に出てきた数値を足し算します。今回は、16+0+0+2+1になります。"></figure>
+                    <div class="image-row-description">
+                        <p> 次に出てきた数値を足し算します。今回は、16+0+0+2+1になります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-45">
+                    <figure><img src="img/46.png" alt="結果、10011(イチゼロゼロイチイチ)は10進数にすると19となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 結果、10011(イチゼロゼロイチイチ)は10進数にすると19となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-46">
+                    <figure><img src="img/47.png" alt="10進数も同じです。例えば453を考えます。"></figure>
+                    <div class="image-row-description">
+                        <p> 10進数も同じです。例えば453を考えます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-47">
+                    <figure><img src="img/48.png" alt="このとき、4は10の2乗の位、5は10の1乗の位、3は10の0乗の位です。"></figure>
+                    <div class="image-row-description">
+                        <p> このとき、4は10の2乗の位、5は10の1乗の位、3は10の0乗の位です。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-48">
+                    <figure><img src="img/49.png"
+                            alt="お金で考えるとわかりやすいです。100の位は100円、10の位は10円...ととらえ、それが何枚あるかを考えます。,100の位は4、つまり、100円玉が4枚あるというイメージです。そうすると、10円玉が5枚、1円玉が3枚になります。,それを合計すると、453円になりますが、計算の理屈はそれと同じです。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> お金で考えるとわかりやすいです。100の位は100円、10の位は10円...ととらえ、それが何枚あるかを考えます。</p>
+                        <p> 100の位は4、つまり、100円玉が4枚あるというイメージです。そうすると、10円玉が5枚、1円玉が3枚になります。</p>
+                        <p> それを合計すると、453円になりますが、計算の理屈はそれと同じです。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-49">
+                    <figure><img src="img/50.png" alt="2進数も同じです。それぞれの位は右から2の0乗で始まり、一番左の位は2の4乗の位となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 2進数も同じです。それぞれの位は右から2の0乗で始まり、一番左の位は2の4乗の位となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-50">
+                    <figure><img src="img/51.png" alt="今回は、16の位、4の位、1の位がそれぞれ1です。つまり、16円玉、4円玉、1円玉が1枚ずつある状況を考えます。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> 今回は、16の位、4の位、1の位がそれぞれ1です。つまり、16円玉、4円玉、1円玉が1枚ずつある状況を考えます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-51">
+                    <figure><img src="img/52.png" alt="合計で21円になります"></figure>
+                    <div class="image-row-description">
+                        <p> 合計で21円になります</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-52">
+                    <figure>
+                        <h5>10進数を2進数に変換する</h5><img src="img/53.png"
+                            alt="10進数を2進数に変換することを考えます。考え方は、先ほどの逆です。,たとえば21という10進数を2進数に変換することを考えると、21円を、位の硬貨でどう支払うかを考えます。,このとき、硬貨の枚数は最小で支払うことを考えます。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 10進数を2進数に変換することを考えます。考え方は、先ほどの逆です。</p>
+                        <p> たとえば21という10進数を2進数に変換することを考えると、21円を、位の硬貨でどう支払うかを考えます。</p>
+                        <p> このとき、硬貨の枚数は最小で支払うことを考えます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-53">
+                    <figure><img src="img/54.png" alt="27を2進数に変換します。"></figure>
+                    <div class="image-row-description">
+                        <p> 27を2進数に変換します。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-54">
+                    <figure><img src="img/55.png" alt="まず、何の位が必要か考えます。"></figure>
+                    <div class="image-row-description">
+                        <p> まず、何の位が必要か考えます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-55">
+                    <figure><img src="img/56.png" alt="今回は2進数の位を考えます。つまり、2の0乗円玉や2の1乗円玉などが必要になるとわかります。"></figure>
+                    <div class="image-row-description">
+                        <p> 今回は2進数の位を考えます。つまり、2の0乗円玉や2の1乗円玉などが必要になるとわかります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-56">
+                    <figure><img src="img/57.png"
+                            alt="そして、それを大きい順に並べます。,今回は、1円玉、2円玉、4円玉、8円玉、16円玉が必要です。そのあとは、32円玉、64円玉と続きます。が、今回は必要ありません。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> そして、それを大きい順に並べます。</p>
+                        <p> 今回は、1円玉、2円玉、4円玉、8円玉、16円玉が必要です。そのあとは、32円玉、64円玉と続きます。が、今回は必要ありません。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-57">
+                    <figure><img src="img/58.png"
+                            alt="用意した硬貨で27円を払う方法を考えます。このとき、より少ない枚数で、ピッタリ払うことを考えます。,なので、32円玉はピッタリ払うことができないので、必要ないということがわかります。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> 用意した硬貨で27円を払う方法を考えます。このとき、より少ない枚数で、ピッタリ払うことを考えます。</p>
+                        <p> なので、32円玉はピッタリ払うことができないので、必要ないということがわかります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-58">
+                    <figure><img src="img/59.png" alt="大きい金額の硬貨から考えます。16円玉は1枚使います。2枚使うと、32円になってしまいピッタリ支払えません。"></figure>
+                    <div class="image-row-description">
+                        <p> 大きい金額の硬貨から考えます。16円玉は1枚使います。2枚使うと、32円になってしまいピッタリ支払えません。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-59">
+                    <figure><img src="img/60.png" alt="硬貨の上に使用する枚数を書きます。"></figure>
+                    <div class="image-row-description">
+                        <p> 硬貨の上に使用する枚数を書きます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-60">
+                    <figure><img src="img/61.png" alt="次に8円玉ですが、これも1枚使います。"></figure>
+                    <div class="image-row-description">
+                        <p> 次に8円玉ですが、これも1枚使います。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-61">
+                    <figure><img src="img/62.png" alt="4円玉ですが、使わないので0枚と書きます。使うと、28円になってしまいピッタリ支払えません。"></figure>
+                    <div class="image-row-description">
+                        <p> 4円玉ですが、使わないので0枚と書きます。使うと、28円になってしまいピッタリ支払えません。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-62">
+                    <figure><img src="img/63.png" alt="2円玉は1枚使います。"></figure>
+                    <div class="image-row-description">
+                        <p> 2円玉は1枚使います。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-63">
+                    <figure><img src="img/64.png" alt="1円玉は1枚使います。"></figure>
+                    <div class="image-row-description">
+                        <p> 1円玉は1枚使います。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-64">
+                    <figure><img src="img/65.png" alt="これで27円がピッタリ支払えました。最後に単位の「枚」を消してみましょう。"></figure>
+                    <div class="image-row-description">
+                        <p> これで27円がピッタリ支払えました。最後に単位の「枚」を消してみましょう。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-65">
+                    <figure><img src="img/66.png" alt="枚数を左から数えたものが、2進数に変換したものになります。"></figure>
+                    <div class="image-row-description">
+                        <p> 枚数を左から数えたものが、2進数に変換したものになります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-66">
+                    <figure>
+                        <h5>デジタル情報と進数 - まとめ</h5><img src="img/67.png" alt="">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top"></div>
+                </div>
+                <!-- ここまでベタ打ち -->
+            </div>
+        </main>
+    </div>
+
 </body>
 <script>
     // 用語
