@@ -48,6 +48,9 @@ if (youtubeURLID !== null) {
     videoExplanation.innerHTML = `<a>なし</a>`;
 }
 
+// 画像差し替え確かめ用。必ずコメントアウトすること。
+// createImageHTML(image);
+
 // 関連単語セクション
 const relatedWordsTitle = document.createElement('h4');
 relatedWordsTitle.textContent = '関連単語';
@@ -208,6 +211,10 @@ function createImageHTML(images) {
     });
 
     console.log(imageEle.innerHTML);
+
+    // 画像差し替え確かめ用。必ずコメントアウトすること。
+    // const imageExplanationEle = document.getElementById("image-explanation");
+    // imageExplanationEle.appendChild(imageEle);
 }
 
 // 画像1枚分の表示を作る共通関数
