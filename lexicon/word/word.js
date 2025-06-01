@@ -182,6 +182,10 @@ function updateDisplayMode() {
         });
         pageNum.textContent = `${currentIndex + 1}/${rows.length}`
         if (nav) nav.classList.add('show');
+
+        // 前へ・次へボタンの活性非活性の制御
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === image.length - 1;
     }
 }
 
