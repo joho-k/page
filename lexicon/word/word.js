@@ -163,6 +163,11 @@ const rows = document.querySelectorAll('.image-row');
 // 初期段階でスライドモードにしておく
 updateDisplayMode();
 
+// 原稿のテキストデータ化
+// console.log(image
+//     .map(item => (item.descriptions || []).join('')) // 1つの descriptions を改行でつなぐ
+//     .join('\n') // 各 descriptions ブロックの間に空行を入れる
+// )
 function updateDisplayMode() {
     if (displayMode === 'list') {
         rows.forEach(row => row.classList.add('show'));
