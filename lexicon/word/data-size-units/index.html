@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<!-- ここから全ページ共通 -->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>データの大きさを表す単位 | 情報I用語集</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    <meta property="og:title" content="データの大きさを表す単位 | 情報Iの用語解説">
+    <meta property="og:description" content="初心者にもわかりやすく解説。">
+
+    <link rel="icon" href="../../../img/logo.ico">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../word.css">
+
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v6.4.2/css/all.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHYWTV27F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RXHYWTV27F');
+    </script>
+
+
+    <script src="../../../common.js"></script>
+    <link rel="stylesheet" href="../../../header.css">
+
+    <!-- 共通部分ここまで -->
+</head>
+
+<body id="word-body">
+    <div class="content">
+        <header>
+        </header>
+        <main>
+            <div id="image-explanation" class="content-item">
+                <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
+                <div class="image-row" id="slide-0">
+                    <figure>
+                        <h5>コンピュータ内部のデータの表し方</h5><img src="img/01.png"
+                            alt="コンピュータの内部では、電流が流れたかそうでないかで処理を制御しています。,このとき、電流が流れていない状態を0、電流が流れている状態を1とする2進数を使うのが合理的です。,文字や画像、音や動画など、コンピュータで扱うデータは内部では0と1で扱われています。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> コンピュータの内部では、電流が流れたかそうでないかで処理を制御しています。</p>
+                        <p> このとき、電流が流れていない状態を0、電流が流れている状態を1とする2進数を使うのが合理的です。</p>
+                        <p> 文字や画像、音や動画など、コンピュータで扱うデータは内部では0と1で扱われています。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-1">
+                    <figure><img src="img/02.png" alt="例えば、「コンニチハ」と書かれた 挨拶.txt というファイルがあるとします。"></figure>
+                    <div class="image-row-description">
+                        <p> 例えば、「コンニチハ」と書かれた 挨拶.txt というファイルがあるとします。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-2">
+                    <figure><img src="img/03.png" alt="このときコンピュータ内部では、1011101011011101... と0と1だけで表現することができます。"></figure>
+                    <div class="image-row-description">
+                        <p> このときコンピュータ内部では、1011101011011101... と0と1だけで表現することができます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-3">
+                    <figure>
+                        <h5>データの大きさを表す単位</h5><img src="img/04.png" alt="挨拶.txt は、内部的にはこのようなデータです。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 挨拶.txt は、内部的にはこのようなデータです。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-4">
+                    <figure><img src="img/05.png" alt="このファイルのデータの大きさは、簡単に求めることができます。,データの中にある数字が何個あるか、数えてみましょう。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> このファイルのデータの大きさは、簡単に求めることができます。</p>
+                        <p> データの中にある数字が何個あるか、数えてみましょう。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-5">
+                    <figure><img src="img/06.png" alt="全部で40個の数字があるのがわかりますね。"></figure>
+                    <div class="image-row-description">
+                        <p> 全部で40個の数字があるのがわかりますね。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-6">
+                    <figure><img src="img/07.png"
+                            alt="このとき、このデータの大きさ、つまりデータ容量は40ビットとなります。,0と1の数が、データの大きさとなり、単位は「ビット」で表されるのです。"></figure>
+                    <div class="image-row-description">
+                        <p> このとき、このデータの大きさ、つまりデータ容量は40ビットとなります。</p>
+                        <p> 0と1の数が、データの大きさとなり、単位は「ビット」で表されるのです。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-7">
+                    <figure><img src="img/08.png" alt="例えばとあるデータが、100だった場合、このデータの大きさは何ビットでしょう。"></figure>
+                    <div class="image-row-description">
+                        <p> 例えばとあるデータが、100だった場合、このデータの大きさは何ビットでしょう。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-8">
+                    <figure><img src="img/09.png" alt="データの中に数字が3つあるので、"></figure>
+                    <div class="image-row-description">
+                        <p> データの中に数字が3つあるので、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-9">
+                    <figure><img src="img/10.png" alt="3ビットとなります。"></figure>
+                    <div class="image-row-description">
+                        <p> 3ビットとなります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-10">
+                    <figure><img src="img/11.png" alt="ではこの場合のデータ容量は？"></figure>
+                    <div class="image-row-description">
+                        <p> ではこの場合のデータ容量は？</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-11">
+                    <figure><img src="img/12.png" alt="数が8個あるので、8ビットですね。"></figure>
+                    <div class="image-row-description">
+                        <p> 数が8個あるので、8ビットですね。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-12">
+                    <figure><img src="img/13.png" alt="8ビットでひとまとまりにし、1バイトという単位にもなります。,スマホの通信容量などで馴染みのある単位ですね。"></figure>
+                    <div class="image-row-description">
+                        <p> 8ビットでひとまとまりにし、1バイトという単位にもなります。</p>
+                        <p> スマホの通信容量などで馴染みのある単位ですね。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-13">
+                    <figure><img src="img/14.png" alt="ではこの場合のデータ容量は何バイトでしょう？"></figure>
+                    <div class="image-row-description">
+                        <p> ではこの場合のデータ容量は何バイトでしょう？</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-14">
+                    <figure><img src="img/15.png" alt="まず、ビットで出してみましょう。データの数字が24個なので、"></figure>
+                    <div class="image-row-description">
+                        <p> まず、ビットで出してみましょう。データの数字が24個なので、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-15">
+                    <figure><img src="img/16.png" alt="24ビットです。"></figure>
+                    <div class="image-row-description">
+                        <p> 24ビットです。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-16">
+                    <figure><img src="img/17.png" alt="1バイトは、8ビットとなっているので、"></figure>
+                    <div class="image-row-description">
+                        <p> 1バイトは、8ビットとなっているので、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-17">
+                    <figure><img src="img/18.png" alt="3バイトとなります。"></figure>
+                    <div class="image-row-description">
+                        <p> 3バイトとなります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-18">
+                    <figure>
+                        <h5>nビットで表すことのできる情報量</h5><img src="img/19.png" alt="1ビットで表せる具体的なデータは、どんなものがあるでしょう？">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 1ビットで表せる具体的なデータは、どんなものがあるでしょう？</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-19">
+                    <figure><img src="img/20.png" alt="まず、1ビットというのは、一桁で表すことができるデータです。,次に、コンピュータ内部では、0と1のみを使って表されます。">
+                    </figure>
+                    <div class="image-row-description">
+                        <p> まず、1ビットというのは、一桁で表すことができるデータです。</p>
+                        <p> 次に、コンピュータ内部では、0と1のみを使って表されます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-20">
+                    <figure><img src="img/21.png" alt="つまり、1ビットで表せる具体的なデータは、「0」と「1」の"></figure>
+                    <div class="image-row-description">
+                        <p> つまり、1ビットで表せる具体的なデータは、「0」と「1」の</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-21">
+                    <figure><img src="img/22.png" alt="2種類となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 2種類となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-22">
+                    <figure><img src="img/23.png"
+                            alt="では、2ビットで表せる具体的なデータは、どんなものがあるでしょう？,まず、「00」が挙げられます。,2ビットは、2桁で表されるデータです。"></figure>
+                    <div class="image-row-description">
+                        <p> では、2ビットで表せる具体的なデータは、どんなものがあるでしょう？</p>
+                        <p> まず、「00」が挙げられます。</p>
+                        <p> 2ビットは、2桁で表されるデータです。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-23">
+                    <figure><img src="img/24.png" alt="「00」の他に、「01」、「10」、「11」の4種類となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 「00」の他に、「01」、「10」、「11」の4種類となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-24">
+                    <figure><img src="img/25.png" alt="では、3ビットで表せる具体的なデータは、どんなものがあるでしょう？"></figure>
+                    <div class="image-row-description">
+                        <p> では、3ビットで表せる具体的なデータは、どんなものがあるでしょう？</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-25">
+                    <figure><img src="img/26.png" alt="樹形図を描くとわかりやすいです。,1桁目にくる数字、2桁目にくる数字をこのように書いてみると、"></figure>
+                    <div class="image-row-description">
+                        <p> 樹形図を描くとわかりやすいです。</p>
+                        <p> 1桁目にくる数字、2桁目にくる数字をこのように書いてみると、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-26">
+                    <figure><img src="img/27.png" alt="全部で8種類となります。"></figure>
+                    <div class="image-row-description">
+                        <p> 全部で8種類となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-27">
+                    <figure><img src="img/28.png" alt="まとめるとこうなります。"></figure>
+                    <div class="image-row-description">
+                        <p> まとめるとこうなります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-28">
+                    <figure><img src="img/29.png" alt="では、Nビットで表せるデータの種類の数は、Nを使って何種類となるでしょう。"></figure>
+                    <div class="image-row-description">
+                        <p> では、Nビットで表せるデータの種類の数は、Nを使って何種類となるでしょう。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-29">
+                    <figure><img src="img/30.png" alt="答えは2のN乗となります。1ビット増えるごとに、2倍となっていますね。"></figure>
+                    <div class="image-row-description">
+                        <p> 答えは2のN乗となります。1ビット増えるごとに、2倍となっていますね。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-30">
+                    <figure>
+                        <h5>練習問題1: 4ビットで表すことのできる情報の種類</h5><img src="img/31.png"
+                            alt="練習問題です。4ビットで表すことのできる情報の種類は何通りでしょうか。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 練習問題です。4ビットで表すことのできる情報の種類は何通りでしょうか。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-31">
+                    <figure><img src="img/32.png" alt="Nビットで表すことのできる情報量は、2のN乗通りなので、"></figure>
+                    <div class="image-row-description">
+                        <p> Nビットで表すことのできる情報量は、2のN乗通りなので、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-32">
+                    <figure><img src="img/33.png" alt="Nは4。つまり、2の4乗、16通りとなります。"></figure>
+                    <div class="image-row-description">
+                        <p> Nは4。つまり、2の4乗、16通りとなります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-33">
+                    <figure><img src="img/34.png" alt="樹形図で表すとこのようになります。16通り存在していますね。"></figure>
+                    <div class="image-row-description">
+                        <p> 樹形図で表すとこのようになります。16通り存在していますね。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-34">
+                    <figure>
+                        <h5>練習問題2: 信号機の色を表すためのビット数</h5><img src="img/35.png" alt="次の問題です。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 次の問題です。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-35">
+                    <figure><img src="img/36.png"
+                            alt="まず、1ビットだとどうでしょうか。,赤を0、黄色を1とすると、使える2つの数字を使ってしまったため、青は表すことができなくなってしまいます。"></figure>
+                    <div class="image-row-description">
+                        <p> まず、1ビットだとどうでしょうか。</p>
+                        <p> 赤を0、黄色を1とすると、使える2つの数字を使ってしまったため、青は表すことができなくなってしまいます。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-36">
+                    <figure><img src="img/37.png" alt="では、2ビットだとどうでしょう。,赤を00、黄色を01とし、青は10となります。"></figure>
+                    <div class="image-row-description">
+                        <p> では、2ビットだとどうでしょう。</p>
+                        <p> 赤を00、黄色を01とし、青は10となります。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-37">
+                    <figure><img src="img/38.png" alt="11は余ってしまいますが、2ビットで全ての情報を表すことができました。"></figure>
+                    <div class="image-row-description">
+                        <p> 11は余ってしまいますが、2ビットで全ての情報を表すことができました。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-38">
+                    <figure>
+                        <h5>練習問題3: 10人の番号を割り当てるために必要なビット数</h5><img src="img/39.png" alt="次の問題です。">
+                    </figure>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 次の問題です。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-39">
+                    <figure><img src="img/40.png" alt="Nビットで表すことのできる情報量は、2のN乗通りであることを踏まえると、"></figure>
+                    <div class="image-row-description">
+                        <p> Nビットで表すことのできる情報量は、2のN乗通りであることを踏まえると、</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-40">
+                    <figure><img src="img/41.png" alt="1ビットは2の1乗通り、2種類なので足りません。"></figure>
+                    <div class="image-row-description">
+                        <p> 1ビットは2の1乗通り、2種類なので足りません。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-41">
+                    <figure><img src="img/42.png" alt="2ビットは2の2乗通り、4種類なので足りません。,3ビットは2の3乗通り、8種類なので足りません。"></figure>
+                    <div class="image-row-description">
+                        <p> 2ビットは2の2乗通り、4種類なので足りません。</p>
+                        <p> 3ビットは2の3乗通り、8種類なので足りません。</p>
+                    </div>
+                </div>
+                <div class="image-row" id="slide-42">
+                    <figure><img src="img/43.png" alt="4ビットは2の4乗通り、16種類なので足ります。よって、最低4ビットが必要です。"></figure>
+                    <div class="image-row-description">
+                        <p> 4ビットは2の4乗通り、16種類なので足ります。よって、最低4ビットが必要です。</p>
+                    </div>
+                </div>
+                <!-- ここまでベタ打ち -->
+            </div>
+        </main>
+    </div>
+</body>
+<script>
+    // 用語
+    const title = "データの大きさを表す単位"
+    // YouTubeの動画のURL。ない場合はnull
+    const youtubeURLID = null;
+    // 関連単語
+    const relatedWords = [
+        { word: "デジタル情報と進数表現", url: "digital-and-binary" },
+    ];
+
+    const image = [
+        {
+            title: "コンピュータ内部のデータの表し方",
+            descriptions: [
+                "コンピュータの内部では、電流が流れたかそうでないかで処理を制御しています。",
+                "このとき、電流が流れていない状態を0、電流が流れている状態を1とする2進数を使うのが合理的です。",
+                "文字や画像、音や動画など、コンピュータで扱うデータは内部では0と1で扱われています。",
+            ]
+        },
+        {
+            descriptions: [
+                "例えば、「コンニチハ」と書かれた 挨拶.txt というファイルがあるとします。",
+            ]
+        },
+        {
+            descriptions: [
+                "このときコンピュータ内部では、1011101011011101... と0と1だけで表現することができます。",
+            ]
+        },
+        {
+            title: "データの大きさを表す単位",
+            descriptions: [
+                "挨拶.txt は、内部的にはこのようなデータです。",
+            ]
+        },
+        {
+            descriptions: [
+                "このファイルのデータの大きさは、簡単に求めることができます。",
+                "データの中にある数字が何個あるか、数えてみましょう。"
+            ]
+        },
+        {
+            descriptions: [
+                "全部で40個の数字があるのがわかりますね。",
+            ]
+        },
+        {
+            descriptions: [
+                "このとき、このデータの大きさ、つまりデータ容量は40ビットとなります。",
+                "0と1の数が、データの大きさとなり、単位は「ビット」で表されるのです。"
+            ]
+        },
+        {
+            descriptions: [
+                "例えばとあるデータが、100だった場合、このデータの大きさは何ビットでしょう。",
+            ]
+        },
+        {
+            descriptions: [
+                "データの中に数字が3つあるので、",
+            ]
+        },
+        {
+            descriptions: [
+                "3ビットとなります。",
+            ]
+        },
+        {
+            descriptions: [
+                "ではこの場合のデータ容量は？",
+            ]
+        },
+        {
+            descriptions: [
+                "数が8個あるので、8ビットですね。",
+            ]
+        },
+        {
+            descriptions: [
+                "8ビットでひとまとまりにし、1バイトという単位にもなります。",
+                "スマホの通信容量などで馴染みのある単位ですね。"
+            ]
+        },
+        {
+            descriptions: [
+                "ではこの場合のデータ容量は何バイトでしょう？",
+            ]
+        },
+        {
+            descriptions: [
+                "まず、ビットで出してみましょう。データの数字が24個なので、",
+            ]
+        },
+        {
+            descriptions: [
+                "24ビットです。",
+            ]
+        },
+        {
+            descriptions: [
+                "1バイトは、8ビットとなっているので、",
+            ]
+        },
+        {
+            descriptions: [
+                "3バイトとなります。",
+            ]
+        },
+        {
+            title: "nビットで表すことのできる情報量",
+            descriptions: [
+                "1ビットで表せる具体的なデータは、どんなものがあるでしょう？",
+            ]
+        },
+        {
+            descriptions: [
+                "まず、1ビットというのは、一桁で表すことができるデータです。",
+                "次に、コンピュータ内部では、0と1のみを使って表されます。"
+            ]
+        },
+        {
+            descriptions: [
+                "つまり、1ビットで表せる具体的なデータは、「0」と「1」の",
+            ]
+        },
+        {
+            descriptions: [
+                "2種類となります。",
+            ]
+        },
+        {
+            descriptions: [
+                "では、2ビットで表せる具体的なデータは、どんなものがあるでしょう？",
+                "まず、「00」が挙げられます。",
+                "2ビットは、2桁で表されるデータです。"
+            ]
+        },
+        {
+            descriptions: [
+                "「00」の他に、「01」、「10」、「11」の4種類となります。",
+            ]
+        },
+        {
+            descriptions: [
+                "では、3ビットで表せる具体的なデータは、どんなものがあるでしょう？",
+            ]
+        },
+        {
+            descriptions: [
+                "樹形図を描くとわかりやすいです。",
+                "1桁目にくる数字、2桁目にくる数字をこのように書いてみると、"
+            ]
+        },
+        {
+            descriptions: [
+                "全部で8種類となります。",
+            ]
+        },
+        {
+            descriptions: [
+                "まとめるとこうなります。",
+            ]
+        },
+        {
+            descriptions: [
+                "では、Nビットで表せるデータの種類の数は、Nを使って何種類となるでしょう。",
+            ]
+        },
+        {
+            descriptions: [
+                "答えは2のN乗となります。1ビット増えるごとに、2倍となっていますね。",
+            ]
+        },
+        {
+            title: "練習問題1: 4ビットで表すことのできる情報の種類",
+            descriptions: [
+                "練習問題です。4ビットで表すことのできる情報の種類は何通りでしょうか。",
+            ]
+        },
+        {
+            descriptions: [
+                "Nビットで表すことのできる情報量は、2のN乗通りなので、",
+            ]
+        },
+        {
+            descriptions: [
+                "Nは4。つまり、2の4乗、16通りとなります。",
+            ]
+        },
+        {
+            descriptions: [
+                "樹形図で表すとこのようになります。16通り存在していますね。",
+            ]
+        },
+        {
+            title: "練習問題2: 信号機の色を表すためのビット数",
+            descriptions: [
+                "次の問題です。",
+            ]
+        },
+        {
+            descriptions: [
+                "まず、1ビットだとどうでしょうか。",
+                "赤を0、黄色を1とすると、使える2つの数字を使ってしまったため、青は表すことができなくなってしまいます。"
+            ]
+        },
+        {
+            descriptions: [
+                "では、2ビットだとどうでしょう。",
+                "赤を00、黄色を01とし、青は10となります。",
+            ]
+        },
+        {
+            descriptions: [
+                "11は余ってしまいますが、2ビットで全ての情報を表すことができました。",
+            ]
+        },
+        {
+            title: "練習問題3: 10人の番号を割り当てるために必要なビット数",
+            descriptions: [
+                "次の問題です。",
+            ]
+        },
+        {
+            descriptions: [
+                "Nビットで表すことのできる情報量は、2のN乗通りであることを踏まえると、",
+            ]
+        },
+        {
+            descriptions: [
+                "1ビットは2の1乗通り、2種類なので足りません。",
+            ]
+        },
+        {
+            descriptions: [
+                "2ビットは2の2乗通り、4種類なので足りません。",
+                "3ビットは2の3乗通り、8種類なので足りません。",
+            ]
+        },
+        {
+            descriptions: [
+                "4ビットは2の4乗通り、16種類なので足ります。よって、最低4ビットが必要です。",
+            ]
+        },
+    ]
+
+</script>
+<script src="../word.js">
+</script>
+
+</html>
