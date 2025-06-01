@@ -85,20 +85,18 @@ image.forEach((item, index) => {
     if (item.title) {
         const li = document.createElement('li');
         const a = document.createElement('a');
-        a.href = "#";
+        a.href = `#slide-${index}`;
         a.textContent = item.title;
 
         a.onclick = (e) => {
             e.preventDefault();
-            if (displayMode === 'list') {
-                const target = document.getElementById(`slide-${index}`);
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                currentIndex = index;
-                const target = document.querySelector('.slide-nav');
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
-            }
+            currentIndex = index;
             updateDisplayMode();
+            const target =
+                displayMode === 'list'
+                    ? document.getElementById(`slide-${index}`)
+                    : document.querySelector('.slide-nav');
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
         };
 
         li.appendChild(a);
