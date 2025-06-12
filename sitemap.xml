@@ -7,25 +7,16 @@
     <loc>https://joho-kyoshitsu.com/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/sisaku/index.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/dncl/question.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/dncl/index.html</loc>
-  </url>
-  <url>
     <loc>https://joho-kyoshitsu.com/lexicon/index.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/info-verification/index.html</loc>
   </url>
   <url>
     <loc>https://joho-kyoshitsu.com/lexicon/word/info-properties/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/public-key/index.html</loc>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/text-binaly/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/encryption/index.html</loc>
   </url>
   <url>
     <loc>https://joho-kyoshitsu.com/lexicon/word/information/index.html</loc>
@@ -37,15 +28,24 @@
     <loc>https://joho-kyoshitsu.com/lexicon/word/info-sources/index.html</loc>
   </url>
   <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/data-size-units/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/public-key/index.html</loc>
+  </url>
+  <url>
     <loc>https://joho-kyoshitsu.com/lexicon/word/digital-and-binary/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/text-binaly/index.html</loc>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/info-verification/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/encryption/index.html</loc>
+    <loc>https://joho-kyoshitsu.com/sisaku/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/data-size-units/index.html</loc>
+    <loc>https://joho-kyoshitsu.com/dncl/question.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/dncl/index.html</loc>
   </url>
 </urlset>
