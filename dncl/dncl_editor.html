@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DNCL実行環境（インデント対応版 + └対応）</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+        }
+
+        #output {
+            background: #f0f0f0;
+            padding: 10px;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>DNCL実行環境（インデントと└でブロック管理）</h2>
+    <button onclick="stepRun()">▶ 次へ</button>
+    <textarea id="code" placeholder="DNCL風コードを入力してください">
+x = 2
+もし x > 3 ならば:
+｜ 表示する("大きい")
+そうでなければ:
+└ 表示する("小さい")
+
+関数 sum (a, b):
+｜ c = a + b
+｜ もし a > b ならば:
+｜ ｜ print("入れ子1")
+｜ ｜ もし a > b ならば:
+｜ ｜ ｜ print("入れ子の入れ子1")
+｜ ｜ └ print("入れ子の入れ子2")
+｜ └ print("入れ子2")
+└ c を返す
+
+表示する(sum(6,5))
+        </textarea>
+    <br><br>
+    <button onclick="runCode()">▶ 実行</button>
+    <h3>出力:</h3>
+    <div id="output"></div>
+
+    <script>
+        function runCode() {
+            const dncl = document.getElementById('code').value;
+            const outputEl = document.getElementById('output');
+            outputEl.textContent = '';
+
+            const lines = dncl.split(/\r?\n/);
+            let jsLines = [];
+            let indentStack = [0];
+
+            let varNames = new Set();
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const trimmedLine = line.trimStart();
+
+                // ✅ 「└　」で始まる行（1行ブロック）
+                if (trimmedLine.includes('└')) {
+                    const match = trimmedLine.match(/(└+)/);
+                    const closeCount = match ? match[1].length : 1;
+                    const content = trimmedLine.replace(/^.*└+\s*/, '');
+                    const currentIndent = indentStack[indentStack.length - 1];
+
+                    let jsLine = content
+                        .replace(/^(.+?) を返す$/, 'return $1')
+                        .replace(/^表示する\((.+)\)$/, 'print($1);')
+                        .replace(/^print\((.+)\)$/, 'print($1);')
+                        .replace(/要素数\((.+?)\)/g, '$1.length')
+                        .replace(/整数\(\)/g, 'Math.random()')
+                        .replace(/乱数\(\)/g, 'Math.floor()');
+
+                    jsLines.push('  '.repeat(currentIndent) + jsLine);
+
+                    for (let j = 0; j < closeCount; j++) {
+                        if (indentStack.length > 1) {
+                            const count = (line.match(/└/g) || []).length;
+                            for (let k = 0; k < count; k++) {
+                                indentStack.pop();
+                                jsLines.push('  '.repeat(indentStack[indentStack.length - 1]) + '}');
+                            }
+                        }
+                    }
+                    continue;
+                }
+
+
+                const indent = (line.match(/^(｜ )+/) || [''])[0].length / 2;
+                const content = line.replace(/^(｜ )+/, '').trim();
+                let jsLine = content;
+
+                const isElse = content.startsWith("そうでなければ:");
+
+                if (isElse) {
+                    jsLines.push('} else {');
+                    indentStack.pop();
+                    indentStack.push(indent);
+                    continue;
+                }
+
+                while (indent < indentStack[indentStack.length - 1]) {
+                    jsLines.push('}');
+                    indentStack.pop();
+                }
+
+                // 文法変換
+                jsLine = jsLine.replace(/^もし (.+) ならば:$/, 'if ($1) {');
+                jsLine = jsLine.replace(/^(.+) を (.+) から (.+) まで (.+) ずつ増やしながら繰り返す:$/, 'for (let $1 = $2; $1 <= $3; $1 += $4) {');
+                jsLine = jsLine.replace(/^(.+) の間繰り返す:$/, 'while ($1) {');
+                jsLine = jsLine.replace(/^表示する\((.+)\)$/, 'print($1);');
+                jsLine = jsLine.replace(/^(.+?) を返す$/, 'return $1');
+                jsLine = jsLine.replace(/要素数\((.+?)\)/g, '$1.length');
+                jsLine = jsLine.replace(/^関数 (.+)\((.*?)\):$/, 'function $1($2) {');
+                jsLine = jsLine.replace(/乱数\(\)/g, 'Math.random()');
+                jsLine = jsLine.replace(/整数\(([^)]+)\)/g, 'Math.floor($1)');
+
+                jsLines.push(jsLine);
+
+                if (jsLine.endsWith('{')) {
+                    indentStack.push(indent);
+                }
+            }
+
+            while (indentStack.length > 1) {
+                jsLines.push('}');
+                indentStack.pop();
+            }
+
+            console.log(jsLines.join('\n'));
+            jsLines.push('print("----- 変数の現在値 -----");');
+            jsLines.push('[...Object.keys(globalThis)].filter(v => [' + [...varNames].map(v => `"${v}"`).join(', ') + '].includes(v)).forEach(v => { try { print(v + " =", globalThis[v]); } catch (e) {} });');
+
+            const finalCode = `
+            let output = "";
+            function print(...args) {
+                output += args.join(" ") + "\\n";
+            }
+            try {
+                ${jsLines.join('\n')}
+            } catch (e) {
+                output += "エラー: " + e.message;
+            }
+            return output;
+            `;
+
+            try {
+                const result = new Function(finalCode)();
+                outputEl.textContent = result;
+            } catch (err) {
+                outputEl.textContent = "実行時エラー: " + err.message;
+            }
+        }
+
+    </script>
+</body>
+
+</html>
