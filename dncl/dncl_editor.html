@@ -27,7 +27,6 @@
 
 <body>
     <h2>DNCL実行環境（インデントと└でブロック管理）</h2>
-    <button onclick="stepRun()">▶ 次へ</button>
     <textarea id="code" placeholder="DNCL風コードを入力してください">
 x = 2
 もし x > 3 ならば:
@@ -65,22 +64,6 @@ x = 2
             let indentStack = [0];
 
             let varNames = new Set();
-
-            /**
-             * 変数を出力
-             */
-            function extractVars(jsLine) {
-                const assignMatch = jsLine.match(/^\s*(?:let\s+)?([a-zA-Z_][a-zA-Z0-9_]*)\s*=/);
-                if (assignMatch) varNames.add(assignMatch[1]);
-                const forMatch = jsLine.match(/for\s*\(\s*let\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=/);
-                if (forMatch) varNames.add(forMatch[1]);
-                const funcArgsMatch = jsLine.match(/^function\s+\w+\((.*?)\)/);
-                if (funcArgsMatch) {
-                    funcArgsMatch[1].split(',').map(arg => arg.trim()).forEach(v => {
-                        if (v) varNames.add(v);
-                    });
-                }
-            }
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
@@ -126,6 +109,17 @@ x = 2
                     jsLines.push('} else {');
                     indentStack.pop();
                     indentStack.push(indent);
+                    continue;
+                }
+
+                // --- 「そうでなくもし」への対応 ---
+                if (/^そうでなくもし .+ ならば:$/.test(content)) {
+                    while (indent < indentStack[indentStack.length - 1]) {
+                        indentStack.pop();
+                        jsLines.push('  '.repeat(indentStack[indentStack.length - 1]) + '}');
+                    }
+                    jsLine = content.replace(/^そうでなくもし (.+) ならば:$/, '} else if ($1) {');
+                    jsLines.push('  '.repeat(indent) + jsLine);
                     continue;
                 }
 
