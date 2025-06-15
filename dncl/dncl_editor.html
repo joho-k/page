@@ -143,6 +143,7 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 const trimmedLine = line.trimStart();
+
                 const assignMatch = trimmedLine.match(/^([└│ ]*)\s*([a-zA-Z_]\w*)\s*=\s*(.+)$/);
                 const assignLoopMatch = trimmedLine.match(/^([a-zA-Z_]\w*) を .+ から .+ まで .+ ずつ増やしながら繰り返す:/);
 
@@ -232,7 +233,20 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             }
 
             for (let i = 1; i < jsLines.length; i = i + 2) {
-                const addCode = jsLines[i] !== "" ? `recordStep(${Math.ceil(i / 2)});` : "";
+                const trimmedLine = jsLines[i - 1].trimStart();
+
+                const assignMatch = trimmedLine.match(/^([└│ ]*)\s*([a-zA-Z_]\w*)\s*=\s*(.+)$/);
+                const assignLoopMatch = trimmedLine.match((/^\s*for\s*\(\s*let\s+([a-zA-Z_]\w*)\s*=/));
+
+                let varsCode = "";
+                if (assignMatch) {
+                    varsCode = ` vars.${assignMatch[2]} = ${assignMatch[2]};`;
+                } else if (assignLoopMatch) {
+                    varsCode = ` vars.${assignLoopMatch[1]} = ${assignLoopMatch[1]};`;
+                }
+                const addCode = trimmedLine !== ""
+                    ? `recordStep(${Math.ceil(i / 2)});${`${varsCode}`}`
+                    : "";
                 jsLines.splice(i, 0, addCode);
             }
             console.log(jsLines.join("\n"));
@@ -240,11 +254,14 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             const finalCode = `
             let output = "";
             let traceTable = [];
+            // 処理を追う用の変数
+            const vars = {};
+
             function recordStep(step) {
                 const snapshot = { "ステップ": step };
                 for (const name of ${JSON.stringify([...varNames])}) {
                     try {
-                        snapshot[name] = JSON.stringify(globalThis[name]);
+                        snapshot[name] = JSON.stringify(vars[name]);
                     } catch { snapshot[name] = "-"; }
                 }
                 traceTable.push(snapshot);
@@ -288,14 +305,25 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             table.appendChild(thead);
 
             const tbody = document.createElement("tbody");
+            let prevRow = null;
             traceTable.forEach(row => {
                 const tr = document.createElement("tr");
                 ["ステップ", ...varNames].forEach(key => {
                     const td = document.createElement("td");
-                    td.textContent = row[key] ?? "-";
+                    const value = row[key] ?? "-";
+
+                    td.textContent = value;
+
+                    if (prevRow && key !== "ステップ") {
+                        const prevValue = prevRow[key] ?? "-";
+                        if (prevValue !== value) {
+                            td.classList.add("changed");
+                        }
+                    }
                     tr.appendChild(td);
                 });
                 tbody.appendChild(tr);
+                prevRow = row;
             });
             table.appendChild(tbody);
 
