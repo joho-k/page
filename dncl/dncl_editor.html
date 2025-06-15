@@ -6,11 +6,26 @@
     <title>DNCL実行環境（インデント対応版 + └対応）</title>
     <style>
         body {
-            font-family: sans-serif;
             padding: 20px;
         }
 
-        textarea {
+        .code-area {
+            display: flex;
+            flex: 1;
+            white-space: pre;
+            height: 200px;
+        }
+
+        #line-numbers {
+            font-size: 16px;
+            text-align: right;
+            padding-right: 8px;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        #code {
+            font-size: 16px;
             width: 100%;
             height: 200px;
             font-family: monospace;
@@ -51,12 +66,15 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
 └ c を返す
 
 表示する(add(6,5)) -->
-    <textarea id="code" placeholder="DNCL風コードを入力してください">
+    <div class="code-area">
+        <div id="line-numbers"></div>
+        <textarea id="code" placeholder="DNCL風コードを入力してください">
 sum = 0
 i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
 └ sum = sum + i
 表示する(sum)
         </textarea>
+    </div>
     <br><br>
     <button onclick="runCode()">▶ 実行</button>
     <h3>出力:</h3>
@@ -65,6 +83,22 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
     <div id="trace"></div>
 
     <script>
+        const textarea = document.getElementById("code");
+        const lineNumbers = document.getElementById("line-numbers");
+
+        function updateLineNumbers() {
+            const lines = textarea.value.split('\n').length;
+            lineNumbers.innerHTML = Array.from({ length: lines }, (_, i) => (i + 1)).join('<br>');
+        }
+
+        textarea.addEventListener('input', updateLineNumbers);
+        textarea.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = textarea.scrollTop;
+        });
+
+        // 初期表示
+        updateLineNumbers();
+
         function runCode() {
             const dncl = document.getElementById('code').value;
             const outputEl = document.getElementById('output');
@@ -165,7 +199,8 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             }
 
             for (let i = 1; i < jsLines.length; i = i + 2) {
-                jsLines.splice(i, 0, `recordStep(${Math.ceil(i / 2)});`);
+                const addCode = jsLines[i] !== "" ? `recordStep(${Math.ceil(i / 2)});` : "";
+                jsLines.splice(i, 0, addCode);
             }
             console.log(jsLines.join("\n"));
 
