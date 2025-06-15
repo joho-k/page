@@ -27,12 +27,11 @@
 
 <body>
     <h2>DNCL実行環境（インデントと└でブロック管理）</h2>
-    <textarea id="code" placeholder="DNCL風コードを入力してください">
-x = 2
+    <!-- x = 2
 もし x > 3 ならば:
-｜ 表示する("大きい")
+│ 表示する("大きい")
 そうでなくもし x == 2 ならば:
-｜ 表示する("x == 2")
+│ 表示する("x == 2")
 そうでなければ:
 └ 表示する("小さい")
 
@@ -42,16 +41,21 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
 表示する(sum)
 
 関数 add (a, b):
-｜ c = a + b
-｜ もし a > b ならば:
-｜ ｜ print("入れ子1")
-｜ ｜ もし a > b ならば:
-｜ ｜ ｜ print("入れ子の入れ子1")
-｜ ｜ └ print("入れ子の入れ子2")
-｜ └ print("入れ子2")
+│ c = a + b
+│ もし a > b ならば:
+│ │ print("入れ子1")
+│ │ もし a > b ならば:
+│ │ │ print("入れ子の入れ子1")
+│ │ └ print("入れ子の入れ子2")
+│ └ print("入れ子2")
 └ c を返す
 
-表示する(add(6,5))
+表示する(add(6,5)) -->
+    <textarea id="code" placeholder="DNCL風コードを入力してください">
+sum = 0
+i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
+└ sum = sum + i
+表示する(sum)
         </textarea>
     <br><br>
     <button onclick="runCode()">▶ 実行</button>
@@ -102,8 +106,8 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 }
 
 
-                const indent = (line.match(/^(｜ )+/) || [''])[0].length / 2;
-                const content = line.replace(/^(｜ )+/, '').trim();
+                const indent = (line.match(/^(│ )+/) || [''])[0].length / 2;
+                const content = line.replace(/^(│ )+/, '').trim();
                 let jsLine = content;
 
                 const isElse = content.startsWith("そうでなければ:");
