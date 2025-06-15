@@ -68,8 +68,6 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             let jsLines = [];
             let indentStack = [0];
 
-            let varNames = new Set();
-
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 const trimmedLine = line.trimStart();
@@ -157,8 +155,6 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             }
 
             console.log(jsLines.join('\n'));
-            jsLines.push('print("----- 変数の現在値 -----");');
-            jsLines.push('[...Object.keys(globalThis)].filter(v => [' + [...varNames].map(v => `"${v}"`).join(', ') + '].includes(v)).forEach(v => { try { print(v + " =", globalThis[v]); } catch (e) {} });');
 
             const finalCode = `
             let output = "";
