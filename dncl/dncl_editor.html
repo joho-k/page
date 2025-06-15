@@ -36,7 +36,12 @@ x = 2
 そうでなければ:
 └ 表示する("小さい")
 
-関数 sum (a, b):
+sum = 0
+i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
+└ sum = sum + i
+表示する(sum)
+
+関数 add (a, b):
 ｜ c = a + b
 ｜ もし a > b ならば:
 ｜ ｜ print("入れ子1")
@@ -46,7 +51,7 @@ x = 2
 ｜ └ print("入れ子2")
 └ c を返す
 
-表示する(sum(6,5))
+表示する(add(6,5))
         </textarea>
     <br><br>
     <button onclick="runCode()">▶ 実行</button>
