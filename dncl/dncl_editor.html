@@ -61,6 +61,8 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
     <button onclick="runCode()">▶ 実行</button>
     <h3>出力:</h3>
     <div id="output"></div>
+    <h3>実行ステップ</h3>
+    <div id="trace"></div>
 
     <script>
         function runCode() {
@@ -71,12 +73,16 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             const lines = dncl.split(/\r?\n/);
             let jsLines = [];
             let indentStack = [0];
+            let varNames = new Set();
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 const trimmedLine = line.trimStart();
 
-                // ✅ 「└　」で始まる行（1行ブロック）
+                const assignMatch = trimmedLine.match(/^([a-zA-Z_]\w*) *=/);
+                if (assignMatch) varNames.add(assignMatch[1]);
+
+                // 「└　」で始まる行（1行ブロック）
                 if (trimmedLine.includes('└')) {
                     const match = trimmedLine.match(/(└+)/);
                     const closeCount = match ? match[1].length : 1;
@@ -158,10 +164,23 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 indentStack.pop();
             }
 
-            console.log(jsLines.join('\n'));
+            for (let i = 1; i < jsLines.length; i = i + 2) {
+                jsLines.splice(i, 0, `recordStep(${Math.ceil(i / 2)});`);
+            }
+            console.log(jsLines.join("\n"));
 
             const finalCode = `
             let output = "";
+            let traceTable = [];
+            function recordStep(step) {
+                const snapshot = { "ステップ": step };
+                for (const name of ${JSON.stringify([...varNames])}) {
+                    try {
+                        snapshot[name] = JSON.stringify(globalThis[name]);
+                    } catch { snapshot[name] = "-"; }
+                }
+                traceTable.push(snapshot);
+            }
             function print(...args) {
                 output += args.join(" ") + "\\n";
             }
@@ -170,17 +189,50 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             } catch (e) {
                 output += "エラー: " + e.message;
             }
-            return output;
+            return { output, traceTable };
             `;
 
             try {
                 const result = new Function(finalCode)();
-                outputEl.textContent = result;
+                outputEl.textContent = result.output;
+                renderTraceTable(result.traceTable, [...varNames]);
             } catch (err) {
                 outputEl.textContent = "実行時エラー: " + err.message;
             }
         }
 
+        function renderTraceTable(traceTable, varNames) {
+            const traceEl = document.getElementById("trace");
+            traceEl.innerHTML = "";
+
+            if (traceTable.length === 0) return;
+
+            const table = document.createElement("table");
+
+            const thead = document.createElement("thead");
+            const headerRow = document.createElement("tr");
+            ["実行行", ...varNames].forEach(col => {
+                const th = document.createElement("th");
+                th.textContent = col;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement("tbody");
+            traceTable.forEach(row => {
+                const tr = document.createElement("tr");
+                ["ステップ", ...varNames].forEach(key => {
+                    const td = document.createElement("td");
+                    td.textContent = row[key] ?? "-";
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            traceEl.appendChild(table);
+        }
     </script>
 </body>
 
