@@ -32,6 +32,8 @@
 x = 2
 もし x > 3 ならば:
 ｜ 表示する("大きい")
+そうでなくもし x == 2 ならば:
+｜ 表示する("x == 2")
 そうでなければ:
 └ 表示する("小さい")
 
@@ -63,6 +65,22 @@ x = 2
             let indentStack = [0];
 
             let varNames = new Set();
+
+            /**
+             * 変数を出力
+             */
+            function extractVars(jsLine) {
+                const assignMatch = jsLine.match(/^\s*(?:let\s+)?([a-zA-Z_][a-zA-Z0-9_]*)\s*=/);
+                if (assignMatch) varNames.add(assignMatch[1]);
+                const forMatch = jsLine.match(/for\s*\(\s*let\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=/);
+                if (forMatch) varNames.add(forMatch[1]);
+                const funcArgsMatch = jsLine.match(/^function\s+\w+\((.*?)\)/);
+                if (funcArgsMatch) {
+                    funcArgsMatch[1].split(',').map(arg => arg.trim()).forEach(v => {
+                        if (v) varNames.add(v);
+                    });
+                }
+            }
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
