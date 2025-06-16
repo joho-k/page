@@ -260,10 +260,27 @@ li a {
     flex-shrink: 0;
 }
 
+.info {
+    background-color: #caf4ff;
+    color: black;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.info::before {
+    font-family: "Font Awesome 6 Free";
+    color: #1565C0;
+    display: inline-block;
+    margin-right: 8px;
+    font: var(--fa-font-solid);
+    content: "\f05a";
+}
+
 .warning {
     background-color: #F29C32;
     color: white;
     padding: 10px;
+    margin-bottom: 10px;
 }
 
 .warning::before {
