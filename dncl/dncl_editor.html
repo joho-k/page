@@ -57,38 +57,18 @@
     このページは、プログラミングの学習・練習を目的としたものであり、掲載されたコードや解説は学習用途に限って自由にご利用いただけます。
     <div class="info">PC・Google Chrome 最新版 での使用をお勧めします。</div>
     <div class="warning">万一、誤動作や予期せぬ結果が発生した場合でも、当ページの作成者は一切の責任を負いかねます。</div>
-    <!-- x = 2
-もし x > 3 ならば:
-│ 表示する("大きい")
-そうでなくもし x == 2 ならば:
-│ 表示する("x == 2")
-そうでなければ:
-└ 表示する("小さい")
-
-sum = 0
-i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
-└ sum = sum + i
-表示する(sum)
-
-関数 add (a, b):
-│ c = a + b
-│ もし a > b ならば:
-│ │ print("入れ子1")
-│ │ もし a > b ならば:
-│ │ │ print("入れ子の入れ子1")
-│ │ └ print("入れ子の入れ子2")
-│ └ print("入れ子2")
-└ c を返す
-
-表示する(add(6,5)) -->
     <div class="code-area">
         <div class="code-output">
             <div class="editor">
                 <div id="line-numbers"></div>
-                <textarea id="code" placeholder="DNCL風コードを入力してください">
+                <textarea id="code" placeholder="DNCLコードを入力してください">
 sum = 0
+a = "こんにちは"
 i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
-└ sum = sum + i
+│ j を 1 から 3 まで 1 ずつ増やしながら繰り返す:
+│ │ b = i * j
+│ │ sum = sum + b
+└ └ 表示する(b)
 表示する(sum)
         </textarea>
             </div>
@@ -122,6 +102,15 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
         function runCode() {
             const dncl = document.getElementById('code').value;
             const outputEl = document.getElementById('output');
+
+            // 禁止用語処理
+            const forbidden = ["alert", "document", "window", "eval", "Function", "localStorage", "constructor", "location"];
+            const regex = new RegExp(`\\b(${forbidden.join("|")})\\b`, "i");
+            if (regex.test(dncl.toLowerCase())) {
+                outputEl.textContent = `使用できないコードが含まれています。 ${forbidden}という単語をプログラムに含めることはできません。`;
+                return;
+            }
+
             outputEl.textContent = '';
 
             const lines = dncl.split(/\r?\n/);
@@ -141,8 +130,6 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 // 「└　」で始まる行（1行ブロック）
                 const endMatch = trimmedLine.match(/^([│└][ ]*)+/);
                 const closeCount = endMatch ? (endMatch[0].match(/└/g) || []).length : 0;
-                console.log(endMatch);
-                console.log(closeCount);
 
                 const content = line.replace(/^([│└ ]+)/, '').trim();
                 let jsLine = content;
@@ -160,10 +147,7 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 jsLine = jsLine.replace(/乱数\(\)/g, 'Math.random()');
                 jsLine = jsLine.replace(/整数\(([^)]+)\)/g, 'Math.floor($1)');
 
-                if (assignMatch || content !== jsLine || jsLine === "") {
-                    // 変数の宣言、もしくは変換が行われていれば正式なコードとみなす。
-                    jsLines.push(jsLine + "}".repeat(closeCount));
-                }
+                jsLines.push(jsLine + "}".repeat(closeCount));
             }
 
             for (let i = 1; i < jsLines.length; i = i + 2) {
@@ -183,7 +167,6 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                     : "";
                 jsLines.splice(i, 0, addCode);
             }
-            console.log(jsLines.join("\n"));
 
             const finalCode = `
             let output = "";
