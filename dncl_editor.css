@@ -1,0 +1,106 @@
+body {
+    padding: 20px;
+}
+
+.code-area {
+    display: flex;
+    /* 70pxは、ヘッダー分 */
+    height: calc(100vh - 70px);
+    box-sizing: border-box;
+}
+
+.code-output,
+.step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 10px;
+    overflow: hidden;
+}
+
+/* 左側（コードと出力） */
+.code-output {
+    border-right: 1px solid #ccc;
+}
+
+/* エディタ部分 */
+.editor {
+    flex: 0 0 55%;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    height: 55%;
+    box-sizing: border-box;
+}
+
+/* 行番号とtextarea */
+#line-numbers {
+    background-color: #f0f0f0;
+    text-align: right;
+    padding: 5px;
+    user-select: none;
+    overflow-y: auto;
+    white-space: pre;
+    color: #999;
+}
+
+#code {
+    flex: 1;
+    resize: none;
+    border: none;
+    padding: 5px;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.4em;
+    overflow: auto;
+}
+
+/* 出力エリア */
+#output {
+    flex: 1;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    overflow: auto;
+}
+
+/* 実行ステップ */
+.step {
+    overflow: auto;
+    background-color: #fafafa;
+    border-left: 1px solid #ccc;
+}
+
+#trace {
+    flex: 1;
+    overflow: auto;
+    padding: 10px;
+}
+
+/* 表テーブル（既存のtrace-tableにも効く） */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+    text-align: center;
+}
+
+#trace .changed {
+    font-weight: bold;
+    color: #d00000;
+    background-color: #fff0f0;
+}
+
+h3 {
+    background-color: #1565c0;
+    color: white;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+}

@@ -3,76 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>DNCL実行環境（インデント対応版 + └対応）</title>
-    <style>
-        body {
-            padding: 20px;
-        }
 
-        .code-area {
-            display: flex;
-            flex: 1;
-            white-space: pre;
-            height: 200px;
-        }
 
-        #line-numbers {
-            font-size: 16px;
-            text-align: right;
-            padding-right: 8px;
-            user-select: none;
-            overflow: hidden;
-        }
 
-        #code {
-            font-size: 16px;
-            width: 100%;
-            height: 200px;
-            font-family: monospace;
-        }
 
-        #output {
-            background: #f0f0f0;
-            padding: 10px;
-            min-height: 100px;
-            white-space: pre-wrap;
-        }
 
-        #trace {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 1em;
-        }
-
-        #trace th,
-        #trace td {
-            border: 1px solid #ccc;
-            padding: 6px 12px;
-            text-align: center;
-        }
-
-        #trace td {
-            color: #888;
-        }
-
-        #trace thead {
-            background-color: #f0f0f0;
-        }
-
-        #trace tbody tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-
-        #trace .changed {
-            font-weight: bold;
-            color: #d00000;
-            background-color: #fff0f0;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../dncl_editor.css">
 </head>
 
 <body>
-    <h2>DNCL実行環境（インデントと└でブロック管理）</h2>
+    <h2>実プロ | DNCL実行環境(β版)</h2>
     <!-- x = 2
 もし x > 3 ならば:
 │ 表示する("大きい")
@@ -98,20 +38,25 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
 
 表示する(add(6,5)) -->
     <div class="code-area">
-        <div id="line-numbers"></div>
-        <textarea id="code" placeholder="DNCL風コードを入力してください">
+        <div class="code-output">
+            <div class="editor">
+                <div id="line-numbers"></div>
+                <textarea id="code" placeholder="DNCL風コードを入力してください">
 sum = 0
 i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
 └ sum = sum + i
 表示する(sum)
         </textarea>
+            </div>
+            <button onclick="runCode()">▶ 実行</button>
+            <h3>出力:</h3>
+            <div id="output"></div>
+        </div>
+        <div class="step">
+            <h3>実行ステップ</h3>
+            <div id="trace"></div>
+        </div>
     </div>
-    <br><br>
-    <button onclick="runCode()">▶ 実行</button>
-    <h3>出力:</h3>
-    <div id="output"></div>
-    <h3>実行ステップ</h3>
-    <div id="trace"></div>
 
     <script>
         const textarea = document.getElementById("code");
