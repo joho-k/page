@@ -29,8 +29,8 @@ body {
     }
 }
 
-input, button {
-    font-family: "M PLUS Rounded 1c", sans-serif;
+input, button, textarea {
+    font-family: inherit;
 }
 
 button {
