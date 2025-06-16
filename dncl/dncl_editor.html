@@ -126,7 +126,6 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
 
             const lines = dncl.split(/\r?\n/);
             let jsLines = [];
-            let indentStack = [0];
             let varNames = new Set();
 
             for (let i = 0; i < lines.length; i++) {
@@ -140,66 +139,18 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 if (assignLoopMatch) varNames.add(assignLoopMatch[2]);
 
                 // 「└　」で始まる行（1行ブロック）
-                if (trimmedLine.includes('└')) {
-                    const match = trimmedLine.match(/(└+)/);
-                    const closeCount = match ? match[1].length : 1;
-                    const content = trimmedLine.replace(/^.*└+\s*/, '');
-                    const currentIndent = indentStack[indentStack.length - 1];
+                const endMatch = trimmedLine.match(/^([│└][ ]*)+/);
+                const closeCount = endMatch ? (endMatch[0].match(/└/g) || []).length : 0;
+                console.log(endMatch);
+                console.log(closeCount);
 
-                    let jsLine = content
-                        .replace(/^(.+?) を返す$/, 'return $1')
-                        .replace(/^表示する\((.+)\)$/, 'print($1);')
-                        .replace(/^print\((.+)\)$/, 'print($1);')
-                        .replace(/要素数\((.+?)\)/g, '$1.length')
-                        .replace(/整数\(\)/g, 'Math.random()')
-                        .replace(/乱数\(\)/g, 'Math.floor()');
-
-                    jsLines.push('  '.repeat(currentIndent) + jsLine);
-
-                    for (let j = 0; j < closeCount; j++) {
-                        if (indentStack.length > 1) {
-                            const count = (line.match(/└/g) || []).length;
-                            for (let k = 0; k < count; k++) {
-                                indentStack.pop();
-                                jsLines.push('  '.repeat(indentStack[indentStack.length - 1]) + '}');
-                            }
-                        }
-                    }
-                    continue;
-                }
-
-
-                const indent = (line.match(/^(│ )+/) || [''])[0].length / 2;
-                const content = line.replace(/^(│ )+/, '').trim();
+                const content = line.replace(/^([│└ ]+)/, '').trim();
                 let jsLine = content;
-
-                const isElse = content.startsWith("そうでなければ:");
-
-                if (isElse) {
-                    jsLines.push('} else {');
-                    indentStack.pop();
-                    indentStack.push(indent);
-                    continue;
-                }
-
-                // --- 「そうでなくもし」への対応 ---
-                if (/^そうでなくもし .+ ならば:$/.test(content)) {
-                    while (indent < indentStack[indentStack.length - 1]) {
-                        indentStack.pop();
-                        jsLines.push('  '.repeat(indentStack[indentStack.length - 1]) + '}');
-                    }
-                    jsLine = content.replace(/^そうでなくもし (.+) ならば:$/, '} else if ($1) {');
-                    jsLines.push('  '.repeat(indent) + jsLine);
-                    continue;
-                }
-
-                while (indent < indentStack[indentStack.length - 1]) {
-                    jsLines.push('}');
-                    indentStack.pop();
-                }
 
                 // 文法変換
                 jsLine = jsLine.replace(/^もし (.+) ならば:$/, 'if ($1) {');
+                jsLine = jsLine.replace(/^そうでなくもし (.+) ならば:$/, '} else if ($1) {');
+                jsLine = jsLine.replace(/^そうでなければ:$/, '} else {');
                 jsLine = jsLine.replace(/^(.+) を (.+) から (.+) まで (.+) ずつ増やしながら繰り返す:$/, 'for (let $1 = $2; $1 <= $3; $1 += $4) {');
                 jsLine = jsLine.replace(/^(.+) の間繰り返す:$/, 'while ($1) {');
                 jsLine = jsLine.replace(/^表示する\((.+)\)$/, 'print($1);');
@@ -209,16 +160,10 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 jsLine = jsLine.replace(/乱数\(\)/g, 'Math.random()');
                 jsLine = jsLine.replace(/整数\(([^)]+)\)/g, 'Math.floor($1)');
 
-                jsLines.push(jsLine);
-
-                if (jsLine.endsWith('{')) {
-                    indentStack.push(indent);
+                if (assignMatch || content !== jsLine || jsLine === "") {
+                    // 変数の宣言、もしくは変換が行われていれば正式なコードとみなす。
+                    jsLines.push(jsLine + "}".repeat(closeCount));
                 }
-            }
-
-            while (indentStack.length > 1) {
-                jsLines.push('}');
-                indentStack.pop();
             }
 
             for (let i = 1; i < jsLines.length; i = i + 2) {
