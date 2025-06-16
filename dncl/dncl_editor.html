@@ -245,7 +245,7 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                     varsCode = ` vars.${assignLoopMatch[1]} = ${assignLoopMatch[1]};`;
                 }
                 const addCode = trimmedLine !== ""
-                    ? `recordStep(${Math.ceil(i / 2)});${`${varsCode}`}`
+                    ? `${`${varsCode} recordStep(${Math.ceil(i / 2)});`}`
                     : "";
                 jsLines.splice(i, 0, addCode);
             }
