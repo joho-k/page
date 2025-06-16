@@ -134,10 +134,10 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 const trimmedLine = line.trimStart();
 
                 const assignMatch = trimmedLine.match(/^([└│ ]*)\s*([a-zA-Z_]\w*)\s*=\s*(.+)$/);
-                const assignLoopMatch = trimmedLine.match(/^([a-zA-Z_]\w*) を .+ から .+ まで .+ ずつ増やしながら繰り返す:/);
+                const assignLoopMatch = trimmedLine.match(/^([└│ ]*)\s*([a-zA-Z_]\w*) を .+ から .+ まで .+ ずつ増やしながら繰り返す:/);
 
                 if (assignMatch) varNames.add(assignMatch[2]);
-                if (assignLoopMatch) varNames.add(assignLoopMatch[1]);
+                if (assignLoopMatch) varNames.add(assignLoopMatch[2]);
 
                 // 「└　」で始まる行（1行ブロック）
                 if (trimmedLine.includes('└')) {
@@ -225,13 +225,13 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 const trimmedLine = jsLines[i - 1].trimStart();
 
                 const assignMatch = trimmedLine.match(/^([└│ ]*)\s*([a-zA-Z_]\w*)\s*=\s*(.+)$/);
-                const assignLoopMatch = trimmedLine.match((/^\s*for\s*\(\s*let\s+([a-zA-Z_]\w*)\s*=/));
+                const assignLoopMatch = trimmedLine.match((/^([└│ ]*)\s*for\s*\(\s*let\s+([a-zA-Z_]\w*)\s*=/));
 
                 let varsCode = "";
                 if (assignMatch) {
                     varsCode = ` vars.${assignMatch[2]} = ${assignMatch[2]};`;
                 } else if (assignLoopMatch) {
-                    varsCode = ` vars.${assignLoopMatch[1]} = ${assignLoopMatch[1]};`;
+                    varsCode = ` vars.${assignLoopMatch[2]} = ${assignLoopMatch[2]};`;
                 }
                 const addCode = trimmedLine !== ""
                     ? `${`${varsCode} recordStep(${Math.ceil(i / 2)});`}`
