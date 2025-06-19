@@ -152,7 +152,9 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 jsLine = jsLine.replace(/乱数\(\)/g, 'Math.random()');
                 jsLine = jsLine.replace(/整数\(([^)]+)\)/g, 'Math.floor($1)');
 
-                jsLines.push(jsLine + "}".repeat(closeCount));
+                jsLines.push(jsLine);
+                const closing = "}".repeat(closeCount);
+                closing != "" && jsLines.push(closing);
             }
 
             for (let i = 1; i < jsLines.length; i = i + 2) {
