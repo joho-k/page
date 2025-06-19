@@ -59,6 +59,11 @@
     <div class="warning">万一、誤動作や予期せぬ結果が発生した場合でも、当ページの作成者は一切の責任を負いかねます。</div>
     <div class="code-area">
         <div class="code-output">
+            <div>
+                入力補助▶︎
+                <button class="insert-button" onclick="insertAtCursor('│ ')">│</button>
+                <button class="insert-button" onclick="insertAtCursor('└ ')">└</button>
+            </div>
             <div class="editor">
                 <div id="line-numbers"></div>
                 <textarea id="code" placeholder="DNCLコードを入力してください">
@@ -245,6 +250,20 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             table.appendChild(tbody);
 
             traceEl.appendChild(table);
+        }
+
+        function insertAtCursor(text) {
+            const textarea = document.getElementById("code");
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const before = textarea.value.substring(0, start);
+            const after = textarea.value.substring(end);
+
+            textarea.value = before + text + after;
+            textarea.selectionStart = textarea.selectionEnd = start + text.length;
+
+            textarea.focus();
+            updateLineNumbers(); // 行番号も更新
         }
     </script>
 </body>
