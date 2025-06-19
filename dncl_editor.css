@@ -134,3 +134,10 @@ h3 {
     padding: 0;
     font-size: 18px;
 }
+
+.insert-button {
+    padding: 4px 8px;
+    margin-right: 3px;
+    color: black;
+    background-color: var(--primary-light-2);
+}
