@@ -84,7 +84,7 @@
             height: 240px;
         }
 
-        .mixer-center {
+        #centerLight {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -148,7 +148,7 @@
                     <div id="redLight" class="light"></div>
                     <div id="greenLight" class="light"></div>
                     <div id="blueLight" class="light"></div>
-                    <div class="mixer-center">
+                    <div id="centerLight">
                         RGB合成色
                     </div>
                 </div>
@@ -198,7 +198,8 @@
     const lights = {
         r: document.getElementById("redLight"),
         g: document.getElementById("greenLight"),
-        b: document.getElementById("blueLight")
+        b: document.getElementById("blueLight"),
+        center: document.getElementById("centerLight")
     };
 
     const hexCode = document.getElementById("hexCode");
@@ -223,6 +224,9 @@
         const hex = "#" + [r, g, b].map(v => v.toString(16).padStart(2, '0').toUpperCase()).join("");
         hexCode.textContent = `RGB合成色→${hex}`;
         hexCode.style.backgroundColor = hex;
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        hexCode.style.color = brightness < 128 ? "#FFFFFF" : "#000000";
+        lights.center.style.color = brightness < 128 ? "#dddddd" : "#777777";
     }
 
     Object.values(sliders).forEach(slider =>
