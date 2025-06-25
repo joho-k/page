@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!-- ここから全ページ共通 -->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>色のデジタル表現 | 情報I用語集</title>
+    <meta name="description" content="RGBやカラーコードとは？色がどのように0と1で表現されているのかを、図解でやさしく解説します。情報Ⅰ対策や共通テストの基礎固めにも最適です。">
+    <meta name="keywords" content="色のデジタル表現,RGB,カラーコード,ビット,情報Ⅰ,情報1,共通テスト,色の仕組み,デジタルカラー,コンピュータ,色表現">
+
+    <meta property="og:title" content="色のデジタル表現 | 情報Iの用語解説">
+    <meta property="og:description" content="赤・緑・青の3色でどうやって様々な色を作っている？RGBやビット数の考え方を、情報Ⅰ対策として図解でわかりやすく解説します。">
+
+    <link rel="icon" href="../../../img/logo.ico">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../word.css">
+
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v6.4.2/css/all.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHYWTV27F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RXHYWTV27F');
+    </script>
+
+
+    <script src="../../../common.js"></script>
+    <link rel="stylesheet" href="../../../header.css">
+
+    <!-- 共通部分ここまで -->
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2em;
+            flex-wrap: wrap;
+        }
+
+        .slider {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .slider-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0px 5px;
+            min-width: 60px;
+        }
+
+        .slider-vertical input[type=range] {
+            writing-mode: bt-lr;
+            /* Chrome, Edge */
+            -webkit-appearance: slider-vertical;
+            height: 150px;
+            width: 30px;
+        }
+
+        .slider-vertical label {
+            margin-top: 0.5em;
+            font-weight: bold;
+        }
+
+        .mixer-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+        }
+
+        .light {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            mix-blend-mode: screen;
+        }
+
+        #redLight {
+            background-color: red;
+            left: 40px;
+            top: 60px;
+        }
+
+        #greenLight {
+            background-color: lime;
+            left: 60px;
+            top: 90px;
+        }
+
+        #blueLight {
+            background-color: blue;
+            left: 80px;
+            top: 60px;
+        }
+
+        .color-code {
+            background: #fff;
+            padding: 0.3em 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            margin-top: 1em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body id="word-body">
+    <div class="content">
+        <header>
+        </header>
+        <main>
+            <h3>光の加法混色とカラーコード</h3>
+            <div class="container">
+                <!-- 中央：加法混色 -->
+                <div class="mixer-container">
+                    <div id="redLight" class="light"></div>
+                    <div id="greenLight" class="light"></div>
+                    <div id="blueLight" class="light"></div>
+                </div>
+
+                <!-- 左：Rスライダー -->
+                <div class="colorInputer">
+                    <div class="slider">
+                        <div class="slider-vertical">
+                            <input type="range" min="0" max="255" value="255" id="rSlider" />
+                            <label style="color: red;">R <span id="rVal">255<br />FF</span></label>
+                        </div>
+                        <!-- 右：G, Bスライダー -->
+                        <div class="slider-vertical">
+                            <input type="range" min="0" max="255" value="255" id="gSlider" />
+                            <label style="color: green;">G <span id="gVal">255<br />FF</span></label>
+                        </div>
+                        <div class="slider-vertical">
+                            <input type="range" min="0" max="255" value="255" id="bSlider" />
+                            <label style="color: blue;">B <span id="bVal">255<br />FF</span></label>
+                        </div>
+                    </div>
+                    <div class="color-code" id="hexCode">#FFFFFF</div>
+                </div>
+            </div>
+
+            <div id="image-explanation" class="content-item">
+                <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
+
+                <!-- ここまでベタ打ち -->
+            </div>
+        </main>
+    </div>
+</body>
+<script>
+    const sliders = {
+        r: document.getElementById("rSlider"),
+        g: document.getElementById("gSlider"),
+        b: document.getElementById("bSlider")
+    };
+
+    const values = {
+        r: document.getElementById("rVal"),
+        g: document.getElementById("gVal"),
+        b: document.getElementById("bVal")
+    };
+
+    const lights = {
+        r: document.getElementById("redLight"),
+        g: document.getElementById("greenLight"),
+        b: document.getElementById("blueLight")
+    };
+
+    const hexCode = document.getElementById("hexCode");
+
+    function updateLights() {
+        const r = parseInt(sliders.r.value);
+        const g = parseInt(sliders.g.value);
+        const b = parseInt(sliders.b.value);
+
+        const hexR = r.toString(16).padStart(2, '0').toUpperCase();
+        const hexG = g.toString(16).padStart(2, '0').toUpperCase();
+        const hexB = b.toString(16).padStart(2, '0').toUpperCase();
+
+        values.r.innerHTML = `${r}<br />${hexR}`;
+        values.g.innerHTML = `${g}<br />${hexG}`;
+        values.b.innerHTML = `${b}<br />${hexB}`;
+
+        lights.r.style.backgroundColor = `rgb(${r},0,0)`;
+        lights.g.style.backgroundColor = `rgb(0,${g},0)`;
+        lights.b.style.backgroundColor = `rgb(0,0,${b})`;
+
+        const hex = "#" + [r, g, b].map(v => v.toString(16).padStart(2, '0').toUpperCase()).join("");
+        hexCode.textContent = hex;
+        hexCode.style.backgroundColor = hex;
+    }
+
+    Object.values(sliders).forEach(slider =>
+        slider.addEventListener("input", updateLights)
+    );
+
+    updateLights();
+</script>
+
+<script>
+    // 用語
+    const title = "色のデジタル表現"
+    // YouTubeの動画のURL。ない場合はnull
+    const youtubeURLID = null;
+    // 関連単語
+    const relatedWords = [
+    ];
+
+    // word.js の画像差し替え確かめ用を用いて確認→HTMLにコードをベタ打ちする
+    const image = [
+    ]
+</script>
+<script src="../word.js"></script>
+
+</html>
