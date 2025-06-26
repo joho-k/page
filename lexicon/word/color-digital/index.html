@@ -254,6 +254,8 @@
         const brightness = (r * 299 + g * 587 + b * 114) / 1000;
         hexCode.style.color = brightness < 128 ? "#FFFFFF" : "#000000";
         lights.center.style.color = brightness < 128 ? "#dddddd" : "#777777";
+        lights.center.style.backgroundColor = hex;
+        lights.center.style.boxShadow = `0px 0px 20px ${hex}`;
     }
 
     Object.values(sliders).forEach(slider =>
