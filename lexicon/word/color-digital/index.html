@@ -78,6 +78,10 @@
             font-weight: bold;
         }
 
+        #gLabel {
+            text-shadow: 0.5px 0.5px 1px gray;
+        }
+
         .mixer-container {
             background-color: black;
             position: relative;
@@ -159,16 +163,16 @@
                     <div class="slider">
                         <div class="slider-vertical">
                             <input type="range" min="0" max="255" value="255" id="rSlider" />
-                            <label style="color: red;">R <span id="rVal">255<br />FF</span></label>
+                            <label id="rLabel" class="color-label">R <span id="rVal">255<br />FF</span></label>
                         </div>
                         <!-- 右：G, Bスライダー -->
                         <div class="slider-vertical">
                             <input type="range" min="0" max="255" value="255" id="gSlider" />
-                            <label style="color: green;">G <span id="gVal">255<br />FF</span></label>
+                            <label id="gLabel" class="color-label">G <span id="gVal">255<br />FF</span></label>
                         </div>
                         <div class="slider-vertical">
                             <input type="range" min="0" max="255" value="255" id="bSlider" />
-                            <label style="color: blue;">B <span id="bVal">255<br />FF</span></label>
+                            <label id="bLabel" class="color-label">B <span id="bVal">255<br />FF</span></label>
                         </div>
                     </div>
                     <div class="color-code" id="hexCode">RGB合成色→ #FFFFFF</div>
@@ -208,6 +212,12 @@
         b: document.getElementById("bVal")
     };
 
+    const labels = {
+        r: document.getElementById("rLabel"),
+        g: document.getElementById("gLabel"),
+        b: document.getElementById("bLabel")
+    };
+
     const lights = {
         r: document.getElementById("redLight"),
         g: document.getElementById("greenLight"),
@@ -233,6 +243,10 @@
         lights.r.style.backgroundColor = `rgb(${r},0,0)`;
         lights.g.style.backgroundColor = `rgb(0,${g},0)`;
         lights.b.style.backgroundColor = `rgb(0,0,${b})`;
+
+        labels.r.style.color = `rgb(${r},0,0)`;
+        labels.g.style.color = `rgb(0,${g},0)`;
+        labels.b.style.color = `rgb(0,0,${b})`;
 
         const hex = "#" + [r, g, b].map(v => v.toString(16).padStart(2, '0').toUpperCase()).join("");
         hexCode.textContent = `RGB合成色→${hex}`;
