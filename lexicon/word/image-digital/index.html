@@ -153,6 +153,10 @@
                 </div>
                 <div class="canvas-area">
                     <h4>生成された画像データ</h4>
+                    <label style="text-align: center;">
+                        <input type="checkbox" id="showBitsCheckbox" checked>
+                        ピクセル上にビット列を表示
+                    </label>
                     <p><canvas id="canvas"></canvas></p>
                     <p id="errorMessage"></p>
                 </div>
@@ -258,6 +262,8 @@
         canvas.height = h * scale;
         const ctx = canvas.getContext('2d');
 
+        const showBits = document.getElementById('showBitsCheckbox').checked;
+
         for (let y = 0; y < h; y++) {
             for (let x = 0; x < w; x++) {
                 const index = y * w + x;
@@ -275,6 +281,14 @@
                     const color = colorMap[key] || '#FF00FF';
                     ctx.fillStyle = color;
                     ctx.fillRect(x * scale, y * scale, scale, scale);
+
+                    if (showBits) {
+                        ctx.font = `${scale * 0.4}px sans-serif`;
+                        ctx.fillStyle = getTextColor(color);
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(key, x * scale + scale / 2, y * scale + scale / 2);
+                    }
                 }
             }
         }
@@ -291,12 +305,30 @@
     function setupRealtimeRedraw() {
         document.getElementById('widthSelect').addEventListener('change', drawImage);
         document.getElementById('heightSelect').addEventListener('change', drawImage);
+        document.getElementById('showBitsCheckbox').addEventListener('change', drawImage);
         document.getElementById('bitCountSelect').addEventListener('change', () => {
             updateColorInputs(); // 色欄更新後に drawImage を呼ぶ
             drawImage();
         });
         document.getElementById('binaryInput').addEventListener('input', drawImage);
     }
+
+    function getTextColor(bgColor) {
+        const rgb = hexToRGB(bgColor);
+        const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b);
+        return luminance > 128 ? '#000000' : '#ffffff'; // 明るい → 黒文字、暗い → 白文字
+    }
+
+    function hexToRGB(hex) {
+        const parsed = hex.replace('#', '');
+        const bigint = parseInt(parsed, 16);
+        return {
+            r: (bigint >> 16) & 255,
+            g: (bigint >> 8) & 255,
+            b: bigint & 255
+        };
+    }
+
 
     populateSizeSelectors();
     updateColorInputs();
