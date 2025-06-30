@@ -101,6 +101,12 @@
             display: block;
         }
 
+        #errorMessage {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
         /* スマホ表示用（画面幅が768px以下の時） */
         @media screen and (max-width: 768px) {
 
@@ -148,7 +154,7 @@
                 <div class="canvas-area">
                     <h4>生成された画像データ</h4>
                     <p><canvas id="canvas"></canvas></p>
-                    <p id="errorMessage" style="color: red; font-weight: bold;"></p>
+                    <p id="errorMessage"></p>
                 </div>
             </div>
             <div id="image-explanation" class="content-item">
