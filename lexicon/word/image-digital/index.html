@@ -254,10 +254,20 @@
         }
     }
 
+    function setupRealtimeRedraw() {
+        document.getElementById('widthSelect').addEventListener('change', drawImage);
+        document.getElementById('heightSelect').addEventListener('change', drawImage);
+        document.getElementById('bitCountSelect').addEventListener('change', () => {
+            updateColorInputs(); // 色欄更新後に drawImage を呼ぶ
+            drawImage();
+        });
+        document.getElementById('binaryInput').addEventListener('input', drawImage);
+    }
+
     populateSizeSelectors();
     updateColorInputs();
-
-    document.getElementById('binaryInput').addEventListener('input', drawImage);
+    setupRealtimeRedraw(); // ←これを必ず呼ぶ
+    drawImage(); // 初回描画
 </script>
 
 <script>
