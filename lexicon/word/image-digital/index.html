@@ -55,6 +55,10 @@
             display: flex;
         }
 
+        .width-height {
+            align-items: baseline;
+        }
+
         #colorInputsContainer {
             flex-wrap: wrap;
             gap: 1em;
@@ -70,7 +74,6 @@
         input[type="text"],
         textarea,
         button {
-            width: 100%;
             padding: 0.4em;
             margin-top: 0.3em;
         }
@@ -96,11 +99,12 @@
             <div class="color-editor">
                 <div class="left">
                     <div class="width-height">
-                        <label>画像の横幅（width）:</label>
+                        <label>横幅:</label>
                         <select id="widthSelect"></select>
-
-                        <label>画像の高さ（height）:</label>
+                        <span>ピクセル×</span>
+                        <label>高さ:</label>
                         <select id="heightSelect"></select>
+                        <span>ピクセル</span>
                     </div>
 
                     <label>カラーコード（ビット数）</label>
@@ -113,9 +117,6 @@
 
                     <label>バイナリデータ（0と1を連続して幅×高さ分入力）:</label>
                     <textarea id="binaryInput" rows="6" placeholder="例: 010101...">0000001111000011111000001</textarea>
-                </div>
-                <div class="create-button">
-                    <button onclick="drawImage()">画像生成</button>
                 </div>
                 <div class="canvas-area">
                     <p><canvas id="canvas"></canvas></p>
@@ -204,9 +205,8 @@
             chunks.push(binary.slice(i, i + chunkSize));
         }
 
-        if (chunks.length !== totalPixels) {
-            alert(`ビット数が一致していません。`);
-            return;
+        while (chunks.length < totalPixels) {
+            chunks.push("000");
         }
 
         const colorMap = {};
@@ -235,6 +235,8 @@
 
     populateSizeSelectors();
     updateColorInputs();
+
+    document.getElementById('binaryInput').addEventListener('input', drawImage);
 </script>
 
 <script>
