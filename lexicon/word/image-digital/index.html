@@ -310,7 +310,30 @@
             updateColorInputs(); // 色欄更新後に drawImage を呼ぶ
             drawImage();
         });
-        document.getElementById('binaryInput').addEventListener('input', drawImage);
+
+        let previousValue = "";
+
+        const binaryInput = document.getElementById('binaryInput');
+
+        binaryInput.addEventListener('input', (e) => {
+            const newValue = e.target.value;
+
+            // カーソル位置（末尾でなくても対応）
+            const selectionStart = e.target.selectionStart;
+            const lengthDiff = newValue.length - previousValue.length;
+
+            let added = '';
+            if (lengthDiff > 0) {
+                // 差分ぶんだけ、直前に挿入された部分を取得
+                added = newValue.slice(selectionStart - lengthDiff, selectionStart);
+                if (added !== "0" && added !== "1") {
+                    alert("半角の0と1のみ入力できます。0と1以外の文字は削除してください。")
+                }
+            }
+
+            previousValue = newValue;
+            drawImage();
+        });
     }
 
     function getTextColor(bgColor) {
