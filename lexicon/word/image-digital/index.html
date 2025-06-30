@@ -238,13 +238,15 @@
         const binary = document.getElementById('binaryInput').value.trim().replace(/\s/g, '');
         const totalPixels = w * h;
         const chunkSize = bitCount;
+        const imageBits = totalPixels * chunkSize;
         const chunks = [];
 
         for (let i = 0; i < binary.length; i += chunkSize) {
             chunks.push(binary.slice(i, i + chunkSize));
         }
 
-        const isIncomplete = chunks.length < totalPixels;
+        const nowBits = chunks.join("").length;
+        const isIncomplete = nowBits < imageBits;
         while (chunks.length < totalPixels) {
             chunks.push("___");
         }
@@ -296,7 +298,9 @@
         // エラーメッセージ表示
         const errorEl = document.getElementById("errorMessage");
         if (isIncomplete) {
-            errorEl.textContent = "データが不完全です！";
+            errorEl.textContent = "データが不完全です！(0と1が足りません)";
+        } else if (nowBits > imageBits) {
+            errorEl.textContent = "データが不完全です！(0と1が多いです)"
         } else {
             errorEl.textContent = "";
         }
