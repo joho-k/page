@@ -120,6 +120,7 @@
                 </div>
                 <div class="canvas-area">
                     <p><canvas id="canvas"></canvas></p>
+                    <p id="errorMessage" style="color: red; font-weight: bold;"></p>
                 </div>
             </div>
             <div id="image-explanation" class="content-item">
@@ -205,8 +206,9 @@
             chunks.push(binary.slice(i, i + chunkSize));
         }
 
+        const isIncomplete = chunks.length < totalPixels;
         while (chunks.length < totalPixels) {
-            chunks.push("000");
+            chunks.push("___");
         }
 
         const colorMap = {};
@@ -226,10 +228,29 @@
             for (let x = 0; x < w; x++) {
                 const index = y * w + x;
                 const key = chunks[index];
-                const color = colorMap[key] || '#FF00FF'; // 不明な値はピンク
-                ctx.fillStyle = color;
-                ctx.fillRect(x * scale, y * scale, scale, scale);
+                if (key === "___") {
+                    ctx.font = `${scale * 0.8}px sans-serif`; // 例: scaleが20なら16px
+                    ctx.lineWidth = 2; // 線を太く
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(x * scale, y * scale, scale, scale);
+                    ctx.fillStyle = "#ff0000";
+                    ctx.strokeText("×", x * scale + scale / 2, y * scale + scale / 2);
+                } else {
+                    const color = colorMap[key] || '#FF00FF';
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x * scale, y * scale, scale, scale);
+                }
             }
+        }
+
+        // エラーメッセージ表示
+        const errorEl = document.getElementById("errorMessage");
+        if (isIncomplete) {
+            errorEl.textContent = "データが不完全です！";
+        } else {
+            errorEl.textContent = "";
         }
     }
 
