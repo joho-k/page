@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!-- ここから全ページ共通 -->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>色のデジタル表現 | 情報I用語集</title>
+    <meta name="description" content="RGBやカラーコードとは？色がどのように0と1で表現されているのかを、図解でやさしく解説します。情報Ⅰ対策や共通テストの基礎固めにも最適です。">
+    <meta name="keywords" content="色のデジタル表現,RGB,カラーコード,ビット,情報Ⅰ,情報1,共通テスト,色の仕組み,デジタルカラー,コンピュータ,色表現">
+
+    <meta property="og:title" content="色のデジタル表現 | 情報Iの用語解説">
+    <meta property="og:description" content="赤・緑・青の3色でどうやって様々な色を作っている？RGBやビット数の考え方を、情報Ⅰ対策として図解でわかりやすく解説します。">
+
+    <link rel="icon" href="../../../img/logo.ico">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../word.css">
+
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v6.4.2/css/all.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHYWTV27F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RXHYWTV27F');
+    </script>
+
+
+    <script src="../../../common.js"></script>
+    <link rel="stylesheet" href="../../../header.css">
+
+    <!-- 共通部分ここまで -->
+    <style>
+        body {
+            padding: 1em;
+        }
+
+        .color-editor,
+        .width-height,
+        .color-input-preview,
+        #colorInputsContainer {
+            display: flex;
+        }
+
+        #colorInputsContainer {
+            flex-wrap: wrap;
+            gap: 1em;
+        }
+
+        label {
+            display: block;
+            margin-top: 1em;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="text"],
+        textarea,
+        button {
+            width: 100%;
+            padding: 0.4em;
+            margin-top: 0.3em;
+        }
+
+        button {
+            margin-top: 1em;
+        }
+
+        canvas {
+            border: 1px solid #333;
+            margin-top: 1em;
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+
+<body id="word-body">
+    <div class="content">
+        <header>
+        </header>
+        <main>
+            <h3>ビットデータから画像生成</h3>
+            <div class="color-editor">
+                <div class="left">
+                    <div class="width-height">
+                        <label>画像の横幅（width）:</label>
+                        <select id="widthSelect"></select>
+
+                        <label>画像の高さ（height）:</label>
+                        <select id="heightSelect"></select>
+                    </div>
+
+                    <label>カラーコード（ビット数）</label>
+                    <select id="bitCountSelect" onchange="updateColorInputs()">
+                        <option value="1" selected>1ビット（2色）</option>
+                        <option value="2">2ビット（4色）</option>
+                        <option value="3">3ビット（8色）</option>
+                    </select>
+                    <div id="colorInputsContainer"></div>
+
+                    <label>バイナリデータ（0と1を連続して幅×高さ分入力）:</label>
+                    <textarea id="binaryInput" rows="6" placeholder="例: 010101...">0000001111000011111000001</textarea>
+                </div>
+                <div class="create-button">
+                    <button onclick="drawImage()">画像生成</button>
+                </div>
+                <div class="canvas-area">
+                    <p><canvas id="canvas"></canvas></p>
+                </div>
+            </div>
+            <div id="image-explanation" class="content-item">
+                <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
+
+                <!-- ここまでベタ打ち -->
+            </div>
+        </main>
+    </div>
+</body>
+<script>
+    const valueColor = ["#000000", "#FFFF00", "#FFFFFF", "#0000FF", "#FF0000", "#00FF00", "#FFA500", "#808080"]
+
+    function populateSizeSelectors() {
+        const widthSelect = document.getElementById('widthSelect');
+        const heightSelect = document.getElementById('heightSelect');
+        for (let i = 1; i <= 8; i++) {
+            widthSelect.innerHTML += `<option value="${i}">${i}</option>`;
+            heightSelect.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+        widthSelect.value = 5;
+        heightSelect.value = 5;
+    }
+
+    function updateColorInputs() {
+        const container = document.getElementById('colorInputsContainer');
+        const bitCount = parseInt(document.getElementById('bitCountSelect').value);
+
+        container.innerHTML = '';
+
+        const colorKeys = [];
+        for (let i = 0; i < Math.pow(2, bitCount); i++) {
+            const key = i.toString(2).padStart(bitCount, '0');
+            colorKeys.push(key);
+        }
+
+        colorKeys.forEach((key, index) => {
+            const div = document.createElement('div');
+            div.className = 'color-item';
+
+            const label = document.createElement('label');
+            label.htmlFor = `color-${key}`;
+            label.textContent = `${key} のカラーコード`;
+
+            const colorInputPreview = document.createElement('div');
+            colorInputPreview.className = "color-input-preview";
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `color-${key}`;
+            input.value = valueColor[index];
+
+            const preview = document.createElement('div');
+            preview.className = 'preview-box';
+            preview.style.width = '30px';
+            preview.style.height = '30px';
+            preview.style.border = '1px solid #ccc';
+            preview.style.backgroundColor = input.value;
+
+            // 入力変更時にプレビューを更新
+            input.addEventListener('input', () => {
+                preview.style.backgroundColor = input.value;
+            });
+
+            div.appendChild(label);
+            colorInputPreview.appendChild(input);
+            colorInputPreview.appendChild(preview);
+            div.appendChild(colorInputPreview)
+            container.appendChild(div);
+        });
+    }
+
+    function drawImage() {
+        const w = parseInt(document.getElementById('widthSelect').value);
+        const h = parseInt(document.getElementById('heightSelect').value);
+        const bitCount = parseInt(document.getElementById('bitCountSelect').value);
+        const binary = document.getElementById('binaryInput').value.trim().replace(/\s/g, '');
+        const totalPixels = w * h;
+        const chunkSize = bitCount;
+        const chunks = [];
+
+        for (let i = 0; i < binary.length; i += chunkSize) {
+            chunks.push(binary.slice(i, i + chunkSize));
+        }
+
+        if (chunks.length !== totalPixels) {
+            alert(`ビット数が一致していません。`);
+            return;
+        }
+
+        const colorMap = {};
+        for (let i = 0; i < Math.pow(2, bitCount); i++) {
+            const key = i.toString(2).padStart(bitCount, '0');
+            const color = document.getElementById(`color-${key}`).value.trim();
+            colorMap[key] = color;
+        }
+
+        const canvas = document.getElementById('canvas');
+        const scale = 20;
+        canvas.width = w * scale;
+        canvas.height = h * scale;
+        const ctx = canvas.getContext('2d');
+
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const index = y * w + x;
+                const key = chunks[index];
+                const color = colorMap[key] || '#FF00FF'; // 不明な値はピンク
+                ctx.fillStyle = color;
+                ctx.fillRect(x * scale, y * scale, scale, scale);
+            }
+        }
+    }
+
+    populateSizeSelectors();
+    updateColorInputs();
+</script>
+
+<script>
+    // 用語
+    const title = "色のデジタル表現"
+    // YouTubeの動画のURL。ない場合はnull
+    const youtubeURLID = null;
+    // 関連単語
+    const relatedWords = [
+    ];
+
+    // word.js の画像差し替え確かめ用を用いて確認→HTMLにコードをベタ打ちする
+    const image = [
+    ]
+</script>
+<script src="../word.js"></script>
+
+</html>
