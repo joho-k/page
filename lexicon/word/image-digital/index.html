@@ -91,6 +91,11 @@
             border: 1px solid #333;
             margin-top: 1em;
             image-rendering: pixelated;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
         /* スマホ表示用（画面幅が768px以下の時） */
         @media screen and (max-width: 768px) {
 
@@ -237,7 +242,7 @@
         }
 
         const canvas = document.getElementById('canvas');
-        const scale = 20;
+        const scale = 30;
         canvas.width = w * scale;
         canvas.height = h * scale;
         const ctx = canvas.getContext('2d');
