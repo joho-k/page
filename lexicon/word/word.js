@@ -15,17 +15,27 @@ const imageExplanation = contentDiv.querySelectorAll("#image-explanation")[0];
 // コンテナ
 const h2 = document.createElement('h2');
 const a = document.createElement('a');
+
+// noheaderのときの処理
+const params = new URLSearchParams(window.location.search);
+const noHeader = params.get('state') === 'noheader';
+
 a.href = '../../index.html';
 a.className = "text-white";
 a.textContent = '用語の辞典';
-h2.appendChild(a);
-header.appendChild(h2);
+
+if (!noHeader) {
+    h2.appendChild(a);
+    header.appendChild(h2);
+}
 
 // 注意文の作成
 const warning = document.createElement('div');
 warning.className = "warning";
 warning.innerHTML = `解説は厳密な正確さよりも、伝わりやすさを優先しています。<br />そのため、実際の定義とは多少異なる表現になっている場合があります。ご了承ください。`;
-header.appendChild(warning);
+if (!noHeader) {
+    header.appendChild(warning);
+}
 
 // タイトル部分
 const wordTitle = document.createElement('h3');
