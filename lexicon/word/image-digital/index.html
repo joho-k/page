@@ -55,6 +55,11 @@
             display: flex;
         }
 
+        .left,
+        .canvas-area {
+            width: 50%;
+        }
+
         .width-height {
             align-items: baseline;
         }
@@ -86,6 +91,18 @@
             border: 1px solid #333;
             margin-top: 1em;
             image-rendering: pixelated;
+        /* スマホ表示用（画面幅が768px以下の時） */
+        @media screen and (max-width: 768px) {
+
+            .color-editor,
+            #colorInputsContainer {
+                display: block;
+            }
+
+            .left,
+            .canvas-area {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -119,6 +136,7 @@
                     <textarea id="binaryInput" rows="6" placeholder="例: 010101...">0000001111000011111000001</textarea>
                 </div>
                 <div class="canvas-area">
+                    <h4>生成された画像データ</h4>
                     <p><canvas id="canvas"></canvas></p>
                     <p id="errorMessage" style="color: red; font-weight: bold;"></p>
                 </div>
