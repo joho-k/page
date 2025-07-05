@@ -159,6 +159,10 @@
                         <input type="checkbox" id="showBitsCheckbox" checked>
                         ピクセル上にビット列を表示
                     </label>
+                    <label style="text-align: center;">
+                        <input type="checkbox" id="borderCheckbox" checked>
+                        ピクセルに枠線を表示
+                    </label>
                     <p><canvas id="canvas"></canvas></p>
                     <p id="errorMessage"></p>
                 </div>
@@ -294,6 +298,12 @@
                         ctx.fillText(key, x * scale + scale / 2, y * scale + scale / 2);
                     }
                 }
+                // 枠線表示チェックがONなら描画
+                if (document.getElementById('borderCheckbox').checked) {
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x * scale, y * scale, scale, scale);
+                }
             }
         }
 
@@ -312,6 +322,7 @@
         document.getElementById('widthSelect').addEventListener('change', drawImage);
         document.getElementById('heightSelect').addEventListener('change', drawImage);
         document.getElementById('showBitsCheckbox').addEventListener('change', drawImage);
+        document.getElementById('borderCheckbox').addEventListener('change', drawImage);
         document.getElementById('bitCountSelect').addEventListener('change', () => {
             updateColorInputs(); // 色欄更新後に drawImage を呼ぶ
             drawImage();
