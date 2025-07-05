@@ -374,14 +374,15 @@
 
         const clonedArea = area.cloneNode(true); // DOMを複製
 
-        // ① colorInputsContainer を削除
+        // colorInputsContainer を削除
         const colorInputs = clonedArea.querySelector("#colorInputsContainer");
-        if (colorInputs) colorInputs.remove
-        // ② colorInputsContainerの代わりにリストを追加
+        const bitSelect = clonedArea.querySelector('#bitCountSelect');
+        if (colorInputs) colorInputs.remove();
+        // colorInputsContainerの代わりにリストを追加
         const colorListHTML = generateColorListHTML();
         const wrapper = document.createElement("div");
-        wrapper.innerHTML = `<h4>カラーコード一覧</h4>${colorListHTML}`;
-        clonedArea.appendChild(wrapper);
+        wrapper.innerHTML = `${colorListHTML}`;
+        bitSelect.insertAdjacentElement('afterend', wrapper);
 
         // 新しいウィンドウを開く
         const printWindow = window.open('', '', 'width=1000,height=800');
@@ -394,7 +395,6 @@
         printWindow.document.write(styles);
 
         printWindow.document.write('</head><body>');
-        console.log(area);
         printWindow.document.write(clonedArea.outerHTML); // id="printArea" の要素ごとコピー
         printWindow.document.write('</div>');
         printWindow.document.write('</body></html>');
