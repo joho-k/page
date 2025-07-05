@@ -50,7 +50,7 @@
             padding: 1em;
         }
 
-        .color-editor,
+        .image-editor,
         .width-height,
         .color-input-preview,
         #colorInputsContainer {
@@ -112,7 +112,7 @@
         /* スマホ表示用（画面幅が768px以下の時） */
         @media screen and (max-width: 768px) {
 
-            .color-editor,
+            .image-editor,
             #colorInputsContainer {
                 display: block;
             }
@@ -131,7 +131,7 @@
         </header>
         <main>
             <h3>ビットデータから画像生成</h3>
-            <div class="color-editor">
+            <div id="imageEditor" class="image-editor">
                 <div class="left">
                     <div class="width-height">
                         <label>横幅:</label>
@@ -152,6 +152,7 @@
 
                     <label>0と1のデータ</label>
                     <textarea id="binaryInput" rows="6" placeholder="例: 010101...">0000001111000011111000001</textarea>
+                    <button onclick="printSpecificArea()">この画像だけ印刷</button>
                 </div>
                 <div class="canvas-area">
                     <h4>生成された画像データ</h4>
@@ -367,6 +368,75 @@
             g: (bigint >> 8) & 255,
             b: bigint & 255
         };
+    }
+    function printSpecificArea() {
+        const area = document.getElementById("imageEditor");
+
+        const clonedArea = area.cloneNode(true); // DOMを複製
+
+        // ① colorInputsContainer を削除
+        const colorInputs = clonedArea.querySelector("#colorInputsContainer");
+        if (colorInputs) colorInputs.remove
+        // ② colorInputsContainerの代わりにリストを追加
+        const colorListHTML = generateColorListHTML();
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = `<h4>カラーコード一覧</h4>${colorListHTML}`;
+        clonedArea.appendChild(wrapper);
+
+        // 新しいウィンドウを開く
+        const printWindow = window.open('', '', 'width=1000,height=800');
+
+        // HTMLの基本構造を作成
+        printWindow.document.write('<html><head><title>印刷プレビュー</title>');
+
+        // 既存のCSSをすべてコピー
+        const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"], style')).map(node => node.outerHTML).join('');
+        printWindow.document.write(styles);
+
+        printWindow.document.write('</head><body>');
+        console.log(area);
+        printWindow.document.write(clonedArea.outerHTML); // id="printArea" の要素ごとコピー
+        printWindow.document.write('</div>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+
+        // canvas の内容もコピー
+        printWindow.onload = () => {
+            // 元のcanvasと複製先canvasを取得
+            const originalCanvas = area.querySelector('canvas');
+            const copiedCanvas = printWindow.document.querySelector('canvas');
+
+            if (originalCanvas && copiedCanvas) {
+                const ctx = copiedCanvas.getContext('2d');
+                copiedCanvas.width = originalCanvas.width;
+                copiedCanvas.height = originalCanvas.height;
+                ctx.drawImage(originalCanvas, 0, 0);
+            }
+
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        };
+    }
+
+    function generateColorListHTML() {
+        const bitCount = parseInt(document.getElementById('bitCountSelect').value);
+        let html = '<ul style="list-style: none; padding-left: 0;">';
+
+        for (let i = 0; i < Math.pow(2, bitCount); i++) {
+            const key = i.toString(2).padStart(bitCount, '0');
+            const colorInput = document.getElementById(`color-${key}`);
+            if (!colorInput) continue;
+            const color = colorInput.value;
+
+            html += `<li style="margin-bottom: 0.5em;">
+                    <span style="display:inline-block;width:1em;height:1em;background:${color};border:1px solid #000;margin-right:0.5em;"></span>
+                    ${key} = ${color}
+                </li>`;
+        }
+
+        html += '</ul>';
+        return html;
     }
 
 
