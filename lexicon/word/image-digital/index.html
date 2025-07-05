@@ -154,12 +154,11 @@
                             <option value="3">3ビット（8色）</option>
                         </select>
                     </div>
-                    <div id="colorInputsContainer">
-                        <span>カラーコードについては<a href="../color-digital/index.html" target="_blank">こちら</a></span>
-                    </div>
+                    <div id="colorInputsContainer"></div>
 
                     <label>0と1のデータ</label>
-                    <textarea id="binaryInput" rows="6" placeholder="例: 010101...">0000001111000011111000001</textarea>
+                    <textarea id="binaryInput" rows="6"
+                        placeholder="例: 010101...">0000001111000011111000001000000111100</textarea>
                     <button onclick="printSpecificArea()">この画像だけ印刷</button>
                 </div>
                 <div class="canvas-area">
@@ -202,7 +201,7 @@
         const container = document.getElementById('colorInputsContainer');
         const bitCount = parseInt(document.getElementById('bitCountSelect').value);
 
-        container.innerHTML += '';
+        container.innerHTML = '<span>カラーコードについては<a href="../color-digital/index.html" target="_blank">こちら</a></span>';
 
         const colorKeys = [];
         for (let i = 0; i < Math.pow(2, bitCount); i++) {
