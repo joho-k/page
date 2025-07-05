@@ -133,21 +133,23 @@
             <h3>ビットデータから画像生成</h3>
             <div id="imageEditor" class="image-editor">
                 <div class="left">
-                    <div class="width-height">
-                        <label>横幅:</label>
-                        <select id="widthSelect"></select>
-                        <span>ピクセル×</span>
-                        <label>高さ:</label>
-                        <select id="heightSelect"></select>
-                        <span>ピクセル</span>
-                    </div>
+                    <div id="properties">
+                        <div class="width-height">
+                            <label>横幅:</label>
+                            <select id="widthSelect"></select>
+                            <span>ピクセル×</span>
+                            <label>高さ:</label>
+                            <select id="heightSelect"></select>
+                            <span>ピクセル</span>
+                        </div>
 
-                    <label>カラーコード（ビット数）</label>
-                    <select id="bitCountSelect" onchange="updateColorInputs()">
-                        <option value="1" selected>1ビット（2色）</option>
-                        <option value="2">2ビット（4色）</option>
-                        <option value="3">3ビット（8色）</option>
-                    </select>
+                        <label>カラーコード（ビット数）</label>
+                        <select id="bitCountSelect" onchange="updateColorInputs()">
+                            <option value="1" selected>1ビット（2色）</option>
+                            <option value="2">2ビット（4色）</option>
+                            <option value="3">3ビット（8色）</option>
+                        </select>
+                    </div>
                     <div id="colorInputsContainer"></div>
 
                     <label>0と1のデータ</label>
@@ -372,32 +374,65 @@
     function printSpecificArea() {
         const area = document.getElementById("imageEditor");
 
+        let imageProperty = "<ul>";
+
+        // 引き継ぎのために、選択中の値を明示的にvalue属性にセット
+        const selects = document.querySelectorAll("#imageEditor select");
+        selects.forEach(sel => {
+            switch (sel.id) {
+                case "widthSelect":
+                    imageProperty += `<li>横幅: <ul><li>${sel.value}ピクセル</ul></li></li>`
+                    break;
+                case "heightSelect":
+                    imageProperty += `<li>高さ: <ul><li>${sel.value}ピクセル</ul></li></li>`
+                    break;
+                case "bitCountSelect":
+                    imageProperty += `<li>カラーコードビット数: <ul><li>${sel.value}ビット</ul></li></li>`
+                    break;
+            }
+        });
+
+        const binalyData = document.getElementById("binaryInput").value;
+
         const clonedArea = area.cloneNode(true); // DOMを複製
 
-        // colorInputsContainer を削除
-        const colorInputs = clonedArea.querySelector("#colorInputsContainer");
-        const bitSelect = clonedArea.querySelector('#bitCountSelect');
-        if (colorInputs) colorInputs.remove();
-        // colorInputsContainerの代わりにリストを追加
-        const colorListHTML = generateColorListHTML();
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = `${colorListHTML}`;
-        bitSelect.insertAdjacentElement('afterend', wrapper);
+        // 一旦leftを消す
+        const leftArea = clonedArea.querySelector(".left");
+        if (leftArea) leftArea.remove();
+
+        // 新しい左側のクラス
+        const newLeftArea = document.createElement("div");
+        newLeftArea.classList.add("left");
+
+        newLeftArea.innerHTML = `
+            <h4>画像の情報</h4>
+            ${imageProperty}
+            ${generateColorListHTML()}
+            <li>0と1のデータ<ul><li>${binalyData}</li></ul></li></ul>
+        `
+
+        clonedArea.prepend(newLeftArea);
 
         // 新しいウィンドウを開く
         const printWindow = window.open('', '', 'width=1000,height=800');
 
-        // HTMLの基本構造を作成
-        printWindow.document.write('<html><head><title>印刷プレビュー</title>');
-
-        // 既存のCSSをすべてコピー
-        const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"], style')).map(node => node.outerHTML).join('');
-        printWindow.document.write(styles);
-
-        printWindow.document.write('</head><body>');
-        printWindow.document.write(clonedArea.outerHTML); // id="printArea" の要素ごとコピー
-        printWindow.document.write('</div>');
-        printWindow.document.write('</body></html>');
+        printWindow.document.write(`
+        <html>
+        <head>
+            <title>印刷プレビュー</title>
+            <style>.image-editor {
+                display: flex;
+            }
+            .left, .canvas-area {
+                width: 50%;
+            }
+            </style>
+        </head>
+        <body>
+            ${clonedArea.outerHTML}
+        </body>
+        </html>
+    `);
         printWindow.document.close();
 
         // canvas の内容もコピー
@@ -421,7 +456,7 @@
 
     function generateColorListHTML() {
         const bitCount = parseInt(document.getElementById('bitCountSelect').value);
-        let html = '<ul style="list-style: none; padding-left: 0;">';
+        let html = '<li>カラーコード一覧<ul>';
 
         for (let i = 0; i < Math.pow(2, bitCount); i++) {
             const key = i.toString(2).padStart(bitCount, '0');
@@ -429,14 +464,13 @@
             if (!colorInput) continue;
             const color = colorInput.value;
 
-            html += `<li style="margin-bottom: 0.5em;">
+            html += `<li>
                     <span style="display:inline-block;width:1em;height:1em;background:${color};border:1px solid #000;margin-right:0.5em;"></span>
                     ${key} = ${color}
                 </li>`;
         }
 
-        html += '</ul>';
-        return html;
+        return html + "</ul></li>";
     }
 
 
