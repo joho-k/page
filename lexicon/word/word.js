@@ -38,7 +38,7 @@ if (!noHeader) {
 }
 
 // タイトル部分
-const wordTitle = document.createElement('h3');
+const wordTitle = document.createElement('h1');
 wordTitle.id = 'word-title';
 wordTitle.innerHTML = `${title}`;
 document.title = `${document.title}「${title}」`;
@@ -157,7 +157,7 @@ toggleBtn.onclick = () => {
 };
 
 // メイン要素に子要素を追加
-main.insertBefore(wordTitle, main.lastElementChild);
+main.prepend(wordTitle);
 main.insertBefore(videoTitle, main.lastElementChild);
 main.insertBefore(videoExplanation, main.lastElementChild);
 main.insertBefore(relatedWordsTitle, main.lastElementChild);
