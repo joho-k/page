@@ -63,6 +63,7 @@
             <canvas id="waveform" width="1000" height="200"></canvas>
 
             <p class="info">押すと音声が再生されます。音量に注意してください。</p>
+            <div id="ordinal-buttons"></div>
             <h4>サンプリング周波数の削減</h4>
             <div class="sampling">
                 <div id="sampling-buttons">
@@ -185,8 +186,19 @@
     }
 
     function createButtons() {
+        const ordinalContainer = document.getElementById('ordinal-buttons');
         const samplingContainer = document.getElementById('sampling-buttons');
         const quantizationContainer = document.getElementById('quantization-buttons');
+
+        const ordinalBtn = document.createElement('button');
+        ordinalBtn.textContent = `元音声データ`;
+        ordinalBtn.onclick = () => {
+            const downsampled = downsampleBuffer(originalBuffer, 1);
+            currentBuffer = downsampled;
+            playBuffer(downsampled);
+            drawWaveform(downsampled);
+        };
+        ordinalContainer.appendChild(ordinalBtn);
 
         [2, 4, 8, 16, 32].forEach(factor => {
             const btn = document.createElement('button');
