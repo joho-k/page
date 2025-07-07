@@ -191,7 +191,7 @@
         const quantizationContainer = document.getElementById('quantization-buttons');
 
         const ordinalBtn = document.createElement('button');
-        ordinalBtn.textContent = `元音声データ`;
+        ordinalBtn.innerText = `元音声データ\n(サンプリング周波数:44100Hz, 量子化ビット数16ビット)`;
         ordinalBtn.onclick = () => {
             const downsampled = downsampleBuffer(originalBuffer, 1);
             currentBuffer = downsampled;
@@ -202,7 +202,7 @@
 
         [2, 4, 8, 16, 32].forEach(factor => {
             const btn = document.createElement('button');
-            btn.textContent = `1/${factor}`;
+            btn.innerText = `1/${factor}\n(${44100 / factor}Hz)`;
             btn.onclick = () => {
                 const downsampled = downsampleBuffer(originalBuffer, factor);
                 currentBuffer = downsampled;
