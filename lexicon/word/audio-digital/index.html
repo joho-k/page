@@ -44,13 +44,9 @@
 
     <!-- 共通部分ここまで -->
     <style>
-        #play-test {
+        .sampling,
+        .quantization {
             display: flex;
-        }
-
-        .left,
-        .right {
-            width: 50%;
         }
     </style>
 </head>
@@ -61,18 +57,17 @@
         </header>
         <main>
             <h3>音質劣化再生テスト</h3>
-            <div id="play-test">
-                <div class="left">
-                    <h4>サンプリング周波数の削減</h4>
-                    <div id="sampling-buttons">
-                        <!-- 動的に追加 -->
-                    </div>
+            <p class="info">押すと音声が再生されます。音量に注意してください。</p>
+            <h4>サンプリング周波数の削減</h4>
+            <div class="sampling">
+                <div id="sampling-buttons">
+                    <!-- 動的に追加 -->
                 </div>
-                <div class="right">
-                    <h4>量子化ビット数の削減</h4>
-                    <div id="quantization-buttons">
-                        <!-- 動的に追加 -->
-                    </div>
+            </div>
+            <h4>量子化ビット数の削減</h4>
+            <div class="quantization">
+                <div id="quantization-buttons">
+                    <!-- 動的に追加 -->
                 </div>
             </div>
 
