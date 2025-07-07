@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!-- ここから全ページ共通 -->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>音声のデジタル表現 | 情報I用語集</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    <meta property="og:title" content="音声のデジタル表現 | 情報Iの用語解説">
+    <meta property="og:description" content="">
+
+    <link rel="icon" href="../../../img/logo.ico">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../word.css">
+
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v6.4.2/css/all.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHYWTV27F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RXHYWTV27F');
+    </script>
+
+
+    <script src="../../../common.js"></script>
+    <link rel="stylesheet" href="../../../header.css">
+
+    <!-- 共通部分ここまで -->
+    <style>
+        #play-test {
+            display: flex;
+        }
+
+        .left,
+        .right {
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body id="word-body">
+    <div class="content">
+        <header>
+        </header>
+        <main>
+            <h3>音質劣化再生テスト</h3>
+            <div id="play-test">
+                <div class="left">
+                    <h4>サンプリング周波数の削減</h4>
+                    <div id="sampling-buttons">
+                        <!-- 動的に追加 -->
+                    </div>
+                </div>
+                <div class="right">
+                    <h4>量子化ビット数の削減</h4>
+                    <div id="quantization-buttons">
+                        <!-- 動的に追加 -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="image-explanation" class="content-item">
+                <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
+                <!-- ここまでベタ打ち -->
+            </div>
+        </main>
+    </div>
+</body>
+<script>
+    const audioFilePath = './audio/sample_audio1.wav';
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let originalBuffer = null;
+
+    async function loadAudio() {
+        const response = await fetch(audioFilePath);
+        const arrayBuffer = await response.arrayBuffer();
+        originalBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    }
+
+    function playBuffer(buffer) {
+        const source = audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioCtx.destination);
+        source.start();
+    }
+
+    function downsampleBuffer(buffer, factor) {
+        const originalData = buffer.getChannelData(0);
+        const length = buffer.length;
+        const sampleRate = buffer.sampleRate;
+
+        const newBuffer = audioCtx.createBuffer(1, length, sampleRate);
+        const newData = newBuffer.getChannelData(0);
+
+        for (let i = 0; i < length; i += factor) {
+            newData[i] = originalData[i];
+            // その他の点は 0 のまま（無音）
+        }
+
+        return newBuffer;
+    }
+
+    function quantizeBuffer(buffer, bitReduction) {
+        const originalData = buffer.getChannelData(0);
+        const length = buffer.length;
+        const sampleRate = buffer.sampleRate;
+
+        const newBuffer = audioCtx.createBuffer(1, length, sampleRate);
+        const newData = newBuffer.getChannelData(0);
+
+        const bits = 16 + bitReduction;
+        const levels = Math.pow(2, bits);
+
+        for (let i = 0; i < length; i++) {
+            const v = originalData[i];
+            newData[i] = Math.round(v * (levels / 2 - 1)) / (levels / 2 - 1);
+        }
+
+        return newBuffer;
+    }
+
+    function createButtons() {
+        const samplingContainer = document.getElementById('sampling-buttons');
+        const quantizationContainer = document.getElementById('quantization-buttons');
+
+        [2, 4, 8, 16, 32].forEach(factor => {
+            const btn = document.createElement('button');
+            btn.textContent = `1/${factor}`;
+            btn.onclick = () => {
+                const downsampled = downsampleBuffer(originalBuffer, factor);
+                playBuffer(downsampled);
+            };
+            samplingContainer.appendChild(btn);
+        });
+
+        [-2, -4, -6, -8, -10, -12].forEach(bits => {
+            const btn = document.createElement('button');
+            btn.innerText = `${bits}ビット\n(${16 + bits}ビット)`;
+            btn.onclick = () => {
+                const quantized = quantizeBuffer(originalBuffer, bits);
+                playBuffer(quantized);
+            };
+            quantizationContainer.appendChild(btn);
+        });
+    }
+
+    loadAudio().then(createButtons);
+</script>
+
+<script>
+    // 用語
+    const title = "音声のデジタル表現"
+    // YouTubeの動画のURL。ない場合はnull
+    const youtubeURLID = null;
+    // 関連単語
+    const relatedWords = [
+        { word: "デジタル情報と進数表現", url: "digital-and-binary" },
+    ];
+
+    // word.js の画像差し替え確かめ用を用いて確認→HTMLにコードをベタ打ちする
+    const image = [
+    ]
+</script>
+<script src="../word.js"></script>
+
+</html>
