@@ -86,6 +86,7 @@
 </body>
 <script>
     let zoomLevel = 1;
+    let currentBuffer = null; // 今表示・再生中のバッファ
 
     function drawWaveform(buffer = originalBuffer) {
         const canvas = document.getElementById("waveform");
@@ -126,7 +127,7 @@
     // ズームスライダーイベント
     document.getElementById("zoomRange").addEventListener("input", e => {
         zoomLevel = parseInt(e.target.value);
-        drawWaveform();
+        drawWaveform(currentBuffer || originalBuffer);
     });
 
     const audioFilePath = './audio/sample_audio1.wav';
@@ -137,6 +138,7 @@
         const response = await fetch(audioFilePath);
         const arrayBuffer = await response.arrayBuffer();
         originalBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        currentBuffer = originalBuffer;
         drawWaveform();
     }
 
@@ -191,6 +193,7 @@
             btn.textContent = `1/${factor}`;
             btn.onclick = () => {
                 const downsampled = downsampleBuffer(originalBuffer, factor);
+                currentBuffer = downsampled;
                 playBuffer(downsampled);
                 drawWaveform(downsampled);
             };
@@ -202,6 +205,7 @@
             btn.innerText = `${bits}ビット\n(${16 + bits}ビット)`;
             btn.onclick = () => {
                 const quantized = quantizeBuffer(originalBuffer, bits);
+                currentBuffer = quantized;
                 playBuffer(quantized);
                 drawWaveform(quantized);
             };
