@@ -76,6 +76,10 @@
                     <!-- 動的に追加 -->
                 </div>
             </div>
+            <h4>ステレオ</h4>
+            <div class="stereo">
+                <button id="stereo-button" onclick="playStereoAudio()">ステレオ音声</button>
+            </div>
 
 
             <div id="image-explanation" class="content-item">
@@ -141,6 +145,17 @@
         originalBuffer = await audioCtx.decodeAudioData(arrayBuffer);
         currentBuffer = originalBuffer;
         drawWaveform();
+    }
+
+    async function playStereoAudio() {
+        const response = await fetch('audio/stereo.wav');
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        const source = audioCtx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioCtx.destination);
+        source.start();
     }
 
     function playBuffer(buffer) {
