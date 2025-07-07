@@ -56,7 +56,12 @@
         <header>
         </header>
         <main>
-            <h3>音質劣化再生テスト</h3>
+            <h3>音質劣化再生テスト・波形表示</h3>
+            <label for="zoomRange">ズーム: </label>
+            <input type="range" id="zoomRange" min="1" max="32" step="1" value="1">
+
+            <canvas id="waveform" width="1000" height="200"></canvas>
+
             <p class="info">押すと音声が再生されます。音量に注意してください。</p>
             <h4>サンプリング周波数の削減</h4>
             <div class="sampling">
@@ -80,6 +85,50 @@
     </div>
 </body>
 <script>
+    let zoomLevel = 1;
+
+    function drawWaveform(buffer = originalBuffer) {
+        const canvas = document.getElementById("waveform");
+        const ctx = canvas.getContext("2d");
+
+        if (!buffer) return;
+
+        const data = buffer.getChannelData(0);
+        const length = data.length;
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerY = height / 2;
+        const samplesPerPixel = Math.floor(length / (width * zoomLevel));
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.beginPath();
+
+        for (let x = 0; x < width; x++) {
+            const start = x * samplesPerPixel;
+            const end = Math.min(start + samplesPerPixel, length);
+            let min = 1.0, max = -1.0;
+            for (let i = start; i < end; i++) {
+                const val = data[i];
+                if (val < min) min = val;
+                if (val > max) max = val;
+            }
+            const y1 = centerY + min * centerY;
+            const y2 = centerY + max * centerY;
+            ctx.moveTo(x, y1);
+            ctx.lineTo(x, y2);
+        }
+
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // ズームスライダーイベント
+    document.getElementById("zoomRange").addEventListener("input", e => {
+        zoomLevel = parseInt(e.target.value);
+        drawWaveform();
+    });
+
     const audioFilePath = './audio/sample_audio1.wav';
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let originalBuffer = null;
@@ -88,6 +137,7 @@
         const response = await fetch(audioFilePath);
         const arrayBuffer = await response.arrayBuffer();
         originalBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        drawWaveform();
     }
 
     function playBuffer(buffer) {
@@ -142,6 +192,7 @@
             btn.onclick = () => {
                 const downsampled = downsampleBuffer(originalBuffer, factor);
                 playBuffer(downsampled);
+                drawWaveform(downsampled);
             };
             samplingContainer.appendChild(btn);
         });
@@ -152,6 +203,7 @@
             btn.onclick = () => {
                 const quantized = quantizeBuffer(originalBuffer, bits);
                 playBuffer(quantized);
+                drawWaveform(quantized);
             };
             quantizationContainer.appendChild(btn);
         });
