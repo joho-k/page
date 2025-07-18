@@ -10,10 +10,10 @@
     <loc>https://joho-kyoshitsu.com/lexicon/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/audio-digital/index.html</loc>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/data-size-units/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/info-properties/index.html</loc>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/audio-digital/index.html</loc>
   </url>
   <url>
     <loc>https://joho-kyoshitsu.com/lexicon/word/text-binaly/index.html</loc>
@@ -22,42 +22,48 @@
     <loc>https://joho-kyoshitsu.com/lexicon/word/image-digital/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/color-digital/index.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/encryption/index.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/information/index.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/common-key/index.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/info-sources/index.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/data-size-units/index.html</loc>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/video-digital/index.html</loc>
   </url>
   <url>
     <loc>https://joho-kyoshitsu.com/lexicon/word/public-key/index.html</loc>
   </url>
   <url>
-    <loc>https://joho-kyoshitsu.com/lexicon/word/digital-and-binary/index.html</loc>
-  </url>
-  <url>
     <loc>https://joho-kyoshitsu.com/lexicon/word/info-verification/index.html</loc>
   </url>
   <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/common-key/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/color-digital/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/information/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/info-sources/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/digital-and-binary/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/data-compression/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/info-properties/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/encryption/index.html</loc>
+  </url>
+  <url>
     <loc>https://joho-kyoshitsu.com/sisaku/index.html</loc>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/dncl/dncl_editor.html</loc>
   </url>
   <url>
     <loc>https://joho-kyoshitsu.com/dncl/question.html</loc>
   </url>
   <url>
     <loc>https://joho-kyoshitsu.com/dncl/index.html</loc>
-  </url>
-  <url>
-    <loc>https://joho-kyoshitsu.com/dncl/dncl_editor.html</loc>
   </url>
 </urlset>
