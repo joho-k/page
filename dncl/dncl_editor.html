@@ -238,10 +238,17 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
 
                     td.textContent = value;
 
-                    if (prevRow && key !== "ステップ") {
-                        const prevValue = prevRow[key] ?? "-";
-                        if (prevValue !== value) {
+                    if (key !== "ステップ") {
+                        if (prevRow == null && value !== "-") {
+                            // 1行目の代入のスタイルを変更する
                             td.classList.add("changed");
+                        } else if (prevRow) {
+                            const prevValue = prevRow[key] ?? "-";
+                            if (value != "-" && prevValue == value) {
+                                td.textContent = "〃";
+                            } else if (prevValue != value) {
+                                td.classList.add("changed");
+                            }
                         }
                     }
                     tr.appendChild(td);
