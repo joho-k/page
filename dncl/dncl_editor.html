@@ -163,17 +163,23 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                 const assignMatch = trimmedLine.match(/^([└│ ]*)\s*([a-zA-Z_]\w*)\s*=\s*(.+)$/);
                 const assignLoopMatch = trimmedLine.match((/^([└│ ]*)\s*for\s*\(\s*let\s+([a-zA-Z_]\w*)\s*=/));
 
+                let updatedVar = null;
                 let varsCode = "";
                 if (assignMatch) {
-                    varsCode = ` vars.${assignMatch[2]} = ${assignMatch[2]};`;
+                    updatedVar = assignMatch[2];
+                    varsCode = ` vars.${updatedVar} = ${updatedVar};`;
                 } else if (assignLoopMatch) {
-                    varsCode = ` vars.${assignLoopMatch[2]} = ${assignLoopMatch[2]};`;
+                    updatedVar = assignLoopMatch[2];
+                    varsCode = ` vars.${updatedVar} = ${updatedVar};`;
                 }
+                console.log(trimmedLine)
                 const addCode = trimmedLine !== ""
-                    ? `${`${varsCode} recordStep(${Math.ceil(i / 2)});`}`
+                    ? `${varsCode} recordStep(${Math.ceil(i / 2)}, ${updatedVar ? `["${updatedVar}"]` : "[]"});`
                     : "";
                 jsLines.splice(i, 0, addCode);
             }
+
+            console.log(jsLines.join('\n'));
 
             const finalCode = `
             let output = "";
@@ -181,15 +187,17 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
             // 処理を追う用の変数
             const vars = {};
 
-            function recordStep(step) {
+            function recordStep(step, updatedVars = []) {
                 const snapshot = { "ステップ": step };
                 for (const name of ${JSON.stringify([...varNames])}) {
                     try {
                         snapshot[name] = JSON.stringify(vars[name]);
                     } catch { snapshot[name] = "-"; }
                 }
+                snapshot["_updated"] = updatedVars;
                 traceTable.push(snapshot);
             }
+
             function print(...args) {
                 output += args.join(" ") + "\\n";
             }
@@ -244,9 +252,10 @@ i を 1 から 3 まで 1 ずつ増やしながら繰り返す:
                             td.classList.add("changed");
                         } else if (prevRow) {
                             const prevValue = prevRow[key] ?? "-";
-                            if (value != "-" && prevValue == value) {
+                            const isUpdatedKey = row["_updated"] && row["_updated"].includes(key);
+                            if (value != "-" && prevValue == value && !isUpdatedKey) {
                                 td.textContent = "〃";
-                            } else if (prevValue != value) {
+                            } else if (prevValue != value || isUpdatedKey) {
                                 td.classList.add("changed");
                             }
                         }
