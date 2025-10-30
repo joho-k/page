@@ -281,7 +281,7 @@
 
                     <!-- 2) 吹き出し（メッセージ） -->
                     <div class="gg-bubble" aria-live="polite" aria-atomic="true">
-                        <div class="gg-msg">私が思い浮かべている1〜999の数を当ててみてください！</div>
+                        <div class="gg-msg">私が思い浮かべている0〜999の数を当ててみてください！</div>
                     </div>
                 </div>
 
@@ -289,7 +289,7 @@
                 <div class="gg-panel">
                     <div class="gg-display">
                         <strong class="gg-current">—</strong>
-                        <small>1〜999 を入力</small>
+                        <small>0〜999 を入力</small>
                     </div>
 
                     <div class="gg-keypad" role="group" aria-label="数字キー">
@@ -381,8 +381,8 @@
             function submitGuess() {
                 if (state.finished) return;
                 const value = Number(state.input);
-                if (!Number.isInteger(value) || value < 1 || value > 999) {
-                    speak('1〜999の整数で予想してください。');
+                if (!Number.isInteger(value) || value < 0 || value > 999) {
+                    speak('0〜999の整数で予想してください。');
                     return;
                 }
                 state.turns += 1;
@@ -408,7 +408,7 @@
             }
 
             function restart() {
-                state.answer = rand(1, 999);
+                state.answer = rand(0, 999);
                 state.turns = 0;
                 state.input = '';
                 state.finished = false;
@@ -416,7 +416,7 @@
                 els.restart.style.display = 'none';
                 els.submit.disabled = false;
                 renderInput();
-                speak('新しい勝負です。私が思い浮かべている1〜999の数を当ててみてください！');
+                speak('新しい勝負です。私が思い浮かべている0〜999の数を当ててみてください！');
             }
 
             // クリック操作
