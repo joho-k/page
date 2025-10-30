@@ -44,27 +44,396 @@
 
     <!-- 共通部分ここまで -->
     <style>
+        /* === 数当てゲーム（埋め込み用スコープ） === */
+        .guessgame {
+            --bg: #f7f7fb;
+            --card: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --accent: #2563eb;
+            --accent-2: #10b981;
+            --danger: #ef4444;
+
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            max-width: 520px;
+        }
+
+        .guessgame * {
+            box-sizing: border-box;
+            color: var(--text);
+        }
+
+
+        .guessgame .gg-opponent {
+            display: flex;
+        }
+
+        /* 1) 対戦相手 */
+        .guessgame .gg-opponent-img {
+            display: grid;
+            place-items: center;
+            margin-bottom: 12px;
+        }
+
+        .guessgame .gg-opponent-img img {
+            width: 180px;
+            height: 180px;
+            box-shadow: inset 0 0 0 2px #e5e7eb;
+        }
+
+        /* 2) 吹き出し */
+        .guessgame .gg-bubble {
+            position: relative;
+            background: #fff;
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin: 8px 0 16px 16px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .guessgame .gg-bubble::after {
+            content: "";
+            position: absolute;
+            bottom: 20px;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-left: 2px solid #e5e7eb;
+            border-bottom: 2px solid #e5e7eb;
+            transform: rotate(45deg);
+        }
+
+        .guessgame .gg-msg {
+            line-height: 1.5;
+            font-size: 16px;
+        }
+
+        /* 3) 入力欄 */
+        .guessgame .gg-panel {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .guessgame .gg-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .guessgame .gg-display strong {
+            font-size: 20px;
+        }
+
+        .guessgame .gg-display small {
+            color: var(--muted);
+        }
+
+        /* ★ 1〜9 横並び（スマホでも横スクロール可） */
+        .guessgame .gg-keypad {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .guessgame .gg-row {
+            display: flex;
+            justify-content: center;
+        }
+
+        .guessgame .gg-row.ops {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .guessgame .gg-row.ops button {
+            flex: 1;
+            height: 52px;
+            font-size: 18px;
+            border-radius: 12px;
+        }
+
+        .guessgame .gg-row.ops .gg-btn-accent {
+            background: var(--accent);
+            color: #fff;
+            width: 100px;
+        }
+
+        .guessgame .gg-row.ops .gg-btn-ghost {
+            background: #f3f4f6;
+            width: 100px;
+        }
+
+        .guessgame .gg-keypad button {
+            width: 45px;
+            height: 40px;
+            padding: 0px;
+            font-size: 20px;
+            border: none;
+            border-radius: 12px;
+            background: #e5e7eb;
+        }
+
+        .guessgame button {
+            padding: 14px 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            background: #e5e7eb;
+            color: #111827;
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        .guessgame button:active {
+            transform: translateY(1px);
+        }
+
+        .guessgame .gg-btn-accent {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .guessgame .gg-btn-good {
+            background: var(--accent-2);
+            color: #fff;
+        }
+
+        /* 4) 履歴 */
+        .guessgame .gg-history {
+            margin-top: 16px;
+        }
+
+        .guessgame .gg-history h2 {
+            font-size: 16px;
+            margin: 6px 0 10px;
+            color: #111827;
+        }
+
+        .guessgame .gg-history-scroll {
+            overflow: auto;
+            max-height: 240px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
+
+        .guessgame table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .guessgame th,
+        .guessgame td {
+            text-align: center;
+            padding: 10px 8px;
+        }
+
+        .guessgame thead th {
+            position: sticky;
+            top: 0;
+            background: #f9fafb;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .guessgame tbody tr:nth-child(odd) {
+            background: #fafafa;
+        }
+
+        .guessgame .gg-footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        /* PCで少し大きく */
+        @media (min-width: 900px) {
+            .guessgame button {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 
 <body id="word-body">
     <div class="content">
-        <header>
-        </header>
+        <header></header>
         <main>
             <h3>数当てゲーム</h3>
 
-            <div id="image-explanation" class="content-item">
-                <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
-                <!-- ここまでベタ打ち -->
+            <div class="guessgame" id="guessgame">
+                <!-- 1) 対戦相手PNG（差し替え可） -->
+                <div class="gg-opponent">
+                    <div class="gg-opponent-img">
+                        <img src="./img/opponent.png" alt="対戦相手">
+                    </div>
+
+                    <!-- 2) 吹き出し（メッセージ） -->
+                    <div class="gg-bubble" aria-live="polite" aria-atomic="true">
+                        <div class="gg-msg">私が思い浮かべている1〜999の数を当ててみてください！</div>
+                    </div>
+                </div>
+
+                <!-- 3) 入力欄（0〜9ボタン、送信）※ヒントや範囲は削除 -->
+                <div class="gg-panel">
+                    <div class="gg-display">
+                        <strong class="gg-current">—</strong>
+                        <small>1〜999 を入力</small>
+                    </div>
+
+                    <div class="gg-keypad" role="group" aria-label="数字キー">
+                        <div class="gg-row">
+                            <button data-key="1">1</button>
+                            <button data-key="2">2</button>
+                            <button data-key="3">3</button>
+                            <button data-key="4">4</button>
+                            <button data-key="5">5</button>
+                        </div>
+                        <div class="gg-row">
+                            <button data-key="6">6</button>
+                            <button data-key="7">7</button>
+                            <button data-key="8">8</button>
+                            <button data-key="9">9</button>
+                            <button data-key="0">0</button>
+                        </div>
+                        <div class="gg-row ops">
+                            <button class="gg-btn-danger" data-action="back">削除</button>
+                            <button class="gg-submit gg-btn-accent">送信</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4) 今までの予想と結果の一覧（3列に簡素化） -->
+                <section class="gg-history">
+                    <h4>履歴</h4>
+                    <div class="gg-history-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>予想</th>
+                                    <th>結果</th>
+                                </tr>
+                            </thead>
+                            <tbody class="gg-history-body"></tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
+
+            <div id="image-explanation" class="content-item"><!-- ここは未使用 --></div>
         </main>
     </div>
+
+    <script>
+        (() => {
+            const root = document.getElementById('guessgame');
+            if (!root) return;
+
+            const $ = (sel) => root.querySelector(sel);
+            const els = {
+                msg: $('.gg-msg'),
+                current: $('.gg-current'),
+                keypad: $('.gg-keypad'),
+                submit: $('.gg-submit'),
+                restart: $('.gg-restart'),
+                historyBody: $('.gg-history-body'),
+            };
+
+            const state = {
+                answer: rand(1, 999),
+                turns: 0,
+                input: '',
+                finished: false,
+            };
+
+            function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+            function renderInput() { els.current.textContent = state.input === '' ? '—' : state.input; }
+            function clearInput() { state.input = ''; renderInput(); }
+            function backspace() { state.input = state.input.slice(0, -1); renderInput(); }
+            function appendDigit(d) { if (state.finished) return; if (state.input.length < 3) { state.input += d; renderInput(); } }
+
+            function speak(text) {
+                els.msg.textContent = text;
+                els.msg.parentElement.animate(
+                    [{ transform: 'scale(1)' }, { transform: 'scale(1.02)' }, { transform: 'scale(1)' }],
+                    { duration: 180, easing: 'ease-out' }
+                );
+            }
+
+            function addHistory(guess, result) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${state.turns}</td><td>${guess}</td><td>${result}</td>`;
+                els.historyBody.prepend(tr); // 新しい順
+            }
+
+            function submitGuess() {
+                if (state.finished) return;
+                const value = Number(state.input);
+                if (!Number.isInteger(value) || value < 1 || value > 999) {
+                    speak('1〜999の整数で予想してください。');
+                    return;
+                }
+                state.turns += 1;
+
+                if (value === state.answer) {
+                    let message = `正解です！合計${state.turns}回で当てましたね！`;
+                    if (state.turns > 10) {
+                        message += "10回以内で必ず当たるはず。もう一度チャレンジしてみよう！"
+                    }
+                    speak(message);
+                    addHistory(value, '◎ 正解！');
+                    state.finished = true;
+                    els.restart.style.display = 'block';
+                    els.submit.disabled = true;
+                } else if (value < state.answer) {
+                    speak('もっと上です！');
+                    addHistory(value, 'もっと上');
+                } else {
+                    speak('もっと下です！');
+                    addHistory(value, 'もっと下');
+                }
+                clearInput();
+            }
+
+            function restart() {
+                state.answer = rand(1, 999);
+                state.turns = 0;
+                state.input = '';
+                state.finished = false;
+                els.historyBody.innerHTML = '';
+                els.restart.style.display = 'none';
+                els.submit.disabled = false;
+                renderInput();
+                speak('新しい勝負です。私が思い浮かべている1〜999の数を当ててみてください！');
+            }
+
+            // クリック操作
+            els.keypad.addEventListener('click', (e) => {
+                const key = e.target.getAttribute('data-key');
+                const action = e.target.getAttribute('data-action');
+                if (key !== null) appendDigit(key);
+                if (action === 'back') backspace();
+                if (action === 'clear') clearInput();
+            });
+            els.submit.addEventListener('click', submitGuess);
+            els.restart.addEventListener('click', restart);
+
+            renderInput();
+        })();
+    </script>
 </body>
-<script>
-
-</script>
-
 <script>
     // 用語
     const title = "アルゴリズム"
