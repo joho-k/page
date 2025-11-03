@@ -79,6 +79,7 @@ window.addEventListener('load', () => {
     header.innerHTML = `
         <div class="title">
             <a href="${pathPrefix}index.html">
+                <span class="logo-desc">情報I・基本情報技術者試験対策なら<br/ ></span>
                 <img class="logo" src="${pathPrefix}img/logo_transparent.png" >
             </a>
         </div>
