@@ -74,23 +74,120 @@
             <p>情報の教室は、高校「情報I」や国家試験「ITパスポート」「基本情報技術者試験」などの学習に役立つ解説・教材を提供する学習支援サイトです。</p>
         </main>
     </header>
-    <section class="navigation">
-        <h2>充実のコンテンツ</h2>
-        <a class="smartphone-description">タップで説明を見ることができます。もう一度タップでリンクに移動します。</a>
-        <nav class="nav">
-            <a href="dncl/index.html" data-tooltip="プログラミング学習ならこれ\n解答した内容で実際にプログラムを動かすことができるサービスです。">実プロ</a>
-            <a href="lexicon/index.html" data-tooltip="重要な単語をわかりやすく、独自の目線で解説します">用語の辞典</a>
-            <a href="sisaku/index.html" data-tooltip="様々な大学の試験問題を一覧にしました。">試作問題リンク</a>
-        </nav>
-        <nav class="nav">
-            <a href="https://www.youtube.com/@joho-no-kyoshitsu" target="_blank" class="link-button"
-                data-tooltip="単語解説だけでなく、情報Iに関する楽しいコンテンツも公開しています。">YouTubeチャンネル</a>
-            <a href="https://coconala.com/users/3877173" target="_blank" class="link-button"
-                data-tooltip="マンツーマンの授業を受けることができます。\n授業内容も柔軟に対応できます。">ココナラ</a>
-            <a href="https://x.com/johonokyoshitsu" target="_blank" class="link-button"
-                data-tooltip="気まぐれで呟いています">X(旧Twitter)</a>
-        </nav>
+
+    <section id="content-hero" aria-label="充実のコンテンツ">
+        <h2>充実の無料コンテンツ</h2>
+        <p style="text-align: center;">以下のコンテンツは、すべて無料・会員登録不要で使用することができます。</p>
+        <div class="wrap">
+            <!-- 実プロ -->
+            <article class="feature">
+                <div class="feat-img">
+                    <img src="./dncl/instruction.png" alt="実プロのイメージ">
+                </div>
+                <div class="feat-body">
+                    <div class="feat-head">
+                        <h3 class="title">実プロ</h3>
+                    </div>
+                    <p class="desc">
+                        実際に動かせるプログラミング学習ができるサービス。<br>
+                        様々な問題を用意しております。
+                    </p>
+                    <a class="cta" href="dncl/index.html">プログラミングをする！</a>
+                </div>
+            </article>
+
+            <!-- 用語の辞典 -->
+            <article class="feature">
+                <div class="feat-img">
+                    <img src="./img/instruction/lexicon.png" alt="用語の辞典のイメージ">
+                </div>
+                <div class="feat-body">
+                    <div class="feat-head">
+                        <h3 class="title">用語の辞典</h3>
+                    </div>
+                    <p class="desc">
+                        重要語をやさしく、独自の視点で解説。<br>
+                        予習・復習・定期テスト対策に。
+                    </p>
+                    <a class="cta" href="lexicon/index.html">用語の解説を聞く！</a>
+                </div>
+            </article>
+
+            <!-- 試作問題リンク -->
+            <article class="feature">
+                <div class="feat-img">
+                    <img src="./img/instruction/sisaku.png" alt="試作問題リンクのイメージ">
+                </div>
+                <div class="feat-body">
+                    <div class="feat-head">
+                        <h3 class="title">試作問題リンク</h3>
+                    </div>
+                    <p class="desc">
+                        様々な大学の試験問題を一覧化。<br>
+                        実戦で理解を深めよう。
+                    </p>
+                    <a class="cta" href="sisaku/index.html">試作問題を解く！</a>
+                </div>
+            </article>
+
+            <!-- YouTubeチャンネル -->
+            <article class="feature">
+                <div class="feat-img">
+                    <img src="./img/instruction/youtube.png" alt="YouTubeチャンネルのイメージ">
+                </div>
+                <div class="feat-body">
+                    <div class="feat-head">
+                        <h3 class="title">YouTubeチャンネル</h3>
+                    </div>
+                    <p class="desc">
+                        単語解説から楽しい企画まで。<br>
+                        映像で直感的に理解！
+                    </p>
+                    <a class="cta" href="https://www.youtube.com/@joho-no-kyoshitsu" target="_blank"
+                        rel="noopener">YouTubeで直感的に理解する！</a>
+                </div>
+            </article>
+
+            <!-- X（旧Twitter） -->
+            <article class="feature">
+                <div class="feat-img">
+                    <img src="./img/instruction/twitter.png" alt="X（旧Twitter）のイメージ">
+                </div>
+                <div class="feat-body">
+                    <div class="feat-head">
+                        <h3 class="title">X（旧Twitter）</h3>
+                    </div>
+                    <p class="desc">
+                        授業ネタや最新情報を気ままにポスト。<br>
+                        お気軽にフォローどうぞ。
+                    </p>
+                    <a class="cta" href="https://x.com/johonokyoshitsu" target="_blank" rel="noopener">つぶやきを見る！</a>
+                </div>
+            </article>
+            <h2>マンツーマン指導</h2>
+            <!-- ココナラ -->
+            <article class="feature">
+                <div class="feat-img">
+                    <img src="./img/instruction/coconara.png" alt="ココナラのイメージ">
+                </div>
+                <div class="feat-body">
+                    <div class="feat-head">
+                        <h3 class="title">ココナラ</h3>
+                    </div>
+                    <p class="desc">
+                        マンツーマン授業や教材制作の相談に対応。<br>
+                        学習内容は柔軟にカスタマイズ可能。
+                    </p>
+                    <a class="cta" href="https://coconala.com/users/3877173" target="_blank"
+                        rel="noopener">マンツーマン指導を受ける！</a>
+                </div>
+            </article>
+
+        </div>
     </section>
+    <!-- ======= ここまで ======= -->
+
+
     <section class="news">
         <h2>新着情報</h2>
         <div id="news-container"></div>
@@ -101,13 +198,16 @@
 </body>
 <script>
     const newsItems = [
+        { date: "2025-09-16", tag: "youtube", desc: "チャンネル登録者数が3,500名を突破しました！" },
+        { date: "2025-07-17", tag: "youtube", desc: "チャンネル登録者数が3,000名を突破しました！" },
+        { date: "2025-06-30", tag: "youtube", desc: "チャンネル登録者数が2,000名を突破しました！" },
         { date: "2025-06-27", tag: "func", desc: "「試作問題リンク」を更新しました。" },
         { date: "2025-06-15", tag: "youtube", desc: "チャンネル登録者数が1,000名を突破しました！" },
-        { date: "2025-04-15", tag: "youtube", desc: "チャンネル登録者数が500名を突破しました！" },
         { date: "2025-03-13", tag: "func", desc: "用語解説ページ「用語の辞典」を公開しました。" },
         { date: "2024-12-18", tag: "func", desc: "「試作問題リンク」を公開しました。" },
         { date: "2024-12-04", tag: "func", desc: "プログラミング学習支援ツール「実プロ」を公開しました。" },
         { date: "2024-12-04", tag: "common", desc: "公式ページを開設しました。" },
+        { date: "2023-07-02", tag: "youtube", desc: "YouTubeチャンネルを開設しました。" },
     ];
 
 
