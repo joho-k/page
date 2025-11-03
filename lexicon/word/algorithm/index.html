@@ -58,7 +58,13 @@
             border-radius: 18px;
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
             padding: 16px;
-            max-width: 520px;
+            display: flex;
+        }
+
+        .guessgame .left,
+        .right {
+            flex: 1;
+            margin: 10px;
         }
 
         .guessgame * {
@@ -263,6 +269,12 @@
                 font-size: 20px;
             }
         }
+
+        @media (max-width: 768px) {
+            .guessgame {
+                display: block;
+            }
+        }
     </style>
 </head>
 
@@ -273,63 +285,66 @@
             <h3>数当てゲーム</h3>
 
             <div class="guessgame" id="guessgame">
-                <!-- 1) 対戦相手PNG（差し替え可） -->
-                <div class="gg-opponent">
-                    <div class="gg-opponent-img">
-                        <img src="./img/opponent.png" alt="対戦相手">
+                <div class="left">
+                    <!-- 1) 対戦相手PNG（差し替え可） -->
+                    <div class="gg-opponent">
+                        <div class="gg-opponent-img">
+                            <img src="./img/opponent.png" alt="対戦相手">
+                        </div>
+
+                        <!-- 2) 吹き出し（メッセージ） -->
+                        <div class="gg-bubble" aria-live="polite" aria-atomic="true">
+                            <div class="gg-msg">私が思い浮かべている0〜999の数を当ててみてください！</div>
+                        </div>
                     </div>
 
-                    <!-- 2) 吹き出し（メッセージ） -->
-                    <div class="gg-bubble" aria-live="polite" aria-atomic="true">
-                        <div class="gg-msg">私が思い浮かべている0〜999の数を当ててみてください！</div>
+                    <!-- 3) 入力欄（0〜9ボタン、送信）※ヒントや範囲は削除 -->
+                    <div class="gg-panel">
+                        <div class="gg-display">
+                            <strong class="gg-current">—</strong>
+                            <small>0〜999 を入力</small>
+                        </div>
+
+                        <div class="gg-keypad" role="group" aria-label="数字キー">
+                            <div class="gg-row">
+                                <button data-key="1">1</button>
+                                <button data-key="2">2</button>
+                                <button data-key="3">3</button>
+                                <button data-key="4">4</button>
+                                <button data-key="5">5</button>
+                            </div>
+                            <div class="gg-row">
+                                <button data-key="6">6</button>
+                                <button data-key="7">7</button>
+                                <button data-key="8">8</button>
+                                <button data-key="9">9</button>
+                                <button data-key="0">0</button>
+                            </div>
+                            <div class="gg-row ops">
+                                <button class="gg-btn-danger" data-action="back">削除</button>
+                                <button class="gg-submit gg-btn-accent">送信</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- 3) 入力欄（0〜9ボタン、送信）※ヒントや範囲は削除 -->
-                <div class="gg-panel">
-                    <div class="gg-display">
-                        <strong class="gg-current">—</strong>
-                        <small>0〜999 を入力</small>
-                    </div>
-
-                    <div class="gg-keypad" role="group" aria-label="数字キー">
-                        <div class="gg-row">
-                            <button data-key="1">1</button>
-                            <button data-key="2">2</button>
-                            <button data-key="3">3</button>
-                            <button data-key="4">4</button>
-                            <button data-key="5">5</button>
+                <div class="right">
+                    <!-- 4) 今までの予想と結果の一覧（3列に簡素化） -->
+                    <section class="gg-history">
+                        <h4>履歴</h4>
+                        <div class="gg-history-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>予想</th>
+                                        <th>結果</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="gg-history-body"></tbody>
+                            </table>
                         </div>
-                        <div class="gg-row">
-                            <button data-key="6">6</button>
-                            <button data-key="7">7</button>
-                            <button data-key="8">8</button>
-                            <button data-key="9">9</button>
-                            <button data-key="0">0</button>
-                        </div>
-                        <div class="gg-row ops">
-                            <button class="gg-btn-danger" data-action="back">削除</button>
-                            <button class="gg-submit gg-btn-accent">送信</button>
-                        </div>
-                    </div>
+                    </section>
                 </div>
-
-                <!-- 4) 今までの予想と結果の一覧（3列に簡素化） -->
-                <section class="gg-history">
-                    <h4>履歴</h4>
-                    <div class="gg-history-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>予想</th>
-                                    <th>結果</th>
-                                </tr>
-                            </thead>
-                            <tbody class="gg-history-body"></tbody>
-                        </table>
-                    </div>
-                </section>
             </div>
 
             <div id="image-explanation" class="content-item"><!-- ここは未使用 --></div>
