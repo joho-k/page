@@ -239,9 +239,16 @@ li a {
     text-decoration: none;
     display: inline-block;
     flex-shrink: 0;
+    margin-left: 10px;
 }
 
-.question-link-button:hover {
+.question-link-button.no-link {
+    background-color: gray;
+    color: white;
+    cursor: default;
+}
+
+.question-link-button:hover:not(.no-link) {
     background-color: #e64a19;
     /* ホバー時に色を少し濃くする */
 }
