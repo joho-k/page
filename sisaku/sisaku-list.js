@@ -58,6 +58,20 @@ const sisaku = [
             source: "https://www.nanzan-u.ac.jp/admission/news/2023/240326_joho.html",
             answer: "https://www.nanzan-u.ac.jp/admission/news/2023/pdf/240326_kaitou-rei.pdf?240328",
         },
+    },
+    {
+        name: "北海道情報大学 令和7年度一般選抜1期問題(1日目)", url: {
+            question: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_1.pdf",
+            source: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_1_answer.pdf",
+            answer: "https://www.do-johodai.ac.jp/examinee/examinfo/entrance_exam/",
+        },
+    },
+    {
+        name: "北海道情報大学 令和7年度一般選抜1期問題(2日目)", url: {
+            question: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_2.pdf",
+            source: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_2_answer.pdf",
+            answer: "https://www.do-johodai.ac.jp/examinee/examinfo/entrance_exam/",
+        },
     }
 ]
 
