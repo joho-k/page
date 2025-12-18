@@ -62,11 +62,37 @@ function renderSisakuList() {
 
 
 function createquestionListHtml(index, name, url) {
+    let answerButton = {
+        class: "no-link",
+        target: "",
+        href: "",
+    }
+    let sourceButton = {
+        class: "no-link",
+        target: "",
+        href: "",
+    }
+
+    if (url.answer) {
+        answerButton.class = "";
+        answerButton.target = "_blank";
+        answerButton.href = `href="${url.answer}"`;
+    }
+
+    if (url.source) {
+        sourceButton.class = "source-link";
+        sourceButton.target = "_blank";
+        sourceButton.href = `href="${url.source}"`;
+    }
+
+    const answerLinkButtonHtml = `
+    <a class="question-link-button ${answerButton.class}" ${answerButton.href} target="${answerButton.target}">答え</a>`
     return `
         <li>
             <span class="question-number">${index}</span>
-            <span class="question-title">${name}</span>
+            <span class="question-title"><a class="${sourceButton.class}" ${sourceButton.href} target="${sourceButton.target}">${name}</a></span>
             <a class="question-link-button" href="${url.question}" target="_blank">問題を解く</a>
+            ${answerLinkButtonHtml}
         </li>
     `
 }
