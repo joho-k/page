@@ -92,6 +92,7 @@ window.addEventListener('load', () => {
             <a href="${pathPrefix}dncl/index.html">実プロ</a>
             <a href="${pathPrefix}lexicon/index.html">用語の辞典</a>
             <a href="${pathPrefix}sisaku/index.html">試作問題リンク</a>
+            <a href="https://notebooklm.google.com/notebook/772b6f45-ffec-4400-b404-62c1748983d1?authuser=1&pli=1" target="_blank">学習支援AI(β版)</a>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSd7RzukGDWpTAVr45UYY1EzBKxxvTeRuqfI_XLaBbb0MI4T0A/viewform?usp=dialog"
             target="_blank" style="background-color: #c01565">
             お問い合わせ</a>
