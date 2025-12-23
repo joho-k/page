@@ -62,15 +62,15 @@ const sisaku = [
     {
         name: "北海道情報大学 令和7年度一般選抜1期問題(1日目)", url: {
             question: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_1.pdf",
-            source: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_1_answer.pdf",
-            answer: "https://www.do-johodai.ac.jp/examinee/examinfo/entrance_exam/",
+            answer: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_1_answer.pdf",
+            source: "https://www.do-johodai.ac.jp/examinee/examinfo/entrance_exam/",
         },
     },
     {
         name: "北海道情報大学 令和7年度一般選抜1期問題(2日目)", url: {
             question: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_2.pdf",
-            source: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_2_answer.pdf",
-            answer: "https://www.do-johodai.ac.jp/examinee/examinfo/entrance_exam/",
+            answer: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_2_answer.pdf",
+            source: "https://www.do-johodai.ac.jp/examinee/examinfo/entrance_exam/",
         },
     }
 ]
