@@ -8,13 +8,11 @@ function evaluate(expr) {
 function executeAST(ast) {
     for (let node of ast) {
 
-        if (node.type === "assign") {
+        if (node.type === "assign")
             vars[node.name] = evaluate(node.value);
-        }
 
-        if (node.type === "print") {
+        if (node.type === "print")
             output += evaluate(node.value) + "\n";
-        }
 
         if (node.type === "if") {
             if (evaluate(node.condition)) {
@@ -22,12 +20,20 @@ function executeAST(ast) {
             }
         }
 
-        if (node.type === "for") {
-            const start = evaluate(node.start);
-            const end = evaluate(node.end);
-            const step = evaluate(node.step);
+        if (node.type === "ifelse") {
+            if (evaluate(node.condition)) {
+                executeAST(node.ifBody);
+            } else {
+                executeAST(node.elseBody);
+            }
+        }
 
-            for (let i = start; i <= end; i += step) {
+        if (node.type === "for") {
+            for (
+                let i = evaluate(node.start);
+                i <= evaluate(node.end);
+                i += evaluate(node.step)
+            ) {
                 vars[node.varName] = i;
                 executeAST(node.body);
             }
