@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>DNCL Scratch</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- SortableJS -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+</head>
+
+<body>
+  <h2>DNCL Scratch（ネスト＋条件入力）</h2>
+
+  <!-- パレット -->
+  <div id="palette">
+    <button onclick="addBlock('assign')">代入</button>
+    <button onclick="addBlock('print')">表示</button>
+    <button onclick="addBlock('if')">if</button>
+  </div>
+
+  <!-- ワークスペース -->
+  <div id="workspace" class="dropzone"></div>
+
+  <h3>コード</h3>
+  <textarea id="code"></textarea>
+
+  <br>
+  <button onclick="run()">▶ 実行</button>
+
+  <h3>出力</h3>
+  <pre id="output"></pre>
+
+  <script src="parser.js"></script>
+  <script src="executor.js"></script>
+  <script src="blocks.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
