@@ -6,71 +6,53 @@ const workspace = document.getElementById("workspace");
 function addBlock(type) {
     let el;
 
-    if (type === "assign") {
-        el = createAssignBlock();
-    }
-
-    if (type === "print") {
-        el = createPrintBlock();
-    }
-
-    if (type === "if") {
-        el = createIfBlock();
-    }
+    if (type === "assign") el = createAssignBlock();
+    if (type === "print") el = createPrintBlock();
+    if (type === "if") el = createIfBlock();
 
     workspace.appendChild(el);
     updateCode();
 }
 
 // ----------------
-// 各ブロック
+// ブロック定義
 // ----------------
 
-// 代入
 function createAssignBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "assign";
 
-    div.innerHTML = `
-    <input value="x"> = <input value="0">
-  `;
+    div.innerHTML = `<input value="x"> = <input value="0">`;
 
-    div.querySelectorAll("input").forEach(input => {
-        input.addEventListener("input", updateCode);
-    });
+    div.querySelectorAll("input").forEach(i =>
+        i.addEventListener("input", updateCode)
+    );
 
     return div;
 }
 
-// 表示
 function createPrintBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "print";
 
-    div.innerHTML = `
-    表示する(<input value="x">)
-  `;
+    div.innerHTML = `表示する(<input value="x">)`;
 
     div.querySelector("input").addEventListener("input", updateCode);
 
     return div;
 }
 
-// if（条件入力🔥）
 function createIfBlock() {
     const div = document.createElement("div");
     div.className = "block if";
     div.dataset.type = "if";
 
     const header = document.createElement("div");
-    header.innerHTML = `
-    もし <input value="x > 0"> ならば:
-  `;
+    header.innerHTML = `もし <input value="x > 0"> ならば:`;
 
-    const input = header.querySelector("input");
-    input.addEventListener("input", updateCode);
+    header.querySelector("input").addEventListener("input", updateCode);
 
     const children = document.createElement("div");
     children.className = "children dropzone";
@@ -97,10 +79,11 @@ function enableDrop(el) {
 enableDrop(workspace);
 
 // ----------------
-// コード生成（再帰🔥）
+// AST生成（超重要🔥）
 // ----------------
-function buildCode(container, indent = "") {
-    let code = "";
+
+function buildAST(container) {
+    const ast = [];
 
     container.childNodes.forEach(node => {
         if (!node.classList) return;
@@ -109,20 +92,54 @@ function buildCode(container, indent = "") {
 
         if (type === "assign") {
             const inputs = node.querySelectorAll("input");
-            code += `${indent}${inputs[0].value} = ${inputs[1].value}\n`;
+            ast.push({
+                type: "assign",
+                name: inputs[0].value,
+                value: inputs[1].value
+            });
         }
 
         if (type === "print") {
             const input = node.querySelector("input");
-            code += `${indent}表示する(${input.value})\n`;
+            ast.push({
+                type: "print",
+                value: input.value
+            });
         }
 
         if (type === "if") {
             const cond = node.querySelector("input").value;
-            code += `${indent}もし ${cond} ならば:\n`;
-
             const child = node.querySelector(".children");
-            code += buildCode(child, indent + "  ");
+
+            ast.push({
+                type: "if",
+                condition: cond,
+                body: buildAST(child) // ← 再帰🔥
+            });
+        }
+    });
+
+    return ast;
+}
+
+// ----------------
+// コード表示
+// ----------------
+function buildCode(ast, indent = "") {
+    let code = "";
+
+    ast.forEach(node => {
+        if (node.type === "assign") {
+            code += `${indent}${node.name} = ${node.value}\n`;
+        }
+
+        if (node.type === "print") {
+            code += `${indent}表示する(${node.value})\n`;
+        }
+
+        if (node.type === "if") {
+            code += `${indent}もし ${node.condition} ならば:\n`;
+            code += buildCode(node.body, indent + "  ");
         }
     });
 
@@ -130,6 +147,10 @@ function buildCode(container, indent = "") {
 }
 
 function updateCode() {
-    const code = buildCode(workspace);
-    document.getElementById("code").value = code;
+    const ast = buildAST(workspace);
+    const code = buildCode(ast);
+
+    document.getElementById("code").textContent = code;
+
+    window.currentAST = ast; // ★ 実行用
 }
