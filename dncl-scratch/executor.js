@@ -22,7 +22,6 @@ function executeAST(ast) {
             }
         }
 
-        // ★for追加
         if (node.type === "for") {
             const start = evaluate(node.start);
             const end = evaluate(node.end);
@@ -30,7 +29,7 @@ function executeAST(ast) {
 
             for (let i = start; i <= end; i += step) {
                 vars[node.varName] = i;
-                executeAST(node.body); // ← ネスト実行🔥
+                executeAST(node.body);
             }
         }
     }

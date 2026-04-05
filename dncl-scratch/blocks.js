@@ -1,6 +1,29 @@
 const workspace = document.getElementById("workspace");
 
 // ----------------
+// 削除ボタン
+// ----------------
+function addDeleteButton(div) {
+    const btn = document.createElement("span");
+    btn.textContent = "×";
+    btn.className = "delete-btn";
+
+    btn.onclick = (e) => {
+        e.stopPropagation();
+        div.remove();
+        updateCode();
+    };
+
+    div.appendChild(btn);
+
+    div.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        div.remove();
+        updateCode();
+    });
+}
+
+// ----------------
 // ブロック追加
 // ----------------
 function addBlock(type) {
@@ -9,14 +32,14 @@ function addBlock(type) {
     if (type === "assign") el = createAssignBlock();
     if (type === "print") el = createPrintBlock();
     if (type === "if") el = createIfBlock();
-    if (type === "for") el = createForBlock(); // ★追加
+    if (type === "for") el = createForBlock();
 
     workspace.appendChild(el);
     updateCode();
 }
 
 // ----------------
-// ブロック定義
+// 各ブロック
 // ----------------
 
 function createAssignBlock() {
@@ -30,6 +53,7 @@ function createAssignBlock() {
         i.addEventListener("input", updateCode)
     );
 
+    addDeleteButton(div);
     return div;
 }
 
@@ -42,6 +66,7 @@ function createPrintBlock() {
 
     div.querySelector("input").addEventListener("input", updateCode);
 
+    addDeleteButton(div);
     return div;
 }
 
@@ -62,11 +87,11 @@ function createIfBlock() {
     div.appendChild(children);
 
     enableDrop(children);
+    addDeleteButton(div);
 
     return div;
 }
 
-// ★ここが追加（forブロック）
 function createForBlock() {
     const div = document.createElement("div");
     div.className = "block for";
@@ -91,6 +116,7 @@ function createForBlock() {
     div.appendChild(children);
 
     enableDrop(children);
+    addDeleteButton(div);
 
     return div;
 }
@@ -111,7 +137,6 @@ enableDrop(workspace);
 // ----------------
 // AST生成
 // ----------------
-
 function buildAST(container) {
     const ast = [];
 
@@ -148,7 +173,6 @@ function buildAST(container) {
             });
         }
 
-        // ★for追加
         if (type === "for") {
             const inputs = node.querySelectorAll("input");
             const child = node.querySelector(".children");
@@ -168,9 +192,8 @@ function buildAST(container) {
 }
 
 // ----------------
-// コード生成
+// コード表示
 // ----------------
-
 function buildCode(ast, indent = "") {
     let code = "";
 
@@ -189,7 +212,6 @@ function buildCode(ast, indent = "") {
             code += buildCode(node.body, indent + "  ");
         }
 
-        // ★for追加
         if (node.type === "for") {
             code += `${indent}${node.varName} を ${node.start} から ${node.end} まで ${node.step} ずつ増やしながら繰り返す:\n`;
             code += buildCode(node.body, indent + "  ");
@@ -204,6 +226,5 @@ function updateCode() {
     const code = buildCode(ast);
 
     document.getElementById("code").textContent = code;
-
     window.currentAST = ast;
 }
