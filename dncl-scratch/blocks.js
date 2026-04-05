@@ -1,8 +1,6 @@
 const workspace = document.getElementById("workspace");
 
-// ----------------
-// 削除ボタン
-// ----------------
+// 削除
 function addDeleteButton(div) {
     const btn = document.createElement("span");
     btn.textContent = "×";
@@ -15,115 +13,113 @@ function addDeleteButton(div) {
     };
 
     div.appendChild(btn);
-
-    div.addEventListener("contextmenu", (e) => {
-        e.preventDefault();
-        div.remove();
-        updateCode();
-    });
 }
 
-// ----------------
-// ブロック追加
-// ----------------
+// 追加
 function addBlock(type) {
     let el;
 
     if (type === "assign") el = createAssignBlock();
     if (type === "print") el = createPrintBlock();
     if (type === "if") el = createIfBlock();
+    if (type === "ifelse") el = createIfElseBlock(); // ★
     if (type === "for") el = createForBlock();
 
     workspace.appendChild(el);
     updateCode();
 }
 
-// ----------------
-// 各ブロック
-// ----------------
-
+// 代入
 function createAssignBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "assign";
 
     div.innerHTML = `<input value="x"> = <input value="0">`;
-
-    div.querySelectorAll("input").forEach(i =>
-        i.addEventListener("input", updateCode)
-    );
+    div.querySelectorAll("input").forEach(i => i.oninput = updateCode);
 
     addDeleteButton(div);
     return div;
 }
 
+// 表示
 function createPrintBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "print";
 
     div.innerHTML = `表示する(<input value="x">)`;
-
-    div.querySelector("input").addEventListener("input", updateCode);
+    div.querySelector("input").oninput = updateCode;
 
     addDeleteButton(div);
     return div;
 }
 
+// if単体
 function createIfBlock() {
     const div = document.createElement("div");
     div.className = "block if";
     div.dataset.type = "if";
 
-    const header = document.createElement("div");
-    header.innerHTML = `もし <input value="x > 0"> ならば:`;
+    div.innerHTML = `
+    もし <input value="x > 0"> ならば:
+    <div class="children dropzone"></div>
+  `;
 
-    header.querySelector("input").addEventListener("input", updateCode);
+    div.querySelector("input").oninput = updateCode;
+    enableDrop(div.querySelector(".children"));
 
-    const children = document.createElement("div");
-    children.className = "children dropzone";
-
-    div.appendChild(header);
-    div.appendChild(children);
-
-    enableDrop(children);
     addDeleteButton(div);
-
     return div;
 }
 
+// ★ if-else一体型
+function createIfElseBlock() {
+    const div = document.createElement("div");
+    div.className = "block ifelse";
+    div.dataset.type = "ifelse";
+
+    div.innerHTML = `
+    もし <input value="x > 0"> ならば:
+    <div class="children dropzone if-body"></div>
+
+    <div class="else-area">
+      そうでなければ:
+      <div class="children dropzone else-body"></div>
+    </div>
+  `;
+
+    div.querySelector("input").oninput = updateCode;
+
+    enableDrop(div.querySelector(".if-body"));
+    enableDrop(div.querySelector(".else-body"));
+
+    addDeleteButton(div);
+    return div;
+}
+
+// for
 function createForBlock() {
     const div = document.createElement("div");
     div.className = "block for";
     div.dataset.type = "for";
 
-    const header = document.createElement("div");
-    header.innerHTML = `
+    div.innerHTML = `
     <input value="i"> を 
     <input value="1"> から 
     <input value="10"> まで 
     <input value="1"> ずつ増やしながら繰り返す:
+    <div class="children dropzone"></div>
   `;
 
-    header.querySelectorAll("input").forEach(i =>
-        i.addEventListener("input", updateCode)
-    );
+    div.querySelectorAll("input").forEach(i => i.oninput = updateCode);
+    enableDrop(div.querySelector(".children"));
 
-    const children = document.createElement("div");
-    children.className = "children dropzone";
-
-    div.appendChild(header);
-    div.appendChild(children);
-
-    enableDrop(children);
     addDeleteButton(div);
-
     return div;
 }
 
-// ----------------
 // ドラッグ
-// ----------------
 function enableDrop(el) {
     new Sortable(el, {
         group: "shared",
@@ -131,12 +127,9 @@ function enableDrop(el) {
         onSort: updateCode
     });
 }
-
 enableDrop(workspace);
 
-// ----------------
-// AST生成
-// ----------------
+// AST
 function buildAST(container) {
     const ast = [];
 
@@ -146,44 +139,41 @@ function buildAST(container) {
         const type = node.dataset.type;
 
         if (type === "assign") {
-            const inputs = node.querySelectorAll("input");
-            ast.push({
-                type: "assign",
-                name: inputs[0].value,
-                value: inputs[1].value
-            });
+            const i = node.querySelectorAll("input");
+            ast.push({ type, name: i[0].value, value: i[1].value });
         }
 
         if (type === "print") {
-            const input = node.querySelector("input");
-            ast.push({
-                type: "print",
-                value: input.value
-            });
+            ast.push({ type, value: node.querySelector("input").value });
         }
 
         if (type === "if") {
-            const cond = node.querySelector("input").value;
-            const child = node.querySelector(".children");
-
             ast.push({
-                type: "if",
-                condition: cond,
-                body: buildAST(child)
+                type,
+                condition: node.querySelector("input").value,
+                body: buildAST(node.querySelector(".children"))
+            });
+        }
+
+        if (type === "ifelse") {
+            ast.push({
+                type,
+                condition: node.querySelector("input").value,
+                ifBody: buildAST(node.querySelector(".if-body")),
+                elseBody: buildAST(node.querySelector(".else-body"))
             });
         }
 
         if (type === "for") {
-            const inputs = node.querySelectorAll("input");
-            const child = node.querySelector(".children");
+            const i = node.querySelectorAll("input");
 
             ast.push({
-                type: "for",
-                varName: inputs[0].value,
-                start: inputs[1].value,
-                end: inputs[2].value,
-                step: inputs[3].value,
-                body: buildAST(child)
+                type,
+                varName: i[0].value,
+                start: i[1].value,
+                end: i[2].value,
+                step: i[3].value,
+                body: buildAST(node.querySelector(".children"))
             });
         }
     });
@@ -191,31 +181,31 @@ function buildAST(container) {
     return ast;
 }
 
-// ----------------
-// コード表示
-// ----------------
+// コード生成
 function buildCode(ast, indent = "") {
     let code = "";
 
     ast.forEach(node => {
 
-        if (node.type === "assign") {
+        if (node.type === "assign")
             code += `${indent}${node.name} = ${node.value}\n`;
-        }
 
-        if (node.type === "print") {
+        if (node.type === "print")
             code += `${indent}表示する(${node.value})\n`;
-        }
 
-        if (node.type === "if") {
-            code += `${indent}もし ${node.condition} ならば:\n`;
-            code += buildCode(node.body, indent + "  ");
-        }
+        if (node.type === "if")
+            code += `${indent}もし ${node.condition} ならば:\n` +
+                buildCode(node.body, indent + "  ");
 
-        if (node.type === "for") {
-            code += `${indent}${node.varName} を ${node.start} から ${node.end} まで ${node.step} ずつ増やしながら繰り返す:\n`;
-            code += buildCode(node.body, indent + "  ");
-        }
+        if (node.type === "ifelse")
+            code += `${indent}もし ${node.condition} ならば:\n` +
+                buildCode(node.ifBody, indent + "  ") +
+                `${indent}そうでなければ:\n` +
+                buildCode(node.elseBody, indent + "  ");
+
+        if (node.type === "for")
+            code += `${indent}${node.varName} を ${node.start} から ${node.end} まで ${node.step} ずつ増やしながら繰り返す:\n` +
+                buildCode(node.body, indent + "  ");
     });
 
     return code;
@@ -223,8 +213,6 @@ function buildCode(ast, indent = "") {
 
 function updateCode() {
     const ast = buildAST(workspace);
-    const code = buildCode(ast);
-
-    document.getElementById("code").textContent = code;
+    document.getElementById("code").textContent = buildCode(ast);
     window.currentAST = ast;
 }
