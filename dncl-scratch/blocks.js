@@ -1,6 +1,24 @@
 const workspace = document.getElementById("workspace");
 
+// ----------------
+// 入力幅自動調整 ★追加
+// ----------------
+function autoResizeInput(input) {
+    const resize = () => {
+        input.style.width = (input.value.length + 1) + "ch";
+    };
+
+    input.addEventListener("input", () => {
+        resize();
+        updateCode();
+    });
+
+    resize();
+}
+
+// ----------------
 // 削除
+// ----------------
 function addDeleteButton(div) {
     const btn = document.createElement("span");
     btn.textContent = "×";
@@ -15,47 +33,57 @@ function addDeleteButton(div) {
     div.appendChild(btn);
 }
 
+// ----------------
 // 追加
+// ----------------
 function addBlock(type) {
     let el;
 
     if (type === "assign") el = createAssignBlock();
     if (type === "print") el = createPrintBlock();
     if (type === "if") el = createIfBlock();
-    if (type === "ifelse") el = createIfElseBlock(); // ★
+    if (type === "ifelse") el = createIfElseBlock();
     if (type === "for") el = createForBlock();
 
     workspace.appendChild(el);
     updateCode();
 }
 
+// ----------------
 // 代入
+// ----------------
 function createAssignBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "assign";
 
     div.innerHTML = `<input value="x"> = <input value="0">`;
-    div.querySelectorAll("input").forEach(i => i.oninput = updateCode);
+
+    div.querySelectorAll("input").forEach(autoResizeInput);
 
     addDeleteButton(div);
     return div;
 }
 
+// ----------------
 // 表示
+// ----------------
 function createPrintBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "print";
 
     div.innerHTML = `表示する(<input value="x">)`;
-    div.querySelector("input").oninput = updateCode;
+
+    autoResizeInput(div.querySelector("input"));
 
     addDeleteButton(div);
     return div;
 }
 
-// if単体
+// ----------------
+// if
+// ----------------
 function createIfBlock() {
     const div = document.createElement("div");
     div.className = "block if";
@@ -66,14 +94,16 @@ function createIfBlock() {
     <div class="children dropzone"></div>
   `;
 
-    div.querySelector("input").oninput = updateCode;
+    autoResizeInput(div.querySelector("input"));
     enableDrop(div.querySelector(".children"));
 
     addDeleteButton(div);
     return div;
 }
 
-// ★ if-else一体型
+// ----------------
+// if-else
+// ----------------
 function createIfElseBlock() {
     const div = document.createElement("div");
     div.className = "block ifelse";
@@ -89,7 +119,7 @@ function createIfElseBlock() {
     </div>
   `;
 
-    div.querySelector("input").oninput = updateCode;
+    autoResizeInput(div.querySelector("input"));
 
     enableDrop(div.querySelector(".if-body"));
     enableDrop(div.querySelector(".else-body"));
@@ -98,7 +128,9 @@ function createIfElseBlock() {
     return div;
 }
 
+// ----------------
 // for
+// ----------------
 function createForBlock() {
     const div = document.createElement("div");
     div.className = "block for";
@@ -112,14 +144,17 @@ function createForBlock() {
     <div class="children dropzone"></div>
   `;
 
-    div.querySelectorAll("input").forEach(i => i.oninput = updateCode);
+    div.querySelectorAll("input").forEach(autoResizeInput);
+
     enableDrop(div.querySelector(".children"));
 
     addDeleteButton(div);
     return div;
 }
 
+// ----------------
 // ドラッグ
+// ----------------
 function enableDrop(el) {
     new Sortable(el, {
         group: "shared",
@@ -129,7 +164,9 @@ function enableDrop(el) {
 }
 enableDrop(workspace);
 
+// ----------------
 // AST
+// ----------------
 function buildAST(container) {
     const ast = [];
 
@@ -181,7 +218,9 @@ function buildAST(container) {
     return ast;
 }
 
+// ----------------
 // コード生成
+// ----------------
 function buildCode(ast, indent = "") {
     let code = "";
 
