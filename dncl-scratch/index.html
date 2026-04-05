@@ -9,25 +9,37 @@
 </head>
 
 <body>
-    <h2>DNCL Scratch（if構造改善版）</h2>
+    <h2>DNCL Scratch</h2>
 
     <div id="palette">
         <button onclick="addBlock('assign')">代入</button>
         <button onclick="addBlock('print')">表示</button>
         <button onclick="addBlock('if')">もし</button>
-        <button onclick="addBlock('ifelse')">もし＋そうでなければ</button> <!-- ★ -->
+        <button onclick="addBlock('ifelse')">もし＋そうでなければ</button>
         <button onclick="addBlock('for')">for</button>
     </div>
 
-    <div id="workspace" class="dropzone"></div>
+    <!-- ★ここが追加 -->
+    <div id="main">
 
-    <h3>コード</h3>
-    <pre id="code"></pre>
+        <!-- 左：ブロック -->
+        <div id="left">
+            <h3>プログラム</h3>
+            <div id="workspace"></div>
+        </div>
 
-    <button onclick="run()">▶ 実行</button>
+        <!-- 右：コード＆出力 -->
+        <div id="right">
+            <h3>コード</h3>
+            <pre id="code"></pre>
 
-    <h3>出力</h3>
-    <pre id="output"></pre>
+            <button onclick="run()">▶ 実行</button>
+
+            <h3>出力</h3>
+            <pre id="output"></pre>
+        </div>
+
+    </div>
 
     <script src="blocks.js"></script>
     <script src="executor.js"></script>
