@@ -1,22 +1,25 @@
 let vars = {};
 let output = "";
 
-function executeLine(line) {
+function evaluate(expr) {
+    return Function(...Object.keys(vars), `return ${expr}`)(...Object.values(vars));
+}
 
-  if (line.startsWith("表示する")) {
-    const val = line.match(/表示する\((.*)\)/)[1];
-    output += eval(val) + "\n";
-    return;
-  }
+function executeAST(ast) {
+    for (let node of ast) {
 
-  if (line.includes("=")) {
-    const [name, value] = line.split("=");
-    vars[name.trim()] = eval(value);
-    return;
-  }
+        if (node.type === "assign") {
+            vars[node.name] = evaluate(node.value);
+        }
 
-  if (line.startsWith("もし")) {
-    const cond = line.match(/もし (.*) ならば/)[1];
-    if (!eval(cond)) return "skip";
-  }
+        if (node.type === "print") {
+            output += evaluate(node.value) + "\n";
+        }
+
+        if (node.type === "if") {
+            if (evaluate(node.condition)) {
+                executeAST(node.body); // ← ここが本物🔥
+            }
+        }
+    }
 }

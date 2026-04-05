@@ -1,15 +1,10 @@
-const codeEl = document.getElementById("code");
-const outputEl = document.getElementById("output");
-
 function run() {
     vars = {};
     output = "";
 
-    const lines = parse(codeEl.value);
+    const ast = window.currentAST || [];
 
-    for (let line of lines) {
-        executeLine(line);
-    }
+    executeAST(ast);
 
-    outputEl.textContent = output;
+    document.getElementById("output").textContent = output;
 }
