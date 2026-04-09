@@ -1,7 +1,27 @@
 const workspace = document.getElementById("workspace");
 
 // ----------------
-// 入力幅自動調整 ★追加
+// プレースホルダー制御 ★
+// ----------------
+function updatePlaceholder(container) {
+    const hasBlock = Array.from(container.children).some(el => el.classList.contains("block"));
+
+    let ph = container.querySelector(".placeholder");
+
+    if (!hasBlock && !ph) {
+        ph = document.createElement("div");
+        ph.className = "placeholder";
+        ph.textContent = "ここに処理を入れてください";
+        container.appendChild(ph);
+    }
+
+    if (hasBlock && ph) {
+        ph.remove();
+    }
+}
+
+// ----------------
+// 入力幅自動
 // ----------------
 function autoResizeInput(input) {
     const resize = () => {
@@ -58,7 +78,6 @@ function createAssignBlock() {
     div.dataset.type = "assign";
 
     div.innerHTML = `<input value="x"> = <input value="0">`;
-
     div.querySelectorAll("input").forEach(autoResizeInput);
 
     addDeleteButton(div);
@@ -94,8 +113,12 @@ function createIfBlock() {
     <div class="children dropzone"></div>
   `;
 
+    const child = div.querySelector(".children");
+
     autoResizeInput(div.querySelector("input"));
-    enableDrop(div.querySelector(".children"));
+    enableDrop(child);
+
+    updatePlaceholder(child); // ★
 
     addDeleteButton(div);
     return div;
@@ -119,10 +142,16 @@ function createIfElseBlock() {
     </div>
   `;
 
+    const ifBody = div.querySelector(".if-body");
+    const elseBody = div.querySelector(".else-body");
+
     autoResizeInput(div.querySelector("input"));
 
-    enableDrop(div.querySelector(".if-body"));
-    enableDrop(div.querySelector(".else-body"));
+    enableDrop(ifBody);
+    enableDrop(elseBody);
+
+    updatePlaceholder(ifBody);   // ★
+    updatePlaceholder(elseBody); // ★
 
     addDeleteButton(div);
     return div;
@@ -144,9 +173,13 @@ function createForBlock() {
     <div class="children dropzone"></div>
   `;
 
+    const child = div.querySelector(".children");
+
     div.querySelectorAll("input").forEach(autoResizeInput);
 
-    enableDrop(div.querySelector(".children"));
+    enableDrop(child);
+
+    updatePlaceholder(child); // ★
 
     addDeleteButton(div);
     return div;
@@ -159,7 +192,10 @@ function enableDrop(el) {
     new Sortable(el, {
         group: "shared",
         animation: 150,
-        onSort: updateCode
+        onSort: () => {
+            updatePlaceholder(el); // ★
+            updateCode();
+        }
     });
 }
 enableDrop(workspace);
@@ -253,5 +289,9 @@ function buildCode(ast, indent = "") {
 function updateCode() {
     const ast = buildAST(workspace);
     document.getElementById("code").textContent = buildCode(ast);
+
+    // ★ 全childrenに対して再チェック
+    document.querySelectorAll(".children").forEach(updatePlaceholder);
+
     window.currentAST = ast;
 }
