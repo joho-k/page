@@ -51,6 +51,13 @@
     margin-left: 20px;
     border-left: 2px solid #ccc;
     padding-left: 10px;
+
+}
+
+.children::after {
+    content: "";
+    display: block;
+    height: 10px;
 }
 
 /* else */
@@ -85,4 +92,10 @@ pre {
     #main {
         flex-direction: column;
     }
+}
+
+/* ★追加：プレースホルダー */
+.placeholder {
+    color: #ccc;
+    font-size: 12px;
 }
