@@ -3,19 +3,19 @@
 }
 
 /* ★左右レイアウト */
-#main {
+.dncl-main {
     display: flex;
     gap: 20px;
     margin-top: 20px;
 }
 
 /* 左 */
-#left {
+.dncl-left {
     flex: 1;
 }
 
 /* 右 */
-#right {
+.dncl-right {
     flex: 1;
 }
 
@@ -89,7 +89,7 @@ pre {
 
 /* ★スマホ対応 */
 @media (max-width: 800px) {
-    #main {
+    .dncl-main {
         flex-direction: column;
     }
 }
