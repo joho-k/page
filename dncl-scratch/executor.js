@@ -17,31 +17,21 @@ function tokenize(expr) {
 }
 
 // ----------------
-// パーサ（再帰下降）
+// パーサ
 // ----------------
 function parseExpression(tokens) {
     let pos = 0;
 
-    function peek() {
-        return tokens[pos];
-    }
-
-    function consume() {
-        return tokens[pos++];
-    }
+    function peek() { return tokens[pos]; }
+    function consume() { return tokens[pos++]; }
 
     function parsePrimary() {
         const token = consume();
 
         if (!token) throw new Error("式エラー");
 
-        if (/^[0-9]+$/.test(token)) {
-            return Number(token);
-        }
-
-        if (/^[a-zA-Z_]\w*$/.test(token)) {
-            return vars[token] ?? 0;
-        }
+        if (/^[0-9]+$/.test(token)) return Number(token);
+        if (/^[a-zA-Z_]\w*$/.test(token)) return vars[token] ?? 0;
 
         if (token === "(") {
             const val = parseComparison();
@@ -58,7 +48,6 @@ function parseExpression(tokens) {
         while (peek() === "*" || peek() === "/") {
             const op = consume();
             const right = parsePrimary();
-
             if (op === "*") left *= right;
             if (op === "/") left /= right;
         }
@@ -72,7 +61,6 @@ function parseExpression(tokens) {
         while (peek() === "+" || peek() === "-") {
             const op = consume();
             const right = parseMulDiv();
-
             if (op === "+") left += right;
             if (op === "-") left -= right;
         }
@@ -83,9 +71,7 @@ function parseExpression(tokens) {
     function parseComparison() {
         let left = parseAddSub();
 
-        while (
-            ["==", "!=", "<", ">", "<=", ">="].includes(peek())
-        ) {
+        while (["==", "!=", "<", ">", "<=", ">="].includes(peek())) {
             const op = consume();
             const right = parseAddSub();
 
@@ -107,56 +93,104 @@ function parseExpression(tokens) {
 // 安全評価
 // ----------------
 function safeEval(expr) {
-    if (!expr || typeof expr !== "string") {
-        throw new Error("式が不正です");
-    }
-
     const tokens = tokenize(expr);
-
-    if (tokens.length === 0) {
-        throw new Error("空の式");
-    }
-
+    if (tokens.length === 0) throw new Error("空の式");
     return parseExpression(tokens);
 }
 
 // ----------------
-// 実行エンジン
+// 通常実行
 // ----------------
 function executeAST(ast) {
     for (let node of ast) {
+        executeNode(node);
+    }
+}
 
-        if (node.type === "assign") {
-            vars[node.name] = safeEval(node.value);
-        }
+// ----------------
+// ステップ用
+// ----------------
+let steps = [];
+let stepIndex = 0;
 
-        if (node.type === "print") {
-            output += safeEval(node.value) + "\n";
-        }
+function buildSteps(ast) {
+    for (let node of ast) {
+        steps.push(() => executeNode(node));
 
-        if (node.type === "if") {
-            if (safeEval(node.condition)) {
-                executeAST(node.body);
-            }
-        }
-
+        if (node.type === "if") buildSteps(node.body);
         if (node.type === "ifelse") {
-            if (safeEval(node.condition)) {
-                executeAST(node.ifBody);
-            } else {
-                executeAST(node.elseBody);
-            }
+            buildSteps(node.ifBody);
+            buildSteps(node.elseBody);
         }
+        if (node.type === "for") buildSteps(node.body);
+    }
+}
 
-        if (node.type === "for") {
-            const start = safeEval(node.start);
-            const end = safeEval(node.end);
-            const step = safeEval(node.step);
+// ----------------
+// ノード実行
+// ----------------
+function executeNode(node) {
 
-            for (let i = start; i <= end; i += step) {
-                vars[node.varName] = i;
-                executeAST(node.body);
-            }
+    if (node.type === "assign") {
+        vars[node.name] = safeEval(node.value);
+    }
+
+    if (node.type === "print") {
+        output += safeEval(node.value) + "\n";
+    }
+
+    if (node.type === "if") {
+        if (!safeEval(node.condition)) return;
+    }
+
+    if (node.type === "ifelse") {
+        if (safeEval(node.condition)) {
+            executeAST(node.ifBody);
+        } else {
+            executeAST(node.elseBody);
         }
     }
+
+    if (node.type === "for") {
+        const start = safeEval(node.start);
+        const end = safeEval(node.end);
+        const step = safeEval(node.step);
+
+        for (let i = start; i <= end; i += step) {
+            vars[node.varName] = i;
+            executeAST(node.body);
+        }
+    }
+}
+
+// ----------------
+// ステップ開始
+// ----------------
+function stepStart() {
+    vars = {};
+    output = "";
+    steps = [];
+    stepIndex = 0;
+
+    buildSteps(window.currentAST || []);
+    updateUI();
+}
+
+// ----------------
+// 次へ
+// ----------------
+function stepNext() {
+    if (stepIndex >= steps.length) return;
+
+    steps[stepIndex++]();
+    updateUI();
+}
+
+// ----------------
+// UI更新
+// ----------------
+function updateUI() {
+    document.getElementById("output").textContent = output;
+    document.getElementById("vars").textContent =
+        JSON.stringify(vars, null, 2);
 }

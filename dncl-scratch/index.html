@@ -73,7 +73,10 @@
         <header>
             <h2>DNCLビジュアルエディタ</h2>
         </header>
+
         <main>
+
+            <!-- パレット -->
             <div class="palette">
                 <button onclick="addBlock('assign')">代入</button>
                 <button onclick="addBlock('print')">表示</button>
@@ -82,24 +85,35 @@
                 <button onclick="addBlock('for')">繰り返し</button>
             </div>
 
+            <!-- メイン -->
             <div class="dncl-main">
-                <!-- 左 -->
+
+                <!-- 左：ブロック -->
                 <div class="dncl-left">
                     <h4>プログラム</h4>
                     <div id="workspace"></div>
                 </div>
 
-                <!-- 右 -->
+                <!-- 右：コード＆実行 -->
                 <div class="dncl-right">
+
                     <h4>コード</h4>
                     <pre id="code"></pre>
 
+                    <!-- 実行ボタン -->
                     <button onclick="run()">▶ 実行</button>
+                    <button onclick="stepStart()">⏭ ステップ開始</button>
+                    <button onclick="stepNext()">▶ 次へ</button>
 
                     <h4>出力</h4>
                     <pre id="output"></pre>
+
+                    <h4>変数</h4>
+                    <pre id="vars"></pre>
+
                 </div>
             </div>
+
         </main>
     </div>
 
@@ -107,6 +121,7 @@
     <script src="./blocks.js"></script>
     <script src="./executor.js"></script>
     <script src="./main.js"></script>
+
 </body>
 
 </html>
