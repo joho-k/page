@@ -1,9 +1,16 @@
+// =========================
+// 状態
+// =========================
 let vars = {};
 let output = "";
 
-// ----------------
+// ステップ
+let trace = [];
+let stepIndex = 0;
+
+// =========================
 // トークナイザ
-// ----------------
+// =========================
 function tokenize(expr) {
     const tokens = [];
     const regex = /\s*([0-9]+|==|!=|<=|>=|[+\-*/()<>]|[a-zA-Z_]\w*)\s*/g;
@@ -16,181 +23,195 @@ function tokenize(expr) {
     return tokens;
 }
 
-// ----------------
+// =========================
 // パーサ
-// ----------------
+// =========================
 function parseExpression(tokens) {
     let pos = 0;
 
     function peek() { return tokens[pos]; }
     function consume() { return tokens[pos++]; }
 
-    function parsePrimary() {
-        const token = consume();
+    function primary() {
+        const t = consume();
+        if (!t) throw new Error("式エラー");
 
-        if (!token) throw new Error("式エラー");
+        if (/^\d+$/.test(t)) return Number(t);
+        if (/^[a-zA-Z_]\w*$/.test(t)) return vars[t] ?? 0;
 
-        if (/^[0-9]+$/.test(token)) return Number(token);
-        if (/^[a-zA-Z_]\w*$/.test(token)) return vars[token] ?? 0;
-
-        if (token === "(") {
-            const val = parseComparison();
+        if (t === "(") {
+            const v = comparison();
             if (consume() !== ")") throw new Error("カッコ不一致");
-            return val;
+            return v;
         }
 
-        throw new Error("不正なトークン: " + token);
+        throw new Error("不正: " + t);
     }
 
-    function parseMulDiv() {
-        let left = parsePrimary();
-
+    function mul() {
+        let v = primary();
         while (peek() === "*" || peek() === "/") {
             const op = consume();
-            const right = parsePrimary();
-            if (op === "*") left *= right;
-            if (op === "/") left /= right;
+            const r = primary();
+            v = op === "*" ? v * r : v / r;
         }
-
-        return left;
+        return v;
     }
 
-    function parseAddSub() {
-        let left = parseMulDiv();
-
+    function add() {
+        let v = mul();
         while (peek() === "+" || peek() === "-") {
             const op = consume();
-            const right = parseMulDiv();
-            if (op === "+") left += right;
-            if (op === "-") left -= right;
+            const r = mul();
+            v = op === "+" ? v + r : v - r;
         }
-
-        return left;
+        return v;
     }
 
-    function parseComparison() {
-        let left = parseAddSub();
-
+    function comparison() {
+        let v = add();
         while (["==", "!=", "<", ">", "<=", ">="].includes(peek())) {
             const op = consume();
-            const right = parseAddSub();
+            const r = add();
 
-            if (op === "==") left = left == right;
-            if (op === "!=") left = left != right;
-            if (op === "<") left = left < right;
-            if (op === ">") left = left > right;
-            if (op === "<=") left = left <= right;
-            if (op === ">=") left = left >= right;
+            if (op === "==") v = v == r;
+            if (op === "!=") v = v != r;
+            if (op === "<") v = v < r;
+            if (op === ">") v = v > r;
+            if (op === "<=") v = v <= r;
+            if (op === ">=") v = v >= r;
         }
-
-        return left;
+        return v;
     }
 
-    return parseComparison();
+    return comparison();
 }
 
-// ----------------
-// 安全評価
-// ----------------
 function safeEval(expr) {
     const tokens = tokenize(expr);
-    if (tokens.length === 0) throw new Error("空の式");
     return parseExpression(tokens);
 }
 
-// ----------------
-// 通常実行
-// ----------------
-function executeAST(ast) {
+// =========================
+// トレース生成（ここが本質🔥）
+// =========================
+function buildTrace(ast) {
     for (let node of ast) {
-        executeNode(node);
-    }
-}
 
-// ----------------
-// ステップ用
-// ----------------
-let steps = [];
-let stepIndex = 0;
+        // 代入
+        if (node.type === "assign") {
+            trace.push(() => {
+                vars[node.name] = safeEval(node.value);
+            });
+        }
 
-function buildSteps(ast) {
-    for (let node of ast) {
-        steps.push(() => executeNode(node));
+        // 表示
+        if (node.type === "print") {
+            trace.push(() => {
+                output += safeEval(node.value) + "\n";
+            });
+        }
 
-        if (node.type === "if") buildSteps(node.body);
+        // if
+        if (node.type === "if") {
+            trace.push(() => {
+                node._cond = safeEval(node.condition);
+            });
+
+            trace.push(() => {
+                if (node._cond) {
+                    buildTrace(node.body);
+                }
+            });
+        }
+
+        // if-else
         if (node.type === "ifelse") {
-            buildSteps(node.ifBody);
-            buildSteps(node.elseBody);
+            trace.push(() => {
+                node._cond = safeEval(node.condition);
+            });
+
+            trace.push(() => {
+                if (node._cond) {
+                    buildTrace(node.ifBody);
+                } else {
+                    buildTrace(node.elseBody);
+                }
+            });
         }
-        if (node.type === "for") buildSteps(node.body);
-    }
-}
 
-// ----------------
-// ノード実行
-// ----------------
-function executeNode(node) {
+        // for
+        if (node.type === "for") {
+            trace.push(() => {
+                node._i = safeEval(node.start);
+                node._end = safeEval(node.end);
+                node._step = safeEval(node.step);
+            });
 
-    if (node.type === "assign") {
-        vars[node.name] = safeEval(node.value);
-    }
-
-    if (node.type === "print") {
-        output += safeEval(node.value) + "\n";
-    }
-
-    if (node.type === "if") {
-        if (!safeEval(node.condition)) return;
-    }
-
-    if (node.type === "ifelse") {
-        if (safeEval(node.condition)) {
-            executeAST(node.ifBody);
-        } else {
-            executeAST(node.elseBody);
-        }
-    }
-
-    if (node.type === "for") {
-        const start = safeEval(node.start);
-        const end = safeEval(node.end);
-        const step = safeEval(node.step);
-
-        for (let i = start; i <= end; i += step) {
-            vars[node.varName] = i;
-            executeAST(node.body);
+            trace.push(() => loopTrace(node));
         }
     }
 }
 
-// ----------------
-// ステップ開始
-// ----------------
+// =========================
+// forのループ展開
+// =========================
+function loopTrace(node) {
+    if (node._i > node._end) return;
+
+    vars[node.varName] = node._i;
+
+    // 本体
+    buildTrace(node.body);
+
+    node._i += node._step;
+
+    // 次のループも予約
+    trace.push(() => loopTrace(node));
+}
+
+// =========================
+// ステップ操作
+// =========================
 function stepStart() {
     vars = {};
     output = "";
-    steps = [];
+    trace = [];
     stepIndex = 0;
 
-    buildSteps(window.currentAST || []);
+    buildTrace(window.currentAST || []);
     updateUI();
 }
 
-// ----------------
-// 次へ
-// ----------------
 function stepNext() {
-    if (stepIndex >= steps.length) return;
+    if (stepIndex >= trace.length) return;
 
-    steps[stepIndex++]();
+    trace[stepIndex++]();
     updateUI();
 }
 
-// ----------------
+// =========================
 // UI更新
-// ----------------
+// =========================
 function updateUI() {
     document.getElementById("output").textContent = output;
     document.getElementById("vars").textContent =
         JSON.stringify(vars, null, 2);
+}
+
+// =========================
+// 通常実行
+// =========================
+function run() {
+    vars = {};
+    output = "";
+
+    buildTrace(window.currentAST || []);
+
+    while (trace.length > 0) {
+        const fn = trace.shift();
+        fn();
+    }
+
+    updateUI();
 }
