@@ -99,3 +99,38 @@ pre {
     color: #ccc;
     font-size: 12px;
 }
+
+/* 配列全体 */
+.array-items {
+    display: inline-flex;
+    /* ★inline-flexにする */
+    flex-wrap: nowrap;
+    /* ★折り返さない */
+    gap: 6px;
+    align-items: center;
+}
+
+/* 各要素 */
+.array-items div {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* 入力 */
+.array-items input {
+    width: auto;
+    min-width: 20px;
+}
+
+/* ＋ボタン */
+.add-item {
+    font-size: 12px;
+    padding: 2px 6px;
+    margin-left: 6px;
+}
+
+/* ×ボタン */
+.array-items button {
+    font-size: 10px;
+    padding: 1px 4px;
+}

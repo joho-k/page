@@ -1,10 +1,11 @@
 const workspace = document.getElementById("workspace");
 
 // ----------------
-// プレースホルダー制御 ★
+// プレースホルダー
 // ----------------
 function updatePlaceholder(container) {
-    const hasBlock = Array.from(container.children).some(el => el.classList.contains("block"));
+    const hasBlock = Array.from(container.children)
+        .some(el => el.classList.contains("block"));
 
     let ph = container.querySelector(".placeholder");
 
@@ -15,13 +16,11 @@ function updatePlaceholder(container) {
         container.appendChild(ph);
     }
 
-    if (hasBlock && ph) {
-        ph.remove();
-    }
+    if (hasBlock && ph) ph.remove();
 }
 
 // ----------------
-// 入力幅自動
+// 入力幅
 // ----------------
 function autoResizeInput(input) {
     const resize = () => {
@@ -64,13 +63,62 @@ function addBlock(type) {
     if (type === "if") el = createIfBlock();
     if (type === "ifelse") el = createIfElseBlock();
     if (type === "for") el = createForBlock();
+    if (type === "array") el = createArrayBlock(); // ★追加
 
     workspace.appendChild(el);
     updateCode();
 }
 
 // ----------------
-// 代入
+// 配列ブロック ★
+// ----------------
+function createArrayBlock() {
+    const div = document.createElement("div");
+    div.className = "block";
+    div.dataset.type = "array";
+
+    div.innerHTML = `
+<input value="a"> = [
+  <span class="array-items"></span>
+  <button class="add-item">＋</button>
+]
+`;
+
+    const items = div.querySelector(".array-items");
+    const addBtn = div.querySelector(".add-item");
+
+    function addItem(val = "0") {
+        const item = document.createElement("div");
+
+        const input = document.createElement("input");
+        input.value = val;
+        autoResizeInput(input);
+
+        const del = document.createElement("button");
+        del.textContent = "×";
+
+        del.onclick = () => {
+            item.remove();
+            updateCode();
+        };
+
+        item.appendChild(input);
+        item.appendChild(del);
+        items.appendChild(item);
+    }
+
+    addBtn.onclick = () => addItem();
+
+    addItem(); // 初期1個
+
+    autoResizeInput(div.querySelector("input"));
+
+    addDeleteButton(div);
+    return div;
+}
+
+// ----------------
+// 既存ブロック
 // ----------------
 function createAssignBlock() {
     const div = document.createElement("div");
@@ -84,25 +132,18 @@ function createAssignBlock() {
     return div;
 }
 
-// ----------------
-// 表示
-// ----------------
 function createPrintBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "print";
 
     div.innerHTML = `表示する(<input value="x">)`;
-
     autoResizeInput(div.querySelector("input"));
 
     addDeleteButton(div);
     return div;
 }
 
-// ----------------
-// if
-// ----------------
 function createIfBlock() {
     const div = document.createElement("div");
     div.className = "block if";
@@ -118,15 +159,11 @@ function createIfBlock() {
     autoResizeInput(div.querySelector("input"));
     enableDrop(child);
 
-    updatePlaceholder(child); // ★
-
+    updatePlaceholder(child);
     addDeleteButton(div);
     return div;
 }
 
-// ----------------
-// if-else
-// ----------------
 function createIfElseBlock() {
     const div = document.createElement("div");
     div.className = "block ifelse";
@@ -150,16 +187,13 @@ function createIfElseBlock() {
     enableDrop(ifBody);
     enableDrop(elseBody);
 
-    updatePlaceholder(ifBody);   // ★
-    updatePlaceholder(elseBody); // ★
+    updatePlaceholder(ifBody);
+    updatePlaceholder(elseBody);
 
     addDeleteButton(div);
     return div;
 }
 
-// ----------------
-// for
-// ----------------
 function createForBlock() {
     const div = document.createElement("div");
     div.className = "block for";
@@ -178,8 +212,7 @@ function createForBlock() {
     div.querySelectorAll("input").forEach(autoResizeInput);
 
     enableDrop(child);
-
-    updatePlaceholder(child); // ★
+    updatePlaceholder(child);
 
     addDeleteButton(div);
     return div;
@@ -193,7 +226,7 @@ function enableDrop(el) {
         group: "shared",
         animation: 150,
         onSort: () => {
-            updatePlaceholder(el); // ★
+            updatePlaceholder(el);
             updateCode();
         }
     });
@@ -201,7 +234,7 @@ function enableDrop(el) {
 enableDrop(workspace);
 
 // ----------------
-// AST
+// AST（配列対応）
 // ----------------
 function buildAST(container) {
     const ast = [];
@@ -210,6 +243,20 @@ function buildAST(container) {
         if (!node.classList) return;
 
         const type = node.dataset.type;
+
+        if (type === "array") {
+            const name = node.querySelector("input").value;
+
+            const values = Array.from(
+                node.querySelectorAll(".array-items input")
+            ).map(i => i.value);
+
+            ast.push({
+                type: "assign",
+                name,
+                value: `[${values.join(",")}]`
+            });
+        }
 
         if (type === "assign") {
             const i = node.querySelectorAll("input");
@@ -290,7 +337,6 @@ function updateCode() {
     const ast = buildAST(workspace);
     document.getElementById("code").textContent = buildCode(ast);
 
-    // ★ 全childrenに対して再チェック
     document.querySelectorAll(".children").forEach(updatePlaceholder);
 
     window.currentAST = ast;

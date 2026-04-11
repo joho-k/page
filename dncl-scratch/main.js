@@ -15,5 +15,6 @@ function run() {
     // UI更新
     document.getElementById("output").textContent = output;
     document.getElementById("vars").textContent =
-        JSON.stringify(vars, null, 2);
+        JSON.stringify(vars, null, 2);    
 }
+
