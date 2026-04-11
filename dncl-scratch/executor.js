@@ -9,7 +9,7 @@ let stepIndex = 0;
 // ----------------
 function tokenize(expr) {
     const tokens = [];
-    const regex = /\s*([0-9]+|==|!=|<=|>=|[\[\],+\-*/()<>]|[a-zA-Z_]\w*)\s*/g;
+    const regex = /\s*([0-9]+|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
     let match;
     while ((match = regex.exec(expr)) !== null) {
         tokens.push(match[1]);
@@ -110,10 +110,13 @@ function parseExpression(tokens) {
 
     function mul() {
         let v = primary();
-        while (peek() === "*" || peek() === "/") {
+        while (peek() === "*" || peek() === "/" || peek() === "%") {
             const op = consume();
             const r = primary();
-            v = op === "*" ? v * r : v / r;
+
+            if (op === "*") v *= r;
+            if (op === "/") v /= r;
+            if (op === "%") v %= r;
         }
         return v;
     }

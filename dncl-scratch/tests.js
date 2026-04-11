@@ -3,6 +3,9 @@
 // =========================
 const TESTS = [
 
+    // ----------------
+    // 基本（既存）
+    // ----------------
     {
         name: "基本計算",
         ast: [
@@ -12,65 +15,39 @@ const TESTS = [
         expected: "7\n"
     },
 
+    // ----------------
+    // 代入 + 式
+    // ----------------
     {
-        name: "if true",
+        name: "代入 + 加算",
         ast: [
-            { type: "assign", name: "x", value: "10" },
-            {
-                type: "if", condition: "x>5", body: [
-                    { type: "print", value: "1" }
-                ]
-            }
+            { type: "assign", name: "x", value: "1+2" },
+            { type: "print", value: "x" }
+        ],
+        expected: "3\n"
+    },
+
+    {
+        name: "代入 + 複合式",
+        ast: [
+            { type: "assign", name: "x", value: "1+2*3" },
+            { type: "assign", name: "y", value: "x+4" },
+            { type: "print", value: "y" }
+        ],
+        expected: "11\n"
+    },
+
+    {
+        name: "あまり（%）",
+        ast: [
+            { type: "assign", name: "x", value: "10%3" },
+            { type: "print", value: "x" }
         ],
         expected: "1\n"
     },
 
-    {
-        name: "for",
-        ast: [
-            {
-                type: "for", varName: "i", start: "1", end: "3", step: "1", body: [
-                    { type: "print", value: "i" }
-                ]
-            }
-        ],
-        expected: "1\n2\n3\n"
-    },
-
-    {
-        name: "for + if（重要）",
-        ast: [
-            {
-                type: "for", varName: "i", start: "1", end: "10", step: "1", body: [
-                    {
-                        type: "if", condition: "i>5", body: [
-                            { type: "print", value: "i" }
-                        ]
-                    }
-                ]
-            }
-        ],
-        expected: "6\n7\n8\n9\n10\n"
-    },
-
-    {
-        name: "ネスト",
-        ast: [
-            {
-                type: "for", varName: "i", start: "1", end: "2", step: "1", body: [
-                    {
-                        type: "for", varName: "j", start: "1", end: "2", step: "1", body: [
-                            { type: "print", value: "i+j" }
-                        ]
-                    }
-                ]
-            }
-        ],
-        expected: "2\n3\n3\n4\n"
-    },
-
     // ----------------
-    // 基本
+    // 配列
     // ----------------
     {
         name: "配列生成",
@@ -81,11 +58,8 @@ const TESTS = [
         expected: "[1,2,3]\n"
     },
 
-    // ----------------
-    // 1次元配列テスト
-    // ----------------
     {
-        name: "1次元配列アクセス",
+        name: "配列アクセス",
         ast: [
             { type: "assign", name: "a", value: "[5,10,15]" },
             { type: "print", value: "a[0]" },
@@ -96,20 +70,37 @@ const TESTS = [
     },
 
     {
-        name: "1次元配列 + 計算",
+        name: "配列 + 計算",
         ast: [
             { type: "assign", name: "a", value: "[1,2,3]" },
-            { type: "print", value: "a[0] + a[1] + a[2]" }
+            { type: "print", value: "a[0]+a[1]+a[2]" }
         ],
         expected: "6\n"
     },
 
     {
-        name: "1次元配列 + for",
+        name: "配列 + あまり",
+        ast: [
+            { type: "assign", name: "a", value: "[2,4,6]" },
+            { type: "print", value: "a[1]%3" }
+        ],
+        expected: "1\n"
+    },
+
+    // ----------------
+    // for + 配列
+    // ----------------
+    {
+        name: "配列 + for",
         ast: [
             { type: "assign", name: "a", value: "[2,4,6]" },
             {
-                type: "for", varName: "i", start: "0", end: "2", step: "1", body: [
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "2",
+                step: "1",
+                body: [
                     { type: "print", value: "a[i]" }
                 ]
             }
@@ -118,19 +109,34 @@ const TESTS = [
     },
 
     {
-        name: "1次元配列 + 範囲外",
+        name: "配列 + for + 計算",
         ast: [
             { type: "assign", name: "a", value: "[1,2,3]" },
-            { type: "print", value: "a[5]" }
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "2",
+                step: "1",
+                body: [
+                    { type: "print", value: "a[i]*2" }
+                ]
+            }
         ],
-        expected: "0\n"
+        expected: "2\n4\n6\n"
     },
+
     {
         name: "配列 + for + 範囲外",
         ast: [
             { type: "assign", name: "a", value: "[0,1,2,3]" },
             {
-                type: "for", varName: "i", start: "1", end: "10", step: "1", body: [
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "10",
+                step: "1",
+                body: [
                     { type: "print", value: "a[i]" }
                 ]
             }
@@ -139,15 +145,46 @@ const TESTS = [
             "1\n2\n3\n0\n0\n0\n0\n0\n0\n0\n"
     },
 
+    // ----------------
+    // if + 式
+    // ----------------
+    {
+        name: "if + 計算条件",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            {
+                type: "if",
+                condition: "x%2==1",
+                body: [
+                    { type: "print", value: "1" }
+                ]
+            }
+        ],
+        expected: "1\n"
+    },
+
+    // ----------------
+    // ネスト
+    // ----------------
     {
         name: "2重ループ + 配列",
         ast: [
             { type: "assign", name: "a", value: "[1,2]" },
             {
-                type: "for", varName: "i", start: "0", end: "1", step: "1", body: [
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "1",
+                step: "1",
+                body: [
                     {
-                        type: "for", varName: "j", start: "0", end: "1", step: "1", body: [
-                            { type: "print", value: "a[i] + a[j]" }
+                        type: "for",
+                        varName: "j",
+                        start: "0",
+                        end: "1",
+                        step: "1",
+                        body: [
+                            { type: "print", value: "a[i]+a[j]" }
                         ]
                     }
                 ]
@@ -156,6 +193,7 @@ const TESTS = [
         expected:
             "2\n3\n3\n4\n"
     },
+
     // ----------------
     // 空配列
     // ----------------
@@ -169,7 +207,7 @@ const TESTS = [
     },
 
     // ----------------
-    // ネスト配列
+    // 2次元配列
     // ----------------
     {
         name: "2次元配列",
@@ -179,7 +217,6 @@ const TESTS = [
         ],
         expected: "3\n"
     },
-
 ];
 
 // =========================

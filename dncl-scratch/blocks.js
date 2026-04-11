@@ -63,7 +63,8 @@ function addBlock(type) {
     if (type === "if") el = createIfBlock();
     if (type === "ifelse") el = createIfElseBlock();
     if (type === "for") el = createForBlock();
-    if (type === "array") el = createArrayBlock(); // ★追加
+    if (type === "array") el = createArrayBlock();
+    if (type === "expr") el = createExprBlock();
 
     workspace.appendChild(el);
     updateCode();
@@ -117,6 +118,32 @@ function createArrayBlock() {
     return div;
 }
 
+function createExprBlock() {
+    const div = document.createElement("div");
+    div.className = "block expr";
+    div.dataset.type = "expr";
+
+    div.innerHTML = `
+      <input value="x">
+      <select>
+        <option value="+">＋</option>
+        <option value="-">－</option>
+        <option value="*">×</option>
+        <option value="/">÷</option>
+        <option value="%">あまり</option>
+      </select>
+      <input value="1">
+    `;
+
+    const inputs = div.querySelectorAll("input");
+    inputs.forEach(autoResizeInput);
+
+    div.querySelector("select").addEventListener("change", updateCode);
+
+    addDeleteButton(div);
+    return div;
+}
+
 // ----------------
 // 既存ブロック
 // ----------------
@@ -125,8 +152,17 @@ function createAssignBlock() {
     div.className = "block";
     div.dataset.type = "assign";
 
-    div.innerHTML = `<input value="x"> = <input value="0">`;
-    div.querySelectorAll("input").forEach(autoResizeInput);
+    div.innerHTML = `
+      <input value="x"> =
+      <div class="children dropzone expr-zone"></div>
+    `;
+
+    const zone = div.querySelector(".expr-zone");
+
+    autoResizeInput(div.querySelector("input"));
+    enableDrop(zone);
+
+    updatePlaceholder(zone);
 
     addDeleteButton(div);
     return div;
@@ -137,7 +173,12 @@ function createPrintBlock() {
     div.className = "block";
     div.dataset.type = "print";
 
-    div.innerHTML = `表示する(<input value="x">)`;
+    div.innerHTML = `
+      表示する(
+        <input value="x">
+      )
+    `;
+
     autoResizeInput(div.querySelector("input"));
 
     addDeleteButton(div);
@@ -259,8 +300,26 @@ function buildAST(container) {
         }
 
         if (type === "assign") {
-            const i = node.querySelectorAll("input");
-            ast.push({ type, name: i[0].value, value: i[1].value });
+
+            const name = node.querySelector("input").value;
+
+            const exprZone = node.querySelector(".expr-zone");
+
+            const child = exprZone.querySelector(".block");
+
+            if (child) {
+                ast.push({
+                    type,
+                    name,
+                    value: buildExpression(child)
+                });
+            } else {
+                ast.push({
+                    type,
+                    name,
+                    value: "0"
+                });
+            }
         }
 
         if (type === "print") {
@@ -296,6 +355,18 @@ function buildAST(container) {
                 body: buildAST(node.querySelector(".children"))
             });
         }
+
+        if (type === "expr") {
+            const i = node.querySelectorAll("input");
+            const op = node.querySelector("select").value;
+
+            ast.push({
+                type: "expr",
+                left: i[0].value,
+                op,
+                right: i[1].value
+            });
+        }
     });
 
     return ast;
@@ -328,9 +399,30 @@ function buildCode(ast, indent = "") {
         if (node.type === "for")
             code += `${indent}${node.varName} を ${node.start} から ${node.end} まで ${node.step} ずつ増やしながら繰り返す:\n` +
                 buildCode(node.body, indent + "  ");
+
+        if (node.type === "expr")
+            code += `${indent}${node.left} ${node.op} ${node.right}\n`;
     });
 
     return code;
+}
+
+function buildExpression(node) {
+
+    const type = node.dataset.type;
+
+    if (type === "expr") {
+        const i = node.querySelectorAll("input");
+        const op = node.querySelector("select").value;
+
+        return `${i[0].value} ${op} ${i[1].value}`;
+    }
+
+    if (type === "assign") {
+        return node.querySelectorAll("input")[1].value;
+    }
+
+    return "0";
 }
 
 function updateCode() {
