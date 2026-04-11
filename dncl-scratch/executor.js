@@ -9,7 +9,7 @@ let stepIndex = 0;
 // ----------------
 function tokenize(expr) {
     const tokens = [];
-    const regex = /\s*([0-9]+|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
+    const regex = /\s*("(?:[^"\\]|\\.)*"|“[^”]*”|[0-9]+|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
     let match;
     while ((match = regex.exec(expr)) !== null) {
         tokens.push(match[1]);
@@ -27,6 +27,14 @@ function parseExpression(tokens) {
 
         if (!t) throw new Error("式エラー");
 
+        // 文字列
+        if (
+            (t.startsWith('"') && t.endsWith('"')) ||
+            (t.startsWith('“') && t.endsWith('”'))
+        ) {
+            return t.slice(1, -1);
+        }
+        
         // 数値
         if (/^\d+$/.test(t)) return Number(t);
 

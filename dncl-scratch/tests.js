@@ -217,6 +217,91 @@ const TESTS = [
         ],
         expected: "3\n"
     },
+    {
+        name: "文字列（ダブルクォート）",
+        ast: [
+            { type: "print", value: '"こんにちは"' }
+        ],
+        expected: "こんにちは\n"
+    },
+
+    {
+        name: "文字列（全角クォート）",
+        ast: [
+            { type: "print", value: "“テストです”" }
+        ],
+        expected: "テストです\n"
+    },
+
+    {
+        name: "文字列 + 数値（別々表示）",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            { type: "print", value: '"値は"' },
+            { type: "print", value: "x" }
+        ],
+        expected: "値は\n5\n"
+    },
+
+    {
+        name: "文字列 + 配列",
+        ast: [
+            { type: "assign", name: "a", value: "[1,2]" },
+            { type: "print", value: '"配列:"' },
+            { type: "print", value: "a" }
+        ],
+        expected: "配列:\n[1,2]\n"
+    },
+
+    {
+        name: "空文字列",
+        ast: [
+            { type: "print", value: '""' }
+        ],
+        expected: "\n"
+    },
+
+    {
+        name: "文字列内スペース",
+        ast: [
+            { type: "print", value: '"hello world"' }
+        ],
+        expected: "hello world\n"
+    },
+
+    {
+        name: "文字列内記号",
+        ast: [
+            { type: "print", value: '"a+b=c"' }
+        ],
+        expected: "a+b=c\n"
+    },
+
+    {
+        name: "文字列 + 配列アクセス",
+        ast: [
+            { type: "assign", name: "a", value: "[10,20]" },
+            { type: "print", value: '"値:"' },
+            { type: "print", value: "a[1]" }
+        ],
+        expected: "値:\n20\n"
+    },
+
+    {
+        name: "文字列（if条件に影響しない）",
+        ast: [
+            { type: "assign", name: "x", value: "1" },
+            { type: "print", value: '"OK"' },
+            {
+                type: "if",
+                condition: "x==1",
+                body: [
+                    { type: "print", value: '"YES"' }
+                ]
+            }
+        ],
+        expected: "OK\nYES\n"
+    },
 ];
 
 // =========================
