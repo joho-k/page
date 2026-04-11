@@ -9,7 +9,7 @@ let stepIndex = 0;
 // ----------------
 function tokenize(expr) {
     const tokens = [];
-    const regex = /\s*([0-9]+|==|!=|<=|>=|[+\-*/()<>]|[a-zA-Z_]\w*)\s*/g;
+    const regex = /\s*([0-9]+|==|!=|<=|>=|[\[\],+\-*/()<>]|[a-zA-Z_]\w*)\s*/g;
     let match;
     while ((match = regex.exec(expr)) !== null) {
         tokens.push(match[1]);
@@ -24,13 +24,87 @@ function parseExpression(tokens) {
 
     function primary() {
         const t = consume();
+
+        if (!t) throw new Error("式エラー");
+
+        // 数値
         if (/^\d+$/.test(t)) return Number(t);
-        if (/^[a-zA-Z_]\w*$/.test(t)) return vars[t] ?? 0;
+
+        // =========================
+        // 配列（完全版🔥）
+        // =========================
+        if (t === "[") {
+            const arr = [];
+
+            // ★ 空配列対応
+            if (peek() === "]") {
+                consume();
+                return arr;
+            }
+
+            while (true) {
+
+                // ★ 再帰（ネスト対応）
+                arr.push(comparison());
+
+                if (peek() === ",") {
+                    consume();
+                    continue;
+                }
+
+                if (peek() === "]") {
+                    consume();
+                    break;
+                }
+
+                // ★ 不正検出
+                throw new Error("配列構文エラー");
+            }
+
+            return arr;
+        }
+
+        // =========================
+        // 変数 + 添字
+        // =========================
+        // =========================
+        // 変数 + 添字（完全修正版🔥）
+        // =========================
+        if (/^[a-zA-Z_]\w*$/.test(t)) {
+
+            // ★ここ重要
+            if (!(t in vars)) return 0;
+
+            let val = vars[t];
+
+            while (peek() === "[") {
+                consume();
+
+                const index = comparison();
+
+                if (consume() !== "]") {
+                    throw new Error("]不足");
+                }
+
+                if (!Array.isArray(val)) {
+                    throw new Error("配列ではない値に添字アクセス");
+                }
+
+                val = val[index];
+
+                if (val === undefined) return 0;
+            }
+
+            return val;
+        }
+
+        // ()
         if (t === "(") {
             const v = comparison();
             if (consume() !== ")") throw new Error("カッコ不一致");
             return v;
         }
+
         throw new Error("不正: " + t);
     }
 
@@ -91,7 +165,12 @@ function buildTrace(ast) {
 
         if (node.type === "print") {
             trace.push(() => {
-                output += safeEval(node.value) + "\n";
+                const val = safeEval(node.value);
+                output += (
+                    Array.isArray(val)
+                        ? JSON.stringify(val)
+                        : val
+                ) + "\n";
             });
         }
 
@@ -143,7 +222,12 @@ function executeImmediate(ast) {
         }
 
         if (node.type === "print") {
-            output += safeEval(node.value) + "\n";
+            const val = safeEval(node.value);
+            output += (
+                Array.isArray(val)
+                    ? JSON.stringify(val)
+                    : val
+            ) + "\n";
         }
 
         if (node.type === "if") {
