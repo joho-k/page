@@ -152,14 +152,16 @@ function createAssignBlock() {
     div.dataset.type = "assign";
 
     div.innerHTML = `
-      <input value="x"> =
-      <div class="children dropzone expr-zone"></div>
+      <div class="assign-inline">
+        <input value="x"> =
+        <div class="children dropzone expr-zone"></div>
+      </div>
     `;
 
     const zone = div.querySelector(".expr-zone");
 
     autoResizeInput(div.querySelector("input"));
-    enableDrop(zone);
+    enableDrop(zone, { onlyExpr: true, singleBlock: true });
 
     updatePlaceholder(zone);
 
@@ -261,9 +263,27 @@ function createForBlock() {
 // ----------------
 // ドラッグ
 // ----------------
-function enableDrop(el) {
+function enableDrop(el, options = {}) {
     new Sortable(el, {
-        group: "shared",
+        group: {
+            name: "shared",
+            put: (_to, _from, dragged) => {
+                if (options.onlyExpr && dragged.dataset.type !== "expr") {
+                    return false;
+                }
+
+                if (options.singleBlock) {
+                    const blocks = Array.from(el.children)
+                        .filter(child => child.classList && child.classList.contains("block"));
+
+                    if (blocks.length > 0 && !blocks.includes(dragged)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        },
         animation: 150,
         onSort: () => {
             updatePlaceholder(el);

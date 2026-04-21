@@ -60,6 +60,43 @@
     height: 10px;
 }
 
+.assign-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.block[data-type="assign"] .assign-inline {
+    width: 100%;
+}
+
+.block[data-type="assign"] .expr-zone {
+    display: inline-flex;
+    align-items: center;
+    flex: 1;
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    width: 100%;
+    min-width: 120px;
+    min-height: 28px;
+    padding-right: 18px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.65);
+}
+
+.block[data-type="assign"] .expr-zone::after {
+    display: none;
+}
+
+.block[data-type="assign"] .expr-zone .placeholder {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
 /* else */
 .else-area {
     margin-top: 5px;
