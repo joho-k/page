@@ -24,6 +24,11 @@ function updatePlaceholder(container) {
 // ----------------
 function autoResizeInput(input) {
     const resize = () => {
+        if (input.classList.contains("assign-value")) {
+            input.style.width = "100%";
+            return;
+        }
+
         input.style.width = (input.value.length + 1) + "ch";
     };
 
@@ -154,16 +159,25 @@ function createAssignBlock() {
     div.innerHTML = `
       <div class="assign-inline">
         <input value="x"> =
-        <div class="children dropzone expr-zone"></div>
+        <div class="children dropzone expr-zone">
+          <input class="assign-value" value="" placeholder="直接入力、または計算ブロックをここに代入">
+        </div>
       </div>
     `;
 
     const zone = div.querySelector(".expr-zone");
+    const valueInput = div.querySelector(".assign-value");
 
     autoResizeInput(div.querySelector("input"));
-    enableDrop(zone, { onlyExpr: true, singleBlock: true });
+    autoResizeInput(valueInput);
+    enableDrop(zone, {
+        onlyExpr: true,
+        singleBlock: true,
+        skipPlaceholder: true,
+        onChange: () => syncAssignZone(zone)
+    });
 
-    updatePlaceholder(zone);
+    syncAssignZone(zone);
 
     addDeleteButton(div);
     return div;
@@ -263,6 +277,17 @@ function createForBlock() {
 // ----------------
 // ドラッグ
 // ----------------
+function syncAssignZone(zone) {
+    const valueInput = zone.querySelector(".assign-value");
+
+    if (!valueInput) return;
+
+    const hasBlock = Array.from(zone.children)
+        .some(child => child.classList && child.classList.contains("block"));
+
+    valueInput.style.display = hasBlock ? "none" : "inline-block";
+}
+
 function enableDrop(el, options = {}) {
     new Sortable(el, {
         group: {
@@ -286,7 +311,14 @@ function enableDrop(el, options = {}) {
         },
         animation: 150,
         onSort: () => {
-            updatePlaceholder(el);
+            if (!options.skipPlaceholder) {
+                updatePlaceholder(el);
+            }
+
+            if (options.onChange) {
+                options.onChange();
+            }
+
             updateCode();
         }
     });
@@ -325,6 +357,7 @@ function buildAST(container) {
             const name = node.querySelector("input").value;
 
             const exprZone = node.querySelector(".expr-zone");
+            const valueInput = exprZone.querySelector(".assign-value");
 
             const child = exprZone.querySelector(".block");
 
@@ -338,7 +371,7 @@ function buildAST(container) {
                 ast.push({
                     type,
                     name,
-                    value: "0"
+                    value: valueInput.value.trim() || "0"
                 });
             }
         }
@@ -450,7 +483,8 @@ function updateCode() {
     const ast = buildAST(workspace);
     document.getElementById("code").textContent = buildCode(ast);
 
-    document.querySelectorAll(".children").forEach(updatePlaceholder);
+    document.querySelectorAll(".children:not(.expr-zone)").forEach(updatePlaceholder);
+    document.querySelectorAll(".expr-zone").forEach(syncAssignZone);
 
     window.currentAST = ast;
 }

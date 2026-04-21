@@ -76,6 +76,7 @@
     display: inline-flex;
     align-items: center;
     flex: 1;
+    gap: 8px;
     margin-left: 0;
     padding-left: 0;
     border-left: none;
@@ -95,6 +96,16 @@
     width: 100%;
     white-space: nowrap;
     font-size: 11px;
+}
+
+.block[data-type="assign"] .assign-value {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    background: transparent;
+    color: inherit;
+    border: none;
+    outline: none;
 }
 
 /* else */
