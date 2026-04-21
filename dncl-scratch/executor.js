@@ -36,10 +36,10 @@ function runTraceStep(step) {
     changedVars = new Set();
     highlightBlock(step.blockId);
     const varsBefore = structuredClone(vars);
-    const details = step.getDetails ? step.getDetails(varsBefore) : null;
+    const result = step.run();
+    const details = step.getDetails ? step.getDetails(varsBefore, result) : null;
     currentExplanation = details?.text || "";
     highlightedArrayAccesses = new Set(details?.arrayAccesses || []);
-    step.run();
 }
 
 function setVar(name, value) {
@@ -211,7 +211,7 @@ function insertTraceAtCurrentPosition(ast) {
     trace.splice(stepIndex, 0, ...insertedSteps);
 }
 
-function buildAssignExplanation(node, scope) {
+function buildAssignExplanation(node, scope, result) {
     const binary = parseSimpleBinaryExpression(node.value);
 
     if (binary) {
@@ -230,7 +230,7 @@ function buildAssignExplanation(node, scope) {
 
     const arrayAccess = parseSimpleArrayAccess(node.value, scope);
     const arrayExplanation = buildArrayAccessExplanation(arrayAccess);
-    const value = safeEvalWithScope(node.value, scope);
+    const value = result?.assignedValue ?? safeEvalWithScope(node.value, scope);
 
     return buildStepDetails(
         [
@@ -241,10 +241,10 @@ function buildAssignExplanation(node, scope) {
     );
 }
 
-function buildPrintExplanation(node, scope) {
+function buildPrintExplanation(node, scope, result) {
     const arrayAccess = parseSimpleArrayAccess(node.value, scope);
     const arrayExplanation = buildArrayAccessExplanation(arrayAccess);
-    const value = safeEvalWithScope(node.value, scope);
+    const value = result?.printedValue ?? safeEvalWithScope(node.value, scope);
 
     if (isSimpleVariable(node.value)) {
         return buildStepDetails(`変数 ${node.value.trim()} の値 ${formatVarValue(value)} を表示しました。`);
@@ -278,7 +278,7 @@ function buildForExplanation(node, current, end, step, isLast, start) {
 // ----------------
 function tokenize(expr) {
     const tokens = [];
-    const regex = /\s*("(?:[^"\\]|\\.)*"|“[^”]*”|[0-9]+|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
+    const regex = /\s*("(?:[^"\\]|\\.)*"|“[^”]*”|乱数|[0-9]+|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
     let match;
     while ((match = regex.exec(expr)) !== null) {
         tokens.push(match[1]);
@@ -306,6 +306,13 @@ function parseExpression(tokens) {
 
         // 数値
         if (/^\d+$/.test(t)) return Number(t);
+
+        // 乱数()
+        if (t === "乱数") {
+            if (consume() !== "(") throw new Error("乱数のカッコ不足");
+            if (consume() !== ")") throw new Error("乱数のカッコ不足");
+            return Math.random();
+        }
 
         // =========================
         // 配列（完全版🔥）
@@ -441,9 +448,11 @@ function buildTrace(ast, targetTrace = trace) {
             targetTrace.push({
                 blockId: node.blockId,
                 run: () => {
-                    setVar(node.name, safeEval(node.value));
+                    const assignedValue = safeEval(node.value);
+                    setVar(node.name, assignedValue);
+                    return { assignedValue };
                 },
-                getDetails: (scope) => buildAssignExplanation(node, scope)
+                getDetails: (scope, result) => buildAssignExplanation(node, scope, result)
             });
         }
 
@@ -457,8 +466,9 @@ function buildTrace(ast, targetTrace = trace) {
                             ? JSON.stringify(val)
                             : val
                     ) + "\n";
+                    return { printedValue: val };
                 },
-                getDetails: (scope) => buildPrintExplanation(node, scope)
+                getDetails: (scope, result) => buildPrintExplanation(node, scope, result)
             });
         }
 
@@ -466,11 +476,13 @@ function buildTrace(ast, targetTrace = trace) {
             targetTrace.push({
                 blockId: node.blockId,
                 run: () => {
-                    if (safeEval(node.condition)) {
+                    const conditionValue = safeEval(node.condition);
+                    if (conditionValue) {
                         insertTraceAtCurrentPosition(node.body);
                     }
+                    return { conditionValue };
                 },
-                getDetails: (scope) => buildStepDetails(`条件 ${node.condition} を確認しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`)
+                getDetails: (_scope, result) => buildStepDetails(`条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} です。`)
             });
         }
 
@@ -478,13 +490,15 @@ function buildTrace(ast, targetTrace = trace) {
             targetTrace.push({
                 blockId: node.blockId,
                 run: () => {
-                    if (safeEval(node.condition)) {
+                    const conditionValue = safeEval(node.condition);
+                    if (conditionValue) {
                         insertTraceAtCurrentPosition(node.ifBody);
                     } else {
                         insertTraceAtCurrentPosition(node.elseBody);
                     }
+                    return { conditionValue };
                 },
-                getDetails: (scope) => buildStepDetails(`条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`)
+                getDetails: (_scope, result) => buildStepDetails(`条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(result?.conditionValue)} です。`)
             });
         }
 
@@ -501,6 +515,7 @@ function buildTrace(ast, targetTrace = trace) {
                     blockId: node.blockId,
                     run: () => {
                         setVar(node.varName, current);
+                        return { current };
                     },
                     getDetails: () => buildStepDetails(buildForExplanation(node, current, end, step, isLast, start))
                 });

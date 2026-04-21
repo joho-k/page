@@ -38,6 +38,11 @@ const BLOCK_PREVIEWS = {
         title: "計算",
         code: `x + 1`,
         text: "足し算、引き算、掛け算、割り算、あまりを作れます。"
+    },
+    random: {
+        title: "乱数",
+        code: `乱数()`,
+        text: "0以上1未満のランダムな値を作れます。"
     }
 };
 
@@ -200,6 +205,7 @@ function addBlock(type) {
     if (type === "for") el = createForBlock();
     if (type === "array") el = createArrayBlock();
     if (type === "expr") el = createExprBlock();
+    if (type === "random") el = createRandomBlock();
 
     workspace.appendChild(el);
     updateCode();
@@ -410,6 +416,18 @@ function createExprBlock() {
     return div;
 }
 
+function createRandomBlock() {
+    const div = document.createElement("div");
+    div.className = "block expr";
+    div.dataset.type = "random";
+    assignBlockId(div);
+
+    div.innerHTML = `乱数()`;
+
+    addDeleteButton(div);
+    return div;
+}
+
 // ----------------
 // 既存ブロック
 // ----------------
@@ -434,7 +452,7 @@ function createAssignBlock() {
     autoResizeInput(div.querySelector("input"));
     autoResizeInput(valueInput);
     enableDrop(zone, {
-        onlyExpr: true,
+        onlyExprLike: true,
         singleBlock: true,
         skipPlaceholder: true,
         onChange: () => syncAssignZone(zone)
@@ -560,7 +578,7 @@ function enableDrop(el, options = {}) {
         group: {
             name: "shared",
             put: (_to, _from, dragged) => {
-                if (options.onlyExpr && dragged.dataset.type !== "expr") {
+                if (options.onlyExprLike && !["expr", "random"].includes(dragged.dataset.type)) {
                     return false;
                 }
 
@@ -699,6 +717,14 @@ function buildAST(container) {
                 right: i[1].value
             });
         }
+
+        if (type === "random") {
+            ast.push({
+                type: "random",
+                blockId: node.dataset.blockId,
+                value: "乱数()"
+            });
+        }
     });
 
     return ast;
@@ -734,6 +760,9 @@ function buildCode(ast, indent = "") {
 
         if (node.type === "expr")
             code += `${indent}${node.left} ${node.op} ${node.right}\n`;
+
+        if (node.type === "random")
+            code += `${indent}乱数()\n`;
     });
 
     return code;
@@ -748,6 +777,10 @@ function buildExpression(node) {
         const op = node.querySelector("select").value;
 
         return `${i[0].value} ${op} ${i[1].value}`;
+    }
+
+    if (type === "random") {
+        return "乱数()";
     }
 
     if (type === "assign") {
