@@ -1,4 +1,5 @@
 const workspace = document.getElementById("workspace");
+let blockIdCounter = 0;
 
 // ----------------
 // プレースホルダー
@@ -57,6 +58,11 @@ function addDeleteButton(div) {
     div.appendChild(btn);
 }
 
+function assignBlockId(div) {
+    blockIdCounter += 1;
+    div.dataset.blockId = `block-${blockIdCounter}`;
+}
+
 // ----------------
 // 追加
 // ----------------
@@ -82,6 +88,7 @@ function createArrayBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "array";
+    assignBlockId(div);
 
     div.innerHTML = `
 <input value="a"> = [
@@ -126,6 +133,7 @@ function createExprBlock() {
     const div = document.createElement("div");
     div.className = "block expr";
     div.dataset.type = "expr";
+    assignBlockId(div);
 
     div.innerHTML = `
       <input value="x">
@@ -155,6 +163,7 @@ function createAssignBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "assign";
+    assignBlockId(div);
 
     div.innerHTML = `
       <div class="assign-inline">
@@ -187,6 +196,7 @@ function createPrintBlock() {
     const div = document.createElement("div");
     div.className = "block";
     div.dataset.type = "print";
+    assignBlockId(div);
 
     div.innerHTML = `
       表示する(
@@ -204,6 +214,7 @@ function createIfBlock() {
     const div = document.createElement("div");
     div.className = "block if";
     div.dataset.type = "if";
+    assignBlockId(div);
 
     div.innerHTML = `
     もし <input value="x > 0"> ならば:
@@ -224,6 +235,7 @@ function createIfElseBlock() {
     const div = document.createElement("div");
     div.className = "block ifelse";
     div.dataset.type = "ifelse";
+    assignBlockId(div);
 
     div.innerHTML = `
     もし <input value="x > 0"> ならば:
@@ -254,6 +266,7 @@ function createForBlock() {
     const div = document.createElement("div");
     div.className = "block for";
     div.dataset.type = "for";
+    assignBlockId(div);
 
     div.innerHTML = `
     <input value="i"> を 
@@ -347,6 +360,7 @@ function buildAST(container) {
 
             ast.push({
                 type: "assign",
+                blockId: node.dataset.blockId,
                 name,
                 value: `[${values.join(",")}]`
             });
@@ -364,12 +378,14 @@ function buildAST(container) {
             if (child) {
                 ast.push({
                     type,
+                    blockId: node.dataset.blockId,
                     name,
                     value: buildExpression(child)
                 });
             } else {
                 ast.push({
                     type,
+                    blockId: node.dataset.blockId,
                     name,
                     value: valueInput.value.trim() || "0"
                 });
@@ -377,12 +393,17 @@ function buildAST(container) {
         }
 
         if (type === "print") {
-            ast.push({ type, value: node.querySelector("input").value });
+            ast.push({
+                type,
+                blockId: node.dataset.blockId,
+                value: node.querySelector("input").value
+            });
         }
 
         if (type === "if") {
             ast.push({
                 type,
+                blockId: node.dataset.blockId,
                 condition: node.querySelector("input").value,
                 body: buildAST(node.querySelector(".children"))
             });
@@ -391,6 +412,7 @@ function buildAST(container) {
         if (type === "ifelse") {
             ast.push({
                 type,
+                blockId: node.dataset.blockId,
                 condition: node.querySelector("input").value,
                 ifBody: buildAST(node.querySelector(".if-body")),
                 elseBody: buildAST(node.querySelector(".else-body"))
@@ -402,6 +424,7 @@ function buildAST(container) {
 
             ast.push({
                 type,
+                blockId: node.dataset.blockId,
                 varName: i[0].value,
                 start: i[1].value,
                 end: i[2].value,
@@ -416,6 +439,7 @@ function buildAST(container) {
 
             ast.push({
                 type: "expr",
+                blockId: node.dataset.blockId,
                 left: i[0].value,
                 op,
                 right: i[1].value

@@ -323,7 +323,7 @@ function runTests() {
             buildTrace(test.ast);
 
             while (stepIndex < trace.length) {
-                trace[stepIndex++]();
+                runTraceStep(trace[stepIndex++]);
             }
 
             const passed = output === test.expected;

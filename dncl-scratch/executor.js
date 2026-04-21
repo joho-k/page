@@ -4,6 +4,35 @@ let output = "";
 let trace = [];
 let stepIndex = 0;
 
+function pushTraceStep(blockId, fn) {
+    trace.push({
+        blockId,
+        run: fn
+    });
+}
+
+function clearStepHighlight() {
+    document.querySelectorAll(".step-active")
+        .forEach(el => el.classList.remove("step-active"));
+}
+
+function highlightBlock(blockId) {
+    clearStepHighlight();
+
+    if (!blockId) return;
+
+    const el = document.querySelector(`[data-block-id="${blockId}"]`);
+    if (el) {
+        el.classList.add("step-active");
+    }
+}
+
+function runTraceStep(step) {
+    if (!step) return;
+    highlightBlock(step.blockId);
+    step.run();
+}
+
 // ----------------
 // 式評価（そのまま）
 // ----------------
@@ -169,13 +198,13 @@ function buildTrace(ast) {
     for (let node of ast) {
 
         if (node.type === "assign") {
-            trace.push(() => {
+            pushTraceStep(node.blockId, () => {
                 vars[node.name] = safeEval(node.value);
             });
         }
 
         if (node.type === "print") {
-            trace.push(() => {
+            pushTraceStep(node.blockId, () => {
                 const val = safeEval(node.value);
                 output += (
                     Array.isArray(val)
@@ -186,7 +215,7 @@ function buildTrace(ast) {
         }
 
         if (node.type === "if") {
-            trace.push(() => {
+            pushTraceStep(node.blockId, () => {
                 if (safeEval(node.condition)) {
                     // ★ここで「その場で」実行ではなく
                     executeImmediate(node.body);
@@ -195,7 +224,7 @@ function buildTrace(ast) {
         }
 
         if (node.type === "ifelse") {
-            trace.push(() => {
+            pushTraceStep(node.blockId, () => {
                 if (safeEval(node.condition)) {
                     executeImmediate(node.ifBody);
                 } else {
@@ -211,7 +240,7 @@ function buildTrace(ast) {
 
             for (let i = start; i <= end; i += step) {
 
-                trace.push(() => {
+                pushTraceStep(node.blockId, () => {
                     vars[node.varName] = i;
                 });
 
@@ -276,6 +305,7 @@ function stepStart() {
     output = "";
     trace = [];
     stepIndex = 0;
+    clearStepHighlight();
 
     buildTrace(window.currentAST || []);
     updateUI();
@@ -283,7 +313,7 @@ function stepStart() {
 
 function stepNext() {
     if (stepIndex >= trace.length) return;
-    trace[stepIndex++]();
+    runTraceStep(trace[stepIndex++]);
     updateUI();
 }
 
