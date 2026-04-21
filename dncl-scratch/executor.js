@@ -3,6 +3,7 @@ let output = "";
 
 let trace = [];
 let stepIndex = 0;
+let changedVars = new Set();
 
 function pushTraceStep(blockId, fn) {
     trace.push({
@@ -29,8 +30,62 @@ function highlightBlock(blockId) {
 
 function runTraceStep(step) {
     if (!step) return;
+    changedVars = new Set();
     highlightBlock(step.blockId);
     step.run();
+}
+
+function setVar(name, value) {
+    vars[name] = value;
+    changedVars.add(name);
+}
+
+function formatVarValue(value) {
+    if (Array.isArray(value)) {
+        return JSON.stringify(value);
+    }
+
+    if (typeof value === "string") {
+        return `"${value}"`;
+    }
+
+    if (value === undefined) {
+        return "undefined";
+    }
+
+    return String(value);
+}
+
+function escapeHtml(text) {
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+}
+
+function renderVars() {
+    const varsEl = document.getElementById("vars");
+    const entries = Object.entries(vars);
+
+    if (entries.length === 0) {
+        varsEl.innerHTML = `<div class="vars-empty">まだ変数はありません</div>`;
+        return;
+    }
+
+    varsEl.innerHTML = entries.map(([name, value]) => {
+        const activeClass = changedVars.has(name) ? " var-card-active" : "";
+        const kind = Array.isArray(value) ? "配列" : "値";
+
+        return `
+            <div class="var-card${activeClass}">
+                <div class="var-card-head">
+                    <span class="var-name">${escapeHtml(name)}</span>
+                    <span class="var-kind">${kind}</span>
+                </div>
+                <div class="var-value">${escapeHtml(formatVarValue(value))}</div>
+            </div>
+        `;
+    }).join("");
 }
 
 // ----------------
@@ -199,7 +254,7 @@ function buildTrace(ast) {
 
         if (node.type === "assign") {
             pushTraceStep(node.blockId, () => {
-                vars[node.name] = safeEval(node.value);
+                setVar(node.name, safeEval(node.value));
             });
         }
 
@@ -241,7 +296,7 @@ function buildTrace(ast) {
             for (let i = start; i <= end; i += step) {
 
                 pushTraceStep(node.blockId, () => {
-                    vars[node.varName] = i;
+                    setVar(node.varName, i);
                 });
 
                 // ★ここが重要：展開する
@@ -258,7 +313,7 @@ function executeImmediate(ast) {
     for (let node of ast) {
 
         if (node.type === "assign") {
-            vars[node.name] = safeEval(node.value);
+            setVar(node.name, safeEval(node.value));
         }
 
         if (node.type === "print") {
@@ -290,7 +345,7 @@ function executeImmediate(ast) {
             const step = safeEval(node.step);
 
             for (let i = start; i <= end; i += step) {
-                vars[node.varName] = i;
+                setVar(node.varName, i);
                 executeImmediate(node.body);
             }
         }
@@ -305,6 +360,7 @@ function stepStart() {
     output = "";
     trace = [];
     stepIndex = 0;
+    changedVars = new Set();
     clearStepHighlight();
 
     buildTrace(window.currentAST || []);
@@ -319,6 +375,5 @@ function stepNext() {
 
 function updateUI() {
     document.getElementById("output").textContent = output;
-    document.getElementById("vars").textContent =
-        JSON.stringify(vars, null, 2);
+    renderVars();
 }

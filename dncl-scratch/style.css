@@ -140,6 +140,74 @@ pre {
     padding: 10px;
 }
 
+.vars-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.vars-empty {
+    width: 100%;
+    background: linear-gradient(135deg, #f4f7fb, #e9eef5);
+    color: #567;
+    border: 1px dashed #b8c4d6;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.var-card {
+    display: inline-block;
+    width: fit-content;
+    max-width: 100%;
+    background: linear-gradient(135deg, #ffffff, #f3f7fb);
+    border: 1px solid #d8e1ee;
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 6px 18px rgba(31, 53, 86, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.var-card-active {
+    border-color: #ffb300;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.22), 0 10px 24px rgba(255, 193, 7, 0.18);
+    transform: translateY(-1px);
+}
+
+.var-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.var-name {
+    color: #16324f;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+}
+
+.var-kind {
+    color: #4f6b88;
+    background: #e7eef7;
+    border-radius: 999px;
+    font-size: 12px;
+    padding: 3px 8px;
+}
+
+.var-value {
+    display: inline-block;
+    color: #1e2b3c;
+    background: #eef3f8;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-family: "Courier New", monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-width: min(36ch, 100%);
+}
+
 /* ★スマホ対応 */
 @media (max-width: 800px) {
     .dncl-main {
