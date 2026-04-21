@@ -79,14 +79,28 @@ function renderVars() {
     varsEl.innerHTML = entries.map(([name, value]) => {
         const activeClass = changedVars.has(name) ? " var-card-active" : "";
         const kind = Array.isArray(value) ? "配列" : "値";
+        const valueHtml = Array.isArray(value)
+            ? `
+                <div class="array-var">
+                    <table class="array-var-table">
+                        <tr class="array-var-index-row">
+                            ${value.map((_, index) => `<th class="array-var-cell">${index}</th>`).join("")}
+                        </tr>
+                        <tr class="array-var-value-row">
+                            ${value.map((item) => `<td class="array-var-cell">${escapeHtml(formatVarValue(item))}</td>`).join("")}
+                        </tr>
+                    </table>
+                </div>
+            `
+            : `<div class="var-value">${escapeHtml(formatVarValue(value))}</div>`;
 
         return `
-            <div class="var-card${activeClass}">
+            <div class="var-card${activeClass}${Array.isArray(value) ? " var-card-array" : ""}">
                 <div class="var-card-head">
                     <span class="var-name">${escapeHtml(name)}</span>
                     <span class="var-kind">${kind}</span>
                 </div>
-                <div class="var-value">${escapeHtml(formatVarValue(value))}</div>
+                ${valueHtml}
             </div>
         `;
     }).join("");
