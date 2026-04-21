@@ -161,6 +161,7 @@ pre {
     flex-wrap: wrap;
     gap: 10px;
     align-items: flex-start;
+    margin-bottom: 10px;
 }
 
 .vars-empty {
@@ -222,6 +223,18 @@ pre {
     white-space: pre-wrap;
     word-break: break-word;
     max-width: min(36ch, 100%);
+}
+
+.step-explanation {
+    background: linear-gradient(135deg, #fff9e8, #fff3c9);
+    color: #4d3c12;
+    border: 1px solid #f0d889;
+    border-radius: 12px;
+    padding: 12px 14px;
+    line-height: 1.7;
+    box-shadow: 0 6px 18px rgba(157, 124, 20, 0.08);
+    margin-bottom: 18px;
+    white-space: pre-wrap;
 }
 
 /* ★スマホ対応 */

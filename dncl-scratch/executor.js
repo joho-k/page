@@ -4,11 +4,13 @@ let output = "";
 let trace = [];
 let stepIndex = 0;
 let changedVars = new Set();
+let currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。";
 
-function pushTraceStep(blockId, fn) {
+function pushTraceStep(blockId, fn, getExplanation = null) {
     trace.push({
         blockId,
-        run: fn
+        run: fn,
+        getExplanation
     });
 }
 
@@ -32,6 +34,8 @@ function runTraceStep(step) {
     if (!step) return;
     changedVars = new Set();
     highlightBlock(step.blockId);
+    const varsBefore = structuredClone(vars);
+    currentExplanation = step.getExplanation ? step.getExplanation(varsBefore) : "";
     step.run();
 }
 
@@ -86,6 +90,135 @@ function renderVars() {
             </div>
         `;
     }).join("");
+}
+
+function renderExplanation() {
+    const explanationEl = document.getElementById("step-explanation");
+    explanationEl.textContent = currentExplanation || "このステップの説明はありません。";
+}
+
+function safeEvalWithScope(expr, scope) {
+    const backup = vars;
+    vars = scope;
+    try {
+        return safeEval(expr);
+    } finally {
+        vars = backup;
+    }
+}
+
+function isSimpleVariable(expr) {
+    return /^[a-zA-Z_]\w*$/.test(expr.trim());
+}
+
+function parseSimpleArrayAccess(expr, scope) {
+    const match = expr.trim().match(/^([a-zA-Z_]\w*)\[(.+)\]$/);
+    if (!match) return null;
+
+    const arrayName = match[1];
+    const indexExpr = match[2].trim();
+    const indexValue = safeEvalWithScope(indexExpr, scope);
+    const arrayValue = scope[arrayName];
+    const itemValue = Array.isArray(arrayValue) ? arrayValue[indexValue] : undefined;
+
+    return {
+        arrayName,
+        indexExpr,
+        indexValue,
+        itemValue
+    };
+}
+
+function parseSimpleBinaryExpression(expr) {
+    const tokens = tokenize(expr.trim());
+    const operators = ["+", "-", "*", "/", "%"];
+    let bracketDepth = 0;
+    let parenDepth = 0;
+
+    function tokensToExpr(parts) {
+        return parts.join("").trim();
+    }
+
+    for (let i = 0; i < tokens.length; i += 1) {
+        const token = tokens[i];
+
+        if (token === "[") bracketDepth += 1;
+        if (token === "]") bracketDepth -= 1;
+        if (token === "(") parenDepth += 1;
+        if (token === ")") parenDepth -= 1;
+
+        if (bracketDepth === 0 && parenDepth === 0 && operators.includes(token)) {
+            const left = tokensToExpr(tokens.slice(0, i));
+            const right = tokensToExpr(tokens.slice(i + 1));
+
+            if (!left || !right) return null;
+
+            return {
+                left,
+                op: token,
+                right
+            };
+        }
+    }
+
+    return null;
+}
+
+function buildArrayAccessExplanation(access) {
+    if (!access) return "";
+
+    return `配列 ${access.arrayName}[${access.indexExpr}] は、配列 ${access.arrayName} の ${access.indexValue} 番目の値です。${access.arrayName} の ${access.indexValue} 番目の値は ${formatVarValue(access.itemValue)} です。`;
+}
+
+function buildAssignExplanation(node, scope) {
+    const binary = parseSimpleBinaryExpression(node.value);
+
+    if (binary) {
+        const leftValue = safeEvalWithScope(binary.left, scope);
+        const rightValue = safeEvalWithScope(binary.right, scope);
+        const rightArrayAccess = parseSimpleArrayAccess(binary.right, scope);
+        const rightText = rightArrayAccess
+            ? `${binary.right} は ${rightArrayAccess.arrayName}[${rightArrayAccess.indexValue}] つまり 配列 ${rightArrayAccess.arrayName} の ${rightArrayAccess.indexValue} 番目の値なので、${formatVarValue(rightValue)} です。`
+            : `${binary.right} は ${formatVarValue(rightValue)} です。`;
+
+        return `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)} です。この計算結果を ${node.name} に代入します。`;
+    }
+
+    const arrayExplanation = buildArrayAccessExplanation(parseSimpleArrayAccess(node.value, scope));
+    const value = safeEvalWithScope(node.value, scope);
+
+    return [
+        arrayExplanation,
+        `変数 ${node.name} に ${formatVarValue(value)} を代入しました。`
+    ].filter(Boolean).join(" ");
+}
+
+function buildPrintExplanation(node, scope) {
+    const arrayExplanation = buildArrayAccessExplanation(parseSimpleArrayAccess(node.value, scope));
+    const value = safeEvalWithScope(node.value, scope);
+
+    if (isSimpleVariable(node.value)) {
+        return `変数 ${node.value.trim()} の値 ${formatVarValue(value)} を表示しました。`;
+    }
+
+    return [
+        arrayExplanation,
+        `${node.value} の値 ${formatVarValue(value)} を表示しました。`
+    ].filter(Boolean).join(" ");
+}
+
+function buildForExplanation(node, current, end, step, isLast, start) {
+    if (current === start) {
+        return `繰り返しが始まりました。変数 ${node.varName} を用意します。最初の値は ${current} です。${end} まで繰り返します。`;
+    }
+
+    const previousValue = current - step;
+
+    if (isLast) {
+        return `繰り返しを続けます。${node.varName} の値は ${previousValue} でしたが、${step}ずつ増えるので次の値は ${current} です。${end} まで繰り返すので、光っているブロックの繰り返しはこれが最後です。`;
+    }
+
+    return `繰り返しを続けます。${node.varName} の値は ${previousValue} でしたが、${step}ずつ増えるので次の値は ${current} です。${end} まで繰り返すので、まだ繰り返しは続きます。`;
 }
 
 // ----------------
@@ -255,7 +388,7 @@ function buildTrace(ast) {
         if (node.type === "assign") {
             pushTraceStep(node.blockId, () => {
                 setVar(node.name, safeEval(node.value));
-            });
+            }, (scope) => buildAssignExplanation(node, scope));
         }
 
         if (node.type === "print") {
@@ -266,7 +399,7 @@ function buildTrace(ast) {
                         ? JSON.stringify(val)
                         : val
                 ) + "\n";
-            });
+            }, (scope) => buildPrintExplanation(node, scope));
         }
 
         if (node.type === "if") {
@@ -275,7 +408,7 @@ function buildTrace(ast) {
                     // ★ここで「その場で」実行ではなく
                     executeImmediate(node.body);
                 }
-            });
+            }, (scope) => `条件 ${node.condition} を確認しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`);
         }
 
         if (node.type === "ifelse") {
@@ -285,7 +418,7 @@ function buildTrace(ast) {
                 } else {
                     executeImmediate(node.elseBody);
                 }
-            });
+            }, (scope) => `条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`);
         }
 
         if (node.type === "for") {
@@ -294,10 +427,12 @@ function buildTrace(ast) {
             const step = safeEval(node.step);
 
             for (let i = start; i <= end; i += step) {
+                const current = i;
+                const isLast = current + step > end;
 
                 pushTraceStep(node.blockId, () => {
-                    setVar(node.varName, i);
-                });
+                    setVar(node.varName, current);
+                }, () => buildForExplanation(node, current, end, step, isLast, start));
 
                 // ★ここが重要：展開する
                 buildTrace(node.body);
@@ -361,6 +496,7 @@ function stepStart() {
     trace = [];
     stepIndex = 0;
     changedVars = new Set();
+    currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。";
     clearStepHighlight();
 
     buildTrace(window.currentAST || []);
@@ -376,4 +512,5 @@ function stepNext() {
 function updateUI() {
     document.getElementById("output").textContent = output;
     renderVars();
+    renderExplanation();
 }
