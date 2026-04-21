@@ -92,22 +92,23 @@
                 <div class="dncl-left">
                     <h4>プログラム</h4>
                     <div id="workspace"></div>
-                </div>
-
-                <div class="dncl-right">
 
                     <h4>コード</h4>
                     <pre id="code"></pre>
+                </div>
 
-                    <button onclick="run()">▶ 実行</button>
-                    <button onclick="stepStart()">⏭ ステップ開始</button>
-                    <button onclick="stepNext()">▶ 次へ</button>
-
-                    <h4>出力</h4>
-                    <pre id="output"></pre>
+                <div class="dncl-right">
+                    <div class="run-buttons">
+                        <button onclick="run()">▶ 実行</button>
+                        <button onclick="stepStart()">⏭ ステップ開始</button>
+                        <button onclick="stepNext()">▶ 次へ</button>
+                    </div>
 
                     <h4>変数</h4>
                     <div id="vars" class="vars-panel"></div>
+
+                    <h4>出力</h4>
+                    <pre id="output"></pre>
 
                 </div>
             </div>
