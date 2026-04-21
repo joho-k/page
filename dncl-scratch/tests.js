@@ -45,6 +45,37 @@ const TESTS = [
         ],
         expected: "1\n"
     },
+    {
+        name: "乱数()",
+        ast: [
+            { type: "assign", name: "r", value: "乱数()" }
+        ],
+        assert: () => typeof vars.r === "number" && vars.r >= 0 && vars.r < 1
+    },
+    {
+        name: "乱数() の代入値と表示値が一致",
+        customRun: () => {
+            vars = {};
+            output = "";
+            trace = [];
+            stepIndex = 0;
+            currentExplanation = "";
+
+            buildTrace([
+                { type: "assign", name: "x", value: "乱数()" },
+                { type: "print", value: "x" }
+            ]);
+
+            runTraceStep(trace[stepIndex++]);
+            const assigned = vars.x;
+            const explanationMatches = currentExplanation.includes(String(assigned));
+
+            runTraceStep(trace[stepIndex++]);
+            const printed = Number(output.trim());
+
+            return explanationMatches && printed === assigned;
+        }
+    },
 
     // ----------------
     // 配列
@@ -319,14 +350,20 @@ function runTests() {
             trace = [];
             stepIndex = 0;
 
-            // 実行
-            buildTrace(test.ast);
+            let passed;
 
-            while (stepIndex < trace.length) {
-                runTraceStep(trace[stepIndex++]);
+            if (test.customRun) {
+                passed = test.customRun();
+            } else {
+                // 実行
+                buildTrace(test.ast);
+
+                while (stepIndex < trace.length) {
+                    runTraceStep(trace[stepIndex++]);
+                }
+
+                passed = test.assert ? test.assert() : output === test.expected;
             }
-
-            const passed = output === test.expected;
 
             if (passed) success++;
 
