@@ -2,6 +2,52 @@
     margin: 5px;
 }
 
+.palette-block-button-active {
+    outline: 2px solid #ffb300;
+    outline-offset: 1px;
+}
+
+.palette-preview {
+    position: relative;
+    margin-top: 8px;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, #f7fbff, #edf4fb);
+    border: 1px solid #d7e3f0;
+    border-radius: 12px;
+    padding: 8px 34px 8px 10px;
+    color: #28415b;
+    line-height: 1.45;
+}
+
+.palette-preview-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgba(22, 50, 79, 0.08);
+    color: #28415b;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.palette-preview-hidden {
+    display: none;
+}
+
+.palette-preview pre {
+    margin: 4px 0;
+    background: #16324f;
+    color: #f5fbff;
+    border-radius: 8px;
+    padding: 6px 8px;
+    overflow-x: auto;
+}
+
 .sample-buttons {
     display: inline-flex;
     gap: 4px;
@@ -312,6 +358,7 @@ pre {
     margin-bottom: 18px;
     white-space: pre-wrap;
 }
+
 
 /* ★スマホ対応 */
 @media (max-width: 800px) {

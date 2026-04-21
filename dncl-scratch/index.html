@@ -77,17 +77,22 @@
         <main>
 
             <div class="palette">
-                <button onclick="addBlock('assign')">代入</button>
-                <button onclick="addBlock('print')">表示</button>
-                <button onclick="addBlock('if')">もし</button>
-                <button onclick="addBlock('ifelse')">もし＋そうでなければ</button>
-                <button onclick="addBlock('for')">繰り返し</button>
-                <button onclick="addBlock('array')">配列</button>
-                <button onclick="addBlock('expr')">計算</button>
+                <button class="palette-block-button" data-block-type="assign">代入</button>
+                <button class="palette-block-button" data-block-type="print">表示</button>
+                <button class="palette-block-button" data-block-type="if">もし</button>
+                <button class="palette-block-button" data-block-type="ifelse">もし＋そうでなければ</button>
+                <button class="palette-block-button" data-block-type="for">繰り返し</button>
+                <button class="palette-block-button" data-block-type="array">配列</button>
+                <button class="palette-block-button" data-block-type="expr">計算</button>
                 <span class="sample-buttons">
                     <button onclick="loadExample1()">例1</button>
                     <button onclick="loadExample2()">例2</button>
                 </span>
+            </div>
+            <div id="palette-preview" class="palette-preview">
+                <button id="toggle-palette-preview-button" class="palette-preview-close"
+                    onclick="hidePalettePreview()">×</button>
+                <div id="palette-preview-content">ブロックにマウスを重ねると説明が表示されます。スマホでは1回目のタップで説明表示・追加がされます。</div>
             </div>
 
             <div class="dncl-main">
