@@ -56,7 +56,7 @@ function renderPalettePreview(type = null) {
     }
 
     if (!type || !BLOCK_PREVIEWS[type]) {
-        previewEl.innerHTML = "ブロックにマウスを重ねると説明が表示されます。スマホでは1回目のタップで説明表示・追加されます。";
+        previewEl.innerHTML = "ブロックにマウスを重ねると説明が表示されます。スマホでは1回目のタップで説明表示・2回目のタップでブロックが追加されます。";
         return;
     }
 
