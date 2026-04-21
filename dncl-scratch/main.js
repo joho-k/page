@@ -5,6 +5,7 @@ function run() {
     stepIndex = 0;
     changedVars = new Set();
     currentExplanation = "一括実行が終わりました。ステップ開始を押すと、1 行ずつ説明を見ながら進められます。";
+    highlightedArrayAccesses = new Set();
     clearStepHighlight();
 
     // トレース生成
