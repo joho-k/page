@@ -3,13 +3,14 @@ function run() {
     output = "";
     trace = [];
     stepIndex = 0;
+    clearStepHighlight();
 
     // トレース生成
     buildTrace(window.currentAST || []);
 
     // 全実行
     while (stepIndex < trace.length) {
-        trace[stepIndex++]();
+        runTraceStep(trace[stepIndex++]);
     }
 
     // UI更新
@@ -17,4 +18,3 @@ function run() {
     document.getElementById("vars").textContent =
         JSON.stringify(vars, null, 2);    
 }
-
