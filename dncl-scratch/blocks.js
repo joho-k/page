@@ -86,7 +86,7 @@ function setInputValue(input, value) {
     input.dispatchEvent(new Event("input"));
 }
 
-function loadDebugSample() {
+function loadExample1() {
     workspace.innerHTML = "";
 
     const sumAAssign = createAssignBlock();
@@ -176,6 +176,38 @@ function loadDebugSample() {
     setInputValue(printSumB.querySelector("input"), "sum_b");
     workspace.appendChild(printSumB);
 
+    updateCode();
+}
+
+function loadExample2() {
+    workspace.innerHTML = "";
+
+    const outerFor = createForBlock();
+    const outerInputs = outerFor.querySelectorAll("input");
+    setInputValue(outerInputs[0], "i");
+    setInputValue(outerInputs[1], "1");
+    setInputValue(outerInputs[2], "9");
+    setInputValue(outerInputs[3], "1");
+
+    const outerBody = outerFor.querySelector(".children");
+
+    const innerFor = createForBlock();
+    const innerInputs = innerFor.querySelectorAll("input");
+    setInputValue(innerInputs[0], "j");
+    setInputValue(innerInputs[1], "1");
+    setInputValue(innerInputs[2], "9");
+    setInputValue(innerInputs[3], "1");
+
+    const innerBody = innerFor.querySelector(".children");
+    const printBlock = createPrintBlock();
+    setInputValue(printBlock.querySelector("input"), 'i + "×" + j + "=" + i * j');
+    innerBody.appendChild(printBlock);
+    updatePlaceholder(innerBody);
+
+    outerBody.appendChild(innerFor);
+    updatePlaceholder(outerBody);
+
+    workspace.appendChild(outerFor);
     updateCode();
 }
 

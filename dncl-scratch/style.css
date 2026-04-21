@@ -2,6 +2,18 @@
     margin: 5px;
 }
 
+.sample-buttons {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.sample-buttons button {
+    font-size: 12px;
+    padding: 3px 8px;
+}
+
 /* ★左右レイアウト */
 .dncl-main {
     display: flex;
