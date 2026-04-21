@@ -90,22 +90,21 @@ function createArrayBlock() {
 
     function addItem(val = "0") {
         const item = document.createElement("div");
+        item.className = "array-item";
 
         const input = document.createElement("input");
         input.value = val;
         autoResizeInput(input);
-
-        const del = document.createElement("button");
-        del.textContent = "×";
-
-        del.onclick = () => {
-            item.remove();
-            updateCode();
-        };
+        input.addEventListener("blur", () => {
+            if (input.value.trim() === "") {
+                item.remove();
+                updateCode();
+            }
+        });
 
         item.appendChild(input);
-        item.appendChild(del);
         items.appendChild(item);
+        updateCode();
     }
 
     addBtn.onclick = () => addItem();
@@ -290,7 +289,9 @@ function buildAST(container) {
 
             const values = Array.from(
                 node.querySelectorAll(".array-items input")
-            ).map(i => i.value);
+            )
+                .map(i => i.value.trim())
+                .filter(Boolean);
 
             ast.push({
                 type: "assign",
