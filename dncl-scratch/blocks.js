@@ -36,8 +36,8 @@ const BLOCK_PREVIEWS = {
     },
     expr: {
         title: "計算",
-        code: `x + 1`,
-        text: "足し算、引き算、掛け算、割り算、あまりを作れます。"
+        code: `例: x + 1`,
+        text: "足し算の他に、引き算、掛け算、割り算、あまりを作れます。"
     },
     random: {
         title: "乱数",
