@@ -81,6 +81,61 @@ function addBlock(type) {
     updateCode();
 }
 
+function setInputValue(input, value) {
+    input.value = value;
+    input.dispatchEvent(new Event("input"));
+}
+
+function loadDebugSample() {
+    workspace.innerHTML = "";
+
+    const sumAssign = createAssignBlock();
+    setInputValue(sumAssign.querySelector(".assign-inline > input"), "sum");
+    setInputValue(sumAssign.querySelector(".assign-value"), "0");
+    workspace.appendChild(sumAssign);
+
+    const arrayAssign = createArrayBlock();
+    setInputValue(arrayAssign.querySelector("input"), "a");
+
+    const arrayItems = arrayAssign.querySelector(".array-items");
+    arrayItems.innerHTML = "";
+    ["20", "69", "20", "98", "30", "63", "18", "93"].forEach((value) => {
+        const addBtn = arrayAssign.querySelector(".add-item");
+        addBtn.click();
+        const lastInput = arrayAssign.querySelector(".array-item:last-child input");
+        setInputValue(lastInput, value);
+    });
+    workspace.appendChild(arrayAssign);
+
+    const forBlock = createForBlock();
+    const forInputs = forBlock.querySelectorAll("input");
+    setInputValue(forInputs[0], "i");
+    setInputValue(forInputs[1], "0");
+    setInputValue(forInputs[2], "7");
+    setInputValue(forInputs[3], "1");
+
+    const loopBody = forBlock.querySelector(".children");
+    const loopAssign = createAssignBlock();
+    setInputValue(loopAssign.querySelector(".assign-inline > input"), "sum");
+    const loopExpr = createExprBlock();
+    const exprInputs = loopExpr.querySelectorAll("input");
+    setInputValue(exprInputs[0], "sum");
+    loopExpr.querySelector("select").value = "+";
+    loopExpr.querySelector("select").dispatchEvent(new Event("change"));
+    setInputValue(exprInputs[1], "a[i]");
+    loopAssign.querySelector(".expr-zone").appendChild(loopExpr);
+    syncAssignZone(loopAssign.querySelector(".expr-zone"));
+    loopBody.appendChild(loopAssign);
+    updatePlaceholder(loopBody);
+    workspace.appendChild(forBlock);
+
+    const printBlock = createPrintBlock();
+    setInputValue(printBlock.querySelector("input"), "sum");
+    workspace.appendChild(printBlock);
+
+    updateCode();
+}
+
 // ----------------
 // 配列ブロック ★
 // ----------------

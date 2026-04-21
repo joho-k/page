@@ -3,6 +3,7 @@ function run() {
     output = "";
     trace = [];
     stepIndex = 0;
+    changedVars = new Set();
     clearStepHighlight();
 
     // トレース生成
@@ -14,7 +15,5 @@ function run() {
     }
 
     // UI更新
-    document.getElementById("output").textContent = output;
-    document.getElementById("vars").textContent =
-        JSON.stringify(vars, null, 2);    
+    updateUI();
 }
