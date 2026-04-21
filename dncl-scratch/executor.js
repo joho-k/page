@@ -205,6 +205,12 @@ function buildStepDetails(text, arrayAccesses = []) {
     };
 }
 
+function insertTraceAtCurrentPosition(ast) {
+    const insertedSteps = [];
+    buildTrace(ast, insertedSteps);
+    trace.splice(stepIndex, 0, ...insertedSteps);
+}
+
 function buildAssignExplanation(node, scope) {
     const binary = parseSimpleBinaryExpression(node.value);
 
@@ -428,43 +434,58 @@ function safeEval(expr) {
 // ----------------
 // 正しいトレース生成（事前展開🔥）
 // ----------------
-function buildTrace(ast) {
+function buildTrace(ast, targetTrace = trace) {
     for (let node of ast) {
 
         if (node.type === "assign") {
-            pushTraceStep(node.blockId, () => {
+            targetTrace.push({
+                blockId: node.blockId,
+                run: () => {
                 setVar(node.name, safeEval(node.value));
-            }, (scope) => buildAssignExplanation(node, scope));
+                },
+                getDetails: (scope) => buildAssignExplanation(node, scope)
+            });
         }
 
         if (node.type === "print") {
-            pushTraceStep(node.blockId, () => {
-                const val = safeEval(node.value);
-                output += (
-                    Array.isArray(val)
-                        ? JSON.stringify(val)
-                        : val
-                ) + "\n";
-            }, (scope) => buildPrintExplanation(node, scope));
+            targetTrace.push({
+                blockId: node.blockId,
+                run: () => {
+                    const val = safeEval(node.value);
+                    output += (
+                        Array.isArray(val)
+                            ? JSON.stringify(val)
+                            : val
+                    ) + "\n";
+                },
+                getDetails: (scope) => buildPrintExplanation(node, scope)
+            });
         }
 
         if (node.type === "if") {
-            pushTraceStep(node.blockId, () => {
-                if (safeEval(node.condition)) {
-                    // ★ここで「その場で」実行ではなく
-                    executeImmediate(node.body);
-                }
-            }, (scope) => buildStepDetails(`条件 ${node.condition} を確認しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`));
+            targetTrace.push({
+                blockId: node.blockId,
+                run: () => {
+                    if (safeEval(node.condition)) {
+                        insertTraceAtCurrentPosition(node.body);
+                    }
+                },
+                getDetails: (scope) => buildStepDetails(`条件 ${node.condition} を確認しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`)
+            });
         }
 
         if (node.type === "ifelse") {
-            pushTraceStep(node.blockId, () => {
-                if (safeEval(node.condition)) {
-                    executeImmediate(node.ifBody);
-                } else {
-                    executeImmediate(node.elseBody);
-                }
-            }, (scope) => buildStepDetails(`条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`));
+            targetTrace.push({
+                blockId: node.blockId,
+                run: () => {
+                    if (safeEval(node.condition)) {
+                        insertTraceAtCurrentPosition(node.ifBody);
+                    } else {
+                        insertTraceAtCurrentPosition(node.elseBody);
+                    }
+                },
+                getDetails: (scope) => buildStepDetails(`条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`)
+            });
         }
 
         if (node.type === "for") {
@@ -476,12 +497,16 @@ function buildTrace(ast) {
                 const current = i;
                 const isLast = current + step > end;
 
-                pushTraceStep(node.blockId, () => {
-                    setVar(node.varName, current);
-                }, () => buildStepDetails(buildForExplanation(node, current, end, step, isLast, start)));
+                targetTrace.push({
+                    blockId: node.blockId,
+                    run: () => {
+                        setVar(node.varName, current);
+                    },
+                    getDetails: () => buildStepDetails(buildForExplanation(node, current, end, step, isLast, start))
+                });
 
                 // ★ここが重要：展開する
-                buildTrace(node.body);
+                buildTrace(node.body, targetTrace);
             }
         }
     }
