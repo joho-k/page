@@ -89,10 +89,15 @@ function setInputValue(input, value) {
 function loadDebugSample() {
     workspace.innerHTML = "";
 
-    const sumAssign = createAssignBlock();
-    setInputValue(sumAssign.querySelector(".assign-inline > input"), "sum");
-    setInputValue(sumAssign.querySelector(".assign-value"), "0");
-    workspace.appendChild(sumAssign);
+    const sumAAssign = createAssignBlock();
+    setInputValue(sumAAssign.querySelector(".assign-inline > input"), "sum_a");
+    setInputValue(sumAAssign.querySelector(".assign-value"), "0");
+    workspace.appendChild(sumAAssign);
+
+    const sumBAssign = createAssignBlock();
+    setInputValue(sumBAssign.querySelector(".assign-inline > input"), "sum_b");
+    setInputValue(sumBAssign.querySelector(".assign-value"), "0");
+    workspace.appendChild(sumBAssign);
 
     const arrayAssign = createArrayBlock();
     setInputValue(arrayAssign.querySelector("input"), "a");
@@ -115,23 +120,61 @@ function loadDebugSample() {
     setInputValue(forInputs[3], "1");
 
     const loopBody = forBlock.querySelector(".children");
-    const loopAssign = createAssignBlock();
-    setInputValue(loopAssign.querySelector(".assign-inline > input"), "sum");
-    const loopExpr = createExprBlock();
-    const exprInputs = loopExpr.querySelectorAll("input");
-    setInputValue(exprInputs[0], "sum");
-    loopExpr.querySelector("select").value = "+";
-    loopExpr.querySelector("select").dispatchEvent(new Event("change"));
-    setInputValue(exprInputs[1], "a[i]");
-    loopAssign.querySelector(".expr-zone").appendChild(loopExpr);
-    syncAssignZone(loopAssign.querySelector(".expr-zone"));
-    loopBody.appendChild(loopAssign);
+
+    const amariAssign = createAssignBlock();
+    setInputValue(amariAssign.querySelector(".assign-inline > input"), "amari");
+    const amariExpr = createExprBlock();
+    const amariExprInputs = amariExpr.querySelectorAll("input");
+    setInputValue(amariExprInputs[0], "i");
+    amariExpr.querySelector("select").value = "%";
+    amariExpr.querySelector("select").dispatchEvent(new Event("change"));
+    setInputValue(amariExprInputs[1], "2");
+    amariAssign.querySelector(".expr-zone").appendChild(amariExpr);
+    syncAssignZone(amariAssign.querySelector(".expr-zone"));
+    loopBody.appendChild(amariAssign);
+
+    const ifElseBlock = createIfElseBlock();
+    setInputValue(ifElseBlock.querySelector("input"), "amari == 0");
+
+    const ifBody = ifElseBlock.querySelector(".if-body");
+    const sumAUpdate = createAssignBlock();
+    setInputValue(sumAUpdate.querySelector(".assign-inline > input"), "sum_a");
+    const sumAExpr = createExprBlock();
+    const sumAExprInputs = sumAExpr.querySelectorAll("input");
+    setInputValue(sumAExprInputs[0], "sum_a");
+    sumAExpr.querySelector("select").value = "+";
+    sumAExpr.querySelector("select").dispatchEvent(new Event("change"));
+    setInputValue(sumAExprInputs[1], "a[i]");
+    sumAUpdate.querySelector(".expr-zone").appendChild(sumAExpr);
+    syncAssignZone(sumAUpdate.querySelector(".expr-zone"));
+    ifBody.appendChild(sumAUpdate);
+    updatePlaceholder(ifBody);
+
+    const elseBody = ifElseBlock.querySelector(".else-body");
+    const sumBUpdate = createAssignBlock();
+    setInputValue(sumBUpdate.querySelector(".assign-inline > input"), "sum_b");
+    const sumBExpr = createExprBlock();
+    const sumBExprInputs = sumBExpr.querySelectorAll("input");
+    setInputValue(sumBExprInputs[0], "sum_b");
+    sumBExpr.querySelector("select").value = "+";
+    sumBExpr.querySelector("select").dispatchEvent(new Event("change"));
+    setInputValue(sumBExprInputs[1], "a[i]");
+    sumBUpdate.querySelector(".expr-zone").appendChild(sumBExpr);
+    syncAssignZone(sumBUpdate.querySelector(".expr-zone"));
+    elseBody.appendChild(sumBUpdate);
+    updatePlaceholder(elseBody);
+
+    loopBody.appendChild(ifElseBlock);
     updatePlaceholder(loopBody);
     workspace.appendChild(forBlock);
 
-    const printBlock = createPrintBlock();
-    setInputValue(printBlock.querySelector("input"), "sum");
-    workspace.appendChild(printBlock);
+    const printSumA = createPrintBlock();
+    setInputValue(printSumA.querySelector("input"), "sum_a");
+    workspace.appendChild(printSumA);
+
+    const printSumB = createPrintBlock();
+    setInputValue(printSumB.querySelector("input"), "sum_b");
+    workspace.appendChild(printSumB);
 
     updateCode();
 }
