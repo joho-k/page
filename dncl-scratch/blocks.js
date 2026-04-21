@@ -1,5 +1,129 @@
 const workspace = document.getElementById("workspace");
 let blockIdCounter = 0;
+let activePaletteButton = null;
+let palettePreviewVisible = true;
+
+const BLOCK_PREVIEWS = {
+    assign: {
+        title: "代入",
+        code: `x = 0`,
+        text: "変数に値や計算結果を入れます。右側には直接入力も、計算ブロックの配置もできます。"
+    },
+    print: {
+        title: "表示",
+        code: `表示する(x)`,
+        text: "変数や計算結果を出力します。"
+    },
+    if: {
+        title: "もし",
+        code: `もし x > 0 ならば:\n  表示する(x)`,
+        text: "条件が正しいときだけ中の処理を実行します。"
+    },
+    ifelse: {
+        title: "もし＋そうでなければ",
+        code: `もし x > 0 ならば:\n  表示する("正")\nそうでなければ:\n  表示する("負か0")`,
+        text: "条件によって2通りの処理を使い分けます。"
+    },
+    for: {
+        title: "繰り返し",
+        code: `i を 1 から 5 まで 1 ずつ増やしながら繰り返す:\n  表示する(i)`,
+        text: "回数を決めて、同じ処理を何度も行います。"
+    },
+    array: {
+        title: "配列",
+        code: `a = [1, 2, 3]`,
+        text: "複数の値を1つにまとめて扱います。"
+    },
+    expr: {
+        title: "計算",
+        code: `x + 1`,
+        text: "足し算、引き算、掛け算、割り算、あまりを作れます。"
+    }
+};
+
+function isTouchLikeDevice() {
+    return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+}
+
+function renderPalettePreview(type = null) {
+    const previewEl = document.getElementById("palette-preview-content");
+    const previewWrapEl = document.getElementById("palette-preview");
+
+    previewWrapEl.classList.toggle("palette-preview-hidden", !palettePreviewVisible);
+
+    if (!palettePreviewVisible) {
+        return;
+    }
+
+    if (!type || !BLOCK_PREVIEWS[type]) {
+        previewEl.innerHTML = "ブロックにマウスを重ねると説明が表示されます。スマホでは1回目のタップで説明表示・追加されます。";
+        return;
+    }
+
+    const preview = BLOCK_PREVIEWS[type];
+    previewEl.innerHTML = `
+        <strong>${preview.title}</strong>
+        <pre>${preview.code}</pre>
+        <div>${preview.text}</div>
+    `;
+}
+
+function setActivePaletteButton(button) {
+    document.querySelectorAll(".palette-block-button")
+        .forEach(el => el.classList.remove("palette-block-button-active"));
+
+    activePaletteButton = button;
+
+    if (button) {
+        palettePreviewVisible = true;
+        button.classList.add("palette-block-button-active");
+        renderPalettePreview(button.dataset.blockType);
+    } else {
+        renderPalettePreview(null);
+    }
+}
+
+function setupPaletteButtons() {
+    const buttons = document.querySelectorAll(".palette-block-button");
+
+    buttons.forEach((button) => {
+        const type = button.dataset.blockType;
+
+        button.addEventListener("mouseenter", () => {
+            if (isTouchLikeDevice()) return;
+            setActivePaletteButton(button);
+        });
+
+        button.addEventListener("focus", () => {
+            setActivePaletteButton(button);
+        });
+
+        button.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if (isTouchLikeDevice()) {
+                if (activePaletteButton !== button) {
+                    setActivePaletteButton(button);
+                    return;
+                }
+            }
+
+            addBlock(type);
+            setActivePaletteButton(button);
+        });
+    });
+
+    const palette = document.querySelector(".palette");
+    palette.addEventListener("mouseleave", () => {
+        if (isTouchLikeDevice()) return;
+        setActivePaletteButton(null);
+    });
+}
+
+function hidePalettePreview() {
+    palettePreviewVisible = false;
+    renderPalettePreview(activePaletteButton?.dataset.blockType || null);
+}
 
 // ----------------
 // プレースホルダー
@@ -642,3 +766,5 @@ function updateCode() {
 
     window.currentAST = ast;
 }
+
+setupPaletteButtons();
