@@ -5,12 +5,13 @@ let trace = [];
 let stepIndex = 0;
 let changedVars = new Set();
 let currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。";
+let highlightedArrayAccesses = new Set();
 
-function pushTraceStep(blockId, fn, getExplanation = null) {
+function pushTraceStep(blockId, fn, getDetails = null) {
     trace.push({
         blockId,
         run: fn,
-        getExplanation
+        getDetails
     });
 }
 
@@ -35,7 +36,9 @@ function runTraceStep(step) {
     changedVars = new Set();
     highlightBlock(step.blockId);
     const varsBefore = structuredClone(vars);
-    currentExplanation = step.getExplanation ? step.getExplanation(varsBefore) : "";
+    const details = step.getDetails ? step.getDetails(varsBefore) : null;
+    currentExplanation = details?.text || "";
+    highlightedArrayAccesses = new Set(details?.arrayAccesses || []);
     step.run();
 }
 
@@ -84,10 +87,16 @@ function renderVars() {
                 <div class="array-var">
                     <table class="array-var-table">
                         <tr class="array-var-index-row">
-                            ${value.map((_, index) => `<th class="array-var-cell">${index}</th>`).join("")}
+                            ${value.map((_, index) => {
+                                const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
+                                return `<th class="array-var-cell${highlightClass}">${index}</th>`;
+                            }).join("")}
                         </tr>
                         <tr class="array-var-value-row">
-                            ${value.map((item) => `<td class="array-var-cell">${escapeHtml(formatVarValue(item))}</td>`).join("")}
+                            ${value.map((item, index) => {
+                                const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
+                                return `<td class="array-var-cell${highlightClass}">${escapeHtml(formatVarValue(item))}</td>`;
+                            }).join("")}
                         </tr>
                     </table>
                 </div>
@@ -184,6 +193,18 @@ function buildArrayAccessExplanation(access) {
     return `配列 ${access.arrayName}[${access.indexExpr}] は、配列 ${access.arrayName} の ${access.indexValue} 番目の値です。${access.arrayName} の ${access.indexValue} 番目の値は ${formatVarValue(access.itemValue)} です。`;
 }
 
+function toArrayAccessKey(access) {
+    if (!access) return null;
+    return `${access.arrayName}:${access.indexValue}`;
+}
+
+function buildStepDetails(text, arrayAccesses = []) {
+    return {
+        text,
+        arrayAccesses: arrayAccesses.filter(Boolean)
+    };
+}
+
 function buildAssignExplanation(node, scope) {
     const binary = parseSimpleBinaryExpression(node.value);
 
@@ -195,30 +216,41 @@ function buildAssignExplanation(node, scope) {
             ? `${binary.right} は ${rightArrayAccess.arrayName}[${rightArrayAccess.indexValue}] つまり 配列 ${rightArrayAccess.arrayName} の ${rightArrayAccess.indexValue} 番目の値なので、${formatVarValue(rightValue)} です。`
             : `${binary.right} は ${formatVarValue(rightValue)} です。`;
 
-        return `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)} です。この計算結果を ${node.name} に代入します。`;
+        return buildStepDetails(
+            `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)} です。この計算結果を ${node.name} に代入します。`,
+            [toArrayAccessKey(rightArrayAccess)]
+        );
     }
 
-    const arrayExplanation = buildArrayAccessExplanation(parseSimpleArrayAccess(node.value, scope));
+    const arrayAccess = parseSimpleArrayAccess(node.value, scope);
+    const arrayExplanation = buildArrayAccessExplanation(arrayAccess);
     const value = safeEvalWithScope(node.value, scope);
 
-    return [
-        arrayExplanation,
-        `変数 ${node.name} に ${formatVarValue(value)} を代入しました。`
-    ].filter(Boolean).join(" ");
+    return buildStepDetails(
+        [
+            arrayExplanation,
+            `変数 ${node.name} に ${formatVarValue(value)} を代入しました。`
+        ].filter(Boolean).join(" "),
+        [toArrayAccessKey(arrayAccess)]
+    );
 }
 
 function buildPrintExplanation(node, scope) {
-    const arrayExplanation = buildArrayAccessExplanation(parseSimpleArrayAccess(node.value, scope));
+    const arrayAccess = parseSimpleArrayAccess(node.value, scope);
+    const arrayExplanation = buildArrayAccessExplanation(arrayAccess);
     const value = safeEvalWithScope(node.value, scope);
 
     if (isSimpleVariable(node.value)) {
-        return `変数 ${node.value.trim()} の値 ${formatVarValue(value)} を表示しました。`;
+        return buildStepDetails(`変数 ${node.value.trim()} の値 ${formatVarValue(value)} を表示しました。`);
     }
 
-    return [
-        arrayExplanation,
-        `${node.value} の値 ${formatVarValue(value)} を表示しました。`
-    ].filter(Boolean).join(" ");
+    return buildStepDetails(
+        [
+            arrayExplanation,
+            `${node.value} の値 ${formatVarValue(value)} を表示しました。`
+        ].filter(Boolean).join(" "),
+        [toArrayAccessKey(arrayAccess)]
+    );
 }
 
 function buildForExplanation(node, current, end, step, isLast, start) {
@@ -422,7 +454,7 @@ function buildTrace(ast) {
                     // ★ここで「その場で」実行ではなく
                     executeImmediate(node.body);
                 }
-            }, (scope) => `条件 ${node.condition} を確認しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`);
+            }, (scope) => buildStepDetails(`条件 ${node.condition} を確認しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`));
         }
 
         if (node.type === "ifelse") {
@@ -432,7 +464,7 @@ function buildTrace(ast) {
                 } else {
                     executeImmediate(node.elseBody);
                 }
-            }, (scope) => `条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`);
+            }, (scope) => buildStepDetails(`条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(safeEvalWithScope(node.condition, scope))} です。`));
         }
 
         if (node.type === "for") {
@@ -446,7 +478,7 @@ function buildTrace(ast) {
 
                 pushTraceStep(node.blockId, () => {
                     setVar(node.varName, current);
-                }, () => buildForExplanation(node, current, end, step, isLast, start));
+                }, () => buildStepDetails(buildForExplanation(node, current, end, step, isLast, start)));
 
                 // ★ここが重要：展開する
                 buildTrace(node.body);
