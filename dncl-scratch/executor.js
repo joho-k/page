@@ -88,15 +88,15 @@ function renderVars() {
                     <table class="array-var-table">
                         <tr class="array-var-index-row">
                             ${value.map((_, index) => {
-                                const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
-                                return `<th class="array-var-cell${highlightClass}">${index}</th>`;
-                            }).join("")}
+                const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
+                return `<th class="array-var-cell${highlightClass}">${index}</th>`;
+            }).join("")}
                         </tr>
                         <tr class="array-var-value-row">
                             ${value.map((item, index) => {
-                                const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
-                                return `<td class="array-var-cell${highlightClass}">${escapeHtml(formatVarValue(item))}</td>`;
-                            }).join("")}
+                const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
+                return `<td class="array-var-cell${highlightClass}">${escapeHtml(formatVarValue(item))}</td>`;
+            }).join("")}
                         </tr>
                     </table>
                 </div>
@@ -303,7 +303,7 @@ function parseExpression(tokens) {
         ) {
             return t.slice(1, -1);
         }
-        
+
         // 数値
         if (/^\d+$/.test(t)) return Number(t);
 
@@ -441,7 +441,7 @@ function buildTrace(ast, targetTrace = trace) {
             targetTrace.push({
                 blockId: node.blockId,
                 run: () => {
-                setVar(node.name, safeEval(node.value));
+                    setVar(node.name, safeEval(node.value));
                 },
                 getDetails: (scope) => buildAssignExplanation(node, scope)
             });
