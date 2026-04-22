@@ -216,6 +216,33 @@ function setInputValue(input, value) {
     input.dispatchEvent(new Event("input"));
 }
 
+function setConditionValue(block, left, op, right) {
+    const leftInput = block.querySelector(".condition-left");
+    const opSelect = block.querySelector(".condition-op");
+    const rightInput = block.querySelector(".condition-right");
+
+    if (!leftInput || !opSelect || !rightInput) return;
+
+    setInputValue(leftInput, left);
+    opSelect.value = op;
+    opSelect.dispatchEvent(new Event("change"));
+    setInputValue(rightInput, right);
+}
+
+function readConditionValue(node) {
+    const leftInput = node.querySelector(".condition-left");
+    const opSelect = node.querySelector(".condition-op");
+    const rightInput = node.querySelector(".condition-right");
+
+    if (leftInput && opSelect && rightInput) {
+        const left = leftInput.value.trim() || "0";
+        const right = rightInput.value.trim() || "0";
+        return `${left} ${opSelect.value} ${right}`;
+    }
+
+    return node.querySelector("input").value;
+}
+
 function loadExample1() {
     workspace.innerHTML = "";
 
@@ -264,7 +291,7 @@ function loadExample1() {
     loopBody.appendChild(amariAssign);
 
     const ifElseBlock = createIfElseBlock();
-    setInputValue(ifElseBlock.querySelector("input"), "amari == 0");
+    setConditionValue(ifElseBlock, "amari", "==", "0");
 
     const ifBody = ifElseBlock.querySelector(".if-body");
     const sumAUpdate = createAssignBlock();
@@ -489,13 +516,25 @@ function createIfBlock() {
     assignBlockId(div);
 
     div.innerHTML = `
-    もし <input value="x > 0"> ならば:
+    もし
+    <input class="condition-left" value="x">
+    <select class="condition-op">
+      <option value=">">&gt;</option>
+      <option value=">=">&gt;=</option>
+      <option value="<">&lt;</option>
+      <option value="<=">&lt;=</option>
+      <option value="==">==</option>
+      <option value="!=">!=</option>
+    </select>
+    <input class="condition-right" value="0">
+    ならば:
     <div class="children dropzone"></div>
   `;
 
     const child = div.querySelector(".children");
 
-    autoResizeInput(div.querySelector("input"));
+    div.querySelectorAll("input").forEach(autoResizeInput);
+    div.querySelector("select").addEventListener("change", updateCode);
     enableDrop(child);
 
     updatePlaceholder(child);
@@ -510,7 +549,18 @@ function createIfElseBlock() {
     assignBlockId(div);
 
     div.innerHTML = `
-    もし <input value="x > 0"> ならば:
+    もし
+    <input class="condition-left" value="x">
+    <select class="condition-op">
+      <option value=">">&gt;</option>
+      <option value=">=">&gt;=</option>
+      <option value="<">&lt;</option>
+      <option value="<=">&lt;=</option>
+      <option value="==">==</option>
+      <option value="!=">!=</option>
+    </select>
+    <input class="condition-right" value="0">
+    ならば:
     <div class="children dropzone if-body"></div>
 
     <div class="else-area">
@@ -522,7 +572,8 @@ function createIfElseBlock() {
     const ifBody = div.querySelector(".if-body");
     const elseBody = div.querySelector(".else-body");
 
-    autoResizeInput(div.querySelector("input"));
+    div.querySelectorAll("input").forEach(autoResizeInput);
+    div.querySelector("select").addEventListener("change", updateCode);
 
     enableDrop(ifBody);
     enableDrop(elseBody);
@@ -676,7 +727,7 @@ function buildAST(container) {
             ast.push({
                 type,
                 blockId: node.dataset.blockId,
-                condition: node.querySelector("input").value,
+                condition: readConditionValue(node),
                 body: buildAST(node.querySelector(".children"))
             });
         }
@@ -685,7 +736,7 @@ function buildAST(container) {
             ast.push({
                 type,
                 blockId: node.dataset.blockId,
-                condition: node.querySelector("input").value,
+                condition: readConditionValue(node),
                 ifBody: buildAST(node.querySelector(".if-body")),
                 elseBody: buildAST(node.querySelector(".else-body"))
             });

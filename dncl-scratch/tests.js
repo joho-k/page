@@ -193,6 +193,84 @@ const TESTS = [
         ],
         expected: "1\n"
     },
+    {
+        name: "比較演算子 >",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            {
+                type: "ifelse",
+                condition: "x > 3",
+                ifBody: [{ type: "print", value: '"T"' }],
+                elseBody: [{ type: "print", value: '"F"' }]
+            }
+        ],
+        expected: "T\n"
+    },
+    {
+        name: "比較演算子 >=",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            {
+                type: "ifelse",
+                condition: "x >= 5",
+                ifBody: [{ type: "print", value: '"T"' }],
+                elseBody: [{ type: "print", value: '"F"' }]
+            }
+        ],
+        expected: "T\n"
+    },
+    {
+        name: "比較演算子 <",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            {
+                type: "ifelse",
+                condition: "x < 3",
+                ifBody: [{ type: "print", value: '"T"' }],
+                elseBody: [{ type: "print", value: '"F"' }]
+            }
+        ],
+        expected: "F\n"
+    },
+    {
+        name: "比較演算子 <=",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            {
+                type: "ifelse",
+                condition: "x <= 5",
+                ifBody: [{ type: "print", value: '"T"' }],
+                elseBody: [{ type: "print", value: '"F"' }]
+            }
+        ],
+        expected: "T\n"
+    },
+    {
+        name: "比較演算子 ==",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            {
+                type: "ifelse",
+                condition: "x == 4",
+                ifBody: [{ type: "print", value: '"T"' }],
+                elseBody: [{ type: "print", value: '"F"' }]
+            }
+        ],
+        expected: "F\n"
+    },
+    {
+        name: "比較演算子 !=",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            {
+                type: "ifelse",
+                condition: "x != 4",
+                ifBody: [{ type: "print", value: '"T"' }],
+                elseBody: [{ type: "print", value: '"F"' }]
+            }
+        ],
+        expected: "T\n"
+    },
 
     // ----------------
     // ネスト
