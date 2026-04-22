@@ -625,11 +625,27 @@ function syncAssignZone(zone) {
 }
 
 function enableDrop(el, options = {}) {
+    const handleDropChange = () => {
+        if (!options.skipPlaceholder) {
+            updatePlaceholder(el);
+        }
+
+        if (options.onChange) {
+            options.onChange();
+        }
+
+        updateCode();
+    };
+
     new Sortable(el, {
         group: {
             name: "shared",
             put: (_to, _from, dragged) => {
-                if (options.onlyExprLike && !["expr", "random"].includes(dragged.dataset.type)) {
+                const draggedType = dragged.dataset?.type;
+                const isExprLikeBlock = ["expr", "random"].includes(draggedType)
+                    || dragged.classList.contains("expr");
+
+                if (options.onlyExprLike && !isExprLikeBlock) {
                     return false;
                 }
 
@@ -646,17 +662,11 @@ function enableDrop(el, options = {}) {
             }
         },
         animation: 150,
-        onSort: () => {
-            if (!options.skipPlaceholder) {
-                updatePlaceholder(el);
-            }
-
-            if (options.onChange) {
-                options.onChange();
-            }
-
-            updateCode();
-        }
+        onAdd: handleDropChange,
+        onUpdate: handleDropChange,
+        onRemove: handleDropChange,
+        onSort: handleDropChange,
+        onEnd: handleDropChange
     });
 }
 enableDrop(workspace);
@@ -822,15 +832,16 @@ function buildCode(ast, indent = "") {
 function buildExpression(node) {
 
     const type = node.dataset.type;
+    const hasOperatorSelect = Boolean(node.querySelector("select"));
 
-    if (type === "expr") {
+    if (type === "expr" || (node.classList.contains("expr") && hasOperatorSelect)) {
         const i = node.querySelectorAll("input");
         const op = node.querySelector("select").value;
 
         return `${i[0].value} ${op} ${i[1].value}`;
     }
 
-    if (type === "random") {
+    if (type === "random" || (node.classList.contains("expr") && !hasOperatorSelect)) {
         return "乱数()";
     }
 

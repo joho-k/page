@@ -309,6 +309,9 @@ function parseExpression(tokens) {
 
         // 乱数()
         if (t === "乱数") {
+            if (peek() !== "(") {
+                return Math.random();
+            }
             if (consume() !== "(") throw new Error("乱数のカッコ不足");
             if (consume() !== ")") throw new Error("乱数のカッコ不足");
             return Math.random();
