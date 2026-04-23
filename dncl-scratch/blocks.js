@@ -1,4 +1,5 @@
 const workspace = document.getElementById("workspace");
+let programViewMode = "block";
 let blockIdCounter = 0;
 let activePaletteButton = null;
 let palettePreviewVisible = true;
@@ -128,6 +129,31 @@ function setupPaletteButtons() {
 function hidePalettePreview() {
     palettePreviewVisible = false;
     renderPalettePreview(activePaletteButton?.dataset.blockType || null);
+}
+
+function setProgramView(mode) {
+    const workspacePanel = document.getElementById("workspace-panel");
+    const codePanel = document.getElementById("code-panel");
+    const blockButton = document.getElementById("view-block-button");
+    const codeButton = document.getElementById("view-code-button");
+    if (!workspacePanel || !codePanel || !blockButton || !codeButton) return;
+
+    programViewMode = mode;
+    const showBlock = mode === "block";
+    workspacePanel.classList.toggle("program-panel-hidden", !showBlock);
+    codePanel.classList.toggle("program-panel-hidden", showBlock);
+    blockButton.classList.toggle("program-view-button-active", showBlock);
+    codeButton.classList.toggle("program-view-button-active", !showBlock);
+}
+
+function setupProgramViewSwitch() {
+    const blockButton = document.getElementById("view-block-button");
+    const codeButton = document.getElementById("view-code-button");
+    if (!blockButton || !codeButton) return;
+
+    blockButton.addEventListener("click", () => setProgramView("block"));
+    codeButton.addEventListener("click", () => setProgramView("code"));
+    setProgramView(programViewMode);
 }
 
 // ----------------
@@ -863,3 +889,4 @@ function updateCode() {
 }
 
 setupPaletteButtons();
+setupProgramViewSwitch();

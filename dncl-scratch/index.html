@@ -100,10 +100,22 @@
 
                 <div class="dncl-left">
                     <h4>プログラム</h4>
-                    <div id="workspace"></div>
+                    <div class="program-view-switch">
+                        見た目を切り替える
+                        <button type="button" id="view-block-button" class="program-view-button program-view-button-active">
+                            ブロック
+                        </button>
+                        <button type="button" id="view-code-button" class="program-view-button">
+                            コード
+                        </button>
+                    </div>
 
-                    <h4>コード</h4>
-                    <pre id="code"></pre>
+                    <div id="workspace-panel" class="program-panel">
+                        <div id="workspace"></div>
+                    </div>
+                    <div id="code-panel" class="program-panel program-panel-hidden">
+                        <pre id="code"></pre>
+                    </div>
                 </div>
 
                 <div class="dncl-right">
