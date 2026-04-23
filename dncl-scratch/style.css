@@ -74,6 +74,33 @@
     flex-direction: column;
 }
 
+.program-view-switch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.program-view-button {
+    border: 1px solid #d0d9e8;
+    background: #f4f7fc;
+    color: #2f4460;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.program-view-button-active {
+    background: #3d5a80;
+    border-color: #3d5a80;
+    color: #ffffff;
+}
+
+.program-panel-hidden {
+    display: none;
+}
+
 /* 右 */
 .dncl-right {
     flex: 1;
