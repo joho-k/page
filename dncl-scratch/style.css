@@ -84,13 +84,13 @@
 .run-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 6px;
+    margin-bottom: 8px;
 }
 
 .run-buttons button {
     font-size: 13px;
-    padding: 6px 10px;
+    padding: 5px 8px;
 }
 
 /* workspace */
@@ -104,86 +104,84 @@
 .block {
     position: relative;
     background: var(--block-bg, #f3f6fb);
-    color: var(--block-text, #243447);
+    color: #ffffff;
     border: 1px solid var(--block-border, #cfdceb);
-    padding: 10px 12px;
-    margin: 6px 0;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(39, 64, 96, 0.08);
+    padding: 7px 9px;
+    margin: 4px 0;
+    border-radius: 9px;
+    box-shadow: 0 2px 8px rgba(39, 64, 96, 0.08);
     transition: box-shadow 0.15s ease;
 }
 
 .block.step-active {
     box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.95), 0 0 18px rgba(255, 235, 59, 0.6);
-    filter: brightness(1.08);
+    filter: brightness(2.00);
+    color: black;
+    input, select {
+        color: black;
+    }
 }
 
 /* 種類ごとの淡い色 */
 .block[data-type="assign"] {
-    --block-bg: #eef7ff;
-    --block-border: #c9dff5;
-    --block-text: #204565;
+    --block-bg: #4e79a7;
+    --block-border: #3f668f;
 }
 
 .block[data-type="print"] {
-    --block-bg: #eefcf4;
-    --block-border: #cbe8d5;
-    --block-text: #224c33;
+    --block-bg: #59a14f;
+    --block-border: #4b8a43;
 }
 
 .block[data-type="if"],
 .block[data-type="ifelse"] {
-    --block-bg: #f3f0ff;
-    --block-border: #d7cff3;
-    --block-text: #43366f;
+    --block-bg: #8f63b8;
+    --block-border: #7b53a2;
 }
 
 .block[data-type="for"] {
-    --block-bg: #fff6ea;
-    --block-border: #f2dbc0;
-    --block-text: #70491f;
+    --block-bg: #e08b34;
+    --block-border: #c8792b;
 }
 
 .block[data-type="array"] {
-    --block-bg: #fff1f1;
-    --block-border: #f0d1d1;
-    --block-text: #6e3737;
+    --block-bg: #c05a7a;
+    --block-border: #aa4d6b;
 }
 
 .block[data-type="expr"] {
-    --block-bg: #f2fbfb;
-    --block-border: #cce6e6;
-    --block-text: #275757;
+    --block-bg: #2f9a9a;
+    --block-border: #288484;
 }
 
 .block[data-type="random"] {
-    --block-bg: #fff8e8;
-    --block-border: #efdfb5;
-    --block-text: #6a5420;
+    --block-bg: #b3922f;
+    --block-border: #9a7d27;
 }
 
 .block:hover {
-    box-shadow: 0 8px 18px rgba(39, 64, 96, 0.12);
+    filter: saturate(1.1) brightness(0.9);
+    box-shadow: 0 4px 11px rgba(39, 64, 96, 0.13);
 }
 
 /* ネスト */
 .children {
-    margin-left: 20px;
+    margin-left: 12px;
     border-left: 2px dashed rgba(70, 92, 118, 0.28);
-    padding-left: 10px;
+    padding-left: 7px;
 
 }
 
 .children::after {
     content: "";
     display: block;
-    height: 10px;
+    height: 4px;
 }
 
 .assign-inline {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: nowrap;
     white-space: nowrap;
 }
@@ -196,17 +194,17 @@
     display: inline-flex;
     align-items: center;
     flex: 1;
-    gap: 8px;
+    gap: 6px;
     margin-left: 0;
     padding-left: 0;
     border-left: none;
     width: 100%;
     min-width: 120px;
-    min-height: 38px;
-    padding-right: 18px;
-    border: 1px dashed rgba(78, 102, 130, 0.28);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.35);
+    min-height: 32px;
+    padding-right: 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.7);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .block[data-type="assign"] .expr-zone::after {
@@ -232,33 +230,38 @@
 
 /* else */
 .else-area {
-    margin-top: 5px;
-    background: rgba(255, 255, 255, 0.48);
-    border: 1px dashed rgba(95, 86, 140, 0.28);
-    border-radius: 10px;
-    padding: 8px;
+    margin-top: 4px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px dashed rgba(255, 255, 255, 0.45);
+    border-radius: 8px;
+    padding: 6px;
 }
 
 /* 入力 */
 input,
 select {
-    width: 75px;
-    background: rgba(255, 255, 255, 0.82);
-    color: inherit;
-    border: 1px solid rgba(78, 102, 130, 0.25);
-    border-radius: 8px;
-    padding: 4px 8px;
+    width: 66px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 7px;
+    padding: 3px 6px;
     outline: none;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.78);
 }
 
 /* 削除 */
 .delete-btn {
     position: absolute;
-    top: 2px;
-    right: 6px;
+    top: 1px;
+    right: 4px;
     cursor: pointer;
     color: inherit;
     opacity: 0.72;
+    line-height: 1;
 }
 
 .delete-btn:hover {
@@ -275,9 +278,9 @@ pre {
 .vars-panel {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     align-items: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .vars-empty {
@@ -410,10 +413,10 @@ pre {
     color: #4d3c12;
     border: 1px solid #f0d889;
     border-radius: 12px;
-    padding: 12px 14px;
-    line-height: 1.7;
+    padding: 9px 11px;
+    line-height: 1.6;
     box-shadow: 0 6px 18px rgba(157, 124, 20, 0.08);
-    margin-bottom: 18px;
+    margin-bottom: 10px;
     white-space: pre-wrap;
 }
 
@@ -458,8 +461,8 @@ pre {
 /* ＋ボタン */
 .add-item {
     font-size: 12px;
-    padding: 2px 6px;
-    margin-left: 6px;
+    padding: 1px 6px;
+    margin-left: 4px;
     border: 1px solid rgba(78, 102, 130, 0.2);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.72);
