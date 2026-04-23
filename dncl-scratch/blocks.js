@@ -429,7 +429,7 @@ function createExprBlock() {
         <option value="-">－</option>
         <option value="*">×</option>
         <option value="/">÷</option>
-        <option value="%">あまり</option>
+        <option value="%">%</option>
       </select>
       <input value="1">
     `;
