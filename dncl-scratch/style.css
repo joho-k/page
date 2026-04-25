@@ -125,6 +125,9 @@
     border: 2px dashed #ccc;
     padding: 10px;
     min-height: 300px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 
 /* ブロック */
