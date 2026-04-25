@@ -44,6 +44,21 @@ const BLOCK_PREVIEWS = {
         title: "乱数",
         code: `乱数()`,
         text: "0以上1未満のランダムな値を作れます。"
+    },
+    floor: {
+        title: "切り捨て",
+        code: `切り捨て(3.9)`,
+        text: "小数を切り捨てて整数にします。"
+    },
+    ceil: {
+        title: "切り上げ",
+        code: `切り上げ(3.1)`,
+        text: "小数を切り上げて整数にします。"
+    },
+    round: {
+        title: "四捨五入",
+        code: `四捨五入(3.5)`,
+        text: "小数を四捨五入して整数にします。"
     }
 };
 
@@ -232,6 +247,9 @@ function addBlock(type) {
     if (type === "array") el = createArrayBlock();
     if (type === "expr") el = createExprBlock();
     if (type === "random") el = createRandomBlock();
+    if (type === "floor") el = createRoundingBlock("floor");
+    if (type === "ceil") el = createRoundingBlock("ceil");
+    if (type === "round") el = createRoundingBlock("round");
 
     workspace.appendChild(el);
     updateCode();
@@ -477,6 +495,31 @@ function createRandomBlock() {
 
     div.innerHTML = `乱数()`;
 
+    addDeleteButton(div);
+    return div;
+}
+
+function createRoundingBlock(kind) {
+    const labelByKind = {
+        floor: "切り捨て",
+        ceil: "切り上げ",
+        round: "四捨五入"
+    };
+
+    const label = labelByKind[kind] || "四捨五入";
+
+    const div = document.createElement("div");
+    div.className = "block expr";
+    div.dataset.type = kind;
+    assignBlockId(div);
+
+    div.innerHTML = `
+      ${label}(
+        <input value="x">
+      )
+    `;
+
+    autoResizeInput(div.querySelector("input"));
     addDeleteButton(div);
     return div;
 }
@@ -812,6 +855,22 @@ function buildAST(container) {
                 value: "乱数()"
             });
         }
+
+        if (["floor", "ceil", "round"].includes(type)) {
+            const input = node.querySelector("input");
+            const rawValue = input ? input.value.trim() : "";
+            const labelByKind = {
+                floor: "切り捨て",
+                ceil: "切り上げ",
+                round: "四捨五入"
+            };
+
+            ast.push({
+                type: "call",
+                blockId: node.dataset.blockId,
+                value: `${labelByKind[type]}(${rawValue || "0"})`
+            });
+        }
     });
 
     return ast;
@@ -850,6 +909,9 @@ function buildCode(ast, indent = "") {
 
         if (node.type === "random")
             code += `${indent}乱数()\n`;
+
+        if (node.type === "call")
+            code += `${indent}${node.value}\n`;
     });
 
     return code;
@@ -867,8 +929,15 @@ function buildExpression(node) {
         return `${i[0].value} ${op} ${i[1].value}`;
     }
 
-    if (type === "random" || (node.classList.contains("expr") && !hasOperatorSelect)) {
+    if (type === "random") {
         return "乱数()";
+    }
+
+    if (["floor", "ceil", "round"].includes(type)) {
+        const value = node.querySelector("input")?.value?.trim() || "0";
+        if (type === "floor") return `切り捨て(${value})`;
+        if (type === "ceil") return `切り上げ(${value})`;
+        return `四捨五入(${value})`;
     }
 
     if (type === "assign") {

@@ -144,6 +144,7 @@
     box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.95), 0 0 18px rgba(255, 235, 59, 0.6);
     filter: brightness(2.00);
     color: black;
+
     input, select {
         color: black;
     }
@@ -176,7 +177,10 @@
     --block-border: #aa4d6b;
 }
 
-.block[data-type="expr"] {
+.block[data-type="expr"],
+.block[data-type="floor"],
+.block[data-type="ceil"],
+.block[data-type="round"] {
     --block-bg: #2f9a9a;
     --block-border: #288484;
 }

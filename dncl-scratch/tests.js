@@ -46,6 +46,38 @@ const TESTS = [
         expected: "1\n"
     },
     {
+        name: "切り捨て",
+        ast: [
+            { type: "assign", name: "x", value: "切り捨て(3.9)" },
+            { type: "print", value: "x" }
+        ],
+        expected: "3\n"
+    },
+    {
+        name: "切り上げ",
+        ast: [
+            { type: "assign", name: "x", value: "切り上げ(3.1)" },
+            { type: "print", value: "x" }
+        ],
+        expected: "4\n"
+    },
+    {
+        name: "四捨五入",
+        ast: [
+            { type: "assign", name: "x", value: "四捨五入(3.5)" },
+            { type: "print", value: "x" }
+        ],
+        expected: "4\n"
+    },
+    {
+        name: "四捨五入（式を引数にできる）",
+        ast: [
+            { type: "assign", name: "x", value: "四捨五入((1+2)/2)" },
+            { type: "print", value: "x" }
+        ],
+        expected: "2\n"
+    },
+    {
         name: "乱数()",
         ast: [
             { type: "assign", name: "r", value: "乱数()" }
