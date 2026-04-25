@@ -133,11 +133,12 @@
     background: var(--block-bg, #f3f6fb);
     color: #ffffff;
     border: 1px solid var(--block-border, #cfdceb);
-    padding: 7px 9px;
-    margin: 4px 0;
-    border-radius: 9px;
+    padding: 1px 20px 1px 8px;
+    margin: 0;
+    border-radius: 0 9px 9px 0;
     box-shadow: 0 2px 8px rgba(39, 64, 96, 0.08);
     transition: box-shadow 0.15s ease;
+    width: fit-content;
 }
 
 .block.step-active {
@@ -231,7 +232,7 @@
     border-left: none;
     width: 100%;
     min-width: 120px;
-    min-height: 32px;
+    min-height: 28px;
     padding-right: 10px;
     border: 1px dashed rgba(255, 255, 255, 0.7);
     border-radius: 7px;
@@ -461,7 +462,7 @@ pre {
 
 /* ★追加：プレースホルダー */
 .placeholder {
-    color: rgba(58, 76, 97, 0.55);
+    color: rgba(240, 240, 240, 0.55);
     font-size: 12px;
 }
 
