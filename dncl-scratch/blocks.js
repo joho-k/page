@@ -471,8 +471,8 @@ function createExprBlock() {
       <select>
         <option value="+">＋</option>
         <option value="-">－</option>
-        <option value="*">×</option>
-        <option value="/">÷</option>
+        <option value="*">＊</option>
+        <option value="/">／</option>
         <option value="%">%</option>
       </select>
       <input value="1">
