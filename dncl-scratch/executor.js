@@ -278,7 +278,7 @@ function buildForExplanation(node, current, end, step, isLast, start) {
 // ----------------
 function tokenize(expr) {
     const tokens = [];
-    const regex = /\s*("(?:[^"\\]|\\.)*"|“[^”]*”|乱数|[0-9]+|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
+    const regex = /\s*("(?:[^"\\]|\\.)*"|“[^”]*”|乱数|切り捨て|切り上げ|四捨五入|[0-9]+(?:\.[0-9]+)?|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
     let match;
     while ((match = regex.exec(expr)) !== null) {
         tokens.push(match[1]);
@@ -304,8 +304,8 @@ function parseExpression(tokens) {
             return t.slice(1, -1);
         }
 
-        // 数値
-        if (/^\d+$/.test(t)) return Number(t);
+        // 数値（整数/小数）
+        if (/^\d+(\.\d+)?$/.test(t)) return Number(t);
 
         // 乱数()
         if (t === "乱数") {
@@ -315,6 +315,17 @@ function parseExpression(tokens) {
             if (consume() !== "(") throw new Error("乱数のカッコ不足");
             if (consume() !== ")") throw new Error("乱数のカッコ不足");
             return Math.random();
+        }
+
+        // 切り捨て/切り上げ/四捨五入
+        if (["切り捨て", "切り上げ", "四捨五入"].includes(t)) {
+            if (consume() !== "(") throw new Error(`${t}のカッコ不足`);
+            const value = comparison();
+            if (consume() !== ")") throw new Error(`${t}のカッコ不足`);
+
+            if (t === "切り捨て") return Math.floor(value);
+            if (t === "切り上げ") return Math.ceil(value);
+            return Math.round(value);
         }
 
         // =========================
