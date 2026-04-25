@@ -222,8 +222,22 @@ function buildAssignExplanation(node, scope, result) {
             ? `${binary.right} は ${rightArrayAccess.arrayName}[${rightArrayAccess.indexValue}] つまり 配列 ${rightArrayAccess.arrayName} の ${rightArrayAccess.indexValue} 番目の値なので、${formatVarValue(rightValue)} です。`
             : `${binary.right} は ${formatVarValue(rightValue)} です。`;
 
+        let opExplanation = binary.op;
+
+        switch (opExplanation) {
+            case "*":
+                opExplanation = ` (${formatVarValue(leftValue)} かける ${formatVarValue(rightValue)})`
+                break;
+            case "/":
+                opExplanation = `(${formatVarValue(leftValue)} わる ${formatVarValue(rightValue)})`
+                break;
+            case "%":
+                opExplanation = `(${formatVarValue(leftValue)} わる ${formatVarValue(rightValue)} のあまり)`
+                break;
+        }
+
         return buildStepDetails(
-            `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)} です。この計算結果を ${node.name} に代入します。`,
+            `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)}${opExplanation}です。この計算結果を ${node.name} に代入します。`,
             [toArrayAccessKey(rightArrayAccess)]
         );
     }
