@@ -412,6 +412,124 @@ function loadExample2() {
     updateCode();
 }
 
+function loadExample3() {
+    workspace.innerHTML = "";
+
+    const arrayAssign = createArrayBlock();
+    setInputValue(arrayAssign.querySelector("input"), "a");
+
+    const arrayItems = arrayAssign.querySelector(".array-items");
+    arrayItems.innerHTML = "";
+    ["20", "69", "20", "98", "30", "63", "18", "93"].forEach((value) => {
+        arrayAssign.querySelector(".add-item").click();
+        const lastInput = arrayAssign.querySelector(".array-item:last-child input");
+        setInputValue(lastInput, value);
+    });
+    workspace.appendChild(arrayAssign);
+
+    const maxAssign = createAssignBlock();
+    setInputValue(maxAssign.querySelector(".assign-inline > input"), "max");
+    setInputValue(maxAssign.querySelector(".assign-value"), "a[0]");
+    workspace.appendChild(maxAssign);
+
+    const forBlock = createForBlock();
+    const inputs = forBlock.querySelectorAll("input");
+    setInputValue(inputs[0], "i");
+    setInputValue(inputs[1], "1");
+    setInputValue(inputs[2], "7");
+    setInputValue(inputs[3], "1");
+
+    const loopBody = forBlock.querySelector(".children");
+
+    const ifBlock = createIfBlock();
+    setConditionValue(ifBlock, "a[i]", ">", "max");
+
+    const ifBody = ifBlock.querySelector(".children");
+
+    const updateMax = createAssignBlock();
+    setInputValue(updateMax.querySelector(".assign-inline > input"), "max");
+    setInputValue(updateMax.querySelector(".assign-value"), "a[i]");
+    ifBody.appendChild(updateMax);
+
+    loopBody.appendChild(ifBlock);
+    workspace.appendChild(forBlock);
+
+    const print = createPrintBlock();
+    setInputValue(print.querySelector("input"), "max");
+    workspace.appendChild(print);
+
+    updateCode();
+}
+
+function loadExample4() {
+    workspace.innerHTML = "";
+
+    // a = 48
+    const aAssign = createAssignBlock();
+    setInputValue(aAssign.querySelector(".assign-inline > input"), "a");
+    setInputValue(aAssign.querySelector(".assign-value"), "48");
+    workspace.appendChild(aAssign);
+
+    // b = 18
+    const bAssign = createAssignBlock();
+    setInputValue(bAssign.querySelector(".assign-inline > input"), "b");
+    setInputValue(bAssign.querySelector(".assign-value"), "18");
+    workspace.appendChild(bAssign);
+
+    // for ループ
+    const forBlock = createForBlock();
+    const inputs = forBlock.querySelectorAll("input");
+    setInputValue(inputs[0], "i");
+    setInputValue(inputs[1], "0");
+    setInputValue(inputs[2], "10"); // 十分な回数
+    setInputValue(inputs[3], "1");
+
+    const loopBody = forBlock.querySelector(".children");
+
+    // if (b != 0)
+    const ifBlock = createIfBlock();
+    setConditionValue(ifBlock, "b", "!=", "0");
+
+    const ifBody = ifBlock.querySelector(".children");
+
+    // r = a % b
+    const rAssign = createAssignBlock();
+    setInputValue(rAssign.querySelector(".assign-inline > input"), "r");
+
+    const modExpr = createExprBlock();
+    const modInputs = modExpr.querySelectorAll("input");
+    setInputValue(modInputs[0], "a");
+    modExpr.querySelector("select").value = "%";
+    modExpr.querySelector("select").dispatchEvent(new Event("change"));
+    setInputValue(modInputs[1], "b");
+
+    rAssign.querySelector(".expr-zone").appendChild(modExpr);
+    syncAssignZone(rAssign.querySelector(".expr-zone"));
+    ifBody.appendChild(rAssign);
+
+    // a = b
+    const aUpdate = createAssignBlock();
+    setInputValue(aUpdate.querySelector(".assign-inline > input"), "a");
+    setInputValue(aUpdate.querySelector(".assign-value"), "b");
+    ifBody.appendChild(aUpdate);
+
+    // b = r
+    const bUpdate = createAssignBlock();
+    setInputValue(bUpdate.querySelector(".assign-inline > input"), "b");
+    setInputValue(bUpdate.querySelector(".assign-value"), "r");
+    ifBody.appendChild(bUpdate);
+
+    loopBody.appendChild(ifBlock);
+    workspace.appendChild(forBlock);
+
+    // 表示
+    const print = createPrintBlock();
+    setInputValue(print.querySelector("input"), `"最大公約数は"+a    `);
+    workspace.appendChild(print);
+
+    updateCode();
+}
+
 // ----------------
 // 配列ブロック ★
 // ----------------
