@@ -4,7 +4,7 @@ let output = "";
 let trace = [];
 let stepIndex = 0;
 let changedVars = new Set();
-let currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。";
+let currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。「次へ」を押してステップ実行を開始してください。";
 let highlightedArrayAccesses = new Set();
 
 function pushTraceStep(blockId, fn, getDetails = null) {
@@ -610,7 +610,7 @@ function stepStart() {
     trace = [];
     stepIndex = 0;
     changedVars = new Set();
-    currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。";
+    currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。「次へ」を押してステップ実行を開始してください。";
     clearStepHighlight();
 
     buildTrace(window.currentAST || []);
