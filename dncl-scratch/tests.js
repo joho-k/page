@@ -534,3 +534,27 @@ function runTests() {
 
     console.log(`\n🎯 合格: ${success}/${TESTS.length}`);
 }
+
+// =========================
+// URL共有の簡易チェック（Console用）
+// =========================
+function testShareRoundtrip() {
+    const ast = [
+        { type: "assign", name: "a", value: "[1,2,3]" },
+        { type: "print", value: "a[1]" },
+        {
+            type: "for",
+            varName: "i",
+            start: "0",
+            end: "2",
+            step: "1",
+            body: [{ type: "print", value: "a[i]" }]
+        }
+    ];
+
+    const encoded = (typeof encodeProgramAst === "function") ? encodeProgramAst(ast) : null;
+    if (!encoded) return false;
+
+    const decoded = (typeof decodeProgramAst === "function") ? decodeProgramAst(encoded) : null;
+    return JSON.stringify(ast) === JSON.stringify(decoded);
+}
