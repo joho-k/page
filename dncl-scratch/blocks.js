@@ -33,7 +33,7 @@ const BLOCK_PREVIEWS = {
     array: {
         title: "配列",
         code: `a = [1, 2, 3]`,
-        text: "複数の値を1つにまとめて扱います。"
+        text: "複数の値をまとめて扱います。行を増やすと2次元配列（表）になります。"
     },
     expr: {
         title: "計算",
@@ -253,11 +253,34 @@ function addBlock(type) {
 
     workspace.appendChild(el);
     updateCode();
+
+    if (type === "array") {
+        setSelectedArrayBlock(el);
+    }
 }
 
 function setInputValue(input, value) {
     input.value = value;
     input.dispatchEvent(new Event("input"));
+}
+
+function setArray1DValues(arrayBlock, values) {
+    const ops = arrayBlock.arrayOps;
+    if (!ops) return;
+
+    // 行は1行にする
+    while (ops.removeRow()) { }
+
+    const rowItems = arrayBlock.querySelector(".array2d-row-items");
+    if (!rowItems) return;
+
+    const current = rowItems.querySelectorAll("input").length;
+    while (rowItems.querySelectorAll("input").length < values.length) ops.addElement();
+    while (rowItems.querySelectorAll("input").length > values.length && values.length >= 1) ops.removeElement();
+
+    rowItems.querySelectorAll("input").forEach((input, idx) => {
+        setInputValue(input, values[idx] ?? "0");
+    });
 }
 
 function setConditionValue(block, left, op, right) {
@@ -302,15 +325,7 @@ function loadExample1() {
 
     const arrayAssign = createArrayBlock();
     setInputValue(arrayAssign.querySelector("input"), "a");
-
-    const arrayItems = arrayAssign.querySelector(".array-items");
-    arrayItems.innerHTML = "";
-    ["20", "69", "20", "98", "30", "63", "18", "93"].forEach((value) => {
-        const addBtn = arrayAssign.querySelector(".add-item");
-        addBtn.click();
-        const lastInput = arrayAssign.querySelector(".array-item:last-child input");
-        setInputValue(lastInput, value);
-    });
+    setArray1DValues(arrayAssign, ["20", "69", "20", "98", "30", "63", "18", "93"]);
     workspace.appendChild(arrayAssign);
 
     const forBlock = createForBlock();
@@ -417,14 +432,7 @@ function loadExample3() {
 
     const arrayAssign = createArrayBlock();
     setInputValue(arrayAssign.querySelector("input"), "a");
-
-    const arrayItems = arrayAssign.querySelector(".array-items");
-    arrayItems.innerHTML = "";
-    ["20", "69", "20", "98", "30", "63", "18", "93"].forEach((value) => {
-        arrayAssign.querySelector(".add-item").click();
-        const lastInput = arrayAssign.querySelector(".array-item:last-child input");
-        setInputValue(lastInput, value);
-    });
+    setArray1DValues(arrayAssign, ["20", "69", "20", "98", "30", "63", "18", "93"]);
     workspace.appendChild(arrayAssign);
 
     const maxAssign = createAssignBlock();
@@ -540,39 +548,133 @@ function createArrayBlock() {
     assignBlockId(div);
 
     div.innerHTML = `
-<input value="a"> = [
-  <span class="array-items"></span>
-  <button class="add-item">＋</button>
-]
+<div class="array2d-head">
+  <input value="a"> =
+</div>
+<div class="array2d-body">
+  <div class="array2d-rows"></div>
+</div>
 `;
 
-    const items = div.querySelector(".array-items");
-    const addBtn = div.querySelector(".add-item");
+    const nameInput = div.querySelector("input");
+    autoResizeInput(nameInput);
 
-    function addItem(val = "0") {
-        const item = document.createElement("div");
-        item.className = "array-item";
+    const rowsContainer = div.querySelector(".array2d-rows");
 
-        const input = document.createElement("input");
-        input.value = val;
-        autoResizeInput(input);
+    function normalizeCellInput(input) {
         input.addEventListener("blur", () => {
             if (input.value.trim() === "") {
-                item.remove();
-                updateCode();
+                input.value = "0";
+                input.dispatchEvent(new Event("input"));
             }
         });
-
-        item.appendChild(input);
-        items.appendChild(item);
-        updateCode();
     }
 
-    addBtn.onclick = () => addItem();
+    function createCell(value = "0") {
+        const input = document.createElement("input");
+        input.value = value;
+        input.className = "array2d-cell";
+        autoResizeInput(input);
+        normalizeCellInput(input);
+        input.addEventListener("input", updateCode);
+        return input;
+    }
 
-    addItem(); // 初期1個
+    function appendCellToRow(itemsEl, value = "0") {
+        const hasCells = itemsEl.querySelectorAll("input").length > 0;
+        if (hasCells) {
+            const comma = document.createElement("span");
+            comma.className = "array2d-comma";
+            comma.textContent = ",";
+            itemsEl.appendChild(comma);
+        }
+        itemsEl.appendChild(createCell(value));
+    }
 
-    autoResizeInput(div.querySelector("input"));
+    function buildRow() {
+        const row = document.createElement("div");
+        row.className = "array2d-row";
+
+        const leftBracket = document.createElement("span");
+        leftBracket.className = "array2d-bracket";
+        leftBracket.textContent = "[";
+
+        const items = document.createElement("span");
+        items.className = "array2d-row-items";
+
+        const rightBracket = document.createElement("span");
+        rightBracket.className = "array2d-bracket";
+        rightBracket.textContent = "]";
+
+        row.appendChild(leftBracket);
+        row.appendChild(items);
+        row.appendChild(rightBracket);
+
+        return { row, items };
+    }
+
+    function getRowCount() {
+        return rowsContainer.querySelectorAll(".array2d-row").length;
+    }
+
+    function getColCount() {
+        const firstRow = rowsContainer.querySelector(".array2d-row");
+        if (!firstRow) return 0;
+        return firstRow.querySelectorAll("input").length;
+    }
+
+    function addRow() {
+        const colCount = Math.max(getColCount(), 1);
+        const { row, items } = buildRow();
+        for (let c = 0; c < colCount; c += 1) appendCellToRow(items, "0");
+        rowsContainer.appendChild(row);
+        updateCode();
+        return true;
+    }
+
+    function removeRow() {
+        const rows = rowsContainer.querySelectorAll(".array2d-row");
+        if (rows.length <= 1) return false;
+        rows[rows.length - 1].remove();
+        updateCode();
+        return true;
+    }
+
+    function addElement() {
+        if (getRowCount() === 0) addRow();
+        rowsContainer.querySelectorAll(".array2d-row-items").forEach((items) => appendCellToRow(items, "0"));
+        updateCode();
+        return true;
+    }
+
+    function removeElement() {
+        const colCount = getColCount();
+        if (colCount <= 1) return false;
+        rowsContainer.querySelectorAll(".array2d-row-items").forEach((items) => {
+            const inputs = items.querySelectorAll("input");
+            const lastInput = inputs[inputs.length - 1];
+            const prev = lastInput.previousSibling;
+            lastInput.remove();
+            if (prev && prev.classList && prev.classList.contains("array2d-comma")) {
+                prev.remove();
+            }
+        });
+        updateCode();
+        return true;
+    }
+
+    // 初期: 1行3要素
+    addRow();
+    addElement();
+    addElement();
+
+    div.arrayOps = { addRow, removeRow, addElement, removeElement };
+
+    div.addEventListener("click", (event) => {
+        if (event.target.closest(".delete-btn")) return;
+        if (event.target.closest("input")) return;
+        setSelectedArrayBlock(div);
+    });
 
     addDeleteButton(div);
     return div;
@@ -872,17 +974,37 @@ function buildAST(container) {
         if (type === "array") {
             const name = node.querySelector("input").value;
 
-            const values = Array.from(
-                node.querySelectorAll(".array-items input")
-            )
-                .map(i => i.value.trim())
-                .filter(Boolean);
+            const rows = Array.from(
+                node.querySelectorAll(".array2d-rows .array2d-row")
+            );
+
+            const matrix = rows.map((tr) => {
+                return Array.from(tr.querySelectorAll("input")).map((input) => input.value.trim() || "0");
+            });
+
+            const colCount = matrix.length > 0 ? Math.max(1, ...matrix.map(r => r.length)) : 1;
+            const normalized = matrix.length > 0 ? matrix : [Array.from({ length: colCount }).map(() => "0")];
+            const rectangular = normalized.map((row) => {
+                const filled = row.slice(0, colCount);
+                while (filled.length < colCount) filled.push("0");
+                return filled;
+            });
+
+            if (rectangular.length <= 1) {
+                ast.push({
+                    type: "assign",
+                    blockId: node.dataset.blockId,
+                    name,
+                    value: `[${rectangular[0].join(",")}]`
+                });
+                return;
+            }
 
             ast.push({
                 type: "assign",
                 blockId: node.dataset.blockId,
                 name,
-                value: `[${values.join(",")}]`
+                value: `[${rectangular.map(row => `[${row.join(",")}]`).join(",")}]`
             });
         }
 
@@ -1072,8 +1194,68 @@ function updateCode() {
     document.querySelectorAll(".children:not(.expr-zone)").forEach(updatePlaceholder);
     document.querySelectorAll(".expr-zone").forEach(syncAssignZone);
 
+    if (selectedArrayBlock && !document.body.contains(selectedArrayBlock)) {
+        setSelectedArrayBlock(null);
+    } else {
+        renderArrayControlPanel();
+    }
+
     window.currentAST = ast;
 }
+
+// ----------------
+// 配列 操作パネル
+// ----------------
+let selectedArrayBlock = null;
+
+function setSelectedArrayBlock(block) {
+    selectedArrayBlock = block;
+    renderArrayControlPanel();
+}
+
+function renderArrayControlPanel() {
+    const panel = document.getElementById("array-control-panel");
+    if (!panel) return;
+
+    if (!selectedArrayBlock || selectedArrayBlock.dataset.type !== "array") {
+        panel.hidden = true;
+        panel.innerHTML = "";
+        return;
+    }
+
+    const ops = selectedArrayBlock.arrayOps;
+    if (!ops) {
+        panel.hidden = true;
+        panel.innerHTML = "";
+        return;
+    }
+
+    panel.hidden = false;
+    panel.innerHTML = `
+        <span class="array-control-panel-title">配列の操作</span>
+        <button type="button" data-op="addElement">要素 ＋</button>
+        <button type="button" data-op="removeElement">要素 －</button>
+        <button type="button" data-op="addRow">行 ＋</button>
+        <button type="button" data-op="removeRow">行 －</button>
+    `;
+
+    panel.querySelectorAll("button[data-op]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const op = btn.dataset.op;
+            const ok = typeof ops[op] === "function" ? ops[op]() : false;
+            if (ok === false) {
+                // no-op
+            }
+        });
+    });
+}
+
+workspace.addEventListener("click", (event) => {
+    const block = event.target.closest(".block");
+    if (!block || block.dataset.type !== "array") {
+        setSelectedArrayBlock(null);
+    }
+});
 
 setupPaletteButtons();
 setupProgramViewSwitch();

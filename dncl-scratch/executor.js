@@ -47,6 +47,95 @@ function setVar(name, value) {
     changedVars.add(name);
 }
 
+function parseAssignmentTarget(expr, scope) {
+    const tokens = tokenize(expr.trim());
+    if (tokens.length === 0) return null;
+    if (!/^[a-zA-Z_]\w*$/.test(tokens[0])) return null;
+
+    const baseName = tokens[0];
+    let pos = 1;
+    const indices = [];
+
+    function consumeIndex() {
+        if (tokens[pos] !== "[") return null;
+        pos += 1;
+
+        let bracketDepth = 1;
+        const start = pos;
+        while (pos < tokens.length) {
+            const t = tokens[pos];
+            if (t === "[") bracketDepth += 1;
+            if (t === "]") bracketDepth -= 1;
+            if (bracketDepth === 0) break;
+            pos += 1;
+        }
+        if (pos >= tokens.length || tokens[pos] !== "]") return null;
+
+        const slice = tokens.slice(start, pos);
+        pos += 1;
+
+        const indexExpr = slice.join("").trim();
+        if (!indexExpr) return null;
+        const indexValue = safeEvalWithScope(indexExpr, scope);
+        return { indexExpr, indexValue };
+    }
+
+    while (true) {
+        const idx = consumeIndex();
+        if (!idx) break;
+        indices.push(idx);
+        if (indices.length >= 2) break;
+    }
+
+    if (pos !== tokens.length) return null;
+    if (indices.length === 0) return null;
+
+    return { baseName, indices };
+}
+
+function ensureArrayLength(arr, length) {
+    while (arr.length < length) arr.push(0);
+}
+
+function ensure2DOuterLength(outer, length) {
+    while (outer.length < length) outer.push([]);
+    for (let r = 0; r < outer.length; r += 1) {
+        if (!Array.isArray(outer[r])) outer[r] = [];
+    }
+}
+
+function setIndexedVar(target, value) {
+    const { baseName, indices } = target;
+    if (!(baseName in vars) || !Array.isArray(vars[baseName])) {
+        vars[baseName] = [];
+    }
+
+    if (indices.length === 1) {
+        const i = indices[0].indexValue;
+        const arr = vars[baseName];
+        ensureArrayLength(arr, i + 1);
+        arr[i] = value;
+        changedVars.add(baseName);
+        return;
+    }
+
+    const i = indices[0].indexValue;
+    const j = indices[1].indexValue;
+    const outer = vars[baseName];
+    ensure2DOuterLength(outer, i + 1);
+    const inner = outer[i];
+    ensureArrayLength(inner, j + 1);
+    inner[j] = value;
+
+    // 2次元配列として矩形を保つ（行の長さを揃える）
+    const width = outer.reduce((max, row) => Math.max(max, Array.isArray(row) ? row.length : 0), 0);
+    for (let r = 0; r < outer.length; r += 1) {
+        ensureArrayLength(outer[r], width);
+    }
+
+    changedVars.add(baseName);
+}
+
 function formatVarValue(value) {
     if (Array.isArray(value)) {
         return JSON.stringify(value);
@@ -79,28 +168,76 @@ function renderVars() {
         return;
     }
 
+    function isRectangular2DArray(value) {
+        if (!Array.isArray(value) || value.length === 0) return false;
+        if (!value.every(row => Array.isArray(row))) return false;
+        const width = value[0].length;
+        return value.every(row => row.length === width);
+    }
+
+    function render1DArray(name, value) {
+        return `
+            <div class="array-var">
+                <table class="array-var-table">
+                    <tr class="array-var-index-row">
+                        ${value.map((_, index) => {
+            const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
+            return `<th class="array-var-cell${highlightClass}">${index}</th>`;
+        }).join("")}
+                    </tr>
+                    <tr class="array-var-value-row">
+                        ${value.map((item, index) => {
+            const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
+            return `<td class="array-var-cell${highlightClass}">${escapeHtml(formatVarValue(item))}</td>`;
+        }).join("")}
+                    </tr>
+                </table>
+            </div>
+        `;
+    }
+
+    function render2DArray(name, value) {
+        const height = value.length;
+        const width = value[0].length;
+
+        const header = `
+            <tr class="array-var-index-row">
+                <th class="array-var-cell array-var-corner-cell"></th>
+                ${Array.from({ length: width }).map((_, col) => `<th class="array-var-cell">${col}</th>`).join("")}
+            </tr>
+        `;
+
+        const rows = Array.from({ length: height }).map((_, row) => {
+            return `
+                <tr class="array-var-value-row">
+                    <th class="array-var-cell array-var-row-index-cell">${row}</th>
+                    ${Array.from({ length: width }).map((_, col) => {
+                const highlightClass = highlightedArrayAccesses.has(`${name}:${row}:${col}`) ? " array-var-cell-highlight" : "";
+                return `<td class="array-var-cell${highlightClass}">${escapeHtml(formatVarValue(value[row][col]))}</td>`;
+            }).join("")}
+                </tr>
+            `;
+        }).join("");
+
+        return `
+            <div class="array-var">
+                <table class="array-var-table">
+                    ${header}
+                    ${rows}
+                </table>
+            </div>
+        `;
+    }
+
     varsEl.innerHTML = entries.map(([name, value]) => {
         const activeClass = changedVars.has(name) ? " var-card-active" : "";
         const kind = Array.isArray(value) ? "配列" : "値";
         const valueHtml = Array.isArray(value)
-            ? `
-                <div class="array-var">
-                    <table class="array-var-table">
-                        <tr class="array-var-index-row">
-                            ${value.map((_, index) => {
-                const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
-                return `<th class="array-var-cell${highlightClass}">${index}</th>`;
-            }).join("")}
-                        </tr>
-                        <tr class="array-var-value-row">
-                            ${value.map((item, index) => {
-                const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
-                return `<td class="array-var-cell${highlightClass}">${escapeHtml(formatVarValue(item))}</td>`;
-            }).join("")}
-                        </tr>
-                    </table>
-                </div>
-            `
+            ? (
+                isRectangular2DArray(value)
+                    ? render2DArray(name, value)
+                    : render1DArray(name, value)
+            )
             : `<div class="var-value">${escapeHtml(formatVarValue(value))}</div>`;
 
         return `
@@ -135,19 +272,61 @@ function isSimpleVariable(expr) {
 }
 
 function parseSimpleArrayAccess(expr, scope) {
-    const match = expr.trim().match(/^([a-zA-Z_]\w*)\[(.+)\]$/);
-    if (!match) return null;
+    const tokens = tokenize(expr.trim());
+    if (tokens.length < 4) return null;
+    if (!/^[a-zA-Z_]\w*$/.test(tokens[0])) return null;
 
-    const arrayName = match[1];
-    const indexExpr = match[2].trim();
-    const indexValue = safeEvalWithScope(indexExpr, scope);
-    const arrayValue = scope[arrayName];
-    const itemValue = Array.isArray(arrayValue) ? arrayValue[indexValue] : undefined;
+    const arrayName = tokens[0];
+    let pos = 1;
+    const indexParts = [];
+
+    function consumeIndex() {
+        if (tokens[pos] !== "[") return null;
+        pos += 1;
+
+        let bracketDepth = 1;
+        const start = pos;
+        while (pos < tokens.length) {
+            const t = tokens[pos];
+            if (t === "[") bracketDepth += 1;
+            if (t === "]") bracketDepth -= 1;
+            if (bracketDepth === 0) break;
+            pos += 1;
+        }
+        if (pos >= tokens.length || tokens[pos] !== "]") return null;
+        const slice = tokens.slice(start, pos);
+        pos += 1;
+
+        const indexExpr = slice.join("").trim();
+        if (!indexExpr) return null;
+        const indexValue = safeEvalWithScope(indexExpr, scope);
+        return { indexExpr, indexValue };
+    }
+
+    const first = consumeIndex();
+    if (!first) return null;
+    indexParts.push(first);
+
+    const second = consumeIndex();
+    if (second) indexParts.push(second);
+
+    if (pos !== tokens.length) return null;
+
+    let arrayValue = scope[arrayName];
+    let itemValue = undefined;
+    if (Array.isArray(arrayValue)) {
+        itemValue = arrayValue[indexParts[0].indexValue];
+        if (indexParts.length === 2) {
+            itemValue = Array.isArray(itemValue) ? itemValue[indexParts[1].indexValue] : undefined;
+        }
+    }
 
     return {
         arrayName,
-        indexExpr,
-        indexValue,
+        indexExpr: indexParts[0].indexExpr,
+        indexValue: indexParts[0].indexValue,
+        indexExpr2: indexParts[1]?.indexExpr,
+        indexValue2: indexParts[1]?.indexValue,
         itemValue
     };
 }
@@ -190,11 +369,18 @@ function parseSimpleBinaryExpression(expr) {
 function buildArrayAccessExplanation(access) {
     if (!access) return "";
 
+    if (access.indexExpr2 !== undefined) {
+        return `配列 ${access.arrayName}[${access.indexExpr}][${access.indexExpr2}] は、配列 ${access.arrayName} の ${access.indexValue} 行 ${access.indexValue2} 列の値です。${access.arrayName} の ${access.indexValue} 行 ${access.indexValue2} 列の値は ${formatVarValue(access.itemValue)} です。`;
+    }
+
     return `配列 ${access.arrayName}[${access.indexExpr}] は、配列 ${access.arrayName} の ${access.indexValue} 番目の値です。${access.arrayName} の ${access.indexValue} 番目の値は ${formatVarValue(access.itemValue)} です。`;
 }
 
 function toArrayAccessKey(access) {
     if (!access) return null;
+    if (access.indexExpr2 !== undefined) {
+        return `${access.arrayName}:${access.indexValue}:${access.indexValue2}`;
+    }
     return `${access.arrayName}:${access.indexValue}`;
 }
 
@@ -212,6 +398,24 @@ function insertTraceAtCurrentPosition(ast) {
 }
 
 function buildAssignExplanation(node, scope, result) {
+    const target = parseAssignmentTarget(node.name, scope);
+
+    if (target) {
+        const assignedValue = result?.assignedValue ?? safeEvalWithScope(node.value, scope);
+        const base = target.baseName;
+        const i = target.indices[0]?.indexValue;
+        const j = target.indices[1]?.indexValue;
+        const key = target.indices.length === 2 ? `${base}:${i}:${j}` : `${base}:${i}`;
+        const targetText = target.indices.length === 2
+            ? `配列 ${base}[${target.indices[0].indexExpr}][${target.indices[1].indexExpr}]（${i} 行 ${j} 列）`
+            : `配列 ${base}[${target.indices[0].indexExpr}]（${i} 番目）`;
+
+        return buildStepDetails(
+            `${targetText} に ${formatVarValue(assignedValue)} を代入しました。`,
+            [key]
+        );
+    }
+
     const binary = parseSimpleBinaryExpression(node.value);
 
     if (binary) {
@@ -219,7 +423,11 @@ function buildAssignExplanation(node, scope, result) {
         const rightValue = safeEvalWithScope(binary.right, scope);
         const rightArrayAccess = parseSimpleArrayAccess(binary.right, scope);
         const rightText = rightArrayAccess
-            ? `${binary.right} は ${rightArrayAccess.arrayName}[${rightArrayAccess.indexValue}] つまり 配列 ${rightArrayAccess.arrayName} の ${rightArrayAccess.indexValue} 番目の値なので、${formatVarValue(rightValue)} です。`
+            ? (
+                rightArrayAccess.indexExpr2 !== undefined
+                    ? `${binary.right} は ${rightArrayAccess.arrayName}[${rightArrayAccess.indexValue}][${rightArrayAccess.indexValue2}] つまり 配列 ${rightArrayAccess.arrayName} の ${rightArrayAccess.indexValue} 行 ${rightArrayAccess.indexValue2} 列の値なので、${formatVarValue(rightValue)} です。`
+                    : `${binary.right} は ${rightArrayAccess.arrayName}[${rightArrayAccess.indexValue}] つまり 配列 ${rightArrayAccess.arrayName} の ${rightArrayAccess.indexValue} 番目の値なので、${formatVarValue(rightValue)} です。`
+            )
             : `${binary.right} は ${formatVarValue(rightValue)} です。`;
 
         let opExplanation = binary.op;
@@ -477,7 +685,12 @@ function buildTrace(ast, targetTrace = trace) {
                 blockId: node.blockId,
                 run: () => {
                     const assignedValue = safeEval(node.value);
-                    setVar(node.name, assignedValue);
+                    const target = parseAssignmentTarget(node.name, vars);
+                    if (target) {
+                        setIndexedVar(target, assignedValue);
+                    } else {
+                        setVar(node.name, assignedValue);
+                    }
                     return { assignedValue };
                 },
                 getDetails: (scope, result) => buildAssignExplanation(node, scope, result)
@@ -562,7 +775,13 @@ function executeImmediate(ast) {
     for (let node of ast) {
 
         if (node.type === "assign") {
-            setVar(node.name, safeEval(node.value));
+            const assignedValue = safeEval(node.value);
+            const target = parseAssignmentTarget(node.name, vars);
+            if (target) {
+                setIndexedVar(target, assignedValue);
+            } else {
+                setVar(node.name, assignedValue);
+            }
         }
 
         if (node.type === "print") {

@@ -151,6 +151,41 @@ const TESTS = [
     },
 
     // ----------------
+    // 2次元配列
+    // ----------------
+    {
+        name: "2次元配列アクセス",
+        ast: [
+            { type: "assign", name: "a", value: "[[1,2,3],[4,5,6]]" },
+            { type: "print", value: "a[0][0]" },
+            { type: "print", value: "a[0][2]" },
+            { type: "print", value: "a[1][1]" }
+        ],
+        expected: "1\n3\n5\n"
+    },
+
+    {
+        name: "2次元配列 添字代入",
+        ast: [
+            { type: "assign", name: "a", value: "[[0,0,0],[0,0,0]]" },
+            { type: "assign", name: "a[1][2]", value: "9" },
+            { type: "print", value: "a[1][2]" }
+        ],
+        expected: "9\n"
+    },
+
+    {
+        name: "2次元配列（空から添字代入で生成）",
+        ast: [
+            { type: "assign", name: "a[0][0]", value: "1" },
+            { type: "assign", name: "a[1][1]", value: "2" },
+            { type: "print", value: "a" }
+        ],
+        expected: "[[1,0],[0,2]]\n",
+        assert: () => Array.isArray(vars.a) && Array.isArray(vars.a[0]) && Array.isArray(vars.a[1])
+    },
+
+    // ----------------
     // for + 配列
     // ----------------
     {
