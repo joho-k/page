@@ -1257,5 +1257,144 @@ workspace.addEventListener("click", (event) => {
     }
 });
 
+// ----------------
+// URL共有
+// ----------------
+function encodeProgramAst(ast) {
+    const json = JSON.stringify(ast ?? []);
+    const utf8 = encodeURIComponent(json);
+    return btoa(utf8);
+}
+
+function decodeProgramAst(encoded) {
+    const json = decodeURIComponent(atob(encoded));
+    const ast = JSON.parse(json);
+    return Array.isArray(ast) ? ast : [];
+}
+
+function parseConditionExpr(condition) {
+    const raw = String(condition ?? "").trim();
+    const ops = ["==", "!=", "<=", ">=", "<", ">"];
+    for (const op of ops) {
+        const idx = raw.indexOf(op);
+        if (idx === -1) continue;
+        const left = raw.slice(0, idx).trim();
+        const right = raw.slice(idx + op.length).trim();
+        if (!left || !right) break;
+        return { left, op, right };
+    }
+    return null;
+}
+
+function loadProgramFromAst(ast) {
+    workspace.innerHTML = "";
+    setSelectedArrayBlock(null);
+
+    function appendNodes(nodes, container) {
+        (nodes || []).forEach((node) => {
+            if (!node || typeof node !== "object") return;
+
+            if (node.type === "assign") {
+                const b = createAssignBlock();
+                setInputValue(b.querySelector(".assign-inline > input"), node.name ?? "x");
+                setInputValue(b.querySelector(".assign-value"), node.value ?? "0");
+                container.appendChild(b);
+                return;
+            }
+
+            if (node.type === "print") {
+                const b = createPrintBlock();
+                setInputValue(b.querySelector("input"), node.value ?? "0");
+                container.appendChild(b);
+                return;
+            }
+
+            if (node.type === "if") {
+                const b = createIfBlock();
+                const parts = parseConditionExpr(node.condition);
+                if (parts) setConditionValue(b, parts.left, parts.op, parts.right);
+                else setInputValue(b.querySelector("input"), node.condition ?? "0");
+                appendNodes(node.body, b.querySelector(".children"));
+                container.appendChild(b);
+                return;
+            }
+
+            if (node.type === "ifelse") {
+                const b = createIfElseBlock();
+                const parts = parseConditionExpr(node.condition);
+                if (parts) setConditionValue(b, parts.left, parts.op, parts.right);
+                else setInputValue(b.querySelector("input"), node.condition ?? "0");
+                appendNodes(node.ifBody, b.querySelector(".if-body"));
+                appendNodes(node.elseBody, b.querySelector(".else-body"));
+                container.appendChild(b);
+                return;
+            }
+
+            if (node.type === "for") {
+                const b = createForBlock();
+                const inputs = b.querySelectorAll("input");
+                setInputValue(inputs[0], node.varName ?? "i");
+                setInputValue(inputs[1], node.start ?? "0");
+                setInputValue(inputs[2], node.end ?? "0");
+                setInputValue(inputs[3], node.step ?? "1");
+                appendNodes(node.body, b.querySelector(".children"));
+                container.appendChild(b);
+                return;
+            }
+        });
+    }
+
+    appendNodes(ast, workspace);
+    updateCode();
+}
+
+function shareProgramUrl() {
+    const ast = window.currentAST || buildAST(workspace);
+    const encoded = encodeProgramAst(ast);
+    const url = new URL(window.location.href);
+    url.searchParams.set("p", encoded);
+
+    const dialog = document.getElementById("share-dialog");
+    const input = document.getElementById("share-url-input");
+    const copyBtn = document.getElementById("copy-share-url-button");
+    const closeBtn = document.getElementById("close-share-dialog-button");
+
+    if (!dialog || !input || !copyBtn || !closeBtn) {
+        window.prompt("共有URL", url.toString());
+        return;
+    }
+
+    input.value = url.toString();
+    dialog.showModal();
+    input.focus();
+    input.select();
+
+    copyBtn.onclick = async () => {
+        try {
+            await navigator.clipboard.writeText(input.value);
+        } catch (_e) {
+            window.prompt("コピーして共有してください", input.value);
+        }
+    };
+
+    closeBtn.onclick = () => dialog.close();
+}
+
+function loadProgramFromUrlIfPresent() {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get("p");
+    if (!encoded) return;
+    try {
+        const ast = decodeProgramAst(encoded);
+        loadProgramFromAst(ast);
+    } catch (e) {
+        console.error("Failed to load program from URL", e);
+    }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    loadProgramFromUrlIfPresent();
+});
+
 setupPaletteButtons();
 setupProgramViewSwitch();

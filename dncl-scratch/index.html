@@ -129,6 +129,7 @@
                         <button onclick="run()">▶ 実行</button>
                         <button onclick="stepStart()">⏭ ステップ開始</button>
                         <button onclick="stepNext()">▶ 次へ</button>
+                        <button onclick="shareProgramUrl()">URL共有</button>
                     </div>
 
                     <div id="step-explanation" class="step-explanation"></div>
@@ -144,6 +145,16 @@
 
         </main>
     </div>
+
+    <dialog id="share-dialog" class="share-dialog">
+        <h3>共有URL</h3>
+        <p>このURLを開くと、今のプログラムが復元されます。</p>
+        <input id="share-url-input" class="share-url-input" readonly>
+        <div class="share-dialog-buttons">
+            <button id="copy-share-url-button" type="button">コピー</button>
+            <button id="close-share-dialog-button" type="button">閉じる</button>
+        </div>
+    </dialog>
 
     <script src="./blocks.js"></script>
     <script src="./executor.js"></script>
