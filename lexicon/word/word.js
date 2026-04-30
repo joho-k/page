@@ -13,7 +13,6 @@ const main = contentDiv.querySelectorAll("main")[0];
 const imageExplanation = contentDiv.querySelectorAll("#image-explanation")[0];
 
 // コンテナ
-const h2 = document.createElement('h2');
 const a = document.createElement('a');
 
 // noheaderのときの処理
@@ -23,11 +22,6 @@ const noHeader = params.get('state') === 'noheader';
 a.href = '../../index.html';
 a.className = "text-white";
 a.textContent = '用語の辞典';
-
-if (!noHeader) {
-    h2.appendChild(a);
-    header.appendChild(h2);
-}
 
 // 注意文の作成
 const warning = document.createElement('div');
@@ -40,7 +34,7 @@ if (!noHeader) {
 // タイトル部分
 const wordTitle = document.createElement('h1');
 wordTitle.id = 'word-title';
-wordTitle.innerHTML = `${title}`;
+wordTitle.innerHTML = `用語の辞典「${title}」`;
 document.title = `${document.title}「${title}」`;
 
 // 動画セクション

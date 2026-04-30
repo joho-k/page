@@ -162,10 +162,10 @@
 .block.step-active {
     box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.95), 0 0 18px rgba(255, 235, 59, 0.6);
     filter: brightness(2.00);
-    color: black;
+    color: var(--text);
 
     input, select {
-        color: black;
+        color: var(--text);
     }
 }
 
@@ -250,7 +250,7 @@
     border: 1px solid #d0d9e8;
     border-radius: 10px;
     font-family: "Courier New", monospace;
-    color: black;
+    color: var(--text);
 }
 
 .share-dialog-buttons {
@@ -356,7 +356,7 @@
     border-radius: 6px;
     padding: 3px 6px;
     font-family: "Courier New", monospace;
-    color: #000;
+    color: var(--text);
 }
 
 .array2d-warning {

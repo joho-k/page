@@ -44,7 +44,7 @@
 .toggle-button {
     margin-bottom: 1em;
     padding: 6px 12px;
-    background-color: #444;
+    background-color: var(--primary);
     color: white;
     border: none;
     border-radius: 5px;
@@ -77,7 +77,7 @@
     /*文字色*/
     border: dashed 2px var(--primary);
     /*破線 太さ 色*/
-    background: #f1f8ff;
+    background: white;
 
     li {
         height: 10px;
@@ -99,7 +99,7 @@
     right: 30px;
     width: 100px;
     height: 100px;
-    background-color: #444;
+    background-color: var(--primary);
     color: white;
     border: none;
     border-radius: 50%;
