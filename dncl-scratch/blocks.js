@@ -490,21 +490,10 @@ function loadExample4() {
     setInputValue(bAssign.querySelector(".assign-value"), "18");
     workspace.appendChild(bAssign);
 
-    // for ループ
-    const forBlock = createForBlock();
-    const inputs = forBlock.querySelectorAll("input");
-    setInputValue(inputs[0], "i");
-    setInputValue(inputs[1], "0");
-    setInputValue(inputs[2], "10"); // 十分な回数
-    setInputValue(inputs[3], "1");
-
-    const loopBody = forBlock.querySelector(".children");
-
-    // if (b != 0)
-    const ifBlock = createIfBlock();
-    setConditionValue(ifBlock, "b", "!=", "0");
-
-    const ifBody = ifBlock.querySelector(".children");
+    // while (b != 0)
+    const whileBlock = createWhileBlock();
+    setConditionValue(whileBlock, "b", "!=", "0");
+    const loopBody = whileBlock.querySelector(".children");
 
     // r = a % b
     const rAssign = createAssignBlock();
@@ -519,22 +508,21 @@ function loadExample4() {
 
     rAssign.querySelector(".expr-zone").appendChild(modExpr);
     syncAssignZone(rAssign.querySelector(".expr-zone"));
-    ifBody.appendChild(rAssign);
+    loopBody.appendChild(rAssign);
 
     // a = b
     const aUpdate = createAssignBlock();
     setInputValue(aUpdate.querySelector(".assign-inline > input"), "a");
     setInputValue(aUpdate.querySelector(".assign-value"), "b");
-    ifBody.appendChild(aUpdate);
+    loopBody.appendChild(aUpdate);
 
     // b = r
     const bUpdate = createAssignBlock();
     setInputValue(bUpdate.querySelector(".assign-inline > input"), "b");
     setInputValue(bUpdate.querySelector(".assign-value"), "r");
-    ifBody.appendChild(bUpdate);
+    loopBody.appendChild(bUpdate);
 
-    loopBody.appendChild(ifBlock);
-    workspace.appendChild(forBlock);
+    workspace.appendChild(whileBlock);
 
     // 表示
     const print = createPrintBlock();
