@@ -150,12 +150,12 @@
 .output-content-dialog {
     padding: 20px 0px;
     font-size: 20px;
-    font-weight: bold; 
+    font-weight: bold;
 }
 
 #close-button {
     background-color: #ddd;
-    color: black
+    color: var(--text)
 }
 
 summary {

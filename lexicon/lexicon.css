@@ -1,8 +1,9 @@
 .word-list-container {
     display: flex;
     flex-wrap: wrap;
-    max-width: 800px;
     margin: 0 auto;
+    background-color: white;
+    border-radius: 24px;
 }
 
 .item {

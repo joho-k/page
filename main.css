@@ -1,12 +1,12 @@
 /* 全体のスタイル */
 :root {
-    --primary: #1565c0;
+    --primary: #002D5A;
     --primary-light: #55DCFD;
     --primary-light-2: #CCFFE9;
     --primary-yellow: #FEFF7C;
-    --accent: #F29C32;
-    --bg: #f9fafb;
-    --text: #333;
+    --accent: #ab0333;
+    --bg: #EDF1F5;
+    --text: #444;
     --heading-font: "M PLUS Rounded 1c", "Noto Sans JP", system-ui, sans-serif;
 
 }
@@ -15,9 +15,10 @@ body {
     font-family: var(--heading-font);
     margin: 30px;
     padding: 0;
-    color: #333;
+    color: #444;
     /* ヘッダーの高さ分の余白を確保 */
     padding-top: 60px;
+    background-color: var(--bg);
 }
 
 /* スマホの場合はmarginを0に */
@@ -48,41 +49,46 @@ button:disabled {
 }
 
 /* hタグのスタイル (シンプルに) */
-h1, h2, h3 {
+h1, h2, h3 ,h4 {
     text-align: center;
     padding: 15px 20px;
     margin: 20px auto;
+    border-radius: 24px;
+    background-color: white;
+    color: var(--primary)
 }
 
 h1 {
     font-size: 2.5em;
-    color: #1565c0;
+    color: var(--primary);
     /* ロゴの濃い青色 */
 }
 
 h2 {
     font-size: 2em;
-    background-color: #1565c0;
+    background-color: var(--primary);
     color: white;
     border-radius: 20px;
 }
 
 h3 {
     font-size: 1.5em;
-    border-bottom: 4px solid #1565c0;
-    color: #1565c0;
+    border: 4px solid var(--primary);
+    color: var(--primary);
 }
 
 h4 {
     font-size: 1.25em;
     text-align: center;
     margin: 0;
-    border-bottom: 2px solid #000;
+    border: 2px solid var(--primary);
+    padding: 5px 10px;
+    margin: 5px auto;
     margin: 10px;
 }
 
 h5 {
-    background-color: #1565c0;
+    background-color: var(--primary);
     font-size: 18px;
     color: white;
 }
@@ -170,7 +176,7 @@ li {
 
 li a {
     text-decoration: none;
-    color: black;
+    color: var(--text);
 }
 
 /* 
@@ -178,7 +184,7 @@ li a {
 */
 /* 問題番号 */
 .question-number {
-    background-color: #0288d1;
+    background-color: var(--primary);
     /* 濃い青 */
     color: white;
     padding: 10px 0px;
@@ -228,7 +234,7 @@ li a {
 
 /* 問題解くボタン */
 .question-link-button {
-    background-color: #ff5722;
+    background-color: var(--accent);
     /* 異なる背景色（オレンジ色） */
     color: white;
     padding: 10px;
@@ -269,14 +275,14 @@ li a {
 
 .info {
     background-color: #caf4ff;
-    color: black;
+    color: var(--text);
     padding: 10px;
     margin-bottom: 10px;
 }
 
 .info::before {
     font-family: "Font Awesome 6 Free";
-    color: #1565C0;
+    color: var(--primary);
     display: inline-block;
     margin-right: 8px;
     font: var(--fa-font-solid);

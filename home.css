@@ -1,8 +1,8 @@
 body {
     margin: 0;
     color: #222;
-    background: #f9fafb;
     line-height: 1.6;
+    background-color: var(--bg);
 }
 
 .hero {
@@ -15,6 +15,7 @@ body {
 .hero h1 {
     font-size: 2.5rem;
     margin: 0 0 .5rem;
+    background-color: var(--primary);
 }
 
 .hero h1 img {
@@ -31,26 +32,6 @@ body {
     background-color: var(--primary-light);
     padding: 0.5rem 1rem;
     text-align: center;
-}
-
-.nav {
-    display: flex;
-    justify-content: center;
-    padding: 10px 0px;
-}
-
-.nav a {
-    margin: 0 .5rem;
-    padding: .5rem 1rem;
-    background: #fff;
-    color: #1e88e5;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.nav .link-button {
-    background-color: var(--primary-yellow);
 }
 
 .intro {
@@ -115,7 +96,7 @@ body {
 
 .news .tag.func {
     background-color: var(--primary-light);
-    color: black;
+    color: var(--text);
 }
 
 .news .tag.common {
@@ -165,8 +146,6 @@ footer {
 /* 右側ボディ（見本の水色帯の雰囲気） */
 #content-hero .feat-body {
     padding: 100px 30px;
-    background: linear-gradient(180deg, #1565C0 0%, #368ef3 100%);
-    border-left: 1px solid #dbeafe;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -176,25 +155,18 @@ footer {
     display: flex;
     align-items: baseline;
     gap: 10px;
-    border-bottom: 1px solid #93c5fd55;
     padding-bottom: 8px;
     margin-bottom: 10px;
-}
-
-#content-hero .feat-head h3 {
-    border-bottom: none;
 }
 
 #content-hero .title {
     margin: 0;
     font-size: 24px;
     letter-spacing: .02em;
-    color: white;
 }
 
 #content-hero .desc {
     margin: .4rem 0 1rem;
-    color: white;
     line-height: 1.8;
     font-size: 16px;
 }
@@ -203,17 +175,16 @@ footer {
     align-self: flex-start;
     text-decoration: none;
     font-weight: 700;
-    color: #0369a1;
-    border: 2px solid #38bdf8;
+    color: white;
     border-radius: 999px;
     padding: 8px 14px;
     transition: .15s ease;
-    background: #e0f2fe;
+    background: var(--primary);
 }
 
 #content-hero .cta:hover {
     transform: translateY(-1px);
-    background: #bae6fd;
+    background: var(--accent);
 }
 
 .feature:nth-child(even) {
