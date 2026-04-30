@@ -95,7 +95,8 @@ window.addEventListener('load', () => {
     // menuListの生成 + 今開いているページのハイライト
     // ---------------------
     const menuList = [
-        { name: "dncl", title: "実プロ", fullUrl: null },
+        // { name: "dncl", title: "実プロ", fullUrl: null },
+        { name: "dncl-scratch", title:"共テプロトレ", full: null},
         { name: "lexicon", title: "用語の辞典", fullUrl: null },
         { name: "sisaku", title: "試作問題リンク", fullUrl: null },
         { name: "generative_ai", title: "学習支援AI(β版)", fullUrl: "https://notebooklm.google.com/notebook/772b6f45-ffec-4400-b404-62c1748983d1?authuser=1&pli=1" },
