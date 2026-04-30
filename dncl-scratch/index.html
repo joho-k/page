@@ -76,93 +76,39 @@
 
         <main>
 
-            <div class="palette">
-                <button class="palette-block-button" data-block-type="assign">代入</button>
-                <button class="palette-block-button" data-block-type="print">表示</button>
-                <button class="palette-block-button" data-block-type="if">もし</button>
-                <button class="palette-block-button" data-block-type="ifelse">もし＋そうでなければ</button>
-                <button class="palette-block-button" data-block-type="for">繰り返し</button>
-                <button class="palette-block-button" data-block-type="while">条件繰り返し</button>
-                <button class="palette-block-button" data-block-type="array">配列</button>
-                <button class="palette-block-button" data-block-type="expr">計算</button>
-                <button class="palette-block-button" data-block-type="random">乱数</button>
-                <button class="palette-block-button" data-block-type="floor">切り捨て</button>
-                <button class="palette-block-button" data-block-type="ceil">切り上げ</button>
-                <button class="palette-block-button" data-block-type="round">四捨五入</button>
-                <span class="sample-buttons">
-                    <button onclick="loadExample1()">例1:配列の集計</button>
-                    <button onclick="loadExample2()">例2:九九</button>
-                    <button onclick="loadExample3()">例3:配列の最大値</button>
-                    <button onclick="loadExample4()">例4:ユークリッドの互除法</button>
-                </span>
-            </div>
-            <div id="palette-preview" class="palette-preview">
-                <button id="toggle-palette-preview-button" class="palette-preview-close"
-                    onclick="hidePalettePreview()">×</button>
-                <div id="palette-preview-content">ブロックにマウスを重ねると説明が表示されます。スマホでは1回目のタップで説明表示・2回目のタップでブロックが追加されます。</div>
-            </div>
+            <section class="protro-intro">
+                <p class="protro-lead">
+                    共通テスト「情報I」で使われる言語 <strong>DNCL</strong> を、実際に動かしながら学べる教材です。
+                    ブロックで組み立てて実行し、コード表示・ステップ実行・解説を使って「書ける／読める」力を身につけます。
+                </p>
 
-            <div class="dncl-main">
-
-                <div class="dncl-left">
-                    <h4>プログラム</h4>
-                    <div class="program-view-switch">
-                        見た目を切り替える
-                        <button type="button" id="view-block-button"
-                            class="program-view-button program-view-button-active">
-                            ブロック
-                        </button>
-                        <button type="button" id="view-code-button" class="program-view-button">
-                            コード
-                        </button>
+                <div class="protro-links">
+                    <div class="protro-link-card">
+                        <h3>Editor（DNCLビジュアルエディタ）</h4>
+                        <p>
+                            ブロックをドラッグ＆ドロップで組み立てて、すぐ実行できます。ブロック表示とコード表示を切り替えられるので、
+                            「見た目」と「文章（DNCL）」を対応させて理解できます。
+                        </p>
+                        <a class="link-button" href="./editor.html">エディターへ</a>
                     </div>
-                    <div id="array-control-panel" class="array-control-panel" hidden></div>
 
-                    <div id="workspace-panel" class="program-panel">
-                        <div id="workspace"></div>
-                    </div>
-                    <div id="code-panel" class="program-panel program-panel-hidden">
-                        <pre id="code"></pre>
+                    <div class="protro-link-card">
+                        <h3>練習問題集</h4>
+                        <p>
+                            共通テスト対策として、典型問題を段階的に練習できます。解説やヒントと一緒に取り組めるので、
+                            つまずきやすいポイントを整理しながら学べます。
+                        </p>
+                        <a class="link-button" >coming soon...</a>
                     </div>
                 </div>
 
-                <div class="dncl-right">
-                    <div class="run-buttons">
-                        <button onclick="run()">▶ 実行</button>
-                        <button onclick="stepStart()">⏭ ステップ開始</button>
-                        <button onclick="stepNext()">▶ 次へ</button>
-                        <button onclick="shareProgramUrl()">URL共有</button>
-                    </div>
-
-                    <div id="step-explanation" class="step-explanation"></div>
-
-                    <h4>変数</h4>
-                    <div id="vars" class="vars-panel"></div>
-
-                    <h4>出力</h4>
-                    <pre id="output"></pre>
-
+                <div class="protro-benefits">
+                    <h3>共テプロトレの3つのメリット</h3>
+                    <img src="./intro.png" />
                 </div>
-            </div>
-
+            </section>
         </main>
     </div>
-
-    <dialog id="share-dialog" class="share-dialog">
-        <h3>共有URL</h3>
-        <p>このURLを開くと、今のプログラムが復元されます。</p>
-        <input id="share-url-input" class="share-url-input" readonly>
-        <div class="share-dialog-buttons">
-            <button id="copy-share-url-button" type="button">コピー</button>
-            <button id="close-share-dialog-button" type="button">閉じる</button>
-        </div>
-    </dialog>
-
-    <script src="./blocks.js"></script>
-    <script src="./executor.js"></script>
-    <script src="./main.js"></script>
-    <script src="./tests.js"></script>
-
 </body>
 
 </html>
