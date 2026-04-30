@@ -30,6 +30,11 @@ const BLOCK_PREVIEWS = {
         code: `i を 1 から 5 まで 1 ずつ増やしながら繰り返す:\n  表示する(i)`,
         text: "回数を決めて、同じ処理を何度も行います。"
     },
+    while: {
+        title: "繰り返し（条件）",
+        code: `x < 10 の間繰り返す:\n  x = x + 1`,
+        text: "条件が正しい間、同じ処理を繰り返します。"
+    },
     array: {
         title: "配列",
         code: `a = [1, 2, 3]`,
@@ -244,6 +249,7 @@ function addBlock(type) {
     if (type === "if") el = createIfBlock();
     if (type === "ifelse") el = createIfElseBlock();
     if (type === "for") el = createForBlock();
+    if (type === "while") el = createWhileBlock();
     if (type === "array") el = createArrayBlock();
     if (type === "expr") el = createExprBlock();
     if (type === "random") el = createRandomBlock();
@@ -899,6 +905,38 @@ function createForBlock() {
     return div;
 }
 
+function createWhileBlock() {
+    const div = document.createElement("div");
+    div.className = "block while";
+    div.dataset.type = "while";
+    assignBlockId(div);
+
+    div.innerHTML = `
+    <input class="condition-left" value="x">
+    <select class="condition-op">
+      <option value=">">&gt;</option>
+      <option value=">=">&gt;=</option>
+      <option value="<">&lt;</option>
+      <option value="<=">&lt;=</option>
+      <option value="==">==</option>
+      <option value="!=">!=</option>
+    </select>
+    <input class="condition-right" value="0">
+    の間繰り返す:
+    <div class="children dropzone"></div>
+  `;
+
+    const child = div.querySelector(".children");
+
+    div.querySelectorAll("input").forEach(autoResizeInput);
+    div.querySelector("select").addEventListener("change", updateCode);
+    enableDrop(child);
+    updatePlaceholder(child);
+
+    addDeleteButton(div);
+    return div;
+}
+
 // ----------------
 // ドラッグ
 // ----------------
@@ -1075,6 +1113,15 @@ function buildAST(container) {
             });
         }
 
+        if (type === "while") {
+            ast.push({
+                type,
+                blockId: node.dataset.blockId,
+                condition: readConditionValue(node),
+                body: buildAST(node.querySelector(".children"))
+            });
+        }
+
         if (type === "expr") {
             const i = node.querySelectorAll("input");
             const op = node.querySelector("select").value;
@@ -1142,6 +1189,10 @@ function buildCode(ast, indent = "") {
 
         if (node.type === "for")
             code += `${indent}${node.varName} を ${node.start} から ${node.end} まで ${node.step} ずつ増やしながら繰り返す:\n` +
+                buildCode(node.body, indent + "  ");
+
+        if (node.type === "while")
+            code += `${indent}${node.condition} の間繰り返す:\n` +
                 buildCode(node.body, indent + "  ");
 
         if (node.type === "expr")
@@ -1337,6 +1388,16 @@ function loadProgramFromAst(ast) {
                 setInputValue(inputs[1], node.start ?? "0");
                 setInputValue(inputs[2], node.end ?? "0");
                 setInputValue(inputs[3], node.step ?? "1");
+                appendNodes(node.body, b.querySelector(".children"));
+                container.appendChild(b);
+                return;
+            }
+
+            if (node.type === "while") {
+                const b = createWhileBlock();
+                const parts = parseConditionExpr(node.condition);
+                if (parts) setConditionValue(b, parts.left, parts.op, parts.right);
+                else setInputValue(b.querySelector("input"), node.condition ?? "0");
                 appendNodes(node.body, b.querySelector(".children"));
                 container.appendChild(b);
                 return;
