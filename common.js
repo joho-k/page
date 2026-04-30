@@ -76,7 +76,8 @@ window.addEventListener('load', () => {
 
     const header = document.createElement('div');
     header.className = 'header';
-    header.innerHTML = `
+
+    let headerInnerHtml = `
         <div class="title">
             <a href="${pathPrefix}index.html">
                 <span class="logo-desc">情報I・基本情報技術者試験対策なら<br/ ></span>
@@ -88,16 +89,28 @@ window.addEventListener('load', () => {
             <span></span>
             <span></span>
         </div>
-        <nav class="menu">
-            <a href="${pathPrefix}dncl/index.html">実プロ</a>
-            <a href="${pathPrefix}lexicon/index.html">用語の辞典</a>
-            <a href="${pathPrefix}sisaku/index.html">試作問題リンク</a>
-            <a href="https://notebooklm.google.com/notebook/772b6f45-ffec-4400-b404-62c1748983d1?authuser=1&pli=1" target="_blank">学習支援AI(β版)</a>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd7RzukGDWpTAVr45UYY1EzBKxxvTeRuqfI_XLaBbb0MI4T0A/viewform?usp=dialog"
-            target="_blank" class="inquiry">
-            お問い合わせ</a>
-        </nav>
-    `;
+        <nav class="menu">`
+
+    // ---------------------
+    // menuListの生成 + 今開いているページのハイライト
+    // ---------------------
+    const menuList = [
+        { name: "dncl", title: "実プロ", fullUrl: null },
+        { name: "lexicon", title: "用語の辞典", fullUrl: null },
+        { name: "sisaku", title: "試作問題リンク", fullUrl: null },
+        { name: "generative_ai", title: "学習支援AI(β版)", fullUrl: "https://notebooklm.google.com/notebook/772b6f45-ffec-4400-b404-62c1748983d1?authuser=1&pli=1" },
+        { name: "inquiry", title: "お問い合わせ", fullUrl: "https://docs.google.com/forms/d/e/1FAIpQLSd7RzukGDWpTAVr45UYY1EzBKxxvTeRuqfI_XLaBbb0MI4T0A/viewform?usp=dialog" },
+    ]
+
+    menuList.forEach((menu) => {
+        const href = menu.fullUrl || `${pathPrefix}${menu.name}/index.html`;
+        const target = menu.fullUrl ? `target="_blank"` : "";
+        const activeClass = window.location.pathname.includes(`/${menu.name}/`) ? "active" : ""
+        headerInnerHtml += `<a href="${href}" ${target} class="${menu.name} ${activeClass}">${menu.title}</a>`
+    })
+
+    header.innerHTML = headerInnerHtml + "</nav>";
+
     document.body.insertBefore(header, document.body.firstChild);
 
     const hamburger = header.querySelector('.hamburger-menu');
