@@ -260,7 +260,7 @@ li a {
 }
 
 .link-button {
-    background-color: #ff5722;
+    background-color: var(--accent);
     /* 異なる背景色（オレンジ色） */
     color: white;
     padding: 10px;
