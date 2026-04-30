@@ -244,6 +244,34 @@ const TESTS = [
     },
 
     // ----------------
+    // while
+    // ----------------
+    {
+        name: "while（条件の間繰り返す）",
+        ast: [
+            { type: "assign", name: "i", value: "0" },
+            {
+                type: "while",
+                condition: "i < 3",
+                body: [
+                    { type: "assign", name: "i", value: "i + 1" },
+                    { type: "print", value: "i" }
+                ]
+            }
+        ],
+        expected: "1\n2\n3\n"
+    },
+
+    {
+        name: "while（最初から条件が偽）",
+        ast: [
+            { type: "assign", name: "i", value: "3" },
+            { type: "while", condition: "i < 3", body: [{ type: "print", value: "i" }] }
+        ],
+        expected: ""
+    },
+
+    // ----------------
     // if + 式
     // ----------------
     {

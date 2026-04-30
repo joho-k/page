@@ -6,6 +6,9 @@ let stepIndex = 0;
 let changedVars = new Set();
 let currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。「次へ」を押してステップ実行を開始してください。";
 let highlightedArrayAccesses = new Set();
+let whileIterationCounts = new Map();
+
+const MAX_WHILE_ITERATIONS_PER_BLOCK = 10000;
 
 function pushTraceStep(blockId, fn, getDetails = null) {
     trace.push({
@@ -678,6 +681,10 @@ function safeEval(expr) {
 // 正しいトレース生成（事前展開🔥）
 // ----------------
 function buildTrace(ast, targetTrace = trace) {
+    if (targetTrace === trace && trace.length === 0 && stepIndex === 0) {
+        whileIterationCounts = new Map();
+    }
+
     for (let node of ast) {
 
         if (node.type === "assign") {
@@ -765,6 +772,48 @@ function buildTrace(ast, targetTrace = trace) {
                 buildTrace(node.body, targetTrace);
             }
         }
+
+        if (node.type === "while") {
+            targetTrace.push({
+                blockId: node.blockId,
+                run: () => {
+                    const conditionValue = safeEval(node.condition);
+
+                    if (!conditionValue) {
+                        return { conditionValue, ended: true };
+                    }
+
+                    const whileKey = node.blockId || node;
+                    const nextCount = (whileIterationCounts.get(whileKey) || 0) + 1;
+                    whileIterationCounts.set(whileKey, nextCount);
+
+                    if (nextCount > MAX_WHILE_ITERATIONS_PER_BLOCK) {
+                        return { conditionValue, stopped: true, iterationCount: nextCount };
+                    }
+
+                    insertTraceAtCurrentPosition([...node.body, node]);
+                    return { conditionValue, continued: true, iterationCount: nextCount };
+                },
+                getDetails: (_scope, result) => {
+                    if (result?.stopped) {
+                        return buildStepDetails(
+                            `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} です。繰り返し回数が多すぎるため（上限 ${MAX_WHILE_ITERATIONS_PER_BLOCK} 回）停止しました。`
+                        );
+                    }
+
+                    if (result?.ended) {
+                        return buildStepDetails(
+                            `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} なので、繰り返しを終了します。`
+                        );
+                    }
+
+                    const countText = typeof result?.iterationCount === "number" ? `（${result.iterationCount} 回目）` : "";
+                    return buildStepDetails(
+                        `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} なので、繰り返しを続けます${countText}。`
+                    );
+                }
+            });
+        }
     }
 }
 
@@ -814,6 +863,15 @@ function executeImmediate(ast) {
 
             for (let i = start; i <= end; i += step) {
                 setVar(node.varName, i);
+                executeImmediate(node.body);
+            }
+        }
+
+        if (node.type === "while") {
+            let count = 0;
+            while (safeEval(node.condition)) {
+                count += 1;
+                if (count > MAX_WHILE_ITERATIONS_PER_BLOCK) break;
                 executeImmediate(node.body);
             }
         }

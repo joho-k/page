@@ -191,6 +191,11 @@
     --block-border: #c8792b;
 }
 
+.block[data-type="while"] {
+    --block-bg: #d97a2b;
+    --block-border: #bf6924;
+}
+
 .block[data-type="array"] {
     --block-bg: #c05a7a;
     --block-border: #aa4d6b;
