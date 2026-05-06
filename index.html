@@ -79,8 +79,23 @@
         <h2>充実の無料コンテンツ</h2>
         <p style="text-align: center;">以下のコンテンツは、すべて無料・会員登録不要で使用することができます。</p>
         <div class="wrap">
-            <!-- 実プロ -->
             <article class="feature">
+                <div class="feat-img">
+                    <img src="./dncl-scratch/intro.png" alt="実プロのイメージ">
+                </div>
+                <div class="feat-body">
+                    <div class="feat-head">
+                        <h3 class="title">共テプロトレ</h3>
+                    </div>
+                    <p class="desc">
+                        共通テスト「情報I」で使われる言語 DNCL を、実際に動かしながら学べる教材です。<br />
+                        ブロックで組み立てて実行し、コード表示・ステップ実行・解説を使って「書ける／読める」力を身につけます。
+                    </p>
+                    <a class="cta" href="dncl-scratch/index.html">プログラミングをする！</a>
+                </div>
+            </article>
+            <!-- 実プロ -->
+            <!-- <article class="feature">
                 <div class="feat-img">
                     <img src="./dncl/instruction.png" alt="実プロのイメージ">
                 </div>
@@ -94,7 +109,7 @@
                     </p>
                     <a class="cta" href="dncl/index.html">プログラミングをする！</a>
                 </div>
-            </article>
+            </article> -->
 
             <!-- 用語の辞典 -->
             <article class="feature">
@@ -218,9 +233,12 @@
 </body>
 <script>
     const newsItems = [
+        { date: "2026-05-06", tag: "func", desc: "「試作問題リンク」に情報を追加しました。" },
+        { date: "2026-04-27", tag: "func", desc: "共通テストプログラミング学習ツール「共テプロトレ」を公開しました。" },
+        { date: "2026-02-17", tag: "youtube", desc: "チャンネル登録者数が4,000名を突破しました！" },
         { date: "2025-12-23", tag: "func", desc: "情報I 学習支援AI(β版)を公開しました。" },
         { date: "2025-12-18", tag: "func", desc: "「試作問題リンク」に、答えと引用元にアクセスできるようにしました。(一部サイトを除く)" },
-        { date: "2025-09-16", tag: "youtube", desc: "チャンネル登録者数が3,500名を突破しました！" },
+        // { date: "2025-09-16", tag: "youtube", desc: "チャンネル登録者数が3,500名を突破しました！" },
         { date: "2025-07-17", tag: "youtube", desc: "チャンネル登録者数が3,000名を突破しました！" },
         { date: "2025-06-30", tag: "youtube", desc: "チャンネル登録者数が2,000名を突破しました！" },
         { date: "2025-06-27", tag: "func", desc: "「試作問題リンク」を更新しました。" },
@@ -269,6 +287,23 @@
         // 組み立て
         content.appendChild(time);
         content.appendChild(tag);
+
+        // 2週間以内の更新はNEW
+        const targetDate = new Date(item.date);
+        const now = new Date();
+
+        // 差をミリ秒で取得
+        const diff = now - targetDate;
+        // 2週間（14日）のミリ秒
+        const oneWeek = 14 * 24 * 60 * 60 * 1000;
+
+        if (diff >= 0 && diff <= oneWeek) {
+            const newSpan = document.createElement("span");
+            newSpan.className = "new";
+            newSpan.textContent = "NEW!";
+            content.appendChild(newSpan);
+        }
+
         content.appendChild(desc);
         li.appendChild(content);
         ul.appendChild(li);
