@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>共テプロトレ(共通テストプログラミングトレーニング) | 情報の教室</title>
-    <meta name="description" content="共通テストプログラミングトレーニング 通称「共テプロトレ」は情報Iに対応した、実際にプログラムを動かしながら学べる教材です。プログラミング初学者にもおすすめ！">
-    <meta name="keywords" content="プログラミング学習,情報I,DNCL,ビジュアルプログラミング">
+    <title>練習問題集 | 共テプロトレ(共通テストプログラミングトレーニング) | 情報の教室</title>
+    <meta name="description" content="共通テスト「情報I」対策：DNCLの典型問題を段階的に練習できる問題集ページです。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,問題集">
 
     <!-- オープングラフ -->
-    <meta property="og:title" content="共テプロトレ(共通テストプログラミングトレーニング) | 情報の教室">
-    <meta property="og:description" content="高校「情報I」や情報処理技術者試験に役立つ教材や情報をまとめた解説サイトです。">
+    <meta property="og:title" content="練習問題集 | 共テプロトレ(共通テストプログラミングトレーニング) | 情報の教室">
+    <meta property="og:description" content="共通テスト「情報I」で使われるDNCLの典型問題を、ヒント・解説付きで練習できます。">
     <meta property="og:url" content="https://joho-kyoshitsu.com/">
     <meta property="og:image" content="https://joho-kyoshitsu.com/img/logo_transparent.png">
     <meta property="og:type" content="website">
@@ -65,7 +65,8 @@
 
     <!-- 共通部分ここまで -->
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="practice.css">
+    <script src="practice.js" defer></script>
 </head>
 
 <body>
@@ -75,36 +76,30 @@
         </header>
 
         <main>
-
-            <section class="protro-intro">
-                <p class="protro-lead">
-                    共通テスト「情報I」で使われる言語 <strong>DNCL</strong> を、実際に動かしながら学べる教材です。
-                    ブロックで組み立てて実行し、コード表示・ステップ実行・解説を使って「書ける／読める」力を身につけます。
-                </p>
-
-                <div class="protro-links">
-                    <div class="protro-link-card">
-                        <h3>Editor（DNCLビジュアルエディタ）</h4>
-                        <p>
-                            ブロックをドラッグ＆ドロップで組み立てて、すぐ実行できます。ブロック表示とコード表示を切り替えられるので、
-                            「見た目」と「文章（DNCL）」を対応させて理解できます。
-                        </p>
-                        <a class="link-button" href="./editor.html">エディターへ</a>
-                    </div>
-
-                    <div class="protro-link-card">
-                        <h3>練習問題集</h4>
-                        <p>
-                            共通テスト対策として、典型問題を段階的に練習できます。解説やヒントと一緒に取り組めるので、
-                            つまずきやすいポイントを整理しながら学べます。
-                        </p>
-                        <a class="link-button" href="./practice.html">問題集へ</a>
+            <section class="practice">
+                <div class="practice-top">
+                    <h3>練習問題集</h3>
+                    <p class="practice-lead">
+                        典型問題を「基礎 → 応用」の順に練習できます。各問題は、ヒントを見ながら段階的に解ける構成を想定しています。
+                    </p>
+                    <div class="practice-actions">
+                        <a class="link-button" href="./index.html"><i class="fa-solid fa-arrow-left"></i> トップへ</a>
+                        <a class="link-button" href="./editor.html"><i class="fa-solid fa-pen-to-square"></i> エディターへ</a>
                     </div>
                 </div>
 
-                <div class="protro-benefits">
-                    <h3>共テプロトレの3つのメリット</h3>
-                    <img src="./intro.png" />
+                <div class="practice-table-wrap">
+                    <table class="practice-table" aria-label="練習問題一覧">
+                        <thead>
+                            <tr>
+                                <th scope="col">難易度</th>
+                                <th scope="col">タイトル</th>
+                                <th scope="col">内容</th>
+                                <th scope="col">追加日</th>
+                            </tr>
+                        </thead>
+                        <tbody id="practice-tbody"></tbody>
+                    </table>
                 </div>
             </section>
         </main>
