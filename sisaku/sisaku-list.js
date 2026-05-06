@@ -72,6 +72,20 @@ const sisaku = [
             answer: "https://www.do-johodai.ac.jp/_cmswp/wp-content/uploads/R7_informationI_2_answer.pdf",
             source: "https://www.do-johodai.ac.jp/examinee/examinfo/entrance_exam/",
         },
+    },
+    {
+        name: "高知工科大学 令和8年度一般選抜前期日程個別学力検査「情報」の出題方針について", url: {
+            question: "https://www.kochi-tech.ac.jp/entrance_info/img/r8ippan_jouhou.pdf",
+            answer: "https://www.kochi-tech.ac.jp/entrance_info/img/r8ippan_jouhou.pdf",
+            source: "",
+        },
+    },
+    {
+        name: "大阪工業大学 2026年度入試「情報」試行問題", url: {
+            question: "https://www.oit.ac.jp/admission/result/pdf/exam/2026/2026it.pdf",
+            answer: "https://www.oit.ac.jp/admission/result/pdf/exam/2026/2026it_ans.pdf",
+            source: "https://www.oit.ac.jp/admission/result/kakomon.html",
+        },
     }
 ]
 
