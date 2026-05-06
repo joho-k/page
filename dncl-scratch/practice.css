@@ -1,0 +1,75 @@
+.practice {
+    margin: 0 auto 18px;
+    padding: 0 10px;
+    max-width: 1100px;
+}
+
+.practice-top {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin: 0 0 12px;
+}
+
+.practice-top h3 {
+    margin: 0 0 6px;
+}
+
+.practice-lead {
+    margin: 0 0 10px;
+}
+
+.practice-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.practice-table-wrap {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: auto;
+}
+
+.practice-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+}
+
+.practice-table thead th {
+    position: sticky;
+    top: 0;
+    background: #f9fafb;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 10px 12px;
+    white-space: nowrap;
+}
+
+.practice-table tbody td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 10px 12px;
+    vertical-align: top;
+}
+
+.practice-table tbody tr:hover td {
+    background: #fafafa;
+}
+
+.practice-difficulty {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.practice-addedAt {
+    white-space: nowrap;
+    color: #6b7280;
+}
+
+.practice-empty {
+    color: #6b7280;
+}
