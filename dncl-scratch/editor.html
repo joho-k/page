@@ -75,6 +75,20 @@
         </header>
 
         <main>
+            <section id="question-panel" class="question-panel" hidden>
+                <h3 id="question-panel-title"></h3>
+                <div class="question-panel-grid">
+                    <div>
+                        <div class="question-panel-label">問題</div>
+                        <div id="question-panel-question" class="question-panel-box"></div>
+                    </div>
+                    <div>
+                        <div class="question-panel-label">メモ</div>
+                        <div id="question-panel-output" class="question-panel-box"></div>
+                    </div>
+                </div>
+                <div id="question-panel-result" class="question-panel-result" aria-live="polite"></div>
+            </section>
 
             <div class="palette">
                 <button class="palette-block-button" data-block-type="assign">代入</button>

@@ -1581,6 +1581,7 @@ function quizSetupChoices(quiz) {
                 window.activeBlankId = null;
             }
             updateCode();
+            quizUpdateCompletionPrompt();
         });
         choicesEl.append(btn);
     });
@@ -1588,6 +1589,34 @@ function quizSetupChoices(quiz) {
 
 function quizGetBlankInputs() {
     return [...workspace.querySelectorAll("input[data-blank-index]")];
+}
+
+function quizUpdateCompletionPrompt() {
+    const resultEl = document.getElementById("question-panel-result");
+    if (!resultEl) return;
+    const blanks = quizGetBlankInputs();
+    if (blanks.length === 0) return;
+
+    const allFilled = blanks.every((b) => String(b.value ?? "").trim().length > 0);
+    const runButtons = document.querySelector(".run-buttons");
+    const runBtn = runButtons?.querySelector('button[onclick="run()"]') ?? null;
+    const nextBtn = runButtons?.querySelector('button[onclick="stepNext()"]') ?? null;
+
+    if (allFilled) {
+        resultEl.textContent = "すべて埋まりました。▶ 実行で答え合わせしてください。";
+        resultEl.className = "question-panel-result";
+        runBtn?.classList.add("quiz-cta", "quiz-cta-pulse");
+        nextBtn?.classList.add("quiz-cta");
+        return;
+    }
+
+    if (resultEl.textContent === "すべて埋まりました。▶ 実行で答え合わせしてください。") {
+        resultEl.textContent = "";
+        resultEl.className = "question-panel-result";
+    }
+
+    runBtn?.classList.remove("quiz-cta", "quiz-cta-pulse");
+    nextBtn?.classList.remove("quiz-cta");
 }
 
 function quizSetupBlankTapBehavior() {
@@ -1605,6 +1634,7 @@ function quizSetupBlankTapBehavior() {
             input.classList.remove("quiz-blank-active");
             window.activeBlankId = null;
             updateCode();
+            quizUpdateCompletionPrompt();
             return;
         }
 
@@ -1703,6 +1733,7 @@ function setupQuizModeIfPresent() {
     quizSetupChoices(quiz);
     quizHookJudge(quiz);
     quizFocusFirstBlank();
+    quizUpdateCompletionPrompt();
     return true;
 }
 
