@@ -773,6 +773,25 @@ pre {
     scroll-snap-type: x mandatory;
 }
 
+.quiz-blank {
+    min-width: 3.8em;
+    padding: 4px 10px;
+    margin: 0 2px;
+    border: 2px solid #ffb300;
+    border-radius: 10px;
+    background: #fff8e1;
+    color: #2f4460;
+    font-weight: 800;
+    font-size: 15px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.quiz-blank::placeholder {
+    color: rgba(47, 68, 96, 0.55);
+    font-weight: 700;
+}
+
 .quiz-choice {
     scroll-snap-align: start;
     border: 1px solid #d0d9e8;
