@@ -1736,11 +1736,9 @@ function setupQuizModeIfPresent() {
     const panel = document.getElementById("question-panel");
     const qTitle = document.getElementById("question-panel-title");
     const qText = document.getElementById("question-panel-question");
-    const outText = document.getElementById("question-panel-output");
-    if (panel && qTitle && qText && outText) {
+    if (panel && qTitle && qText) {
         qTitle.textContent = `問題：${quiz.question ?? ""}`;
         qText.textContent = quiz.question ?? "";
-        outText.textContent = "（実行して確かめよう）";
         panel.hidden = false;
     }
 
