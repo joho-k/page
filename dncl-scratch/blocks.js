@@ -1663,7 +1663,21 @@ function quizShowResultDialog(ok, hintMessage = "") {
     if (!dialog || !title || !body || !close) return;
 
     title.textContent = ok ? "正解！" : "不正解";
-    body.textContent = ok ? "よくできました。" : (hintMessage ? `ヒント：\n${hintMessage}` : "もう一度チャレンジしてみましょう。");
+    const outputText = String(output ?? "");
+    const hintText = ok
+        ? "よくできました。"
+        : (hintMessage ? `ヒント：\n${hintMessage}` : "もう一度チャレンジしてみましょう。");
+
+    body.innerHTML = "";
+    const outputLabel = document.createElement("div");
+    outputLabel.textContent = "出力";
+    const outputBox = document.createElement("pre");
+    outputBox.className = "quiz-result-output";
+    outputBox.textContent = outputText || "（出力なし）";
+    const hintBox = document.createElement("div");
+    hintBox.className = "quiz-result-body";
+    hintBox.textContent = hintText;
+    body.append(outputLabel, outputBox, hintBox);
     close.onclick = () => dialog.close();
     dialog.showModal();
 }
