@@ -86,7 +86,14 @@ const sisaku = [
             answer: "https://www.oit.ac.jp/admission/result/pdf/exam/2026/2026it_ans.pdf",
             source: "https://www.oit.ac.jp/admission/result/kakomon.html",
         },
-    }
+    },
+    {
+        name: "松山大学 2027 年度入学者選抜の試験科目『情報』について", url: {
+            question: "https://nyushi.matsuyama-u.ac.jp/_cms/wp-content/uploads/2026/03/nyusi20250731_01.pdf",
+            answer: "https://nyushi.matsuyama-u.ac.jp/_cms/wp-content/uploads/2026/03/nyusi20250731_01.pdf",
+            source: "https://nyushi.matsuyama-u.ac.jp/information/detail/758/",
+        },
+    },
 ]
 
 ////////////////////
