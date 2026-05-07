@@ -1592,8 +1592,8 @@ function quizGetBlankInputs() {
 }
 
 function quizUpdateCompletionPrompt() {
-    const resultEl = document.getElementById("question-panel-result");
-    if (!resultEl) return;
+    const statusEl = document.getElementById("quiz-status");
+    if (!statusEl) return;
     const blanks = quizGetBlankInputs();
     if (blanks.length === 0) return;
 
@@ -1603,16 +1603,14 @@ function quizUpdateCompletionPrompt() {
     const nextBtn = runButtons?.querySelector('button[onclick="stepNext()"]') ?? null;
 
     if (allFilled) {
-        resultEl.textContent = "すべて埋まりました。▶ 実行で答え合わせしてください。";
-        resultEl.className = "question-panel-result";
+        statusEl.textContent = "すべて埋まりました。▶ 実行で答え合わせしてください。";
         runBtn?.classList.add("quiz-cta", "quiz-cta-pulse");
         nextBtn?.classList.add("quiz-cta");
         return;
     }
 
-    if (resultEl.textContent === "すべて埋まりました。▶ 実行で答え合わせしてください。") {
-        resultEl.textContent = "";
-        resultEl.className = "question-panel-result";
+    if (statusEl.textContent === "すべて埋まりました。▶ 実行で答え合わせしてください。") {
+        statusEl.textContent = "";
     }
 
     runBtn?.classList.remove("quiz-cta", "quiz-cta-pulse");
@@ -1716,14 +1714,23 @@ function setupQuizModeIfPresent() {
     if (palette) palette.style.display = "none";
     if (palettePreview) palettePreview.style.display = "none";
 
-    // show step next, hide share; keep run
+    // Move run buttons into quiz panel (run / stepStart / stepNext), hide share
     const runButtons = document.querySelector(".run-buttons");
     if (runButtons) {
         const buttons = [...runButtons.querySelectorAll("button")];
         // 0: run, 1: stepStart, 2: stepNext, 3: share
         if (buttons[3]) buttons[3].style.display = "none";
-        if (buttons[1]) buttons[1].style.display = "none";
-        if (buttons[2]) buttons[2].style.display = "";
+
+        const actionHost = document.getElementById("quiz-actions-buttons");
+        if (actionHost) {
+            // keep existing handlers by moving the elements
+            if (buttons[0]) actionHost.appendChild(buttons[0]);
+            if (buttons[1]) actionHost.appendChild(buttons[1]);
+            if (buttons[2]) actionHost.appendChild(buttons[2]);
+        }
+
+        // hide original container on the right
+        runButtons.style.display = "none";
     }
 
     // load blocks with blanks

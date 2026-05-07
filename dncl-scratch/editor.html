@@ -87,7 +87,6 @@
                         <div id="question-panel-output" class="question-panel-box"></div>
                     </div>
                 </div>
-                <div id="question-panel-result" class="question-panel-result" aria-live="polite"></div>
             </section>
 
             <div class="palette">
@@ -181,6 +180,11 @@
     </dialog>
 
     <div id="quiz-choices-bar" class="quiz-choices-bar" hidden>
+        <div class="quiz-actions">
+            <div class="quiz-actions-label">操作</div>
+            <div id="quiz-actions-buttons" class="quiz-actions-buttons"></div>
+        </div>
+        <div id="quiz-status" class="quiz-status" aria-live="polite"></div>
         <div class="quiz-choices-label">選択肢</div>
         <div id="quiz-choices" class="quiz-choices"></div>
     </div>
