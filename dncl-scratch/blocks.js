@@ -952,7 +952,7 @@ function enableDrop(el, options = {}) {
         updateCode();
     };
 
-    new Sortable(el, {
+    const sortable = new Sortable(el, {
         group: {
             name: "shared",
             put: (_to, _from, dragged) => {
@@ -983,6 +983,8 @@ function enableDrop(el, options = {}) {
         onSort: handleDropChange,
         onEnd: handleDropChange
     });
+
+    el._sortable = sortable;
 }
 enableDrop(workspace);
 
@@ -1325,6 +1327,53 @@ function parseConditionExpr(condition) {
     return null;
 }
 
+function parseBlankToken(raw) {
+    const s = String(raw ?? "").trim();
+    const m = s.match(/^__BLANK(?::|_)?(.+?)__$/);
+    if (!m) return null;
+    return m[1];
+}
+
+function setInputMaybeBlank(input, raw) {
+    const blankId = parseBlankToken(raw);
+    if (blankId === null) {
+        setInputValue(input, raw ?? "");
+        return;
+    }
+    setInputValue(input, "");
+    input.dataset.blankIndex = String(blankId);
+    input.readOnly = true;
+    input.classList.add("quiz-blank");
+}
+
+function parseSimpleBinaryExpr(raw) {
+    const s = String(raw ?? "").trim();
+    const ops = ["==", "!=", "<=", ">=", "+", "-", "*", "/", "%", "<", ">"];
+
+    // quiz v1: prioritize arithmetic ops only
+    const arithOps = ["+", "-", "*", "/", "%"];
+    for (const op of arithOps) {
+        const idx = s.indexOf(op);
+        if (idx <= 0) continue;
+        const left = s.slice(0, idx).trim();
+        const right = s.slice(idx + op.length).trim();
+        if (!left || !right) continue;
+        return { left, op, right };
+    }
+
+    // fallback (not used yet)
+    for (const op of ops) {
+        const idx = s.indexOf(op);
+        if (idx <= 0) continue;
+        const left = s.slice(0, idx).trim();
+        const right = s.slice(idx + op.length).trim();
+        if (!left || !right) continue;
+        return { left, op, right };
+    }
+
+    return null;
+}
+
 function loadProgramFromAst(ast) {
     workspace.innerHTML = "";
     setSelectedArrayBlock(null);
@@ -1335,15 +1384,34 @@ function loadProgramFromAst(ast) {
 
             if (node.type === "assign") {
                 const b = createAssignBlock();
-                setInputValue(b.querySelector(".assign-inline > input"), node.name ?? "x");
-                setInputValue(b.querySelector(".assign-value"), node.value ?? "0");
+                setInputMaybeBlank(b.querySelector(".assign-inline > input"), node.name ?? "x");
+
+                const zone = b.querySelector(".expr-zone");
+                const valueInput = b.querySelector(".assign-value");
+                const rawValue = node.value ?? "0";
+
+                // If value looks like a simple binary expr, render as expr block so each side can be a blank.
+                const parts = parseSimpleBinaryExpr(rawValue);
+                if (parts) {
+                    const expr = createExprBlock();
+                    const inputs = expr.querySelectorAll("input");
+                    const opSelect = expr.querySelector("select");
+                    setInputMaybeBlank(inputs[0], parts.left);
+                    if (opSelect) opSelect.value = parts.op;
+                    setInputMaybeBlank(inputs[1], parts.right);
+                    zone.insertBefore(expr, valueInput);
+                    syncAssignZone(zone);
+                } else {
+                    setInputMaybeBlank(valueInput, rawValue);
+                }
+
                 container.appendChild(b);
                 return;
             }
 
             if (node.type === "print") {
                 const b = createPrintBlock();
-                setInputValue(b.querySelector("input"), node.value ?? "0");
+                setInputMaybeBlank(b.querySelector("input"), node.value ?? "0");
                 container.appendChild(b);
                 return;
             }
@@ -1372,10 +1440,10 @@ function loadProgramFromAst(ast) {
             if (node.type === "for") {
                 const b = createForBlock();
                 const inputs = b.querySelectorAll("input");
-                setInputValue(inputs[0], node.varName ?? "i");
-                setInputValue(inputs[1], node.start ?? "0");
-                setInputValue(inputs[2], node.end ?? "0");
-                setInputValue(inputs[3], node.step ?? "1");
+                setInputMaybeBlank(inputs[0], node.varName ?? "i");
+                setInputMaybeBlank(inputs[1], node.start ?? "0");
+                setInputMaybeBlank(inputs[2], node.end ?? "0");
+                setInputMaybeBlank(inputs[3], node.step ?? "1");
                 appendNodes(node.body, b.querySelector(".children"));
                 container.appendChild(b);
                 return;
@@ -1441,8 +1509,176 @@ function loadProgramFromUrlIfPresent() {
     }
 }
 
+function quizGetParams() {
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    const id = params.get("id");
+    if (mode !== "quiz" || !id) return null;
+    return { id };
+}
+
+function quizNormalizeAnswer(str) {
+    return String(str ?? "").trim();
+}
+
+function quizDisableEditingExceptBlanks() {
+    try {
+        workspace._sortable?.option("disabled", true);
+    } catch (_e) {
+        // no-op
+    }
+
+    // disable delete buttons (defense in depth; CSS hides too)
+    workspace.querySelectorAll(".delete-btn").forEach((btn) => {
+        btn.style.pointerEvents = "none";
+    });
+
+    const editable = workspace.querySelectorAll("input, select, textarea, button");
+    editable.forEach((el) => {
+        const isBlank = el.matches?.("input[data-blank-index]");
+        if (!isBlank) {
+            el.disabled = true;
+        } else {
+            el.disabled = false;
+            el.readOnly = true;
+        }
+    });
+}
+
+function quizSetupChoices(quiz) {
+    const bar = document.getElementById("quiz-choices-bar");
+    const choicesEl = document.getElementById("quiz-choices");
+    if (!bar || !choicesEl) return;
+
+    bar.hidden = false;
+    choicesEl.replaceChildren();
+
+    (quiz.choices ?? []).forEach((choice) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "quiz-choice";
+        btn.textContent = choice.label ?? "";
+        btn.addEventListener("click", () => {
+            if (!window.activeBlankId) return;
+            const target = workspace.querySelector(`input[data-blank-index="${CSS.escape(window.activeBlankId)}"]`);
+            if (!target) return;
+            target.value = String(choice.value ?? "");
+            target.classList.remove("quiz-blank-active");
+            window.activeBlankId = null;
+            updateCode();
+        });
+        choicesEl.append(btn);
+    });
+}
+
+function quizSetupBlankTapBehavior() {
+    window.activeBlankId = null;
+    workspace.addEventListener("click", (event) => {
+        const input = event.target.closest?.("input[data-blank-index]");
+        if (!input) return;
+
+        const id = input.dataset.blankIndex;
+        if (!id) return;
+
+        // re-tap active blank => clear
+        if (window.activeBlankId === id) {
+            input.value = "";
+            input.classList.remove("quiz-blank-active");
+            window.activeBlankId = null;
+            updateCode();
+            return;
+        }
+
+        // switch active blank
+        workspace.querySelectorAll("input[data-blank-index]").forEach((el) => el.classList.remove("quiz-blank-active"));
+        input.classList.add("quiz-blank-active");
+        window.activeBlankId = id;
+    });
+}
+
+function quizShowResultDialog(ok, hintMessage = "") {
+    const dialog = document.getElementById("quiz-result-dialog");
+    const title = document.getElementById("quiz-result-title");
+    const body = document.getElementById("quiz-result-body");
+    const close = document.getElementById("quiz-result-close-button");
+    if (!dialog || !title || !body || !close) return;
+
+    title.textContent = ok ? "正解！" : "不正解";
+    body.textContent = ok ? "よくできました。" : (hintMessage ? `ヒント：\n${hintMessage}` : "もう一度チャレンジしてみましょう。");
+    close.onclick = () => dialog.close();
+    dialog.showModal();
+}
+
+function quizHookJudge(quiz) {
+    if (typeof window.run === "function") {
+        const originalRun = window.run;
+        window.run = function (...args) {
+            const ret = originalRun.apply(this, args);
+            try {
+                const result = { variables: vars, output };
+                const ok = typeof quiz.judge === "function" ? !!quiz.judge(result) : false;
+                let hint = "";
+                if (!ok && Array.isArray(quiz.hints)) {
+                    const h = quiz.hints.find((x) => typeof x?.check === "function" && x.check(result));
+                    if (h?.message) hint = String(h.message);
+                }
+                quizShowResultDialog(ok, hint);
+            } catch (_e) {
+                // no-op
+            }
+            return ret;
+        };
+    }
+}
+
+function setupQuizModeIfPresent() {
+    const p = quizGetParams();
+    if (!p) return false;
+    const quiz = window.quizData?.[p.id];
+    if (!quiz) return false;
+
+    // show question panel
+    const panel = document.getElementById("question-panel");
+    const qTitle = document.getElementById("question-panel-title");
+    const qText = document.getElementById("question-panel-question");
+    const outText = document.getElementById("question-panel-output");
+    if (panel && qTitle && qText && outText) {
+        qTitle.textContent = `問題：${quiz.question ?? ""}`;
+        qText.textContent = quiz.question ?? "";
+        outText.textContent = "（実行して確かめよう）";
+        panel.hidden = false;
+    }
+
+    // hide palette areas
+    const palette = document.querySelector(".palette");
+    const palettePreview = document.getElementById("palette-preview");
+    if (palette) palette.style.display = "none";
+    if (palettePreview) palettePreview.style.display = "none";
+
+    // show step next, hide share; keep run
+    const runButtons = document.querySelector(".run-buttons");
+    if (runButtons) {
+        const buttons = [...runButtons.querySelectorAll("button")];
+        // 0: run, 1: stepStart, 2: stepNext, 3: share
+        if (buttons[3]) buttons[3].style.display = "none";
+        if (buttons[1]) buttons[1].style.display = "none";
+        if (buttons[2]) buttons[2].style.display = "";
+    }
+
+    // load blocks with blanks
+    loadProgramFromAst(Array.isArray(quiz.ast) ? quiz.ast : []);
+    quizDisableEditingExceptBlanks();
+    quizSetupBlankTapBehavior();
+    quizSetupChoices(quiz);
+    quizHookJudge(quiz);
+    return true;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
-    loadProgramFromUrlIfPresent();
+    const isQuiz = setupQuizModeIfPresent();
+    if (!isQuiz) {
+        loadProgramFromUrlIfPresent();
+    }
 });
 
 setupPaletteButtons();
