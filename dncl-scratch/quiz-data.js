@@ -2,6 +2,9 @@
 // Loaded as a global: window.quizData
 window.quizData = {
     q001: {
+        title: "合計（穴埋め）",
+        addedAt: "2026-05-07",
+        difficulty: 1,
         question: "sumに、xとyを合計した値を代入するプログラムを作成せよ",
         // AST format is the same as window.currentAST / buildAST(workspace)
         ast: [
