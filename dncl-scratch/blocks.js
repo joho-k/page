@@ -1560,15 +1560,34 @@ function quizSetupChoices(quiz) {
         btn.textContent = choice.label ?? "";
         btn.addEventListener("click", () => {
             if (!window.activeBlankId) return;
-            const target = workspace.querySelector(`input[data-blank-index="${CSS.escape(window.activeBlankId)}"]`);
+            const blanks = quizGetBlankInputs();
+            const target = workspace.querySelector(
+                `input[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
+            );
             if (!target) return;
             target.value = String(choice.value ?? "");
-            target.classList.remove("quiz-blank-active");
-            window.activeBlankId = null;
+
+            // move focus to next blank
+            const idx = blanks.indexOf(target);
+            const next = idx >= 0 ? blanks[idx + 1] : null;
+            workspace
+                .querySelectorAll("input[data-blank-index]")
+                .forEach((el) => el.classList.remove("quiz-blank-active"));
+            if (next) {
+                next.classList.add("quiz-blank-active");
+                window.activeBlankId = next.dataset.blankIndex;
+                next.focus();
+            } else {
+                window.activeBlankId = null;
+            }
             updateCode();
         });
         choicesEl.append(btn);
     });
+}
+
+function quizGetBlankInputs() {
+    return [...workspace.querySelectorAll("input[data-blank-index]")];
 }
 
 function quizSetupBlankTapBehavior() {
@@ -1593,7 +1612,19 @@ function quizSetupBlankTapBehavior() {
         workspace.querySelectorAll("input[data-blank-index]").forEach((el) => el.classList.remove("quiz-blank-active"));
         input.classList.add("quiz-blank-active");
         window.activeBlankId = id;
+        input.focus();
     });
+}
+
+function quizFocusFirstBlank() {
+    const blanks = quizGetBlankInputs();
+    if (blanks.length === 0) return;
+    workspace
+        .querySelectorAll("input[data-blank-index]")
+        .forEach((el) => el.classList.remove("quiz-blank-active"));
+    blanks[0].classList.add("quiz-blank-active");
+    window.activeBlankId = blanks[0].dataset.blankIndex;
+    blanks[0].focus();
 }
 
 function quizShowResultDialog(ok, hintMessage = "") {
@@ -1671,6 +1702,7 @@ function setupQuizModeIfPresent() {
     quizSetupBlankTapBehavior();
     quizSetupChoices(quiz);
     quizHookJudge(quiz);
+    quizFocusFirstBlank();
     return true;
 }
 
