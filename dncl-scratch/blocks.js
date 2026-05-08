@@ -1593,6 +1593,13 @@ function quizGetBlankInputs() {
     return [...workspace.querySelectorAll("input[data-blank-index]")];
 }
 
+function quizSetChoicesVisible(visible) {
+    const bar = document.getElementById("quiz-choices-bar");
+    const row = bar?.querySelector(".quiz-choices-row") ?? null;
+    if (!row) return;
+    row.style.display = visible ? "" : "none";
+}
+
 function quizUpdateCompletionPrompt() {
     const blanks = quizGetBlankInputs();
     if (blanks.length === 0) return;
@@ -1715,6 +1722,7 @@ function quizHookJudge(quiz) {
                         if (h?.message) hint = String(h.message);
                     }
                     quizShowResultDialog(ok, hint);
+                    quizSetChoicesVisible(true);
                 }
             } catch (_e) {
                 // no-op
@@ -1733,6 +1741,7 @@ function quizHookJudge(quiz) {
                 // ボタンは quiz パネルに移動済みなので DOM から探す
                 const movedNextBtn = document.querySelector('#quiz-actions-buttons button[onclick="stepNext()"]') ?? nextBtn;
                 if (movedNextBtn) movedNextBtn.style.display = "";
+                quizSetChoicesVisible(false);
             } catch (_e) {
                 // no-op
             }
