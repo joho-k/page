@@ -125,11 +125,28 @@
 /* workspace */
 #workspace {
     border: 2px dashed #ccc;
-    padding: 10px;
-    min-height: 300px;
+    padding: 10px 0px 10px 10px;
+    max-height: 70vh;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: scroll;
     white-space: nowrap;
+    background-color: var(--primary-light-2);
+    scrollbar-color: var(--primary);
+}
+
+#workspace::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+#workspace::-webkit-scrollbar-track {
+    border-radius: 999px;
+}
+
+#workspace::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light-2);
+    border-radius: 999px;
+    border: 2px solid var(--primary);
 }
 
 #workspace-panel {
@@ -846,10 +863,12 @@ pre {
         box-shadow: 0 0 0 0 rgba(255, 179, 0, 0.0);
         background: #fff8e1;
     }
+
     50% {
         box-shadow: 0 0 0 8px rgba(255, 179, 0, 0.18);
         background: #ffe57b;
     }
+
     100% {
         box-shadow: 0 0 0 0 rgba(255, 179, 0, 0.0);
         background: #fff8e1;
@@ -887,9 +906,11 @@ pre {
     0% {
         box-shadow: 0 0 0 4px rgba(255, 179, 0, 0.14);
     }
+
     50% {
         box-shadow: 0 0 0 7px rgba(255, 179, 0, 0.28);
     }
+
     100% {
         box-shadow: 0 0 0 4px rgba(255, 179, 0, 0.14);
     }
