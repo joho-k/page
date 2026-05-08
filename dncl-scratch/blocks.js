@@ -1732,14 +1732,14 @@ function setupQuizModeIfPresent() {
     const quiz = window.quizData?.[p.id];
     if (!quiz) return false;
 
-    // show question panel
+    document.body.classList.add("quiz-mode");
+
+    // quiz mode: question is shown in choices bar (title only)
     const panel = document.getElementById("question-panel");
-    const qTitle = document.getElementById("question-panel-title");
-    const qText = document.getElementById("question-panel-question");
-    if (panel && qTitle && qText) {
-        qTitle.textContent = `問題：${quiz.question ?? ""}`;
-        qText.textContent = quiz.question ?? "";
-        panel.hidden = false;
+    if (panel) panel.hidden = true;
+    const quizTitleEl = document.getElementById("quiz-question-title");
+    if (quizTitleEl) {
+        quizTitleEl.textContent = quiz.question ?? `問題 ${p.id}`;
     }
 
     // hide palette areas

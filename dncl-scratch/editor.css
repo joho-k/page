@@ -759,6 +759,18 @@ pre {
     background: linear-gradient(135deg, #ffffff, #f7fbff);
 }
 
+.quiz-mode header {
+    display: none;
+}
+
+.quiz-question-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #16324f;
+    margin-bottom: 8px;
+    line-height: 1.35;
+}
+
 .quiz-actions {
     display: flex;
     align-items: center;

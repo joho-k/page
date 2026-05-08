@@ -76,7 +76,6 @@
 
         <main>
             <section id="question-panel" class="question-panel" hidden>
-                <h3 id="question-panel-title"></h3>
                 <div class="question-panel-grid">
                     <div>
                         <div class="question-panel-label">問題</div>
@@ -176,13 +175,14 @@
     </dialog>
 
     <div id="quiz-choices-bar" class="quiz-choices-bar" hidden>
+        <div id="quiz-question-title" class="quiz-question-title"></div>
+        <div id="quiz-status" class="quiz-status" aria-live="polite"></div>
+        <div class="quiz-choices-label">選択肢</div>
+        <div id="quiz-choices" class="quiz-choices"></div>
         <div class="quiz-actions">
             <div class="quiz-actions-label">操作</div>
             <div id="quiz-actions-buttons" class="quiz-actions-buttons"></div>
         </div>
-        <div id="quiz-status" class="quiz-status" aria-live="polite"></div>
-        <div class="quiz-choices-label">選択肢</div>
-        <div id="quiz-choices" class="quiz-choices"></div>
     </div>
 
     <script src="./quiz-data.js"></script>
