@@ -837,6 +837,25 @@ pre {
     cursor: pointer;
 }
 
+.quiz-blank-pulse {
+    animation: quizBlankPulse 1.35s ease-in-out infinite;
+}
+
+@keyframes quizBlankPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 179, 0, 0.0);
+        background: #fff8e1;
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(255, 179, 0, 0.18);
+        background: #ffe57b;
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 179, 0, 0.0);
+        background: #fff8e1;
+    }
+}
+
 .quiz-blank::placeholder {
     color: rgba(47, 68, 96, 0.55);
     font-weight: 700;
