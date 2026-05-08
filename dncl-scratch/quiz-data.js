@@ -37,5 +37,55 @@ window.quizData = {
             }
         ],
         defaultHint: "xとyを合計する式を考えよう"
+    },
+    q002: {
+        title: "繰り返し回数",
+        addedAt: "2026-05-08",
+        difficulty: 1,
+        question: "「これを3回表示してください」を3回表示するようにしよう",
+        ast: [
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "__BLANK_blank_a__",
+                step: "1",
+                body: [
+                    {
+                        type: "print",
+                        value: "\"これを3回表示してください\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+            { label: "3", value: "3" },
+            { label: "4", value: "4" },
+        ],
+        answers: [
+            {
+                values: ["2"],
+                correct: true,
+            },
+            {
+                values: ["3"],
+                correct: false,
+                hint: "0から始まることに注意しよう",
+            },
+            {
+                values: ["1"],
+                correct: false,
+                hint: "2回しか繰り返されません",
+            },
+            {
+                values: ["4"],
+                correct: false,
+                hint: "5回繰り返されてしまいます",
+            }
+        ],
+        defaultHint: "0,1,2 の3回になるように考えよう"
+    },
     }
 };
