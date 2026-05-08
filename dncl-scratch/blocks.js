@@ -1593,6 +1593,37 @@ function quizGetBlankInputs() {
     return [...workspace.querySelectorAll("input[data-blank-index]")];
 }
 
+function quizCollectBlankValues() {
+    return quizGetBlankInputs().map((input) =>
+        quizNormalizeAnswer(input.value)
+    );
+}
+
+function quizJudgeByAnswers(quiz) {
+    const userAnswers = quizCollectBlankValues();
+    const matched = (quiz.answers ?? []).find((item) => {
+        if (!Array.isArray(item.values)) return false;
+        if (item.values.length !== userAnswers.length) {
+            return false;
+        }
+        return item.values.every((v, i) => {
+            return quizNormalizeAnswer(v)
+                === quizNormalizeAnswer(userAnswers[i]);
+        });
+    });
+
+    if (!matched) {
+        return {
+            ok: false,
+            hint: quiz.defaultHint ?? "",
+        };
+    }
+    return {
+        ok: !!matched.correct,
+        hint: matched.hint ?? "",
+    };
+}
+
 function quizSetChoicesVisible(visible) {
     const bar = document.getElementById("quiz-choices-bar");
     const row = bar?.querySelector(".quiz-choices-row") ?? null;
@@ -1693,14 +1724,12 @@ function quizHookJudge(quiz) {
         window.run = function (...args) {
             const ret = originalRun.apply(this, args);
             try {
-                const result = { variables: vars, output };
-                const ok = typeof quiz.judge === "function" ? !!quiz.judge(result) : false;
-                let hint = "";
-                if (!ok && Array.isArray(quiz.hints)) {
-                    const h = quiz.hints.find((x) => typeof x?.check === "function" && x.check(result));
-                    if (h?.message) hint = String(h.message);
-                }
-                quizShowResultDialog(ok, hint);
+                const result = quizJudgeByAnswers(quiz);
+
+                quizShowResultDialog(
+                    result.ok,
+                    result.hint
+                );
             } catch (_e) {
                 // no-op
             }
