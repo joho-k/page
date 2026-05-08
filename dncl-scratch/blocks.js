@@ -1566,6 +1566,7 @@ function quizSetupChoices(quiz) {
             );
             if (!target) return;
             target.value = String(choice.value ?? "");
+            target.classList.remove("quiz-blank-pulse");
 
             // move focus to next blank
             const idx = blanks.indexOf(target);
@@ -1575,6 +1576,7 @@ function quizSetupChoices(quiz) {
                 .forEach((el) => el.classList.remove("quiz-blank-active"));
             if (next) {
                 next.classList.add("quiz-blank-active");
+                next.classList.add("quiz-blank-pulse");
                 window.activeBlankId = next.dataset.blankIndex;
                 next.focus();
             } else {
@@ -1633,6 +1635,7 @@ function quizSetupBlankTapBehavior() {
         // switch active blank
         workspace.querySelectorAll("input[data-blank-index]").forEach((el) => el.classList.remove("quiz-blank-active"));
         input.classList.add("quiz-blank-active");
+        input.classList.remove("quiz-blank-pulse");
         window.activeBlankId = id;
         input.focus();
     });
@@ -1643,8 +1646,9 @@ function quizFocusFirstBlank() {
     if (blanks.length === 0) return;
     workspace
         .querySelectorAll("input[data-blank-index]")
-        .forEach((el) => el.classList.remove("quiz-blank-active"));
+        .forEach((el) => el.classList.remove("quiz-blank-active", "quiz-blank-pulse"));
     blanks[0].classList.add("quiz-blank-active");
+    blanks[0].classList.add("quiz-blank-pulse");
     window.activeBlankId = blanks[0].dataset.blankIndex;
     blanks[0].focus();
 }
