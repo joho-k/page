@@ -149,6 +149,10 @@
     border: 2px solid var(--primary);
 }
 
+#workspace::-webkit-scrollbar-corner {
+    background: var(--primary-light-2);
+}
+
 #workspace-panel {
     user-select: none;
     -webkit-user-select: none;
