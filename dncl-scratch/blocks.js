@@ -1592,29 +1592,23 @@ function quizGetBlankInputs() {
 }
 
 function quizUpdateCompletionPrompt() {
-    const statusEl = document.getElementById("quiz-status");
-    if (!statusEl) return;
     const blanks = quizGetBlankInputs();
     if (blanks.length === 0) return;
 
     const allFilled = blanks.every((b) => String(b.value ?? "").trim().length > 0);
-    const runButtons = document.querySelector(".run-buttons");
-    const runBtn = runButtons?.querySelector('button[onclick="run()"]') ?? null;
-    const nextBtn = runButtons?.querySelector('button[onclick="stepNext()"]') ?? null;
+    const actionHost = document.getElementById("quiz-actions-buttons");
+    const runBtn = actionHost?.querySelector('button[onclick="run()"]') ?? null;
+    const stepBtn = actionHost?.querySelector('button[onclick="stepStart()"]') ?? null;
 
     if (allFilled) {
-        statusEl.textContent = "すべて埋まりました。▶ 実行で答え合わせしてください。";
         runBtn?.classList.add("quiz-cta", "quiz-cta-pulse");
-        nextBtn?.classList.add("quiz-cta");
+        stepBtn?.classList.add("quiz-cta");
         return;
     }
 
-    if (statusEl.textContent === "すべて埋まりました。▶ 実行で答え合わせしてください。") {
-        statusEl.textContent = "";
-    }
 
     runBtn?.classList.remove("quiz-cta", "quiz-cta-pulse");
-    nextBtn?.classList.remove("quiz-cta");
+    stepBtn?.classList.remove("quiz-cta");
 }
 
 function quizSetupBlankTapBehavior() {
@@ -1724,6 +1718,23 @@ function quizHookJudge(quiz) {
             return ret;
         };
     }
+
+    if (typeof window.stepStart === "function") {
+        const originalStepStart = window.stepStart;
+        window.stepStart = function (...args) {
+            const ret = originalStepStart.apply(this, args);
+            try {
+                const runButtons = document.querySelector(".run-buttons");
+                const nextBtn = runButtons?.querySelector('button[onclick="stepNext()"]') ?? null;
+                // ボタンは quiz パネルに移動済みなので DOM から探す
+                const movedNextBtn = document.querySelector('#quiz-actions-buttons button[onclick="stepNext()"]') ?? nextBtn;
+                if (movedNextBtn) movedNextBtn.style.display = "";
+            } catch (_e) {
+                // no-op
+            }
+            return ret;
+        };
+    }
 }
 
 function setupQuizModeIfPresent() {
@@ -1758,9 +1769,19 @@ function setupQuizModeIfPresent() {
         const actionHost = document.getElementById("quiz-actions-buttons");
         if (actionHost) {
             // keep existing handlers by moving the elements
-            if (buttons[0]) actionHost.appendChild(buttons[0]);
-            if (buttons[1]) actionHost.appendChild(buttons[1]);
-            if (buttons[2]) actionHost.appendChild(buttons[2]);
+            if (buttons[0]) {
+                buttons[0].textContent = "▶ 回答";
+                actionHost.appendChild(buttons[0]);
+            }
+            if (buttons[1]) {
+                buttons[1].textContent = "⏭ ステップで回答";
+                actionHost.appendChild(buttons[1]);
+            }
+            if (buttons[2]) {
+                // 「ステップで回答」を押したら表示
+                buttons[2].style.display = "none";
+                actionHost.appendChild(buttons[2]);
+            }
         }
 
         // hide original container on the right
