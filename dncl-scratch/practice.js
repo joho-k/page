@@ -126,4 +126,16 @@ window.addEventListener("DOMContentLoaded", () => {
                 renderPracticeProblems();
             });
         });
+
+    document.getElementById("practice-difficulty-select")
+        ?.addEventListener("change", (e) => {
+            practiceDifficultyFilter = e.target.value;
+            renderPracticeProblems();
+        });
+
+    document.getElementById("practice-sort-select")
+        ?.addEventListener("change", (e) => {
+            practiceSort = e.target.value;
+            renderPracticeProblems();
+        });
 });
