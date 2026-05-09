@@ -87,5 +87,4 @@ window.quizData = {
         ],
         defaultHint: "0,1,2 の3回になるように考えよう"
     },
-    }
-};
+}
