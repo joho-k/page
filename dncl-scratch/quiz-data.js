@@ -87,4 +87,80 @@ window.quizData = {
         ],
         defaultHint: "0,1,2 の3回になるように考えよう"
     },
+    q003: {
+        title: "2の倍数判定",
+        addedAt: "2026-05-08",
+        difficulty: 2,
+
+        question: "2の倍数のときだけ「2の倍数です」と表示されるようにしよう",
+
+        ast: [
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "10",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "i __BLANK_blank_a__ 2"
+                    },
+                    {
+                        type: "ifelse",
+                        condition: "amari == 0",
+                        ifBody: [
+                            {
+                                type: "print",
+                                value: "i + \"は2の倍数です\""
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "print",
+                                value: "i + \"は2の倍数でない\""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+
+        answers: [
+            {
+                values: ["%"],
+                correct: true,
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "割り算ではなく「あまり」を求めます",
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算では2の倍数か判定できません",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "引き算では2の倍数か判定できません",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "掛け算では「あまり」は求められません",
+            }
+        ],
+
+        defaultHint: "2で割った「あまり」を求める演算子を考えよう"
+    },
 }

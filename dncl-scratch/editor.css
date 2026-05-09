@@ -856,6 +856,7 @@ pre {
     font-size: 15px;
     text-align: center;
     cursor: pointer;
+    font: inherit;
 }
 
 .quiz-blank-pulse {
