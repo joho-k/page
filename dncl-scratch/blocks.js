@@ -1348,20 +1348,17 @@ function setInputMaybeBlank(input, raw) {
 
 function parseSimpleBinaryExpr(raw) {
     const s = String(raw ?? "").trim();
-    const ops = ["==", "!=", "<=", ">=", "+", "-", "*", "/", "%", "<", ">"];
-
-    // quiz v1: prioritize arithmetic ops only
-    const arithOps = ["+", "-", "*", "/", "%"];
-    for (const op of arithOps) {
-        const idx = s.indexOf(op);
-        if (idx <= 0) continue;
-        const left = s.slice(0, idx).trim();
-        const right = s.slice(idx + op.length).trim();
-        if (!left || !right) continue;
-        return { left, op, right };
+    const blankMatch = s.match(
+        /^(.+?)\s+(__BLANK.+?__)\s+(.+)$/
+    );
+    if (blankMatch) {
+        return {
+            left: blankMatch[1].trim(),
+            op: blankMatch[2].trim(),
+            right: blankMatch[3].trim(),
+        };
     }
-
-    // fallback (not used yet)
+    const ops = ["==", "!=", "<=", ">=", "+", "-", "*", "/", "%"];
     for (const op of ops) {
         const idx = s.indexOf(op);
         if (idx <= 0) continue;
@@ -1370,7 +1367,6 @@ function parseSimpleBinaryExpr(raw) {
         if (!left || !right) continue;
         return { left, op, right };
     }
-
     return null;
 }
 
@@ -1390,14 +1386,28 @@ function loadProgramFromAst(ast) {
                 const valueInput = b.querySelector(".assign-value");
                 const rawValue = node.value ?? "0";
 
-                // If value looks like a simple binary expr, render as expr block so each side can be a blank.
                 const parts = parseSimpleBinaryExpr(rawValue);
                 if (parts) {
                     const expr = createExprBlock();
                     const inputs = expr.querySelectorAll("input");
                     const opSelect = expr.querySelector("select");
                     setInputMaybeBlank(inputs[0], parts.left);
-                    if (opSelect) opSelect.value = parts.op;
+                    const blankId = parseBlankToken(parts.op);
+                    if (blankId !== null) {
+                        opSelect.dataset.blankIndex = blankId;
+                        opSelect.classList.add("quiz-blank");
+                        opSelect.innerHTML = `
+                            <option value=""></option>
+                            <option value="+">＋</option>
+                            <option value="-">－</option>
+                            <option value="*">＊</option>
+                            <option value="/">／</option>
+                            <option value="%">%</option>
+                        `;
+                        opSelect.value = "";
+                    } else {
+                        opSelect.value = parts.op;
+                    }
                     setInputMaybeBlank(inputs[1], parts.right);
                     zone.insertBefore(expr, valueInput);
                     syncAssignZone(zone);
@@ -1562,10 +1572,12 @@ function quizSetupChoices(quiz) {
             if (!window.activeBlankId) return;
             const blanks = quizGetBlankInputs();
             const target = workspace.querySelector(
-                `input[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
+                `[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
             );
             if (!target) return;
             target.value = String(choice.value ?? "");
+            target.dispatchEvent(new Event("change"));
+            target.dispatchEvent(new Event("input"));
             target.classList.remove("quiz-blank-pulse");
 
             // move focus to next blank
@@ -1579,8 +1591,6 @@ function quizSetupChoices(quiz) {
                 next.classList.add("quiz-blank-pulse");
                 window.activeBlankId = next.dataset.blankIndex;
                 next.focus();
-            } else {
-                window.activeBlankId = null;
             }
             updateCode();
             quizUpdateCompletionPrompt();
@@ -1590,7 +1600,11 @@ function quizSetupChoices(quiz) {
 }
 
 function quizGetBlankInputs() {
-    return [...workspace.querySelectorAll("input[data-blank-index]")];
+    return [
+        ...workspace.querySelectorAll(
+            "input[data-blank-index], select[data-blank-index]"
+        )
+    ];
 }
 
 function quizCollectBlankValues() {
@@ -1654,28 +1668,29 @@ function quizUpdateCompletionPrompt() {
 function quizSetupBlankTapBehavior() {
     window.activeBlankId = null;
     workspace.addEventListener("click", (event) => {
-        const input = event.target.closest?.("input[data-blank-index]");
-        if (!input) return;
-
-        const id = input.dataset.blankIndex;
+        const target = event.target.closest?.(
+            "input[data-blank-index], select[data-blank-index]"
+        );
+        if (!target) return;
+        const id = target.dataset.blankIndex;
         if (!id) return;
-
-        // re-tap active blank => clear
         if (window.activeBlankId === id) {
-            input.value = "";
-            input.classList.remove("quiz-blank-active");
+            if (target.tagName === "INPUT") {
+                target.value = "";
+            }
+            target.classList.remove("quiz-blank-active");
             window.activeBlankId = null;
             updateCode();
             quizUpdateCompletionPrompt();
             return;
         }
-
-        // switch active blank
-        workspace.querySelectorAll("input[data-blank-index]").forEach((el) => el.classList.remove("quiz-blank-active"));
-        input.classList.add("quiz-blank-active");
-        input.classList.remove("quiz-blank-pulse");
+        workspace
+            .querySelectorAll(".quiz-blank-active")
+            .forEach((el) => el.classList.remove("quiz-blank-active"));
+        target.classList.add("quiz-blank-active");
+        target.classList.remove("quiz-blank-pulse");
         window.activeBlankId = id;
-        input.focus();
+        target.focus();
     });
 }
 
