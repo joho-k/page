@@ -89,6 +89,21 @@
                     </div>
                 </div>
 
+                <div class="practice-controls">
+                    <input type="text" id="practice-search" placeholder="問題名・内容で検索">
+                    <div class="practice-filter-buttons" id="practice-difficulty-buttons">
+                        <button type="button" class="practice-filter-button active" data-difficulty="">すべて</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="1">★1</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="2">★2</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="3">★3</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="4">★4</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="5">★5</button>
+                    </div>
+                    <div class="practice-filter-buttons" id="practice-sort-buttons">
+                        <button type="button" class="practice-filter-button active" data-sort="newest">新しい順</button>
+                        <button type="button" class="practice-filter-button" data-sort="id">問題番号順</button>
+                    </div>
+                </div>
                 <div class="practice-table-wrap">
                     <table class="practice-table" aria-label="練習問題一覧">
                         <thead>
