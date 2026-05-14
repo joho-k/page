@@ -296,10 +296,43 @@ function setConditionValue(block, left, op, right) {
 
     if (!leftInput || !opSelect || !rightInput) return;
 
-    setInputValue(leftInput, left);
-    opSelect.value = op;
+    setInputMaybeBlank(leftInput, left);
+
+    // quiz blank support for operator select
+    const blankId = parseBlankToken(op);
+    if (blankId !== null) {
+        opSelect.dataset.blankIndex = String(blankId);
+        opSelect.classList.add("quiz-blank");
+
+        // preserve original options so we can restore later
+        if (!opSelect.dataset.originalOptions) {
+            opSelect.dataset.originalOptions = opSelect.innerHTML;
+        }
+
+        // allow "empty" selection that will be filled by quiz choice buttons
+        opSelect.innerHTML = `
+            <option value=""></option>
+            <option value="==">==</option>
+            <option value="!=">!=</option>
+            <option value="<=">&lt;=</option>
+            <option value=">=">&gt;=</option>
+            <option value="<">&lt;</option>
+            <option value=">">&gt;</option>
+        `;
+        opSelect.value = "";
+    } else {
+        // restore original options if they were replaced for blanks
+        if (opSelect.dataset.originalOptions) {
+            opSelect.innerHTML = opSelect.dataset.originalOptions;
+            delete opSelect.dataset.originalOptions;
+        }
+        delete opSelect.dataset.blankIndex;
+        opSelect.classList.remove("quiz-blank");
+        opSelect.value = op;
+    }
+
     opSelect.dispatchEvent(new Event("change"));
-    setInputValue(rightInput, right);
+    setInputMaybeBlank(rightInput, right);
 }
 
 function readConditionValue(node) {
@@ -1315,6 +1348,15 @@ function decodeProgramAst(encoded) {
 
 function parseConditionExpr(condition) {
     const raw = String(condition ?? "").trim();
+    // quiz blank operator support: "a __BLANK_x__ b"
+    const blankMatch = raw.match(/^(.+?)\s+(__BLANK.+?__)\s+(.+)$/);
+    if (blankMatch) {
+        return {
+            left: blankMatch[1].trim(),
+            op: blankMatch[2].trim(),
+            right: blankMatch[3].trim(),
+        };
+    }
     const ops = ["==", "!=", "<=", ">=", "<", ">"];
     for (const op of ops) {
         const idx = raw.indexOf(op);

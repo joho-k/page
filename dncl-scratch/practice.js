@@ -84,7 +84,13 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
 
         const tdAddedAt = document.createElement("td");
         tdAddedAt.className = "practice-addedAt";
-        tdAddedAt.textContent = quiz.addedAt ?? "-";
+
+        const date = new Date(quiz.addedAt);
+        const y = date.getFullYear();
+        const m = date.getMonth() + 1;
+        const d = date.getDate();
+
+        tdAddedAt.textContent = `${y}/${m}/${d}` ?? "-";
 
         tr.append(tdDifficulty, tdTitle, tdContent, tdAddedAt);
 

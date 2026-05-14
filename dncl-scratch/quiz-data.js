@@ -89,7 +89,7 @@ window.quizData = {
     },
     q003: {
         title: "2の倍数判定",
-        addedAt: "2026-05-08",
+        addedAt: "2026-05-08 12:00",
         difficulty: 2,
 
         question: "2の倍数のときだけ「2の倍数です」と表示されるようにしよう",
@@ -163,4 +163,160 @@ window.quizData = {
 
         defaultHint: "2で割った「あまり」を求める演算子を考えよう"
     },
+    q004: {
+        title: "カウントダウン",
+        addedAt: "2026-05-14 11:00",
+        difficulty: 2,
+        question: "「あと少し！」を4回表示するようにしよう",
+        ast: [
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "__BLANK_blank_a__",
+                step: "1",
+                body: [
+                    {
+                        type: "print",
+                        value: "\"あと少し！\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "2", value: "2" },
+            { label: "3", value: "3" },
+            { label: "4", value: "4" },
+            { label: "5", value: "5" },
+        ],
+        answers: [
+            {
+                values: ["4"],
+                correct: true,
+            },
+            {
+                values: ["3"],
+                correct: false,
+                hint: "3回しか繰り返されません",
+            },
+            {
+                values: ["5"],
+                correct: false,
+                hint: "5回繰り返されてしまいます",
+            },
+            {
+                values: ["2"],
+                correct: false,
+                hint: "2回しか繰り返されません",
+            }
+        ],
+        defaultHint: "1から始まることに注目しよう"
+    },
+    q005: {
+        title: "テスト合格判定",
+        addedAt: "2026-05-14 12:00",
+        difficulty: 3,
+        question: "score が80以上のときだけ「合格」と表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "score",
+                value: "85"
+            },
+            {
+                type: "if",
+                condition: "score __BLANK_blank_a__ 80",
+                body: [
+                    {
+                        type: "print",
+                        value: "\"合格\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: "<", value: "<" },
+            { label: ">=", value: ">=" },
+            { label: "<=", value: "<=" },
+        ],
+        answers: [
+            {
+                values: [">="],
+                correct: true,
+            },
+            {
+                values: [">"],
+                correct: false,
+                hint: "80ちょうどのときも合格にしたい",
+            },
+            {
+                values: ["<"],
+                correct: false,
+                hint: "小さい場合ではありません",
+            },
+            {
+                values: ["<="],
+                correct: false,
+                hint: "80以下になってしまいます",
+            }
+        ],
+        defaultHint: "80以上になる条件を考えよう"
+    },
+    q006: {
+        title: "HPが0になるまで",
+        addedAt: "2026-05-14 13:00",
+        difficulty: 3,
+        question: "hp が0より大きい間、繰り返されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "hp",
+                value: "5"
+            },
+            {
+                type: "while",
+                condition: "hp __BLANK_blank_a__ 0",
+                body: [
+                    {
+                        type: "print",
+                        value: "\"ダメージ！\""
+                    },
+                    {
+                        type: "assign",
+                        name: "hp",
+                        value: "hp - 1"
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: "<", value: "<" },
+            { label: "==", value: "==" },
+            { label: "!=", value: "!=" },
+        ],
+        answers: [
+            {
+                values: [">"],
+                correct: true,
+            },
+            {
+                values: ["<"],
+                correct: false,
+                hint: "hpは減っていきます",
+            },
+            {
+                values: ["=="],
+                correct: false,
+                hint: "最初は5なので条件を満たしません",
+            },
+            {
+                values: ["!="],
+                correct: false,
+                hint: "負の値になっても止まらない可能性があります",
+            }
+        ],
+        defaultHint: "hpが残っている間、繰り返したい"
+    }
 }
