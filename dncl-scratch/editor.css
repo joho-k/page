@@ -168,9 +168,12 @@
 /* ブロック */
 .block {
     position: relative;
-    background: var(--block-bg, #f3f6fb);
-    color: #ffffff;
-    border: 1px solid var(--block-border, #cfdceb);
+    background: #f7f9fc;
+    background: color-mix(in srgb, var(--block-bg, #5b7ea6) 12%, #ffffff);
+    color: #29384b;
+    border: 1px solid #dbe3ee;
+    border: 1px solid color-mix(in srgb, var(--block-bg, #5b7ea6) 30%, #ffffff);
+    border-left: 5px solid var(--block-bg, #5b7ea6);
     padding: 1px 20px 1px 8px;
     margin: 0;
     border-radius: 0 9px 9px 0;
@@ -181,12 +184,15 @@
 }
 
 .block.step-active {
-    box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.95), 0 0 18px rgba(255, 235, 59, 0.6);
-    filter: brightness(2.00);
-    color: var(--text);
+    background: #ffe16a;
+    border-color: #e8a417;
+    box-shadow: 0 0 0 3px #f0a81e, 0 0 0 7px rgba(240, 168, 30, 0.3), 0 4px 16px rgba(240, 168, 30, 0.45);
+    color: #2a2410;
+    font-weight: 700;
 
     input, select {
-        color: var(--text);
+        color: #2a2410;
+        border-color: #d9a43a;
     }
 }
 
@@ -275,8 +281,8 @@
 }
 
 .block[data-type="while"] {
-    --block-bg: #d97a2b;
-    --block-border: #bf6924;
+    --block-bg: #d2484c;
+    --block-border: #b93d41;
 }
 
 .block[data-type="array"] {
@@ -362,8 +368,7 @@
 }
 
 .block:hover {
-    filter: saturate(1.1) brightness(0.9);
-    box-shadow: 0 4px 11px rgba(39, 64, 96, 0.13);
+    box-shadow: 0 4px 11px rgba(39, 64, 96, 0.16);
 }
 
 /* ネスト */
@@ -410,11 +415,11 @@
 
 .array2d-bracket {
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.95);
+    color: rgba(41, 56, 75, 0.85);
 }
 
 .array2d-comma {
-    color: rgba(255, 255, 255, 0.92);
+    color: rgba(41, 56, 75, 0.8);
     margin: 0 2px;
 }
 
@@ -486,9 +491,9 @@
     min-width: 120px;
     min-height: 28px;
     padding-right: 10px;
-    border: 1px dashed rgba(255, 255, 255, 0.7);
+    border: 1px dashed rgba(41, 56, 75, 0.32);
     border-radius: 7px;
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(41, 56, 75, 0.04);
 }
 
 .block[data-type="assign"] .expr-zone::after {
@@ -515,8 +520,8 @@
 /* else */
 .else-area {
     margin-top: 4px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px dashed rgba(255, 255, 255, 0.45);
+    background: rgba(41, 56, 75, 0.04);
+    border: 1px dashed rgba(41, 56, 75, 0.28);
     border-radius: 8px;
     padding: 6px;
 }
@@ -525,16 +530,16 @@
 input,
 select {
     width: 66px;
-    background: rgba(255, 255, 255, 0.18);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: #ffffff;
+    color: #29384b;
+    border: 1px solid #cfd9e8;
     border-radius: 7px;
     padding: 3px 6px;
     outline: none;
 }
 
 input::placeholder {
-    color: rgba(255, 255, 255, 0.78);
+    color: rgba(41, 56, 75, 0.5);
 }
 
 /* 削除 */
@@ -726,7 +731,7 @@ pre {
 
 /* ★追加：プレースホルダー */
 .placeholder {
-    color: rgba(240, 240, 240, 0.55);
+    color: rgba(41, 56, 75, 0.5);
     font-size: 12px;
 }
 
