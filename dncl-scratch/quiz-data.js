@@ -395,16 +395,16 @@ window.quizData = {
                     {
                         type: "assign",
                         name: "amari",
-                        value: "i __BLANK_blank_c1__ 2"
+                        value: "i % 2"
                     },
                     {
                         type: "if",
-                        condition: "amari __BLANK_blank_c2__ 0",
+                        condition: "amari == 0",
                         body: [
                             {
                                 type: "assign",
                                 name: "goukei",
-                                value: "goukei __BLANK_blank_c3__ i"
+                                value: "__BLANK_blank_c1__ __BLANK_blank_c2__ __BLANK_blank_c3__"
                             }
                         ]
                     }
@@ -416,41 +416,35 @@ window.quizData = {
             }
         ],
         choices: [
+            { label: "goukei", value: "goukei" },
+            { label: "i", value: "i" },
+            { label: "amari", value: "amari" },
             { label: "+", value: "+" },
             { label: "-", value: "-" },
             { label: "*", value: "*" },
-            { label: "/", value: "/" },
-            { label: "%", value: "%" },
-            { label: "==", value: "==" },
-            { label: "!=", value: "!=" },
-            { label: ">", value: ">" }
+            { label: "/", value: "/" }
         ],
         answers: [
             {
-                values: ["%", "==", "+"],
+                values: ["goukei", "+", "i"],
                 correct: true,
             },
             {
-                values: ["/", "==", "+"],
-                correct: false,
-                hint: "1つ目は「偶数か」を判定するための“あまり”を求めます。割り算ではありません",
-            },
-            {
-                values: ["%", "!=", "+"],
-                correct: false,
-                hint: "あまりが0のとき偶数です。!= では奇数を合計してしまいます",
-            },
-            {
-                values: ["%", "==", "*"],
+                values: ["goukei", "*", "i"],
                 correct: false,
                 hint: "合計は今までの値に i を足していきます。掛け算ではありません",
             },
             {
-                values: ["%", ">", "+"],
+                values: ["goukei", "-", "i"],
                 correct: false,
-                hint: "あまりがちょうど0のときを選びたいので > ではありません",
+                hint: "引き算では合計になりません。足し算で積み上げます",
+            },
+            {
+                values: ["amari", "+", "i"],
+                correct: false,
+                hint: "足し込む先は合計を入れている goukei です。amari ではありません",
             }
         ],
-        defaultHint: "2で割ったあまりが0なら偶数。その i を goukei に足していこう"
+        defaultHint: "これまでの合計 goukei に i を足して、新しい goukei にしよう"
     }
 }
