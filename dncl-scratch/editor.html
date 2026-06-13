@@ -148,7 +148,7 @@
                     <div id="vars" class="vars-panel"></div>
 
                     <h4>出力</h4>
-                    <pre id="output"></pre>
+                    <pre id="output" class="output-panel"></pre>
 
                 </div>
             </div>
@@ -175,9 +175,12 @@
     </dialog>
 
     <div id="quiz-choices-bar" class="quiz-choices-bar" hidden>
-        <div id="quiz-question-title" class="quiz-question-title"></div>
+        <div class="quiz-question-row">
+            <span class="quiz-question-badge">問題</span>
+            <div id="quiz-question-title" class="quiz-question-title"></div>
+        </div>
         <div class="quiz-choices-row">
-            <div class="quiz-choices-label">選択肢▶︎</div>
+            <div class="quiz-choices-label">選択肢</div>
             <div id="quiz-choices" class="quiz-choices"></div>
         </div>
         <div class="quiz-actions">
