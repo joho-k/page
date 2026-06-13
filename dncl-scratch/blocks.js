@@ -1756,6 +1756,7 @@ function quizShowResultDialog(ok, hintMessage = "") {
     if (!dialog || !title || !body || !close) return;
 
     title.textContent = ok ? "正解！" : "不正解";
+    title.className = ok ? "quiz-result-correct" : "quiz-result-incorrect";
     const outputText = String(output ?? "");
     const hintText = ok
         ? "よくできました。"
