@@ -375,7 +375,7 @@ window.quizData = {
         defaultHint: "単価×個数で合計金額を求めよう"
     },
     q008: {
-        title: "偶数だけの合計",
+        title: "偶数の合計（1〜10）",
         addedAt: "2026-06-13",
         difficulty: 5,
         question: "1から10までの整数のうち、偶数だけを合計して表示するようにしよう（3か所の穴をうめよう）",
