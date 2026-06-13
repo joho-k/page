@@ -1800,14 +1800,9 @@ function quizHookJudge(quiz) {
             const ret = originalStepNext.apply(this, args);
             try {
                 if (typeof stepIndex === "number" && Array.isArray(trace) && stepIndex >= trace.length) {
-                    const result = { variables: vars, output };
-                    const ok = typeof quiz.judge === "function" ? !!quiz.judge(result) : false;
-                    let hint = "";
-                    if (!ok && Array.isArray(quiz.hints)) {
-                        const h = quiz.hints.find((x) => typeof x?.check === "function" && x.check(result));
-                        if (h?.message) hint = String(h.message);
-                    }
-                    quizShowResultDialog(ok, hint);
+                    // 実行(run)と同じく選択肢の答え合わせで判定する
+                    const result = quizJudgeByAnswers(quiz);
+                    quizShowResultDialog(result.ok, result.hint);
                     quizSetChoicesVisible(true);
                 }
             } catch (_e) {
