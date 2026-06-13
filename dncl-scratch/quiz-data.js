@@ -373,5 +373,84 @@ window.quizData = {
             }
         ],
         defaultHint: "単価×個数で合計金額を求めよう"
+    },
+    q008: {
+        title: "偶数だけの合計",
+        addedAt: "2026-06-13",
+        difficulty: 5,
+        question: "1から10までの整数のうち、偶数だけを合計して表示するようにしよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "goukei",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "10",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "i __BLANK_blank_a__ 2"
+                    },
+                    {
+                        type: "if",
+                        condition: "amari __BLANK_blank_b__ 0",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "goukei",
+                                value: "goukei __BLANK_blank_c__ i"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"偶数の合計は\" + goukei"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+            { label: "==", value: "==" },
+            { label: "!=", value: "!=" },
+            { label: ">", value: ">" }
+        ],
+        answers: [
+            {
+                values: ["%", "==", "+"],
+                correct: true,
+            },
+            {
+                values: ["/", "==", "+"],
+                correct: false,
+                hint: "1つ目は「偶数か」を判定するための“あまり”を求めます。割り算ではありません",
+            },
+            {
+                values: ["%", "!=", "+"],
+                correct: false,
+                hint: "あまりが0のとき偶数です。!= では奇数を合計してしまいます",
+            },
+            {
+                values: ["%", "==", "*"],
+                correct: false,
+                hint: "合計は今までの値に i を足していきます。掛け算ではありません",
+            },
+            {
+                values: ["%", ">", "+"],
+                correct: false,
+                hint: "あまりがちょうど0のときを選びたいので > ではありません",
+            }
+        ],
+        defaultHint: "2で割ったあまりが0なら偶数。その i を goukei に足していこう"
     }
 }
