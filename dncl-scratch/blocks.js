@@ -1752,8 +1752,9 @@ function quizShowResultDialog(ok, hintMessage = "") {
     const dialog = document.getElementById("quiz-result-dialog");
     const title = document.getElementById("quiz-result-title");
     const body = document.getElementById("quiz-result-body");
-    const close = document.getElementById("quiz-result-close-button");
-    if (!dialog || !title || !body || !close) return;
+    const retryBtn = document.getElementById("quiz-result-retry-button");
+    const othersBtn = document.getElementById("quiz-result-others-button");
+    if (!dialog || !title || !body || !retryBtn || !othersBtn) return;
 
     title.textContent = ok ? "正解！" : "不正解";
     title.className = ok ? "quiz-result-correct" : "quiz-result-incorrect";
@@ -1772,8 +1773,20 @@ function quizShowResultDialog(ok, hintMessage = "") {
     hintBox.className = "quiz-result-body";
     hintBox.textContent = hintText;
     body.append(outputLabel, outputBox, hintBox);
-    close.onclick = () => dialog.close();
+    // 「もう一度問題を確認する」＝ダイアログを閉じて問題画面に戻る
+    retryBtn.onclick = () => dialog.close();
+    // 「他の問題を解く」＝問題一覧へ移動
+    othersBtn.onclick = () => quizGoToList();
     dialog.showModal();
+}
+
+// 問題一覧（practice.html）へ移動する。state=noheader を引き継ぐ
+function quizGoToList() {
+    const params = new URLSearchParams(location.search);
+    const target = params.get("state") === "noheader"
+        ? "practice.html?state=noheader"
+        : "practice.html";
+    location.href = target;
 }
 
 function quizHookJudge(quiz) {
@@ -1877,6 +1890,14 @@ function setupQuizModeIfPresent() {
                 buttons[2].style.display = "none";
                 actionHost.appendChild(buttons[2]);
             }
+
+            // 問題一覧に戻るボタン
+            const backBtn = document.createElement("button");
+            backBtn.type = "button";
+            backBtn.textContent = "📋 問題一覧に戻る";
+            backBtn.className = "quiz-back-button";
+            backBtn.addEventListener("click", () => quizGoToList());
+            actionHost.appendChild(backBtn);
         }
 
         // hide original container on the right
