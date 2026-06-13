@@ -318,5 +318,60 @@ window.quizData = {
             }
         ],
         defaultHint: "hpが残っている間、繰り返したい"
+    },
+    q007: {
+        title: "合計金額の計算",
+        addedAt: "2026-06-13",
+        difficulty: 1,
+        question: "1個120円のりんごを3個買ったときの合計金額が表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "price",
+                value: "120"
+            },
+            {
+                type: "assign",
+                name: "kosu",
+                value: "3"
+            },
+            {
+                type: "assign",
+                name: "goukei",
+                value: "price __BLANK_blank_a__ kosu"
+            },
+            {
+                type: "print",
+                value: "\"合計金額は\" + goukei + \"円\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["*"],
+                correct: true,
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算では「120個ぶんの代金」になりません",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "引き算では合計金額になりません",
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "割り算では合計金額になりません",
+            }
+        ],
+        defaultHint: "単価×個数で合計金額を求めよう"
     }
 }
