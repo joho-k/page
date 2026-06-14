@@ -314,6 +314,9 @@
 .block[data-type="array"] {
     --block-bg: #c05a7a;
     --block-border: #aa4d6b;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
 }
 
 .array-control-panel {
@@ -418,7 +421,7 @@
 }
 
 .array2d-body {
-    margin-top: 6px;
+    margin-top: 0;
 }
 
 .array2d-rows {
