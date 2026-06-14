@@ -1275,6 +1275,11 @@ function updateCode() {
     }
 
     window.currentAST = ast;
+
+    // プログラムが変わったら、進行中の実行（ステップ/一括）をキャンセルする
+    if (typeof onProgramChanged === "function") {
+        onProgramChanged();
+    }
 }
 
 // ----------------
@@ -1826,23 +1831,8 @@ function quizHookJudge(quiz) {
         };
     }
 
-    if (typeof window.stepStart === "function") {
-        const originalStepStart = window.stepStart;
-        window.stepStart = function (...args) {
-            const ret = originalStepStart.apply(this, args);
-            try {
-                const runButtons = document.querySelector(".run-buttons");
-                const nextBtn = runButtons?.querySelector('button[onclick="stepNext()"]') ?? null;
-                // ボタンは quiz パネルに移動済みなので DOM から探す
-                const movedNextBtn = document.querySelector('#quiz-actions-buttons button[onclick="stepNext()"]') ?? nextBtn;
-                if (movedNextBtn) movedNextBtn.style.display = "";
-                quizSetChoicesVisible(false);
-            } catch (_e) {
-                // no-op
-            }
-            return ret;
-        };
-    }
+    // 「前へ」「次へ」の表示は executor 側（setStepButtonsVisible）が担当。
+    // 選択肢はステップ中も表示したままにする（隠さない）。
 }
 
 function setupQuizModeIfPresent() {
@@ -1870,26 +1860,29 @@ function setupQuizModeIfPresent() {
     // Move run buttons into quiz panel (run / stepStart / stepNext), hide share
     const runButtons = document.querySelector(".run-buttons");
     if (runButtons) {
-        const buttons = [...runButtons.querySelectorAll("button")];
-        // 0: run, 1: stepStart, 2: stepNext, 3: share
-        if (buttons[3]) buttons[3].style.display = "none";
+        // インデックスではなくセレクタで取得（「前へ」追加で並びが変わるため）
+        const runBtn = runButtons.querySelector('button[onclick="run()"]');
+        const stepStartBtn = runButtons.querySelector('button[onclick="stepStart()"]');
+        const prevBtn = runButtons.querySelector('#step-prev-button');
+        const nextBtn = runButtons.querySelector('#step-next-button');
+        const shareBtn = runButtons.querySelector('button[onclick="shareProgramUrl()"]');
+
+        if (shareBtn) shareBtn.style.display = "none";
 
         const actionHost = document.getElementById("quiz-actions-buttons");
         if (actionHost) {
             // keep existing handlers by moving the elements
-            if (buttons[0]) {
-                buttons[0].textContent = "▶ 回答";
-                actionHost.appendChild(buttons[0]);
+            if (runBtn) {
+                runBtn.textContent = "▶ 回答";
+                actionHost.appendChild(runBtn);
             }
-            if (buttons[1]) {
-                buttons[1].textContent = "⏭ ステップで回答";
-                actionHost.appendChild(buttons[1]);
+            if (stepStartBtn) {
+                stepStartBtn.textContent = "⏭ ステップで回答";
+                actionHost.appendChild(stepStartBtn);
             }
-            if (buttons[2]) {
-                // 「ステップで回答」を押したら表示
-                buttons[2].style.display = "none";
-                actionHost.appendChild(buttons[2]);
-            }
+            // 「前へ」「次へ」は hidden 属性で初期非表示。stepStart() で表示される。
+            if (prevBtn) actionHost.appendChild(prevBtn);
+            if (nextBtn) actionHost.appendChild(nextBtn);
 
             // 問題一覧に戻るボタン
             const backBtn = document.createElement("button");
