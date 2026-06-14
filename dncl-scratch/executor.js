@@ -415,7 +415,7 @@ function comparisonPhrase(leftDesc, right, op) {
     }
 }
 
-function buildConditionExplanation(condition, conditionValue, scope) {
+function buildConditionText(condition, conditionValue, scope) {
     const resultText = formatBoolValue(conditionValue);
     const cmp = parseComparison(condition);
 
@@ -425,13 +425,60 @@ function buildConditionExplanation(condition, conditionValue, scope) {
 
         if (phrase) {
             const leftValue = safeEvalWithScope(cmp.left, scope);
-            return buildStepDetails(
-                `条件 ${condition} は、${phrase} true(真)です。${leftDesc}は ${formatVarValue(leftValue)} なので、${resultText} です。`
-            );
+            // 右辺もただの定数でなければ、その値も見せる（例: maxは 20）
+            const rightPart = isNumericConstant(cmp.right)
+                ? ""
+                : `、${cmp.right}は ${formatVarValue(safeEvalWithScope(cmp.right, scope))}`;
+            return `条件 ${condition} は、${phrase} true(真)です。${leftDesc}は ${formatVarValue(leftValue)}${rightPart} なので、${resultText} です。`;
         }
     }
 
-    return buildStepDetails(`条件 ${condition} は、今は ${resultText} です。`);
+    return `条件 ${condition} は、今は ${resultText} です。`;
+}
+
+function buildConditionExplanation(condition, conditionValue, scope) {
+    return buildStepDetails(buildConditionText(condition, conditionValue, scope));
+}
+
+// 文字列連結（a + "×" + b ...）を、トップレベルの + ごとの被演算子に分解する
+function splitConcatOperands(expr) {
+    const tokens = tokenize(expr.trim());
+    const operands = [];
+    let bracketDepth = 0;
+    let parenDepth = 0;
+    let current = [];
+
+    for (const token of tokens) {
+        if (token === "[") bracketDepth += 1;
+        if (token === "]") bracketDepth -= 1;
+        if (token === "(") parenDepth += 1;
+        if (token === ")") parenDepth -= 1;
+
+        if (token === "+" && bracketDepth === 0 && parenDepth === 0) {
+            operands.push(current.join("").trim());
+            current = [];
+        } else {
+            current.push(token);
+        }
+    }
+    operands.push(current.join("").trim());
+    return operands.filter(Boolean);
+}
+
+// 式中の * や / を、子ども向けに ×・÷ で見せる
+function prettyExpr(expr) {
+    return String(expr).replaceAll("*", "×").replaceAll("/", "÷");
+}
+
+function describeConcatOperand(expr) {
+    const t = expr.trim();
+    if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith('“') && t.endsWith('”'))) {
+        return `「${t.slice(1, -1)}」`;
+    }
+    if (isSimpleVariable(t)) {
+        return `${t}の値`;
+    }
+    return `${prettyExpr(t)}の値`;
 }
 
 function buildArrayAccessExplanation(access) {
@@ -553,13 +600,15 @@ function buildPrintExplanation(node, scope, result) {
         return buildStepDetails(`変数 ${node.value.trim()} の値 ${formatVarValue(value)} を表示しました。`);
     }
 
-    // 文字列の連結（例: "最大公約数は" + a）は「○○ と △△ を結合した」と説明する
-    const binary = parseSimpleBinaryExpression(node.value);
-    if (binary && binary.op === "+" && typeof value === "string") {
-        const describe = (expr) => isSimpleVariable(expr) ? `${expr.trim()}の値` : expr.trim();
-        return buildStepDetails(
-            `${describe(binary.left)} と ${describe(binary.right)} を結合した「${value}」を表示しました。`
-        );
+    // 文字列の連結（例: i + "×" + j + "=" + i*j）は各パーツを「と」でつないで説明する
+    if (typeof value === "string") {
+        const operands = splitConcatOperands(node.value);
+        if (operands.length >= 2) {
+            const parts = operands.map(describeConcatOperand).join("と");
+            return buildStepDetails(
+                `${parts}を結合した、「${value}」を出力に表示しました。`
+            );
+        }
     }
 
     return buildStepDetails(
@@ -881,22 +930,24 @@ function buildTrace(ast, targetTrace = trace) {
                     insertTraceAtCurrentPosition([...node.body, node]);
                     return { conditionValue, continued: true, iterationCount: nextCount };
                 },
-                getDetails: (_scope, result) => {
+                getDetails: (scope, result) => {
+                    const conditionText = buildConditionText(node.condition, result?.conditionValue, scope);
+
                     if (result?.stopped) {
                         return buildStepDetails(
-                            `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} です。繰り返し回数が多すぎるため（上限 ${MAX_WHILE_ITERATIONS_PER_BLOCK} 回）停止しました。`
+                            `${conditionText} 繰り返し回数が多すぎるため（上限 ${MAX_WHILE_ITERATIONS_PER_BLOCK} 回）停止しました。`
                         );
                     }
 
                     if (result?.ended) {
                         return buildStepDetails(
-                            `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} なので、繰り返しを終了します。`
+                            `${conditionText} 繰り返しを終了します。`
                         );
                     }
 
                     const countText = typeof result?.iterationCount === "number" ? `（${result.iterationCount} 回目）` : "";
                     return buildStepDetails(
-                        `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} なので、繰り返しを続けます${countText}。`
+                        `${conditionText} 繰り返しを続けます${countText}。`
                     );
                 }
             });
