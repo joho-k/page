@@ -447,21 +447,33 @@ function buildConditionText(condition, conditionValue, scope) {
     return `条件 ${condition} は、今は ${resultText} です。`;
 }
 
+// 比較記号の意味を子ども向けに説明する
+function operatorMeaningNote(op) {
+    switch (op) {
+        case "==": return "== は「2つが 同じ」か しらべる記号";
+        case "!=": return "!= は「2つが ちがう（等しくない）」か しらべる記号";
+        case "<": return "< は「左が 右より 小さい」か しらべる記号";
+        case ">": return "> は「左が 右より 大きい」か しらべる記号";
+        case "<=": return "<= は「左が 右以下（小さいか 同じ）」か しらべる記号";
+        case ">=": return ">= は「左が 右以上（大きいか 同じ）」か しらべる記号";
+        default: return "";
+    }
+}
+
 function buildConditionCardHtml(condition, conditionValue, scope) {
     const cmp = parseComparison(condition);
     const badgeClass = conditionValue ? "bool-true" : "bool-false";
     const badge = conditionValue ? "✓ true（真）" : "✗ false（偽）";
 
     if (cmp) {
-        const leftValue = safeEvalWithScope(cmp.left, scope);
-        const rightValue = safeEvalWithScope(cmp.right, scope);
+        // 各オペランドを concat-chip（ラベル＝式・値）で見せる。演算子の説明文は式の上。
+        const row = `${operandChip(cmp.left, scope)}${calcOp(cmp.op)}${operandChip(cmp.right, scope)}`;
+
         return buildStepCard({
             title: "条件をチェック",
             cardClass: "step-card-cond",
-            rows: [
-                `${calcToken(cmp.left)}${calcOp(cmp.op)}${calcToken(cmp.right)}`,
-                `${calcToken(formatVarValue(leftValue), "calc-token-val")}${calcOp(cmp.op)}${calcToken(formatVarValue(rightValue), "calc-token-val")}`
-            ],
+            topNote: operatorMeaningNote(cmp.op),
+            rows: [row],
             badge,
             badgeClass
         });
@@ -574,15 +586,33 @@ function opPhrase(op, leftValue, rightValue) {
     }
 }
 
-function buildStepCard({ title, rows = [], note = "", badge = "", badgeClass = "", cardClass = "" }) {
+function buildStepCard({ title, rows = [], note = "", topNote = "", badge = "", badgeClass = "", cardClass = "" }) {
+    const topNoteHtml = topNote ? `<div class="step-card-note step-card-note-top">${escapeHtml(topNote)}</div>` : "";
     const rowsHtml = rows.filter(Boolean).map(r => `<div class="calc-row">${r}</div>`).join("");
     const noteHtml = note ? `<div class="step-card-note">${escapeHtml(note)}</div>` : "";
     const arrowHtml = badge ? `<div class="calc-arrow">↓</div>` : "";
     const badgeHtml = badge ? `<div class="result-badge ${badgeClass}">${badge}</div>` : "";
     return `<div class="step-card ${cardClass}">`
         + `<div class="step-card-title">${escapeHtml(title)}</div>`
-        + rowsHtml + noteHtml + arrowHtml + badgeHtml
+        + topNoteHtml + rowsHtml + noteHtml + arrowHtml + badgeHtml
         + `</div>`;
+}
+
+// 1つの被演算子（オペランド）を「表示する(結合)」と同じ concat-chip で見せる。
+// 変数や配列要素は ラベル(式)＋値 のチップ、定数・文字列はそのままのトークン。
+function operandChip(exprText, scope) {
+    const t = String(exprText).trim();
+    if (isNumericConstant(t)) {
+        return calcToken(t);
+    }
+    if (isStringLiteral(t)) {
+        return calcToken(`「${stripQuotes(t)}」`, "calc-token-str");
+    }
+    const value = safeEvalWithScope(t, scope);
+    return `<span class="concat-chip">`
+        + `<span class="chip-label">${escapeHtml(prettyExpr(t))}</span>`
+        + `<span class="chip-val">${escapeHtml(formatVarValue(value))}</span>`
+        + `</span>`;
 }
 
 // 1つの式を、変数/値が見えるトークン列の HTML にする（i % 2 → i % 2）
@@ -725,13 +755,12 @@ function buildAssignExplanation(node, scope, result) {
             ? `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)} です。`
             : `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText}`;
 
-        const calcRow = `${calcToken(formatVarValue(leftValue), "calc-token-val")}${calcOp(binary.op)}${calcToken(formatVarValue(rightValue), "calc-token-val")}${calcOp("=")}${calcToken(formatVarValue(resultValue), "calc-result")}`;
+        const row = `${calcToken(node.name, "calc-target")}${calcOp("=")}`
+            + `${operandChip(binary.left, scope)}${calcOp(binary.op)}${operandChip(binary.right, scope)}`
+            + `<span class="calc-result-arrow">→</span>${calcToken(formatVarValue(resultValue), "calc-result")}`;
         const html = buildStepCard({
             title: "今のステップ",
-            rows: [
-                `${calcToken(node.name, "calc-target")}${calcOp("=")}${exprToTokensHtml(node.value)}`,
-                calcRow
-            ],
+            rows: [row],
             note: opPhrase(binary.op, leftValue, rightValue),
             badge: assignBadge(node.name, resultValue)
         });
@@ -752,14 +781,12 @@ function buildAssignExplanation(node, scope, result) {
     const arrayTag = Array.isArray(value) ? "(配列)" : "";
     const highlightVars = [...collectVarNames(node.value, scope), ...(isSimpleVariable(node.name) ? [node.name.trim()] : [])];
 
-    // 別の変数をそのまま代入したとき（例: a ← b）は、その変数名と値の両方を見せる
+    // 別の変数をそのまま代入したとき（例: a = b）は concat-chip で値を見せる
     if (isSimpleVariable(node.value) && !arrayAccess) {
+        const row = `${calcToken(node.name, "calc-target")}${calcOp("=")}${operandChip(node.value, scope)}`;
         const html = buildStepCard({
             title: "今のステップ",
-            rows: [
-                `${calcToken(node.name, "calc-target")}${calcOp("=")}${calcToken(node.value.trim())}`,
-                `${calcToken(node.value.trim())}${calcOp("=")}${calcToken(formatVarValue(value), "calc-result")}`
-            ],
+            rows: [row],
             badge: assignBadge(node.name, value)
         });
         return buildStepDetails(
@@ -768,18 +795,17 @@ function buildAssignExplanation(node, scope, result) {
         );
     }
 
-    // 配列リテラルを代入（a ← [20,69,...]）は中身を1つのトークンでまとめて見せる
-    // それ以外（x ← a[i] など）は式をトークンに分解する
-    const rhsHtml = Array.isArray(value)
-        ? calcToken(formatVarValue(value))
-        : exprToTokensHtml(node.value);
-    const rows = [`${calcToken(`${node.name}${arrayTag}`, "calc-target")}${calcOp("=")}${rhsHtml}`];
-    if (arrayAccess) {
-        rows.push(`${calcToken(node.value.trim())}${calcOp("=")}${calcToken(formatVarValue(value), "calc-result")}`);
+    // 配列リテラルを代入（a = [20,69,...]）は中身を1つのトークンでまとめて見せる
+    // 配列の要素を取り出して代入（x = a[i]）は a[i] を concat-chip で見せる
+    let rowHtml;
+    if (Array.isArray(value)) {
+        rowHtml = `${calcToken(`${node.name}${arrayTag}`, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(value))}`;
+    } else {
+        rowHtml = `${calcToken(`${node.name}${arrayTag}`, "calc-target")}${calcOp("=")}${operandChip(node.value, scope)}`;
     }
     const html = buildStepCard({
         title: "今のステップ",
-        rows,
+        rows: [rowHtml],
         note: arrayAccess ? `${node.value.trim()} は配列 ${arrayAccess.arrayName} の ${arrayAccess.indexValue} 番目` : "",
         badge: Array.isArray(value)
             ? `${escapeHtml(node.name)} に <b>配列</b> を入れる`
@@ -817,7 +843,7 @@ function buildPrintExplanation(node, scope, result) {
     if (isSimpleVariable(node.value)) {
         const html = buildStepCard({
             title: "表示する",
-            rows: [`${calcToken(node.value.trim())}${calcOp("=")}${calcToken(formatVarValue(value), "calc-result")}`],
+            rows: [operandChip(node.value, scope)],
             badge: `<b>${escapeHtml(formatVarValue(value))}</b> を出力`
         });
         return buildStepDetails(
@@ -848,7 +874,7 @@ function buildPrintExplanation(node, scope, result) {
 
     const html = buildStepCard({
         title: "表示する",
-        rows: [`${calcToken(prettyExpr(node.value.trim()))}${calcOp("=")}${calcToken(formatVarValue(value), "calc-result")}`],
+        rows: [operandChip(node.value, scope)],
         badge: `<b>${escapeHtml(formatVarValue(value))}</b> を出力`
     });
     return buildStepDetails(

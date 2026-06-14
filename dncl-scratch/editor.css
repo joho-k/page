@@ -835,6 +835,11 @@ pre {
     font-size: 18px;
 }
 
+.calc-result-arrow {
+    color: #b89640;
+    font-weight: 700;
+}
+
 .calc-token {
     display: inline-block;
     background: #eef3f8;
@@ -893,6 +898,11 @@ pre {
 .step-card-loop-note {
     color: #2f6b88;
     background: #eaf4f9;
+}
+
+/* 式の上に置く説明文（比較記号の意味など） */
+.step-card-note-top {
+    margin-bottom: 2px;
 }
 
 .result-badge {
