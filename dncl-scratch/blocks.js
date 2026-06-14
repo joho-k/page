@@ -1883,14 +1883,6 @@ function setupQuizModeIfPresent() {
             // 「前へ」「次へ」は hidden 属性で初期非表示。stepStart() で表示される。
             if (prevBtn) actionHost.appendChild(prevBtn);
             if (nextBtn) actionHost.appendChild(nextBtn);
-
-            // 問題一覧に戻るボタン
-            const backBtn = document.createElement("button");
-            backBtn.type = "button";
-            backBtn.textContent = "問題一覧に戻る";
-            backBtn.className = "quiz-back-button";
-            backBtn.addEventListener("click", () => quizGoToList());
-            actionHost.appendChild(backBtn);
         }
 
         // hide original container on the right

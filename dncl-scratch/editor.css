@@ -3,8 +3,19 @@
 }
 
 /* ─── 使い方ツアー ───────────────────────────── */
+/* 上部ツールバー（TOPへ戻る・使い方を見る）。問題モードでも隠れないよう header の外に置く */
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 14px;
+}
+
 .tour-start-button {
-    margin-top: 6px;
+    display: inline-block;
+    margin: 0;
+    text-decoration: none;
     border: 2px solid var(--primary);
     background: #ffffff;
     color: var(--primary);
@@ -79,6 +90,7 @@
     font-size: 18px;
     line-height: 1.5;
     margin-bottom: 10px;
+    white-space: pre-line;
 }
 
 .tour-tip-close {
@@ -1315,6 +1327,30 @@ pre {
 
 .quiz-actions-buttons button:active {
     transform: translateY(1px);
+}
+
+/* スマホ：操作・回答・ステップで回答を1行に収める */
+@media (max-width: 600px) {
+    .quiz-actions {
+        flex-wrap: nowrap;
+        gap: 8px;
+    }
+
+    .quiz-actions-buttons {
+        flex-wrap: nowrap;
+        gap: 6px;
+        overflow-x: auto;
+    }
+
+    .quiz-actions-label {
+        white-space: nowrap;
+    }
+
+    .quiz-actions-buttons button {
+        padding: 7px 12px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
 }
 
 /* 問題一覧に戻る（操作板の右端に配置する控えめなボタン） */

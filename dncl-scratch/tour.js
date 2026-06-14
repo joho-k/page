@@ -1,77 +1,130 @@
 // 使い方ツアー：説明する要素だけを明るく残し、まわりを黒い半透明で覆って案内する
 (function () {
-    // 案内する手順。
+    // 各手順の指定方法
     //   selector(単数) / selectors(複数→囲む範囲) … スポットライトを当てる対象
     //   interactive … 対象（または clickSelector）を実際に押せるようにし、押すと次へ進む
     //   clickSelector … interactive で「押す対象」をスポットライトと別にしたいとき
     //   onEnter … 表示前に呼ぶ準備処理
     //   center … 対象を持たず、画面全体を暗くして中央にメッセージを出す
-    const STEPS = [
-        {
-            selector: ".palette",
-            title: "パーツ（部品）",
-            text: "ここにあるのがプログラムの部品です。代入・表示・もし・繰り返しなどを選ぶと、右側のプログラムに追加されます。"
-        },
-        {
-            selectors: ["#workspace-panel", ".program-view-switch"],
-            title: "プログラムとコード",
-            text: "選んだ部品はここに組み上がります。「ブロック」と「コード」を切り替えると、実際のプログラムのコードとして見比べられます。"
-        },
-        {
-            selector: 'button[onclick="run()"]',
-            title: "実行ボタン",
-            text: "これが実行ボタンです。組み立てたプログラムを、ここを押して一気に動かします。"
-        },
-        {
-            selector: 'button[onclick="run()"]',
-            title: "押してみましょう",
-            text: "実際に押してみましょう。プログラムが動いて、結果が表示されます。ボタンを押すか「次へ」で進めます。",
-            interactive: true
-        },
-        {
-            selectors: ["#vars_title", "#output"],
-            title: "変数と出力",
-            text: "実行すると、変数の中身が「変数」に、表示ブロックの結果が「出力」に出ます。プログラムがどう動いたかをここで確かめます。"
-        },
-        {
-            selector: 'button[onclick="stepStart()"]',
-            title: "ここが一番の売り！ステップ実行",
-            text: "このシステムの主役が「ステップ実行」です。プログラムを1行ずつ、自分のペースで動かせます。まずは「ステップ開始」を押してみましょう。",
-            interactive: true
-        },
-        {
-            selector: "#step-next-button",
-            title: "「次へ」を押してみましょう",
-            text: "ステップ実行こそ、このシステムの一番の魅力。プログラムの「次へ」を押すと、処理が1行だけ進みます。押してみましょう。",
-            interactive: true,
-            onEnter: ensureStepStarted
-        },
-        {
-            selector: "#workspace-panel",
-            title: "1行ずつハイライト",
-            text: "プログラムを見てください。今まさに実行される1行がハイライトされます。",
-            onEnter: ensureStepAdvanced
-        },
-        {
-            selector: "#step-explanation",
-            title: "図で動きを理解",
-            text: "さらに、その処理の詳しい動きを図で理解できます。もう一度「次へ」を押してみましょう。",
-            interactive: true,
-            clickSelector: "#step-next-button",
-            onEnter: ensureStepAdvanced
-        },
-        {
-            selector: "#vars_title",
-            title: "変数もリアルタイム更新",
-            text: "実行したステップに合わせて、変数の中身もリアルタイムに更新されます。値がどう変化していくかが一目で分かります。",
-            onEnter: ensureStepAdvanced
-        },
-        {
-            center: true,
-            title: "このシステムを使ってプログラムの理解を深めよう！",
-            text: "「次へ」「前へ」で行き来しながら、説明と図でプログラムの動きをじっくり追いかけてみてください。"
-        }
-    ];
+
+    // ステップ実行〜締めはエディター・問題モードで共通
+    function sharedStepSteps() {
+        return [
+            {
+                selector: 'button[onclick="stepStart()"]',
+                title: "ここが一番の売り！ステップ実行",
+                text: "このシステムの主役が「ステップ実行」です。プログラムを1行ずつ、自分のペースで動かせます。まずは「ステップ開始」を押してみましょう。",
+                interactive: true
+            },
+            {
+                selector: "#step-next-button",
+                title: "「次へ」を押してみましょう",
+                text: "ステップ実行こそ、このシステムの一番の魅力。プログラムの「次へ」を押すと、処理が1行だけ進みます。押してみましょう。",
+                interactive: true,
+                onEnter: ensureStepStarted
+            },
+            {
+                selector: "#workspace-panel",
+                title: "1行ずつハイライト",
+                text: "プログラムを見てください。今まさに実行される1行がハイライトされます。",
+                onEnter: ensureStepAdvanced
+            },
+            {
+                selector: "#step-explanation",
+                title: "図で動きを理解",
+                text: "さらに、その処理の詳しい動きを図で理解できます。もう一度「次へ」を押してみましょう。",
+                interactive: true,
+                clickSelector: "#step-next-button",
+                onEnter: ensureStepAdvanced
+            },
+            {
+                selector: "#vars_title",
+                title: "変数もリアルタイム更新",
+                text: "実行したステップに合わせて、変数の中身もリアルタイムに更新されます。値がどう変化していくかが一目で分かります。",
+                onEnter: ensureStepAdvanced
+            },
+            {
+                center: true,
+                title: "このシステムを使って\nプログラムの理解を深めよう！",
+                text: "「次へ」「前へ」で行き来しながら、説明と図でプログラムの動きをじっくり追いかけてみてください。"
+            }
+        ];
+    }
+
+    // エディター（通常モード）
+    function buildEditorSteps() {
+        return [
+            {
+                selector: ".palette",
+                title: "パーツ（部品）",
+                text: "ここにあるのがプログラムの部品です。代入・表示・もし・繰り返しなどを選ぶと、右側のプログラムに追加されます。"
+            },
+            {
+                selectors: ["#workspace-panel", ".program-view-switch"],
+                title: "プログラムとコード",
+                text: "選んだ部品はここに組み上がります。「ブロック」と「コード」を切り替えると、実際のプログラムのコードとして見比べられます。"
+            },
+            {
+                selector: 'button[onclick="run()"]',
+                title: "実行ボタン",
+                text: "これが実行ボタンです。組み立てたプログラムを、ここを押して一気に動かします。"
+            },
+            {
+                selector: 'button[onclick="run()"]',
+                title: "押してみましょう",
+                text: "実際に押してみましょう。プログラムが動いて、結果が表示されます。ボタンを押すか「次へ」で進めます。",
+                interactive: true
+            },
+            {
+                selectors: ["#vars_title", "#output"],
+                title: "変数と出力",
+                text: "実行すると、変数の中身が「変数」に、表示ブロックの結果が「出力」に出ます。プログラムがどう動いたかをここで確かめます。"
+            },
+            ...sharedStepSteps()
+        ];
+    }
+
+    // 問題モード
+    function buildQuizSteps() {
+        return [
+            {
+                selector: ".quiz-question-row",
+                title: "問題文",
+                text: "まずはここで問題文を確認します。何を答える問題なのかを読み取りましょう。"
+            },
+            {
+                selector: "#workspace-panel",
+                title: "プログラム",
+                text: "これが問題のプログラムです。全体の流れを読みながら、空欄に何が入るかを考えます。"
+            },
+            {
+                selector: ".quiz-blank-active",
+                title: "ハイライトされた空欄",
+                text: "黄色く光っているのが、いま答える空欄です。タップすると、その空欄を選べます。"
+            },
+            {
+                selector: ".quiz-choices-row",
+                title: "選択肢はここ",
+                text: "選択肢はここに並びます。選んだものが、選択中の空欄に入ります。"
+            },
+            {
+                selector: "#workspace-panel",
+                title: "回答したら",
+                text: "選んだ選択肢が空欄に入ります。空欄が複数あるときは、同じように全部の空欄を埋めましょう。"
+            },
+            {
+                selector: 'button[onclick="run()"]',
+                title: "回答ボタンで確認",
+                text: "すべての空欄を埋めたら、「回答」ボタンを押して答え合わせをします。"
+            },
+            {
+                selector: "#quiz-actions-buttons",
+                title: "結果の見方",
+                text: "回答すると、正解・不正解とプログラムの出力結果が表示されます。間違えても何度でも挑戦できます。"
+            },
+            ...sharedStepSteps()
+        ];
+    }
 
     // ステップ開始を押さずに来た場合でも、ボタンと説明欄を出しておく
     function ensureStepStarted() {
@@ -89,6 +142,7 @@
     }
 
     const PAD = 8; // スポットライトの余白
+    let STEPS = [];
     let index = 0;
     let blocker, spotlight, tip, nav, navCount, prevBtn, nextBtn;
     let liftedEl = null;       // クリックできるよう前面に出した要素
@@ -280,9 +334,12 @@
 
     window.startTour = function () {
         if (blocker) return; // 二重起動を防ぐ
-        // 空っぽだと押しても結果が出ないので、例を1つ用意しておく
+        const quizMode = document.body.classList.contains("quiz-mode");
+        STEPS = quizMode ? buildQuizSteps() : buildEditorSteps();
+
+        // エディターで空っぽだと押しても結果が出ないので、例を1つ用意しておく
         const ws = document.getElementById("workspace");
-        if (ws && ws.children.length === 0 && typeof loadExample1 === "function") {
+        if (!quizMode && ws && ws.children.length === 0 && typeof loadExample1 === "function") {
             loadExample1();
         }
         index = 0;
