@@ -373,5 +373,82 @@ window.quizData = {
             }
         ],
         defaultHint: "単価×個数で合計金額を求めよう"
+    },
+    q008: {
+        title: "偶数の合計（1〜10）",
+        addedAt: "2026-06-13",
+        difficulty: 3,
+        question: "1から10までの整数のうち、偶数だけを合計して表示するようにしよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "goukei",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "10",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "i % 2"
+                    },
+                    {
+                        type: "if",
+                        condition: "amari == 0",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "goukei",
+                                value: "__BLANK_blank_c1__ __BLANK_blank_c2__ __BLANK_blank_c3__"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"偶数の合計は\" + goukei"
+            }
+        ],
+        choices: [
+            { label: "goukei", value: "goukei" },
+            { label: "i", value: "i" },
+            { label: "amari", value: "amari" },
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" }
+        ],
+        answers: [
+            {
+                values: ["goukei", "+", "i"],
+                correct: true,
+            },
+            {
+                values: ["i", "+", "goukei"],
+                correct: true,
+            },
+            {
+                values: ["goukei", "*", "i"],
+                correct: false,
+                hint: "合計は今までの値に i を足していきます。掛け算ではありません",
+            },
+            {
+                values: ["goukei", "-", "i"],
+                correct: false,
+                hint: "引き算では合計になりません。足し算で積み上げます",
+            },
+            {
+                values: ["amari", "+", "i"],
+                correct: false,
+                hint: "足し込む先は合計を入れている goukei です。amari ではありません",
+            }
+        ],
+        defaultHint: "これまでの合計 goukei に i を足して、新しい goukei にしよう"
     }
 }
