@@ -650,6 +650,53 @@ function exprToTokensHtml(expr) {
     return parts.join("");
 }
 
+// exprToTokensHtml の「値が見える」版。式の中の変数・配列要素を
+// concat-chip（名前＋値、配列は a[i]→a[0]→値 の段階表示）で見せる。
+// 例: (i+1)*(j+1) → ( [i/0] + 1 ) × ( [j/2] + 1 )
+function exprToValueTokensHtml(expr, scope) {
+    const tokens = tokenize(String(expr));
+    const parts = [];
+
+    for (let i = 0; i < tokens.length; i += 1) {
+        const t = tokens[i];
+
+        // 配列アクセス name[...] をひとかたまりにして段階表示チップに
+        if (/^[a-zA-Z_]\w*$/.test(t) && tokens[i + 1] === "[") {
+            let buf = t;
+            let j = i + 1;
+            let depth = 0;
+            while (j < tokens.length) {
+                const tj = tokens[j];
+                if (tj === "[") depth += 1;
+                if (tj === "]") depth -= 1;
+                buf += tj;
+                j += 1;
+                if (depth === 0 && tokens[j] !== "[") break;
+            }
+            parts.push(operandChip(buf, scope));
+            i = j - 1;
+            continue;
+        }
+
+        // scope にある変数は値つきチップ、関数名など未定義の識別子はプレーン
+        if (/^[a-zA-Z_]\w*$/.test(t)) {
+            if (scope && Object.prototype.hasOwnProperty.call(scope, t)) {
+                parts.push(operandChip(t, scope));
+            } else {
+                parts.push(calcToken(t));
+            }
+            continue;
+        }
+
+        if (["+", "-", "*", "/", "%"].includes(t)) parts.push(calcOp(t));
+        else if (["(", ")"].includes(t)) parts.push(`<span class="calc-bracket">${escapeHtml(t)}</span>`);
+        else if (isStringLiteral(t)) parts.push(calcToken(`「${stripQuotes(t)}」`, "calc-token-str"));
+        else parts.push(calcToken(t));
+    }
+
+    return parts.join("");
+}
+
 function buildArrayAccessExplanation(access) {
     if (!access) return "";
 
@@ -706,13 +753,23 @@ function buildAssignExplanation(node, scope, result) {
         const targetLabel = target.indices.length === 2
             ? `${base}[${target.indices[0].indexExpr}][${target.indices[1].indexExpr}]`
             : `${base}[${target.indices[0].indexExpr}]`;
+        // 添字を値に解決したラベル（バッジ用）: a[i][j] → a[0][2]
+        const resolvedLabel = target.indices.length === 2
+            ? `${base}[${i}][${j}]`
+            : `${base}[${i}]`;
         const targetText = `配列 ${targetLabel}（${posText}）`;
+
+        // 計算式（+,-,*,/,% を含む）なら → 結果 を付ける
+        const isCompound = !!parseSimpleBinaryExpression(node.value);
+        const resultArrow = isCompound
+            ? `<span class="calc-result-arrow">→</span>${calcToken(formatVarValue(assignedValue), "calc-result")}`
+            : "";
 
         const html = buildStepCard({
             title: "今のステップ",
-            rows: [`${calcToken(targetLabel, "calc-target")}${calcOp("=")}${exprToTokensHtml(node.value)}`],
+            rows: [`${calcToken(targetLabel, "calc-target")}${calcOp("=")}${exprToValueTokensHtml(node.value, scope)}${resultArrow}`],
             note: `${targetLabel} は配列 ${base} の ${posText}`,
-            badge: assignBadge(targetLabel, assignedValue)
+            badge: assignBadge(resolvedLabel, assignedValue)
         });
 
         return buildStepDetails(
@@ -756,7 +813,7 @@ function buildAssignExplanation(node, scope, result) {
             : `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText}`;
 
         const row = `${calcToken(node.name, "calc-target")}${calcOp("=")}`
-            + `${operandChip(binary.left, scope)}${calcOp(binary.op)}${operandChip(binary.right, scope)}`
+            + `${exprToValueTokensHtml(node.value, scope)}`
             + `<span class="calc-result-arrow">→</span>${calcToken(formatVarValue(resultValue), "calc-result")}`;
         const html = buildStepCard({
             title: "今のステップ",
