@@ -369,6 +369,71 @@ function parseSimpleBinaryExpression(expr) {
     return null;
 }
 
+function isNumericConstant(expr) {
+    return /^\d+(\.\d+)?$/.test(String(expr).trim());
+}
+
+function formatBoolValue(value) {
+    return value ? "true(真)" : "false(偽)";
+}
+
+// 比較式（amari == 0 など）を左辺・演算子・右辺に分解する
+function parseComparison(expr) {
+    const comparisonOps = ["==", "!=", "<=", ">=", "<", ">"];
+    const tokens = tokenize(expr.trim());
+    let bracketDepth = 0;
+    let parenDepth = 0;
+
+    for (let i = 0; i < tokens.length; i += 1) {
+        const token = tokens[i];
+
+        if (token === "[") bracketDepth += 1;
+        if (token === "]") bracketDepth -= 1;
+        if (token === "(") parenDepth += 1;
+        if (token === ")") parenDepth -= 1;
+
+        if (bracketDepth === 0 && parenDepth === 0 && comparisonOps.includes(token)) {
+            const left = tokens.slice(0, i).join("").trim();
+            const right = tokens.slice(i + 1).join("").trim();
+            if (!left || !right) return null;
+            return { left, op: token, right };
+        }
+    }
+
+    return null;
+}
+
+function comparisonPhrase(leftDesc, right, op) {
+    switch (op) {
+        case "==": return `${leftDesc}と${right}が同じであれば`;
+        case "!=": return `${leftDesc}と${right}がちがえば`;
+        case "<": return `${leftDesc}が${right}より小さければ`;
+        case ">": return `${leftDesc}が${right}より大きければ`;
+        case "<=": return `${leftDesc}が${right}以下であれば`;
+        case ">=": return `${leftDesc}が${right}以上であれば`;
+        default: return "";
+    }
+}
+
+function buildConditionExplanation(condition, conditionValue, scope) {
+    const resultText = formatBoolValue(conditionValue);
+    const cmp = parseComparison(condition);
+
+    if (cmp) {
+        const leftDesc = isSimpleVariable(cmp.left) ? `${cmp.left}の値` : cmp.left;
+        const phrase = comparisonPhrase(leftDesc, cmp.right, cmp.op);
+
+        if (phrase) {
+            const leftValue = safeEvalWithScope(cmp.left, scope);
+            return buildStepDetails(
+                `条件 ${condition} は、${phrase} true(真)です。${leftDesc}は ${formatVarValue(leftValue)} なので、${resultText} です。`
+            );
+        }
+    }
+
+    return buildStepDetails(`条件 ${condition} は、今は ${resultText} です。`);
+}
+
 function buildArrayAccessExplanation(access) {
     if (!access) return "";
 
@@ -433,9 +498,9 @@ function buildAssignExplanation(node, scope, result) {
             )
             : `${binary.right} は ${formatVarValue(rightValue)} です。`;
 
-        let opExplanation = binary.op;
+        let opExplanation = "";
 
-        switch (opExplanation) {
+        switch (binary.op) {
             case "*":
                 opExplanation = ` (${formatVarValue(leftValue)} かける ${formatVarValue(rightValue)})`
                 break;
@@ -447,8 +512,13 @@ function buildAssignExplanation(node, scope, result) {
                 break;
         }
 
+        // 右側がただの定数（数値リテラル）のときは「2 は 2 です」のような説明を省く
+        const intro = isNumericConstant(binary.right)
+            ? `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)} です。`
+            : `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText}`;
+
         return buildStepDetails(
-            `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)}${opExplanation}です。この計算結果を ${node.name} に代入します。`,
+            `${intro} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)}${opExplanation}です。この計算結果を ${node.name} に代入します。`,
             [toArrayAccessKey(rightArrayAccess)]
         );
     }
@@ -456,11 +526,19 @@ function buildAssignExplanation(node, scope, result) {
     const arrayAccess = parseSimpleArrayAccess(node.value, scope);
     const arrayExplanation = buildArrayAccessExplanation(arrayAccess);
     const value = result?.assignedValue ?? safeEvalWithScope(node.value, scope);
+    const arrayTag = Array.isArray(value) ? "(配列)" : "";
+
+    // 別の変数をそのまま代入したとき（例: a ← b）は、その変数名と値の両方を見せる
+    if (isSimpleVariable(node.value) && !arrayAccess) {
+        return buildStepDetails(
+            `変数 ${node.name}${arrayTag} に ${node.value.trim()}の値、${formatVarValue(value)}を代入しました。`
+        );
+    }
 
     return buildStepDetails(
         [
             arrayExplanation,
-            `変数 ${node.name} に ${formatVarValue(value)} を代入しました。`
+            `変数 ${node.name}${arrayTag} に ${formatVarValue(value)} を代入しました。`
         ].filter(Boolean).join(" "),
         [toArrayAccessKey(arrayAccess)]
     );
@@ -473,6 +551,15 @@ function buildPrintExplanation(node, scope, result) {
 
     if (isSimpleVariable(node.value)) {
         return buildStepDetails(`変数 ${node.value.trim()} の値 ${formatVarValue(value)} を表示しました。`);
+    }
+
+    // 文字列の連結（例: "最大公約数は" + a）は「○○ と △△ を結合した」と説明する
+    const binary = parseSimpleBinaryExpression(node.value);
+    if (binary && binary.op === "+" && typeof value === "string") {
+        const describe = (expr) => isSimpleVariable(expr) ? `${expr.trim()}の値` : expr.trim();
+        return buildStepDetails(
+            `${describe(binary.left)} と ${describe(binary.right)} を結合した「${value}」を表示しました。`
+        );
     }
 
     return buildStepDetails(
@@ -730,7 +817,7 @@ function buildTrace(ast, targetTrace = trace) {
                     }
                     return { conditionValue };
                 },
-                getDetails: (_scope, result) => buildStepDetails(`条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} です。`)
+                getDetails: (scope, result) => buildConditionExplanation(node.condition, result?.conditionValue, scope)
             });
         }
 
@@ -746,7 +833,7 @@ function buildTrace(ast, targetTrace = trace) {
                     }
                     return { conditionValue };
                 },
-                getDetails: (_scope, result) => buildStepDetails(`条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(result?.conditionValue)} です。`)
+                getDetails: (scope, result) => buildConditionExplanation(node.condition, result?.conditionValue, scope)
             });
         }
 
