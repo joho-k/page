@@ -1887,7 +1887,7 @@ function setupQuizModeIfPresent() {
             // 問題一覧に戻るボタン
             const backBtn = document.createElement("button");
             backBtn.type = "button";
-            backBtn.textContent = "📋 問題一覧に戻る";
+            backBtn.textContent = "問題一覧に戻る";
             backBtn.className = "quiz-back-button";
             backBtn.addEventListener("click", () => quizGoToList());
             actionHost.appendChild(backBtn);
