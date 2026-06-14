@@ -68,6 +68,35 @@
     color: #2f4460;
 }
 
+/* 締めの中央メッセージ */
+.tour-tip-center {
+    width: min(420px, 90vw);
+    text-align: center;
+    padding: 22px 24px;
+}
+
+.tour-tip-center .tour-tip-title {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.tour-tip-close {
+    margin-top: 14px;
+    border: 2px solid var(--primary);
+    background: var(--primary);
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 8px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.tour-tip-close:hover {
+    filter: brightness(1.06);
+}
+
 /* 右上の操作パネル（次へ・閉じる） */
 .tour-nav {
     position: fixed;

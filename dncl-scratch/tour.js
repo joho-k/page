@@ -1,6 +1,11 @@
 // 使い方ツアー：説明する要素だけを明るく残し、まわりを黒い半透明で覆って案内する
 (function () {
-    // 案内する手順。selector(単数) か selectors(複数→囲む範囲) で対象を指定する
+    // 案内する手順。
+    //   selector(単数) / selectors(複数→囲む範囲) … スポットライトを当てる対象
+    //   interactive … 対象（または clickSelector）を実際に押せるようにし、押すと次へ進む
+    //   clickSelector … interactive で「押す対象」をスポットライトと別にしたいとき
+    //   onEnter … 表示前に呼ぶ準備処理
+    //   center … 対象を持たず、画面全体を暗くして中央にメッセージを出す
     const STEPS = [
         {
             selector: ".palette",
@@ -24,27 +29,64 @@
             interactive: true
         },
         {
-            selectors: ["#vars", "#output"],
+            selectors: ["#vars_title", "#output"],
             title: "変数と出力",
             text: "実行すると、変数の中身が「変数」に、表示ブロックの結果が「出力」に出ます。プログラムがどう動いたかをここで確かめます。"
         },
         {
             selector: 'button[onclick="stepStart()"]',
-            title: "ステップ実行",
-            text: "「ステップ開始」を押してみましょう。プログラムを1行ずつ動かす準備ができます。ボタンを押すか「次へ」で進めます。",
+            title: "ここが一番の売り！ステップ実行",
+            text: "このシステムの主役が「ステップ実行」です。プログラムを1行ずつ、自分のペースで動かせます。まずは「ステップ開始」を押してみましょう。",
             interactive: true
         },
         {
-            selectors: ["#step-prev-button", "#step-next-button", "#step-explanation"],
-            title: "1行ずつ理解を広げよう",
-            text: "「次へ」「前へ」で1行ずつ動かし、ここに出る説明を読みながら、プログラムの動きの理解を広げていきましょう。",
-            // ステップ開始を押さずに来た場合でも、ボタンと説明欄を出しておく
-            onEnter: () => {
-                const nb = document.getElementById("step-next-button");
-                if (nb && nb.hidden && typeof stepStart === "function") stepStart();
-            }
+            selector: "#step-next-button",
+            title: "「次へ」を押してみましょう",
+            text: "ステップ実行こそ、このシステムの一番の魅力。プログラムの「次へ」を押すと、処理が1行だけ進みます。押してみましょう。",
+            interactive: true,
+            onEnter: ensureStepStarted
+        },
+        {
+            selector: "#workspace-panel",
+            title: "1行ずつハイライト",
+            text: "プログラムを見てください。今まさに実行される1行がハイライトされます。",
+            onEnter: ensureStepAdvanced
+        },
+        {
+            selector: "#step-explanation",
+            title: "図で動きを理解",
+            text: "さらに、その処理の詳しい動きを図で理解できます。もう一度「次へ」を押してみましょう。",
+            interactive: true,
+            clickSelector: "#step-next-button",
+            onEnter: ensureStepAdvanced
+        },
+        {
+            selector: "#vars_title",
+            title: "変数もリアルタイム更新",
+            text: "実行したステップに合わせて、変数の中身もリアルタイムに更新されます。値がどう変化していくかが一目で分かります。",
+            onEnter: ensureStepAdvanced
+        },
+        {
+            center: true,
+            title: "このシステムを使ってプログラムの理解を深めよう！",
+            text: "「次へ」「前へ」で行き来しながら、説明と図でプログラムの動きをじっくり追いかけてみてください。"
         }
     ];
+
+    // ステップ開始を押さずに来た場合でも、ボタンと説明欄を出しておく
+    function ensureStepStarted() {
+        const nb = document.getElementById("step-next-button");
+        if (nb && nb.hidden && typeof stepStart === "function") stepStart();
+    }
+
+    // 「次へ」を押さずにツアーを進めた場合でも、1行は実行済みにしてハイライトを出す
+    function ensureStepAdvanced() {
+        ensureStepStarted();
+        if (typeof stepHistory !== "undefined" && stepHistory.length === 0 &&
+            typeof stepNext === "function") {
+            stepNext();
+        }
+    }
 
     const PAD = 8; // スポットライトの余白
     let index = 0;
@@ -62,7 +104,11 @@
 
         tip = document.createElement("div");
         tip.className = "tour-tip";
-        tip.innerHTML = '<p class="tour-tip-title"></p><p class="tour-tip-text"></p>';
+        tip.innerHTML =
+            '<p class="tour-tip-title"></p>' +
+            '<p class="tour-tip-text"></p>' +
+            '<button type="button" class="tour-tip-close" hidden>閉じる</button>';
+        tip.querySelector(".tour-tip-close").onclick = endTour;
 
         nav = document.createElement("div");
         nav.className = "tour-nav";
@@ -123,8 +169,10 @@
         releaseLifted();
         if (i >= STEPS.length) { endTour(); return; }
         index = i;
-        if (STEPS[i].onEnter) STEPS[i].onEnter(); // 必要なら対象を表示してから測る
-        const els = getTargets(STEPS[i]);
+        const step = STEPS[i];
+        if (step.onEnter) step.onEnter(); // 必要なら対象を表示してから測る
+        if (step.center) { requestAnimationFrame(render); return; }
+        const els = getTargets(step);
         if (!els.length) { go(i + 1); return; } // 対象が無ければ飛ばす
         els[0].scrollIntoView({ block: "center", behavior: "auto" });
         requestAnimationFrame(render);
@@ -132,6 +180,26 @@
 
     function render() {
         const step = STEPS[index];
+
+        // 共通：説明文と操作パネル
+        tip.querySelector(".tour-tip-title").textContent = step.title;
+        tip.querySelector(".tour-tip-text").textContent = step.text || "";
+        tip.classList.toggle("tour-tip-center", !!step.center);
+        tip.querySelector(".tour-tip-close").hidden = !step.center; // 締めのダイアログだけ閉じるボタン
+        navCount.textContent = (index + 1) + " / " + STEPS.length;
+        prevBtn.disabled = index === 0;
+        nextBtn.textContent = index === STEPS.length - 1 ? "完了" : "次へ";
+
+        // 締めのメッセージ：画面全体を暗くして中央に表示
+        if (step.center) {
+            spotlight.style.width = "0px";
+            spotlight.style.height = "0px";
+            spotlight.style.top = (window.innerHeight / 2) + "px";
+            spotlight.style.left = (window.innerWidth / 2) + "px";
+            placeTipCenter();
+            return;
+        }
+
         const els = getTargets(step);
         if (!els.length) return;
         const r = unionRect(els);
@@ -142,17 +210,11 @@
         spotlight.style.width = (r.width + PAD * 2) + "px";
         spotlight.style.height = (r.height + PAD * 2) + "px";
 
-        // 説明文
-        tip.querySelector(".tour-tip-title").textContent = step.title;
-        tip.querySelector(".tour-tip-text").textContent = step.text;
-
-        // 操作パネル
-        navCount.textContent = (index + 1) + " / " + STEPS.length;
-        prevBtn.disabled = index === 0;
-        nextBtn.textContent = index === STEPS.length - 1 ? "完了" : "次へ";
-
         // 「押してみましょう」など、対象を実際にクリックできるようにする
-        if (step.interactive) liftElement(els[0]);
+        if (step.interactive) {
+            const clickEl = step.clickSelector ? document.querySelector(step.clickSelector) : els[0];
+            if (clickEl) liftElement(clickEl);
+        }
 
         placeTip(r);
     }
@@ -197,6 +259,11 @@
 
         tip.style.top = top + "px";
         tip.style.left = left + "px";
+    }
+
+    function placeTipCenter() {
+        tip.style.top = Math.max(14, (window.innerHeight - tip.offsetHeight) / 2) + "px";
+        tip.style.left = Math.max(14, (window.innerWidth - tip.offsetWidth) / 2) + "px";
     }
 
     function reposition() {
