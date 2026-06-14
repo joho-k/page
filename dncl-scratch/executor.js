@@ -9,6 +9,8 @@ let currentExplanationHtml = null;
 let highlightedArrayAccesses = new Set();
 let highlightedVars = new Set();
 let whileIterationCounts = new Map();
+let stepHistory = [];          // 「前へ」用に各ステップ実行前の状態を積む
+let executionActive = false;   // ステップ/一括実行が動いているか（プログラム変更でキャンセル）
 
 const MAX_WHILE_ITERATIONS_PER_BLOCK = 10000;
 
@@ -1370,23 +1372,121 @@ function executeImmediate(ast) {
 // ----------------
 // ステップ制御
 // ----------------
+const STEP_INTRO_TEXT = "ステップ実行を始めると、ここに今の処理の説明が表示されます。「次へ」を押してステップ実行を開始してください。";
+
+// 「前へ」用に、ステップ実行前の状態をまるごと記録/復元する
+function snapshotState() {
+    return {
+        vars: structuredClone(vars),
+        output,
+        trace: trace.slice(),
+        stepIndex,
+        changedVars: new Set(changedVars),
+        currentExplanation,
+        currentExplanationHtml,
+        highlightedArrayAccesses: new Set(highlightedArrayAccesses),
+        highlightedVars: new Set(highlightedVars),
+        whileIterationCounts: new Map(whileIterationCounts),
+        activeBlockId: document.querySelector(".step-active")?.dataset.blockId || null
+    };
+}
+
+function restoreState(s) {
+    vars = structuredClone(s.vars);
+    output = s.output;
+    trace = s.trace.slice();
+    stepIndex = s.stepIndex;
+    changedVars = new Set(s.changedVars);
+    currentExplanation = s.currentExplanation;
+    currentExplanationHtml = s.currentExplanationHtml;
+    highlightedArrayAccesses = new Set(s.highlightedArrayAccesses);
+    highlightedVars = new Set(s.highlightedVars);
+    whileIterationCounts = new Map(s.whileIterationCounts);
+    if (s.activeBlockId) {
+        highlightBlock(s.activeBlockId);
+    } else {
+        clearStepHighlight();
+    }
+}
+
+function setStepButtonsVisible(visible) {
+    const prev = document.getElementById("step-prev-button");
+    const next = document.getElementById("step-next-button");
+    if (prev) prev.hidden = !visible;
+    if (next) next.hidden = !visible;
+}
+
+function updateStepButtons() {
+    const prev = document.getElementById("step-prev-button");
+    const next = document.getElementById("step-next-button");
+    if (prev) prev.disabled = stepHistory.length === 0;
+    if (next) next.disabled = stepIndex >= trace.length;
+}
+
 function stepStart() {
     vars = {};
     output = "";
     trace = [];
     stepIndex = 0;
+    stepHistory = [];
     changedVars = new Set();
-    currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。「次へ」を押してステップ実行を開始してください。";
+    whileIterationCounts = new Map();
+    currentExplanation = STEP_INTRO_TEXT;
+    currentExplanationHtml = null;
+    highlightedArrayAccesses = new Set();
+    highlightedVars = new Set();
     clearStepHighlight();
 
     buildTrace(window.currentAST || []);
+    executionActive = true;
+    setStepButtonsVisible(true);   // 「次へ」「前へ」はここで初めて出す
     updateUI();
+    updateStepButtons();
 }
 
 function stepNext() {
     if (stepIndex >= trace.length) return;
+    stepHistory.push(snapshotState());
     runTraceStep(trace[stepIndex++]);
     updateUI();
+    updateStepButtons();
+}
+
+function stepPrev() {
+    if (stepHistory.length === 0) return;
+    restoreState(stepHistory.pop());
+    updateUI();
+    updateStepButtons();
+}
+
+// プログラムが変更されたら、進行中の実行（ステップ/一括）をキャンセルして初期状態に戻す
+function cancelExecution() {
+    vars = {};
+    output = "";
+    trace = [];
+    stepIndex = 0;
+    stepHistory = [];
+    changedVars = new Set();
+    whileIterationCounts = new Map();
+    currentExplanation = STEP_INTRO_TEXT;
+    currentExplanationHtml = null;
+    highlightedArrayAccesses = new Set();
+    highlightedVars = new Set();
+    executionActive = false;
+    clearStepHighlight();
+    setStepButtonsVisible(false);
+    updateUI();
+
+    // 問題モードなどが後片付けに使うフック（選択肢の再表示など）
+    if (typeof window.onExecutionCancelled === "function") {
+        window.onExecutionCancelled();
+    }
+}
+
+function onProgramChanged() {
+    if (executionActive) {
+        cancelExecution();
+    }
 }
 
 function updateUI() {
