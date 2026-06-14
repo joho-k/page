@@ -430,6 +430,10 @@ window.quizData = {
                 correct: true,
             },
             {
+                values: ["i", "+", "goukei"],
+                correct: true,
+            },
+            {
                 values: ["goukei", "*", "i"],
                 correct: false,
                 hint: "合計は今までの値に i を足していきます。掛け算ではありません",
