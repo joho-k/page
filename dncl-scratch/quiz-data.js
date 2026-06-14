@@ -373,5 +373,60 @@ window.quizData = {
             }
         ],
         defaultHint: "単価×個数で合計金額を求めよう"
+    },
+    q008: {
+        title: "おつりの計算",
+        addedAt: "2026-06-15",
+        difficulty: 1,
+        question: "1000円札で350円の買い物をしたときのおつりが表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "harau",
+                value: "1000"
+            },
+            {
+                type: "assign",
+                name: "kakaku",
+                value: "350"
+            },
+            {
+                type: "assign",
+                name: "otsuri",
+                value: "harau __BLANK_blank_a__ kakaku"
+            },
+            {
+                type: "print",
+                value: "\"おつりは\" + otsuri + \"円\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["-"],
+                correct: true,
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算では支払った額より増えてしまいます",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "掛け算ではおつりになりません",
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "割り算ではおつりになりません",
+            }
+        ],
+        defaultHint: "払ったお金から価格を引くとおつりになるよ"
     }
 }
