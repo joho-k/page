@@ -5,8 +5,12 @@ let trace = [];
 let stepIndex = 0;
 let changedVars = new Set();
 let currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。「次へ」を押してステップ実行を開始してください。";
+let currentExplanationHtml = null;
 let highlightedArrayAccesses = new Set();
+let highlightedVars = new Set();
 let whileIterationCounts = new Map();
+let stepHistory = [];          // 「前へ」用に各ステップ実行前の状態を積む
+let executionActive = false;   // ステップ/一括実行が動いているか（プログラム変更でキャンセル）
 
 const MAX_WHILE_ITERATIONS_PER_BLOCK = 10000;
 
@@ -42,7 +46,9 @@ function runTraceStep(step) {
     const result = step.run();
     const details = step.getDetails ? step.getDetails(varsBefore, result) : null;
     currentExplanation = details?.text || "";
+    currentExplanationHtml = details?.html || null;
     highlightedArrayAccesses = new Set(details?.arrayAccesses || []);
+    highlightedVars = new Set(details?.highlightVars || []);
 }
 
 function setVar(name, value) {
@@ -179,22 +185,15 @@ function renderVars() {
     }
 
     function render1DArray(name, value) {
+        // プログラムと同じ [20, 69, 30] の1行表記。参照中の要素だけ光らせる。
+        const items = value.map((item, index) => {
+            const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-inline-cell-highlight" : "";
+            return `<span class="array-inline-cell${highlightClass}">${escapeHtml(formatVarValue(item))}</span>`;
+        }).join(`<span class="array-inline-sep">, </span>`);
+
         return `
-            <div class="array-var">
-                <table class="array-var-table">
-                    <tr class="array-var-index-row">
-                        ${value.map((_, index) => {
-            const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
-            return `<th class="array-var-cell${highlightClass}">${index}</th>`;
-        }).join("")}
-                    </tr>
-                    <tr class="array-var-value-row">
-                        ${value.map((item, index) => {
-            const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-var-cell-highlight" : "";
-            return `<td class="array-var-cell${highlightClass}">${escapeHtml(formatVarValue(item))}</td>`;
-        }).join("")}
-                    </tr>
-                </table>
+            <div class="array-inline">
+                <span class="array-inline-bracket">[</span>${items}<span class="array-inline-bracket">]</span>
             </div>
         `;
     }
@@ -234,6 +233,7 @@ function renderVars() {
 
     varsEl.innerHTML = entries.map(([name, value]) => {
         const activeClass = changedVars.has(name) ? " var-card-active" : "";
+        const refClass = highlightedVars.has(name) ? " var-card-ref" : "";
         const kind = Array.isArray(value) ? "配列" : "値";
         const valueHtml = Array.isArray(value)
             ? (
@@ -244,7 +244,7 @@ function renderVars() {
             : `<div class="var-value">${escapeHtml(formatVarValue(value))}</div>`;
 
         return `
-            <div class="var-card${activeClass}${Array.isArray(value) ? " var-card-array" : ""}">
+            <div class="var-card${activeClass}${refClass}${Array.isArray(value) ? " var-card-array" : ""}">
                 <div class="var-card-head">
                     <span class="var-name">${escapeHtml(name)}</span>
                     <span class="var-kind">${kind}</span>
@@ -257,6 +257,19 @@ function renderVars() {
 
 function renderExplanation() {
     const explanationEl = document.getElementById("step-explanation");
+
+    // 図解(html)があれば図を表示し、元の文章は data-alt に残す（動画作成時に取り出せる）
+    if (currentExplanationHtml) {
+        explanationEl.classList.add("step-explanation-figure");
+        explanationEl.setAttribute("data-alt", currentExplanation || "");
+        explanationEl.setAttribute("title", currentExplanation || "");
+        explanationEl.innerHTML = currentExplanationHtml;
+        return;
+    }
+
+    explanationEl.classList.remove("step-explanation-figure");
+    explanationEl.removeAttribute("data-alt");
+    explanationEl.removeAttribute("title");
     explanationEl.textContent = currentExplanation || "このステップの説明はありません。";
 }
 
@@ -369,6 +382,323 @@ function parseSimpleBinaryExpression(expr) {
     return null;
 }
 
+function isNumericConstant(expr) {
+    return /^\d+(\.\d+)?$/.test(String(expr).trim());
+}
+
+function formatBoolValue(value) {
+    return value ? "true(真)" : "false(偽)";
+}
+
+// 比較式（amari == 0 など）を左辺・演算子・右辺に分解する
+function parseComparison(expr) {
+    const comparisonOps = ["==", "!=", "<=", ">=", "<", ">"];
+    const tokens = tokenize(expr.trim());
+    let bracketDepth = 0;
+    let parenDepth = 0;
+
+    for (let i = 0; i < tokens.length; i += 1) {
+        const token = tokens[i];
+
+        if (token === "[") bracketDepth += 1;
+        if (token === "]") bracketDepth -= 1;
+        if (token === "(") parenDepth += 1;
+        if (token === ")") parenDepth -= 1;
+
+        if (bracketDepth === 0 && parenDepth === 0 && comparisonOps.includes(token)) {
+            const left = tokens.slice(0, i).join("").trim();
+            const right = tokens.slice(i + 1).join("").trim();
+            if (!left || !right) return null;
+            return { left, op: token, right };
+        }
+    }
+
+    return null;
+}
+
+function comparisonPhrase(leftDesc, right, op) {
+    switch (op) {
+        case "==": return `${leftDesc}と${right}が同じであれば`;
+        case "!=": return `${leftDesc}と${right}がちがえば`;
+        case "<": return `${leftDesc}が${right}より小さければ`;
+        case ">": return `${leftDesc}が${right}より大きければ`;
+        case "<=": return `${leftDesc}が${right}以下であれば`;
+        case ">=": return `${leftDesc}が${right}以上であれば`;
+        default: return "";
+    }
+}
+
+function buildConditionText(condition, conditionValue, scope) {
+    const resultText = formatBoolValue(conditionValue);
+    const cmp = parseComparison(condition);
+
+    if (cmp) {
+        const leftDesc = isSimpleVariable(cmp.left) ? `${cmp.left}の値` : cmp.left;
+        const phrase = comparisonPhrase(leftDesc, cmp.right, cmp.op);
+
+        if (phrase) {
+            const leftValue = safeEvalWithScope(cmp.left, scope);
+            // 右辺もただの定数でなければ、その値も見せる（例: maxは 20）
+            const rightPart = isNumericConstant(cmp.right)
+                ? ""
+                : `、${cmp.right}は ${formatVarValue(safeEvalWithScope(cmp.right, scope))}`;
+            return `条件 ${condition} は、${phrase} true(真)です。${leftDesc}は ${formatVarValue(leftValue)}${rightPart} なので、${resultText} です。`;
+        }
+    }
+
+    return `条件 ${condition} は、今は ${resultText} です。`;
+}
+
+// 比較記号の意味を子ども向けに説明する
+function operatorMeaningNote(op) {
+    switch (op) {
+        case "==": return "== は「2つが 同じ」か しらべる記号";
+        case "!=": return "!= は「2つが ちがう（等しくない）」か しらべる記号";
+        case "<": return "< は「左が 右より 小さい」か しらべる記号";
+        case ">": return "> は「左が 右より 大きい」か しらべる記号";
+        case "<=": return "<= は「左が 右以下（小さいか 同じ）」か しらべる記号";
+        case ">=": return ">= は「左が 右以上（大きいか 同じ）」か しらべる記号";
+        default: return "";
+    }
+}
+
+function buildConditionCardHtml(condition, conditionValue, scope) {
+    const cmp = parseComparison(condition);
+    const badgeClass = conditionValue ? "bool-true" : "bool-false";
+    const badge = conditionValue ? "✓ true（真）" : "✗ false（偽）";
+
+    if (cmp) {
+        // 各オペランドを concat-chip（ラベル＝式・値）で見せる。演算子の説明文は式の上。
+        const row = `${operandChip(cmp.left, scope)}${calcOp(cmp.op)}${operandChip(cmp.right, scope)}`;
+
+        return buildStepCard({
+            title: "条件をチェック",
+            cardClass: "step-card-cond",
+            topNote: operatorMeaningNote(cmp.op),
+            rows: [row],
+            badge,
+            badgeClass
+        });
+    }
+
+    return buildStepCard({
+        title: "条件をチェック",
+        cardClass: "step-card-cond",
+        rows: [exprToTokensHtml(condition)],
+        badge,
+        badgeClass
+    });
+}
+
+function buildConditionParts(condition, conditionValue, scope) {
+    return {
+        text: buildConditionText(condition, conditionValue, scope),
+        html: buildConditionCardHtml(condition, conditionValue, scope),
+        highlightVars: collectVarNames(condition, scope)
+    };
+}
+
+function buildConditionExplanation(condition, conditionValue, scope) {
+    const parts = buildConditionParts(condition, conditionValue, scope);
+    return buildStepDetails(parts.text, { html: parts.html, highlightVars: parts.highlightVars });
+}
+
+// 文字列連結（a + "×" + b ...）を、トップレベルの + ごとの被演算子に分解する
+function splitConcatOperands(expr) {
+    const tokens = tokenize(expr.trim());
+    const operands = [];
+    let bracketDepth = 0;
+    let parenDepth = 0;
+    let current = [];
+
+    for (const token of tokens) {
+        if (token === "[") bracketDepth += 1;
+        if (token === "]") bracketDepth -= 1;
+        if (token === "(") parenDepth += 1;
+        if (token === ")") parenDepth -= 1;
+
+        if (token === "+" && bracketDepth === 0 && parenDepth === 0) {
+            operands.push(current.join("").trim());
+            current = [];
+        } else {
+            current.push(token);
+        }
+    }
+    operands.push(current.join("").trim());
+    return operands.filter(Boolean);
+}
+
+// 式中の * や / を、子ども向けに ×・÷ で見せる
+function prettyExpr(expr) {
+    return String(expr).replaceAll("*", "×").replaceAll("/", "÷");
+}
+
+function describeConcatOperand(expr) {
+    const t = expr.trim();
+    if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith('“') && t.endsWith('”'))) {
+        return `「${t.slice(1, -1)}」`;
+    }
+    if (isSimpleVariable(t)) {
+        return `${t}の値`;
+    }
+    return `${prettyExpr(t)}の値`;
+}
+
+// ─── 図解カード（案1: 図解中心）のための部品 ───────────────
+function isStringLiteral(expr) {
+    const t = String(expr).trim();
+    return (t.startsWith('"') && t.endsWith('"')) || (t.startsWith('“') && t.endsWith('”'));
+}
+
+function stripQuotes(expr) {
+    return String(expr).trim().slice(1, -1);
+}
+
+// 式に出てくる変数名（scope に存在するもの）を集めてハイライト対象にする
+function collectVarNames(expr, scope) {
+    const names = new Set();
+    for (const token of tokenize(String(expr))) {
+        if (/^[a-zA-Z_]\w*$/.test(token) && scope && Object.prototype.hasOwnProperty.call(scope, token)) {
+            names.add(token);
+        }
+    }
+    return [...names];
+}
+
+function calcToken(text, cls = "") {
+    return `<span class="calc-token ${cls}">${escapeHtml(String(text))}</span>`;
+}
+
+function calcOp(symbol) {
+    const pretty = { "*": "×", "/": "÷" }[symbol] || symbol;
+    return `<span class="calc-op">${escapeHtml(pretty)}</span>`;
+}
+
+// 演算を子ども向けの言葉で説明する（例: 0 を 2 で わったあまり）
+function opPhrase(op, leftValue, rightValue) {
+    const l = formatVarValue(leftValue);
+    const r = formatVarValue(rightValue);
+    switch (op) {
+        case "+": return `${l} と ${r} を たした`;
+        case "-": return `${l} から ${r} を ひいた`;
+        case "*": return `${l} と ${r} を かけた`;
+        case "/": return `${l} を ${r} で わった`;
+        case "%": return `${l} を ${r} で わった あまり`;
+        default: return "";
+    }
+}
+
+function buildStepCard({ title, rows = [], note = "", topNote = "", badge = "", badgeClass = "", cardClass = "" }) {
+    const topNoteHtml = topNote ? `<div class="step-card-note step-card-note-top">${escapeHtml(topNote)}</div>` : "";
+    const rowsHtml = rows.filter(Boolean).map(r => `<div class="calc-row">${r}</div>`).join("");
+    const noteHtml = note ? `<div class="step-card-note">${escapeHtml(note)}</div>` : "";
+    const arrowHtml = badge ? `<div class="calc-arrow">↓</div>` : "";
+    const badgeHtml = badge ? `<div class="result-badge ${badgeClass}">${badge}</div>` : "";
+    return `<div class="step-card ${cardClass}">`
+        + `<div class="step-card-title">${escapeHtml(title)}</div>`
+        + topNoteHtml + rowsHtml + noteHtml + arrowHtml + badgeHtml
+        + `</div>`;
+}
+
+// 1つの被演算子（オペランド）を「表示する(結合)」と同じ concat-chip で見せる。
+// 変数や配列要素は ラベル(式)＋値 のチップ、定数・文字列はそのままのトークン。
+function operandChip(exprText, scope) {
+    const t = String(exprText).trim();
+    if (isNumericConstant(t)) {
+        return calcToken(t);
+    }
+    if (isStringLiteral(t)) {
+        return calcToken(`「${stripQuotes(t)}」`, "calc-token-str");
+    }
+    const value = safeEvalWithScope(t, scope);
+    return `<span class="concat-chip">`
+        + `<span class="chip-label">${escapeHtml(prettyExpr(t))}</span>`
+        + `<span class="chip-val">${escapeHtml(formatVarValue(value))}</span>`
+        + `</span>`;
+}
+
+// 1つの式を、変数/値が見えるトークン列の HTML にする（i % 2 → i % 2）
+// 配列アクセス（a[i] や a[i][j]）は1つのトークンにまとめる
+function exprToTokensHtml(expr) {
+    const tokens = tokenize(String(expr));
+    const parts = [];
+
+    for (let i = 0; i < tokens.length; i += 1) {
+        const t = tokens[i];
+
+        if (/^[a-zA-Z_]\w*$/.test(t) && tokens[i + 1] === "[") {
+            let buf = t;
+            let j = i + 1;
+            let depth = 0;
+            while (j < tokens.length) {
+                const tj = tokens[j];
+                if (tj === "[") depth += 1;
+                if (tj === "]") depth -= 1;
+                buf += tj;
+                j += 1;
+                if (depth === 0 && tokens[j] !== "[") break;
+            }
+            parts.push(calcToken(buf));
+            i = j - 1;
+            continue;
+        }
+
+        if (["+", "-", "*", "/", "%"].includes(t)) parts.push(calcOp(t));
+        else if (["(", ")"].includes(t)) parts.push(`<span class="calc-bracket">${escapeHtml(t)}</span>`);
+        else if (isStringLiteral(t)) parts.push(calcToken(`「${stripQuotes(t)}」`, "calc-token-str"));
+        else parts.push(calcToken(t));
+    }
+
+    return parts.join("");
+}
+
+// exprToTokensHtml の「値が見える」版。式の中の変数・配列要素を
+// concat-chip（名前＋値、配列は a[i]→a[0]→値 の段階表示）で見せる。
+// 例: (i+1)*(j+1) → ( [i/0] + 1 ) × ( [j/2] + 1 )
+function exprToValueTokensHtml(expr, scope) {
+    const tokens = tokenize(String(expr));
+    const parts = [];
+
+    for (let i = 0; i < tokens.length; i += 1) {
+        const t = tokens[i];
+
+        // 配列アクセス name[...] をひとかたまりにして段階表示チップに
+        if (/^[a-zA-Z_]\w*$/.test(t) && tokens[i + 1] === "[") {
+            let buf = t;
+            let j = i + 1;
+            let depth = 0;
+            while (j < tokens.length) {
+                const tj = tokens[j];
+                if (tj === "[") depth += 1;
+                if (tj === "]") depth -= 1;
+                buf += tj;
+                j += 1;
+                if (depth === 0 && tokens[j] !== "[") break;
+            }
+            parts.push(operandChip(buf, scope));
+            i = j - 1;
+            continue;
+        }
+
+        // scope にある変数は値つきチップ、関数名など未定義の識別子はプレーン
+        if (/^[a-zA-Z_]\w*$/.test(t)) {
+            if (scope && Object.prototype.hasOwnProperty.call(scope, t)) {
+                parts.push(operandChip(t, scope));
+            } else {
+                parts.push(calcToken(t));
+            }
+            continue;
+        }
+
+        if (["+", "-", "*", "/", "%"].includes(t)) parts.push(calcOp(t));
+        else if (["(", ")"].includes(t)) parts.push(`<span class="calc-bracket">${escapeHtml(t)}</span>`);
+        else if (isStringLiteral(t)) parts.push(calcToken(`「${stripQuotes(t)}」`, "calc-token-str"));
+        else parts.push(calcToken(t));
+    }
+
+    return parts.join("");
+}
+
 function buildArrayAccessExplanation(access) {
     if (!access) return "";
 
@@ -387,10 +717,18 @@ function toArrayAccessKey(access) {
     return `${access.arrayName}:${access.indexValue}`;
 }
 
-function buildStepDetails(text, arrayAccesses = []) {
+// 第2引数は後方互換: 配列を渡すと arrayAccesses として扱う。
+// オブジェクトなら { arrayAccesses, html, highlightVars } を受け取る。
+// text は動画作成用に常に残し、html があれば画面では図解を表示する（text は alt 扱い）。
+function buildStepDetails(text, optionsOrArrayAccesses = {}) {
+    const options = Array.isArray(optionsOrArrayAccesses)
+        ? { arrayAccesses: optionsOrArrayAccesses }
+        : optionsOrArrayAccesses;
     return {
         text,
-        arrayAccesses: arrayAccesses.filter(Boolean)
+        html: options.html || null,
+        arrayAccesses: (options.arrayAccesses || []).filter(Boolean),
+        highlightVars: (options.highlightVars || []).filter(Boolean)
     };
 }
 
@@ -398,6 +736,10 @@ function insertTraceAtCurrentPosition(ast) {
     const insertedSteps = [];
     buildTrace(ast, insertedSteps);
     trace.splice(stepIndex, 0, ...insertedSteps);
+}
+
+function assignBadge(targetName, value) {
+    return `${escapeHtml(targetName)} に <b>${escapeHtml(formatVarValue(value))}</b> を入れる`;
 }
 
 function buildAssignExplanation(node, scope, result) {
@@ -409,13 +751,32 @@ function buildAssignExplanation(node, scope, result) {
         const i = target.indices[0]?.indexValue;
         const j = target.indices[1]?.indexValue;
         const key = target.indices.length === 2 ? `${base}:${i}:${j}` : `${base}:${i}`;
-        const targetText = target.indices.length === 2
-            ? `配列 ${base}[${target.indices[0].indexExpr}][${target.indices[1].indexExpr}]（${i} 行 ${j} 列）`
-            : `配列 ${base}[${target.indices[0].indexExpr}]（${i} 番目）`;
+        const posText = target.indices.length === 2 ? `${i} 行 ${j} 列` : `${i} 番目`;
+        const targetLabel = target.indices.length === 2
+            ? `${base}[${target.indices[0].indexExpr}][${target.indices[1].indexExpr}]`
+            : `${base}[${target.indices[0].indexExpr}]`;
+        // 添字を値に解決したラベル（バッジ用）: a[i][j] → a[0][2]
+        const resolvedLabel = target.indices.length === 2
+            ? `${base}[${i}][${j}]`
+            : `${base}[${i}]`;
+        const targetText = `配列 ${targetLabel}（${posText}）`;
+
+        // 計算式（+,-,*,/,% を含む）なら → 結果 を付ける
+        const isCompound = !!parseSimpleBinaryExpression(node.value);
+        const resultArrow = isCompound
+            ? `<span class="calc-result-arrow">→</span>${calcToken(formatVarValue(assignedValue), "calc-result")}`
+            : "";
+
+        const html = buildStepCard({
+            title: "今のステップ",
+            rows: [`${calcToken(targetLabel, "calc-target")}${calcOp("=")}${exprToValueTokensHtml(node.value, scope)}${resultArrow}`],
+            note: `${targetLabel} は配列 ${base} の ${posText}`,
+            badge: assignBadge(resolvedLabel, assignedValue)
+        });
 
         return buildStepDetails(
             `${targetText} に ${formatVarValue(assignedValue)} を代入しました。`,
-            [key]
+            { arrayAccesses: [key], html, highlightVars: collectVarNames(node.value, scope) }
         );
     }
 
@@ -424,6 +785,7 @@ function buildAssignExplanation(node, scope, result) {
     if (binary) {
         const leftValue = safeEvalWithScope(binary.left, scope);
         const rightValue = safeEvalWithScope(binary.right, scope);
+        const resultValue = result?.assignedValue ?? safeEvalWithScope(node.value, scope);
         const rightArrayAccess = parseSimpleArrayAccess(binary.right, scope);
         const rightText = rightArrayAccess
             ? (
@@ -433,9 +795,9 @@ function buildAssignExplanation(node, scope, result) {
             )
             : `${binary.right} は ${formatVarValue(rightValue)} です。`;
 
-        let opExplanation = binary.op;
+        let opExplanation = "";
 
-        switch (opExplanation) {
+        switch (binary.op) {
             case "*":
                 opExplanation = ` (${formatVarValue(leftValue)} かける ${formatVarValue(rightValue)})`
                 break;
@@ -447,23 +809,89 @@ function buildAssignExplanation(node, scope, result) {
                 break;
         }
 
+        // 右側がただの定数（数値リテラル）のときは「2 は 2 です」のような説明を省く
+        const intro = isNumericConstant(binary.right)
+            ? `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)} です。`
+            : `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText}`;
+
+        const row = `${calcToken(node.name, "calc-target")}${calcOp("=")}`
+            + `${exprToValueTokensHtml(node.value, scope)}`
+            + `<span class="calc-result-arrow">→</span>${calcToken(formatVarValue(resultValue), "calc-result")}`;
+        const html = buildStepCard({
+            title: "今のステップ",
+            rows: [row],
+            note: opPhrase(binary.op, leftValue, rightValue),
+            badge: assignBadge(node.name, resultValue)
+        });
+
         return buildStepDetails(
-            `これを実行する前の ${binary.left} は ${formatVarValue(leftValue)}、${rightText} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)}${opExplanation}です。この計算結果を ${node.name} に代入します。`,
-            [toArrayAccessKey(rightArrayAccess)]
+            `${intro} ${binary.left}${binary.op}${binary.right} は ${formatVarValue(leftValue)}${binary.op}${formatVarValue(rightValue)}${opExplanation}です。この計算結果を ${node.name} に代入します。`,
+            {
+                arrayAccesses: [toArrayAccessKey(rightArrayAccess)],
+                html,
+                highlightVars: [...collectVarNames(node.value, scope), ...(isSimpleVariable(node.name) ? [node.name.trim()] : [])]
+            }
         );
     }
 
     const arrayAccess = parseSimpleArrayAccess(node.value, scope);
     const arrayExplanation = buildArrayAccessExplanation(arrayAccess);
     const value = result?.assignedValue ?? safeEvalWithScope(node.value, scope);
+    const arrayTag = Array.isArray(value) ? "(配列)" : "";
+    const highlightVars = [...collectVarNames(node.value, scope), ...(isSimpleVariable(node.name) ? [node.name.trim()] : [])];
+
+    // 別の変数をそのまま代入したとき（例: a = b）は concat-chip で値を見せる
+    if (isSimpleVariable(node.value) && !arrayAccess) {
+        const row = `${calcToken(node.name, "calc-target")}${calcOp("=")}${operandChip(node.value, scope)}`;
+        const html = buildStepCard({
+            title: "今のステップ",
+            rows: [row],
+            badge: assignBadge(node.name, value)
+        });
+        return buildStepDetails(
+            `変数 ${node.name}${arrayTag} に ${node.value.trim()}の値、${formatVarValue(value)}を代入しました。`,
+            { html, highlightVars }
+        );
+    }
+
+    // 配列リテラルを代入（a = [20,69,...]）は中身を1つのトークンでまとめて見せる
+    // 配列の要素を取り出して代入（x = a[i]）は a[i] を concat-chip で見せる
+    let rowHtml;
+    if (Array.isArray(value)) {
+        rowHtml = `${calcToken(`${node.name}${arrayTag}`, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(value))}`;
+    } else {
+        rowHtml = `${calcToken(`${node.name}${arrayTag}`, "calc-target")}${calcOp("=")}${operandChip(node.value, scope)}`;
+    }
+    const html = buildStepCard({
+        title: "今のステップ",
+        rows: [rowHtml],
+        note: arrayAccess ? `${node.value.trim()} は配列 ${arrayAccess.arrayName} の ${arrayAccess.indexValue} 番目` : "",
+        badge: Array.isArray(value)
+            ? `${escapeHtml(node.name)} に <b>配列</b> を入れる`
+            : assignBadge(`${node.name}${arrayTag}`, value)
+    });
 
     return buildStepDetails(
         [
             arrayExplanation,
-            `変数 ${node.name} に ${formatVarValue(value)} を代入しました。`
+            `変数 ${node.name}${arrayTag} に ${formatVarValue(value)} を代入しました。`
         ].filter(Boolean).join(" "),
-        [toArrayAccessKey(arrayAccess)]
+        { arrayAccesses: [toArrayAccessKey(arrayAccess)], html, highlightVars }
     );
+}
+
+// 連結の各パーツを「チップ」にして並べる図解
+function buildConcatChip(operand, scope) {
+    const t = operand.trim();
+    if (isStringLiteral(t)) {
+        return `<span class="concat-chip concat-chip-str">${escapeHtml(stripQuotes(t))}</span>`;
+    }
+    const v = safeEvalWithScope(t, scope);
+    const label = isSimpleVariable(t) ? t : prettyExpr(t);
+    return `<span class="concat-chip">`
+        + `<span class="chip-label">${escapeHtml(label)}</span>`
+        + `<span class="chip-val">${escapeHtml(formatVarValue(v))}</span>`
+        + `</span>`;
 }
 
 function buildPrintExplanation(node, scope, result) {
@@ -472,15 +900,48 @@ function buildPrintExplanation(node, scope, result) {
     const value = result?.printedValue ?? safeEvalWithScope(node.value, scope);
 
     if (isSimpleVariable(node.value)) {
-        return buildStepDetails(`変数 ${node.value.trim()} の値 ${formatVarValue(value)} を表示しました。`);
+        const html = buildStepCard({
+            title: "表示する",
+            rows: [operandChip(node.value, scope)],
+            badge: `<b>${escapeHtml(formatVarValue(value))}</b> を出力`
+        });
+        return buildStepDetails(
+            `変数 ${node.value.trim()} の値 ${formatVarValue(value)} を表示しました。`,
+            { html, highlightVars: collectVarNames(node.value, scope) }
+        );
     }
 
+    // 文字列の連結（例: i + "×" + j + "=" + i*j）は各パーツをチップで並べて説明する
+    if (typeof value === "string") {
+        const operands = splitConcatOperands(node.value);
+        if (operands.length >= 2) {
+            const parts = operands.map(describeConcatOperand).join("と");
+            const chips = operands
+                .map(o => buildConcatChip(o, scope))
+                .join(`<span class="concat-plus">＋</span>`);
+            const html = buildStepCard({
+                title: "表示する（つなげる）",
+                rows: [`<span class="concat-chips">${chips}</span>`],
+                badge: `「${escapeHtml(String(value))}」を出力`
+            });
+            return buildStepDetails(
+                `${parts}を結合した、「${value}」を出力に表示しました。`,
+                { html, highlightVars: collectVarNames(node.value, scope) }
+            );
+        }
+    }
+
+    const html = buildStepCard({
+        title: "表示する",
+        rows: [operandChip(node.value, scope)],
+        badge: `<b>${escapeHtml(formatVarValue(value))}</b> を出力`
+    });
     return buildStepDetails(
         [
             arrayExplanation,
             `${node.value} の値 ${formatVarValue(value)} を表示しました。`
         ].filter(Boolean).join(" "),
-        [toArrayAccessKey(arrayAccess)]
+        { arrayAccesses: [toArrayAccessKey(arrayAccess)], html, highlightVars: collectVarNames(node.value, scope) }
     );
 }
 
@@ -496,6 +957,35 @@ function buildForExplanation(node, current, end, step, isLast, start) {
     }
 
     return `繰り返しを続けます。${node.varName} の値は ${previousValue} でしたが、${step}ずつ増えるので次の値は ${current} です。${end} まで繰り返すので、まだ繰り返しは続きます。`;
+}
+
+function buildForDetails(node, current, end, step, isLast, start) {
+    const text = buildForExplanation(node, current, end, step, isLast, start);
+    const rangeNote = `${start} から ${end} まで ${step} ずつ くりかえす`;
+
+    let rows;
+    let note;
+    let badge;
+    if (current === start) {
+        rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
+        note = rangeNote;
+        badge = "くりかえし スタート";
+    } else {
+        const previousValue = current - step;
+        rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
+        note = `前は ${formatVarValue(previousValue)} → ${step} ふえて 今は ${formatVarValue(current)}（${rangeNote}）`;
+        badge = isLast ? "これが さいごの くりかえし" : "まだ くりかえす";
+    }
+
+    const html = buildStepCard({
+        title: "くりかえし（ループ）",
+        cardClass: "step-card-loop",
+        rows,
+        note,
+        badge
+    });
+
+    return buildStepDetails(text, { html, highlightVars: [node.varName] });
 }
 
 // ----------------
@@ -730,7 +1220,7 @@ function buildTrace(ast, targetTrace = trace) {
                     }
                     return { conditionValue };
                 },
-                getDetails: (_scope, result) => buildStepDetails(`条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} です。`)
+                getDetails: (scope, result) => buildConditionExplanation(node.condition, result?.conditionValue, scope)
             });
         }
 
@@ -746,7 +1236,7 @@ function buildTrace(ast, targetTrace = trace) {
                     }
                     return { conditionValue };
                 },
-                getDetails: (_scope, result) => buildStepDetails(`条件 ${node.condition} を確認して、分岐を実行しました。今は ${formatVarValue(result?.conditionValue)} です。`)
+                getDetails: (scope, result) => buildConditionExplanation(node.condition, result?.conditionValue, scope)
             });
         }
 
@@ -765,7 +1255,7 @@ function buildTrace(ast, targetTrace = trace) {
                         setVar(node.varName, current);
                         return { current };
                     },
-                    getDetails: () => buildStepDetails(buildForExplanation(node, current, end, step, isLast, start))
+                    getDetails: () => buildForDetails(node, current, end, step, isLast, start)
                 });
 
                 // ★ここが重要：展開する
@@ -794,23 +1284,24 @@ function buildTrace(ast, targetTrace = trace) {
                     insertTraceAtCurrentPosition([...node.body, node]);
                     return { conditionValue, continued: true, iterationCount: nextCount };
                 },
-                getDetails: (_scope, result) => {
+                getDetails: (scope, result) => {
+                    const parts = buildConditionParts(node.condition, result?.conditionValue, scope);
+
+                    let suffix;
                     if (result?.stopped) {
-                        return buildStepDetails(
-                            `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} です。繰り返し回数が多すぎるため（上限 ${MAX_WHILE_ITERATIONS_PER_BLOCK} 回）停止しました。`
-                        );
+                        suffix = `繰り返し回数が多すぎるため（上限 ${MAX_WHILE_ITERATIONS_PER_BLOCK} 回）停止しました。`;
+                    } else if (result?.ended) {
+                        suffix = `繰り返しを終了します。`;
+                    } else {
+                        const countText = typeof result?.iterationCount === "number" ? `（${result.iterationCount} 回目）` : "";
+                        suffix = `繰り返しを続けます${countText}。`;
                     }
 
-                    if (result?.ended) {
-                        return buildStepDetails(
-                            `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} なので、繰り返しを終了します。`
-                        );
-                    }
+                    const html = parts.html
+                        ? `${parts.html}<div class="step-card-note step-card-loop-note">${escapeHtml(suffix)}</div>`
+                        : null;
 
-                    const countText = typeof result?.iterationCount === "number" ? `（${result.iterationCount} 回目）` : "";
-                    return buildStepDetails(
-                        `条件 ${node.condition} を確認しました。今は ${formatVarValue(result?.conditionValue)} なので、繰り返しを続けます${countText}。`
-                    );
+                    return buildStepDetails(`${parts.text} ${suffix}`, { html, highlightVars: parts.highlightVars });
                 }
             });
         }
@@ -881,23 +1372,121 @@ function executeImmediate(ast) {
 // ----------------
 // ステップ制御
 // ----------------
+const STEP_INTRO_TEXT = "ステップ実行を始めると、ここに今の処理の説明が表示されます。「次へ」を押してステップ実行を開始してください。";
+
+// 「前へ」用に、ステップ実行前の状態をまるごと記録/復元する
+function snapshotState() {
+    return {
+        vars: structuredClone(vars),
+        output,
+        trace: trace.slice(),
+        stepIndex,
+        changedVars: new Set(changedVars),
+        currentExplanation,
+        currentExplanationHtml,
+        highlightedArrayAccesses: new Set(highlightedArrayAccesses),
+        highlightedVars: new Set(highlightedVars),
+        whileIterationCounts: new Map(whileIterationCounts),
+        activeBlockId: document.querySelector(".step-active")?.dataset.blockId || null
+    };
+}
+
+function restoreState(s) {
+    vars = structuredClone(s.vars);
+    output = s.output;
+    trace = s.trace.slice();
+    stepIndex = s.stepIndex;
+    changedVars = new Set(s.changedVars);
+    currentExplanation = s.currentExplanation;
+    currentExplanationHtml = s.currentExplanationHtml;
+    highlightedArrayAccesses = new Set(s.highlightedArrayAccesses);
+    highlightedVars = new Set(s.highlightedVars);
+    whileIterationCounts = new Map(s.whileIterationCounts);
+    if (s.activeBlockId) {
+        highlightBlock(s.activeBlockId);
+    } else {
+        clearStepHighlight();
+    }
+}
+
+function setStepButtonsVisible(visible) {
+    const prev = document.getElementById("step-prev-button");
+    const next = document.getElementById("step-next-button");
+    if (prev) prev.hidden = !visible;
+    if (next) next.hidden = !visible;
+}
+
+function updateStepButtons() {
+    const prev = document.getElementById("step-prev-button");
+    const next = document.getElementById("step-next-button");
+    if (prev) prev.disabled = stepHistory.length === 0;
+    if (next) next.disabled = stepIndex >= trace.length;
+}
+
 function stepStart() {
     vars = {};
     output = "";
     trace = [];
     stepIndex = 0;
+    stepHistory = [];
     changedVars = new Set();
-    currentExplanation = "ステップ実行を始めると、ここに今の処理の説明が表示されます。「次へ」を押してステップ実行を開始してください。";
+    whileIterationCounts = new Map();
+    currentExplanation = STEP_INTRO_TEXT;
+    currentExplanationHtml = null;
+    highlightedArrayAccesses = new Set();
+    highlightedVars = new Set();
     clearStepHighlight();
 
     buildTrace(window.currentAST || []);
+    executionActive = true;
+    setStepButtonsVisible(true);   // 「次へ」「前へ」はここで初めて出す
     updateUI();
+    updateStepButtons();
 }
 
 function stepNext() {
     if (stepIndex >= trace.length) return;
+    stepHistory.push(snapshotState());
     runTraceStep(trace[stepIndex++]);
     updateUI();
+    updateStepButtons();
+}
+
+function stepPrev() {
+    if (stepHistory.length === 0) return;
+    restoreState(stepHistory.pop());
+    updateUI();
+    updateStepButtons();
+}
+
+// プログラムが変更されたら、進行中の実行（ステップ/一括）をキャンセルして初期状態に戻す
+function cancelExecution() {
+    vars = {};
+    output = "";
+    trace = [];
+    stepIndex = 0;
+    stepHistory = [];
+    changedVars = new Set();
+    whileIterationCounts = new Map();
+    currentExplanation = STEP_INTRO_TEXT;
+    currentExplanationHtml = null;
+    highlightedArrayAccesses = new Set();
+    highlightedVars = new Set();
+    executionActive = false;
+    clearStepHighlight();
+    setStepButtonsVisible(false);
+    updateUI();
+
+    // 問題モードなどが後片付けに使うフック（選択肢の再表示など）
+    if (typeof window.onExecutionCancelled === "function") {
+        window.onExecutionCancelled();
+    }
+}
+
+function onProgramChanged() {
+    if (executionActive) {
+        cancelExecution();
+    }
 }
 
 function updateUI() {
