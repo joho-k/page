@@ -450,5 +450,60 @@ window.quizData = {
             }
         ],
         defaultHint: "これまでの合計 goukei に i を足して、新しい goukei にしよう"
+    },
+    q009: {
+        title: "平均点の計算",
+        addedAt: "2026-06-15",
+        difficulty: 1,
+        question: "合計140点を2人で分けた平均点が表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "goukei",
+                value: "140"
+            },
+            {
+                type: "assign",
+                name: "ninzu",
+                value: "2"
+            },
+            {
+                type: "assign",
+                name: "heikin",
+                value: "goukei __BLANK_blank_a__ ninzu"
+            },
+            {
+                type: "print",
+                value: "\"平均点は\" + heikin + \"点\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["/"],
+                correct: true,
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算では平均になりません",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "引き算では平均になりません",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "掛け算では人数ぶん増えてしまいます",
+            }
+        ],
+        defaultHint: "合計を人数で割ると平均になるよ"
     }
 }
