@@ -455,7 +455,7 @@ window.quizData = {
         title: "平均点の計算",
         addedAt: "2026-06-15",
         difficulty: 1,
-        question: "合計140点を5人で分けた平均点が表示されるようにしよう",
+        question: "5人のテストの合計点が140点のとき、1人あたりの平均点が表示されるようにしよう",
         ast: [
             {
                 type: "assign",
@@ -504,6 +504,6 @@ window.quizData = {
                 hint: "掛け算では人数ぶん増えてしまいます",
             }
         ],
-        defaultHint: "合計を人数で割ると平均になるよ"
+        defaultHint: "合計を人数で割ると平均になるよ。割り算の記号は(/)です。"
     }
 }
