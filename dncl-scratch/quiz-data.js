@@ -455,7 +455,7 @@ window.quizData = {
         title: "平均点の計算",
         addedAt: "2026-06-15",
         difficulty: 1,
-        question: "合計140点を2人で分けた平均点が表示されるようにしよう",
+        question: "合計140点を5人で分けた平均点が表示されるようにしよう",
         ast: [
             {
                 type: "assign",
@@ -465,7 +465,7 @@ window.quizData = {
             {
                 type: "assign",
                 name: "ninzu",
-                value: "2"
+                value: "5"
             },
             {
                 type: "assign",
