@@ -1813,20 +1813,58 @@ function quizHookJudge(quiz) {
         };
     }
 
+    if (typeof window.stepStart === "function") {
+        const originalStepStart = window.stepStart;
+        window.stepStart = function (...args) {
+            const ret = originalStepStart.apply(this, args);
+            // ステップ回答を始め直したら「次へ」表示に戻す
+            const next = document.getElementById("step-next-button");
+            if (next) next.textContent = "▶ 次へ";
+            return ret;
+        };
+    }
+
     if (typeof window.stepNext === "function") {
         const originalStepNext = window.stepNext;
+        const isAtTraceEnd = () =>
+            typeof stepIndex === "number" && Array.isArray(trace) && stepIndex >= trace.length;
+
         window.stepNext = function (...args) {
+            // 最後のステップを実行し終えた状態でもう一度押されたか
+            const wasAtEnd = isAtTraceEnd();
             const ret = originalStepNext.apply(this, args);
             try {
-                if (typeof stepIndex === "number" && Array.isArray(trace) && stepIndex >= trace.length) {
-                    // 実行(run)と同じく選択肢の答え合わせで判定する
-                    const result = quizJudgeByAnswers(quiz);
-                    quizShowResultDialog(result.ok, result.hint);
-                    quizSetChoicesVisible(true);
+                const next = document.getElementById("step-next-button");
+                if (isAtTraceEnd()) {
+                    if (wasAtEnd) {
+                        // 最後のステップを確認したあとにもう一度押したら答え合わせ
+                        const result = quizJudgeByAnswers(quiz);
+                        quizShowResultDialog(result.ok, result.hint);
+                        quizSetChoicesVisible(true);
+                    } else if (next) {
+                        // 最後のステップに到達。まずこのステップを確認してもらい、
+                        // 次に押したときに答え合わせをする（すぐにダイアログを出さない）
+                        next.disabled = false;
+                        next.textContent = "✅ 答え合わせ";
+                    }
+                } else if (next) {
+                    // 途中のステップでは通常表示に戻す
+                    next.textContent = "▶ 次へ";
                 }
             } catch (_e) {
                 // no-op
             }
+            return ret;
+        };
+    }
+
+    if (typeof window.stepPrev === "function") {
+        const originalStepPrev = window.stepPrev;
+        window.stepPrev = function (...args) {
+            const ret = originalStepPrev.apply(this, args);
+            // 「前へ」で最後のステップから戻ったら「答え合わせ」表示を解除する
+            const next = document.getElementById("step-next-button");
+            if (next) next.textContent = "▶ 次へ";
             return ret;
         };
     }
