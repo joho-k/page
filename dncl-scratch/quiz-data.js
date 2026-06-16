@@ -505,5 +505,54 @@ window.quizData = {
             }
         ],
         defaultHint: "合計を人数で割ると平均になるよ。割り算の記号は(/)です。"
+    },
+    q010: {
+        title: "2ずつ増やして表示",
+        addedAt: "2026-06-16",
+        difficulty: 2,
+        question: "0から始めて2ずつ増やし、0 2 4 6 8 と表示するようにしよう",
+        ast: [
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "9",
+                step: "__BLANK_blank_a__",
+                body: [
+                    {
+                        type: "print",
+                        value: "i"
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+            { label: "3", value: "3" },
+            { label: "4", value: "4" },
+        ],
+        answers: [
+            {
+                values: ["2"],
+                correct: true,
+            },
+            {
+                values: ["1"],
+                correct: false,
+                hint: "1ずつだと 0 1 2 …と全部の数が表示されてしまいます",
+            },
+            {
+                values: ["3"],
+                correct: false,
+                hint: "3ずつだと 0 3 6 9 になってしまいます",
+            },
+            {
+                values: ["4"],
+                correct: false,
+                hint: "4ずつだと 0 4 8 になってしまいます",
+            }
+        ],
+        defaultHint: "ひとつ進むごとにいくつ増やせば 0 2 4 6 8 になるか考えよう"
     }
 }
