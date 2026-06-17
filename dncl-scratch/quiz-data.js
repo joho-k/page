@@ -576,7 +576,7 @@ window.quizData = {
                     {
                         type: "assign",
                         name: "seki",
-                        value: "seki __BLANK_blank_a__ i"
+                        value: "__BLANK_blank_a__ * i"
                     }
                 ]
             },
@@ -586,32 +586,32 @@ window.quizData = {
             }
         ],
         choices: [
-            { label: "+", value: "+" },
-            { label: "-", value: "-" },
-            { label: "*", value: "*" },
-            { label: "/", value: "/" },
+            { label: "seki", value: "seki" },
+            { label: "i", value: "i" },
+            { label: "1", value: "1" },
+            { label: "5", value: "5" },
         ],
         answers: [
             {
-                values: ["*"],
+                values: ["seki"],
                 correct: true,
             },
             {
-                values: ["+"],
+                values: ["i"],
                 correct: false,
-                hint: "足し算では「かけ合わせた値」になりません（1+2+3+4+5=15になってしまいます）",
+                hint: "i × i になってしまい、これまでの積を引き継げません",
             },
             {
-                values: ["-"],
+                values: ["1"],
                 correct: false,
-                hint: "引き算ではかけ合わせた値になりません",
+                hint: "毎回 1 × i になり、積が積み上がりません（最後は5のまま）",
             },
             {
-                values: ["/"],
+                values: ["5"],
                 correct: false,
-                hint: "割り算ではかけ合わせた値になりません",
+                hint: "毎回 5 × i になり、1から5までの積にはなりません",
             }
         ],
-        defaultHint: "これまでの積 seki に i をかけて、新しい seki にしよう"
+        defaultHint: "これまでの積が入っている seki に i をかけて、新しい seki にしよう"
     }
 }
