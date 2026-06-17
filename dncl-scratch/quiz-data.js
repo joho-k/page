@@ -554,5 +554,64 @@ window.quizData = {
             }
         ],
         defaultHint: "ひとつ進むごとにいくつ増やせば 0 2 4 6 8 になるか考えよう"
+    },
+    q011: {
+        title: "1から5までの積",
+        addedAt: "2026-06-17",
+        difficulty: 3,
+        question: "1から5までの整数をすべてかけ合わせた値（1×2×3×4×5）が表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "seki",
+                value: "1"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "5",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "seki",
+                        value: "seki __BLANK_blank_a__ i"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"答えは\" + seki"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["*"],
+                correct: true,
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算では「かけ合わせた値」になりません（1+2+3+4+5=15になってしまいます）",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "引き算ではかけ合わせた値になりません",
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "割り算ではかけ合わせた値になりません",
+            }
+        ],
+        defaultHint: "これまでの積 seki に i をかけて、新しい seki にしよう"
     }
 }
