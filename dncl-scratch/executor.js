@@ -592,11 +592,10 @@ function buildStepCard({ title, rows = [], note = "", topNote = "", badge = "", 
     const topNoteHtml = topNote ? `<div class="step-card-note step-card-note-top">${escapeHtml(topNote)}</div>` : "";
     const rowsHtml = rows.filter(Boolean).map(r => `<div class="calc-row">${r}</div>`).join("");
     const noteHtml = note ? `<div class="step-card-note">${escapeHtml(note)}</div>` : "";
-    const arrowHtml = badge ? `<div class="calc-arrow">↓</div>` : "";
-    const badgeHtml = badge ? `<div class="result-badge ${badgeClass}">${badge}</div>` : "";
+    const badgeHtml = badge ? `<div><span>説明: </span><span class="result-badge ${badgeClass}">${badge}</span></div>` : "";
     return `<div class="step-card ${cardClass}">`
         + `<div class="step-card-title">${escapeHtml(title)}</div>`
-        + topNoteHtml + rowsHtml + noteHtml + arrowHtml + badgeHtml
+        + topNoteHtml + rowsHtml + noteHtml + badgeHtml
         + `</div>`;
 }
 
