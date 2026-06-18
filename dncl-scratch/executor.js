@@ -312,11 +312,97 @@ function animateStepCard(container) {
         animateLoopCard(container, card);
         return;
     }
+    if (card && card.classList.contains("step-card-cond")) {
+        animateConditionCard(container, card);
+        return;
+    }
     animateAssignmentCard(container);
 }
 
 const FLYIN_DURATION = 3000;
 const LOOP_ANIM_DURATION = 2800;
+const COND_ANIM_DURATION = 3800;
+
+// 条件チェックのアニメーション：左の値 → 右の値 → 演算子 を順にズーム強調し、
+// それぞれの下に言葉を出す。最後に結果（true/false バッジ）をズームして強調する。
+function animateConditionCard(container, card) {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof Element.prototype.animate !== "function") return;
+
+    const row = card.querySelector(".calc-row");
+    if (!row) return;
+    const opEl = row.querySelector(".calc-op");
+    const leftEl = row.firstElementChild;
+    const rightEl = row.lastElementChild;
+    if (!leftEl) return;
+
+    const cRect = container.getBoundingClientRect();
+    const D = COND_ANIM_DURATION;
+    const rowBottomRel = row.getBoundingClientRect().bottom - cRect.top;
+    const labelTop = rowBottomRel + 6;
+
+    // 要素を、指定の時間帯にズーム強調する
+    const zoom = (el, s, e) => {
+        if (!el) return;
+        el.animate([
+            { transform: "scale(1)", offset: 0 },
+            { transform: "scale(1)", offset: s },
+            { transform: "scale(1.25)", offset: (s + e) / 2 },
+            { transform: "scale(1)", offset: e },
+            { transform: "scale(1)", offset: 1 }
+        ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+    };
+
+    // 要素の真下に、対応する言葉を その要素のズーム中だけ出す
+    const labelFor = (text, el, s, e) => {
+        if (!text || !el) return;
+        const lab = document.createElement("span");
+        lab.className = "cond-phrase";
+        lab.textContent = text;
+        Object.assign(lab.style, { position: "absolute", margin: "0", zIndex: "6", pointerEvents: "none", opacity: "0" });
+        container.appendChild(lab);
+        const er = el.getBoundingClientRect();
+        lab.style.left = `${er.left + er.width / 2 - cRect.left - lab.offsetWidth / 2}px`;
+        lab.style.top = `${labelTop}px`;
+        const reserve = (labelTop + lab.offsetHeight + 6) - rowBottomRel;
+        if (reserve > 0 && (parseFloat(row.style.marginBottom) || 0) < reserve) {
+            row.style.marginBottom = `${reserve}px`;
+        }
+        lab.animate([
+            { opacity: 0, offset: 0 },
+            { opacity: 0, offset: Math.max(0, s - 0.04) },
+            { opacity: 1, offset: s },
+            { opacity: 1, offset: e },
+            { opacity: 0, offset: Math.min(1, e + 0.05) },
+            { opacity: 0, offset: 1 }
+        ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+    };
+
+    // ① 左の値  ② 右の値  ③ 演算子 を順にズームし、その下に言葉を出す（間隔を空けて）
+    zoom(leftEl, 0.05, 0.18);
+    labelFor(card.dataset.condLeft, leftEl, 0.06, 0.20);
+    if (rightEl && rightEl !== leftEl) {
+        zoom(rightEl, 0.30, 0.43);
+        labelFor(card.dataset.condRight, rightEl, 0.31, 0.45);
+    }
+    zoom(opEl, 0.55, 0.68);
+    // 演算子の説明は、結果が出るまで長めに出しておく
+    labelFor(card.dataset.condOp, opEl, 0.56, 0.97);
+
+    // ④ 最後に結果（true/false バッジ）をズームして強調する
+    const badgeEl = card.querySelector(".result-badge");
+    if (badgeEl) {
+        badgeEl.style.display = "inline-block";
+        badgeEl.animate([
+            { transform: "scale(1)", offset: 0 },
+            { transform: "scale(1)", offset: 0.80 },
+            { transform: "scale(1.3)", offset: 0.88 },
+            { transform: "scale(1.15)", offset: 0.93 },
+            { transform: "scale(1.15)", offset: 0.97 },
+            { transform: "scale(1)", offset: 1 }
+        ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+    }
+}
 
 // ループ（2回目以降）のアニメーション：変数の箱（名前が上・値が下）で、
 // 「前の値」のとなりに「+ステップ」が上から降りてきて足され、「新しい値」に変わる、を繰り返す。
@@ -703,7 +789,7 @@ function isNumericConstant(expr) {
 }
 
 function formatBoolValue(value) {
-    return value ? "true(真)" : "false(偽)";
+    return value ? "真(true)" : "偽(false)";
 }
 
 // 比較式（amari == 0 など）を左辺・演算子・右辺に分解する
@@ -758,7 +844,7 @@ function buildConditionText(condition, conditionValue, scope) {
             const rightPart = isNumericConstant(cmp.right)
                 ? ""
                 : `、${cmp.right}は ${formatVarValue(safeEvalWithScope(cmp.right, scope))}`;
-            return `条件 ${condition} は、${phrase} true(真)です。${leftDesc}は ${formatVarValue(leftValue)}${rightPart} なので、${resultText} です。`;
+            return `条件 ${condition} は、${phrase} 真(true)です。${leftDesc}は ${formatVarValue(leftValue)}${rightPart} なので、${resultText} です。`;
         }
     }
 
@@ -778,21 +864,41 @@ function operatorMeaningNote(op) {
     }
 }
 
+// 比較を、左オペランド・右オペランド・演算子の3パーツの文章に分ける。
+// （b != 0 → 左「b と」/ 右「0 が」/ 演算子「等しくなければ」）
+function conditionPhraseParts(cmp) {
+    const L = prettyExpr(cmp.left.trim());
+    const R = prettyExpr(cmp.right.trim());
+    switch (cmp.op) {
+        case "==": return { left: `${L} と`, right: `${R} が`, op: "等しければ" };
+        case "!=": return { left: `${L} と`, right: `${R} が`, op: "等しくなければ" };
+        case "<": return { left: `${L} が`, right: `${R} より`, op: "小さければ" };
+        case ">": return { left: `${L} が`, right: `${R} より`, op: "大きければ" };
+        case "<=": return { left: `${L} が`, right: `${R}`, op: "以下なら" };
+        case ">=": return { left: `${L} が`, right: `${R}`, op: "以上なら" };
+        default: return { left: "", right: "", op: "" };
+    }
+}
+
 function buildConditionCardHtml(condition, conditionValue, scope) {
     const cmp = parseComparison(condition);
     const badgeClass = conditionValue ? "bool-true" : "bool-false";
-    const badge = conditionValue ? "✓ true（真）" : "✗ false（偽）";
+    const badge = conditionValue ? "✓ 真（true）" : "✗ 偽（false）";
+
+    const dataset = { "cond-result": conditionValue ? "true" : "false" };
 
     if (cmp) {
         // 各オペランドを concat-chip（ラベル＝式・値）で見せる
         const row = `${operandChip(cmp.left, scope)}${calcOp(cmp.op)}${operandChip(cmp.right, scope)}`;
 
+        const parts = conditionPhraseParts(cmp);
         return buildStepCard({
             title: "条件をチェック",
             cardClass: "step-card-cond",
             rows: [row],
             badge,
-            badgeClass
+            badgeClass,
+            dataset: { ...dataset, "cond-left": parts.left, "cond-right": parts.right, "cond-op": parts.op + "真(true)" }
         });
     }
 
@@ -801,7 +907,8 @@ function buildConditionCardHtml(condition, conditionValue, scope) {
         cardClass: "step-card-cond",
         rows: [exprToTokensHtml(condition)],
         badge,
-        badgeClass
+        badgeClass,
+        dataset
     });
 }
 
