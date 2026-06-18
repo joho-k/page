@@ -373,5 +373,186 @@ window.quizData = {
             }
         ],
         defaultHint: "単価×個数で合計金額を求めよう"
+    },
+    q008: {
+        title: "偶数の合計（1〜10）",
+        addedAt: "2026-06-13",
+        difficulty: 3,
+        question: "1から10までの整数のうち、偶数だけを合計して表示するようにしよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "goukei",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "10",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "i % 2"
+                    },
+                    {
+                        type: "if",
+                        condition: "amari == 0",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "goukei",
+                                value: "__BLANK_blank_c1__ __BLANK_blank_c2__ __BLANK_blank_c3__"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"偶数の合計は\" + goukei"
+            }
+        ],
+        choices: [
+            { label: "goukei", value: "goukei" },
+            { label: "i", value: "i" },
+            { label: "amari", value: "amari" },
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" }
+        ],
+        answers: [
+            {
+                values: ["goukei", "+", "i"],
+                correct: true,
+            },
+            {
+                values: ["i", "+", "goukei"],
+                correct: true,
+            },
+            {
+                values: ["goukei", "*", "i"],
+                correct: false,
+                hint: "合計は今までの値に i を足していきます。掛け算ではありません",
+            },
+            {
+                values: ["goukei", "-", "i"],
+                correct: false,
+                hint: "引き算では合計になりません。足し算で積み上げます",
+            },
+            {
+                values: ["amari", "+", "i"],
+                correct: false,
+                hint: "足し込む先は合計を入れている goukei です。amari ではありません",
+            }
+        ],
+        defaultHint: "これまでの合計 goukei に i を足して、新しい goukei にしよう"
+    },
+    q009: {
+        title: "平均点の計算",
+        addedAt: "2026-06-15",
+        difficulty: 1,
+        question: "5人のテストの合計点が140点のとき、1人あたりの平均点が表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "goukei",
+                value: "140"
+            },
+            {
+                type: "assign",
+                name: "ninzu",
+                value: "5"
+            },
+            {
+                type: "assign",
+                name: "heikin",
+                value: "goukei __BLANK_blank_a__ ninzu"
+            },
+            {
+                type: "print",
+                value: "\"平均点は\" + heikin + \"点\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["/"],
+                correct: true,
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算では平均になりません",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "引き算では平均になりません",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "掛け算では人数ぶん増えてしまいます",
+            }
+        ],
+        defaultHint: "合計を人数で割ると平均になるよ。割り算の記号は(/)です。"
+    },
+    q010: {
+        title: "2ずつ増やして表示",
+        addedAt: "2026-06-16",
+        difficulty: 2,
+        question: "0から始めて2ずつ増やし、0 2 4 6 8 と表示するようにしよう",
+        ast: [
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "9",
+                step: "__BLANK_blank_a__",
+                body: [
+                    {
+                        type: "print",
+                        value: "i"
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+            { label: "3", value: "3" },
+            { label: "4", value: "4" },
+        ],
+        answers: [
+            {
+                values: ["2"],
+                correct: true,
+            },
+            {
+                values: ["1"],
+                correct: false,
+                hint: "1ずつだと 0 1 2 …と全部の数が表示されてしまいます",
+            },
+            {
+                values: ["3"],
+                correct: false,
+                hint: "3ずつだと 0 3 6 9 になってしまいます",
+            },
+            {
+                values: ["4"],
+                correct: false,
+                hint: "4ずつだと 0 4 8 になってしまいます",
+            }
+        ],
+        defaultHint: "ひとつ進むごとにいくつ増やせば 0 2 4 6 8 になるか考えよう"
     }
 }
