@@ -793,6 +793,8 @@ pre {
 /* ─── 図解カード（案1） ─────────────────────────── */
 .step-explanation-figure {
     white-space: normal;
+    /* 値が収まる「変数の箱」を絶対配置する位置基準 */
+    position: relative;
 }
 
 .step-card {
