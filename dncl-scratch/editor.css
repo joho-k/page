@@ -886,23 +886,15 @@ pre {
     font-weight: 700;
 }
 
-.step-card-note {
-    font-size: 13px;
-    color: #6b5a2a;
-    background: #fdf6e0;
-    border-radius: 8px;
-    padding: 4px 10px;
+/* note と badge を1行にまとめたキャプション */
+.step-card-caption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
-.step-card-loop-note {
-    color: #2f6b88;
-    background: #eaf4f9;
-}
-
-/* 式の上に置く説明文（比較記号の意味など） */
-.step-card-note-top {
-    margin-bottom: 2px;
-}
 
 .result-badge {
     display: inline-block;
@@ -1308,6 +1300,28 @@ pre {
 .scroll-hint-hand {
     font-size: 17px;
     animation: scrollHintSwipe 1.3s ease-in-out infinite;
+}
+
+/* 上書き代入のラベル：元の値の説明「今までの値」→ 消えるとき「上書き」 */
+.assign-prev-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #5a6b80;
+    background: #eef2f7;
+    border: 1px solid #d3dce8;
+    border-radius: 6px;
+    padding: 1px 6px;
+    white-space: nowrap;
+}
+
+.assign-overwrite-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    background: #e0506a;
+    border-radius: 6px;
+    padding: 1px 6px;
+    white-space: nowrap;
 }
 
 @keyframes scrollHintSwipe {

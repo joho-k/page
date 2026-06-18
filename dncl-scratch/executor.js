@@ -466,6 +466,72 @@ function animateAssignmentCard(container) {
     // = は使わないので隠す（レイアウト位置は保つため visibility）
     if (op) op.style.visibility = "hidden";
 
+    // 同じ変数の上書き代入のとき：元の値を最初から箱の中に表示しておき、
+    // 新しい値が入ってくるのに合わせて「上書き」と出して元の値を消す。
+    const card = container.querySelector(".step-card");
+    const prevText = card?.dataset.prevValue;
+    if (prevText !== undefined && prevText !== "") {
+        const slotCenterX = tRect.left + tRect.width / 2 - cRect.left;
+        const slotCenterY = (vRect.top - cRect.top) + dy + vRect.height / 2;
+
+        // 元の値（最初から表示）
+        const prevEl = document.createElement("span");
+        prevEl.className = "calc-token calc-result";
+        prevEl.textContent = prevText;
+        Object.assign(prevEl.style, { position: "absolute", margin: "0", zIndex: "4", pointerEvents: "none" });
+        container.appendChild(prevEl);
+        prevEl.style.left = `${slotCenterX - prevEl.offsetWidth / 2}px`;
+        prevEl.style.top = `${slotCenterY - prevEl.offsetHeight / 2}px`;
+
+        const labelLeft = `${slotCenterX + tRect.width / 2 + pad + 6}px`;
+
+        // 「今までの値」ラベル（元の値を表示している間、箱のすぐ右に出す）
+        const prevLabelEl = document.createElement("span");
+        prevLabelEl.className = "assign-prev-label";
+        prevLabelEl.textContent = "今までの値";
+        Object.assign(prevLabelEl.style, { position: "absolute", margin: "0", zIndex: "6", pointerEvents: "none" });
+        container.appendChild(prevLabelEl);
+        prevLabelEl.style.left = labelLeft;
+        prevLabelEl.style.top = `${slotCenterY - prevLabelEl.offsetHeight / 2}px`;
+
+        // 「上書き」ラベル（同じ位置に、元の値が消えるのに合わせて出す）
+        const overwriteEl = document.createElement("span");
+        overwriteEl.className = "assign-overwrite-label";
+        overwriteEl.textContent = "上書き";
+        Object.assign(overwriteEl.style, { position: "absolute", margin: "0", zIndex: "6", pointerEvents: "none", opacity: "0" });
+        container.appendChild(overwriteEl);
+        overwriteEl.style.left = labelLeft;
+        overwriteEl.style.top = `${slotCenterY - overwriteEl.offsetHeight / 2}px`;
+
+        // 元の値：表示 → 新しい値が入るところで消える → 次のループ用に戻す
+        prevEl.animate([
+            { opacity: 1, offset: 0 },
+            { opacity: 1, offset: 0.4 },
+            { opacity: 0, offset: 0.55 },
+            { opacity: 0, offset: 0.92 },
+            { opacity: 1, offset: 1 }
+        ], { duration: FLYIN_DURATION, iterations: Infinity });
+
+        // 「今までの値」：最初から表示 → 上書きの直前に消える → 次のループ用に戻す
+        prevLabelEl.animate([
+            { opacity: 1, offset: 0 },
+            { opacity: 1, offset: 0.4 },
+            { opacity: 0, offset: 0.5 },
+            { opacity: 0, offset: 0.92 },
+            { opacity: 1, offset: 1 }
+        ], { duration: FLYIN_DURATION, iterations: Infinity });
+
+        // 「上書き」：「今までの値」が消えた直後に出して、少し見せてから消す
+        overwriteEl.animate([
+            { opacity: 0, offset: 0 },
+            { opacity: 0, offset: 0.5 },
+            { opacity: 1, offset: 0.58 },
+            { opacity: 1, offset: 0.76 },
+            { opacity: 0, offset: 0.86 },
+            { opacity: 0, offset: 1 }
+        ], { duration: FLYIN_DURATION, iterations: Infinity });
+    }
+
     // 値トークンそのものを、箱の外（右）から箱の中のスロットへ入れる動きを繰り返す
     target.style.position = "relative";
     target.style.zIndex = "2";
@@ -684,13 +750,12 @@ function buildConditionCardHtml(condition, conditionValue, scope) {
     const badge = conditionValue ? "✓ true（真）" : "✗ false（偽）";
 
     if (cmp) {
-        // 各オペランドを concat-chip（ラベル＝式・値）で見せる。演算子の説明文は式の上。
+        // 各オペランドを concat-chip（ラベル＝式・値）で見せる
         const row = `${operandChip(cmp.left, scope)}${calcOp(cmp.op)}${operandChip(cmp.right, scope)}`;
 
         return buildStepCard({
             title: "条件をチェック",
             cardClass: "step-card-cond",
-            topNote: operatorMeaningNote(cmp.op),
             rows: [row],
             badge,
             badgeClass
@@ -804,17 +869,18 @@ function opPhrase(op, leftValue, rightValue) {
     }
 }
 
-function buildStepCard({ title, rows = [], note = "", topNote = "", badge = "", badgeClass = "", cardClass = "", dataset = null }) {
-    const topNoteHtml = topNote ? `<div class="step-card-note step-card-note-top">${escapeHtml(topNote)}</div>` : "";
+function buildStepCard({ title, rows = [], badge = "", badgeClass = "", cardClass = "", dataset = null }) {
     const rowsHtml = rows.filter(Boolean).map(r => `<div class="calc-row">${r}</div>`).join("");
-    const noteHtml = note ? `<div class="step-card-note">${escapeHtml(note)}</div>` : "";
-    const badgeHtml = badge ? `<div><span>説明: </span><span class="result-badge ${badgeClass}">${badge}</span></div>` : "";
+    // バッジのみ表示（ノートは出さない）
+    const captionHtml = badge
+        ? `<div class="step-card-caption"><span class="result-badge ${badgeClass}">${badge}</span></div>`
+        : "";
     const dataAttrs = dataset
         ? Object.entries(dataset).map(([k, v]) => ` data-${k}="${escapeHtml(String(v))}"`).join("")
         : "";
     return `<div class="step-card ${cardClass}"${dataAttrs}>`
         + `<div class="step-card-title">${escapeHtml(title)}</div>`
-        + topNoteHtml + rowsHtml + noteHtml + badgeHtml
+        + rowsHtml + captionHtml
         + `</div>`;
 }
 
@@ -963,6 +1029,18 @@ function assignBadge(targetName, value) {
 function buildAssignExplanation(node, scope, result) {
     const target = parseAssignmentTarget(node.name, scope);
 
+    // 同じ変数を上書きする代入のとき、元の値をアニメで見せるためのデータ。
+    // 代入前のスコープ(varsBefore)に値があればそれが「元の値」。
+    const simpleTargetName = isSimpleVariable(node.name) ? node.name.trim() : null;
+    const hasPrevValue = simpleTargetName
+        && scope
+        && Object.prototype.hasOwnProperty.call(scope, simpleTargetName)
+        && scope[simpleTargetName] !== undefined
+        && !Array.isArray(scope[simpleTargetName]);
+    const assignDataset = hasPrevValue
+        ? { "prev-value": formatVarValue(scope[simpleTargetName]) }
+        : null;
+
     if (target) {
         const assignedValue = result?.assignedValue ?? safeEvalWithScope(node.value, scope);
         const base = target.baseName;
@@ -1039,7 +1117,8 @@ function buildAssignExplanation(node, scope, result) {
             title: "今のステップ",
             rows: [row],
             note: opPhrase(binary.op, leftValue, rightValue),
-            badge: assignBadge(node.name, resultValue)
+            badge: assignBadge(node.name, resultValue),
+            dataset: assignDataset
         });
 
         return buildStepDetails(
@@ -1064,7 +1143,8 @@ function buildAssignExplanation(node, scope, result) {
         const html = buildStepCard({
             title: "今のステップ",
             rows: [row],
-            badge: assignBadge(node.name, value)
+            badge: assignBadge(node.name, value),
+            dataset: assignDataset
         });
         return buildStepDetails(
             `変数 ${node.name}${arrayTag} に ${node.value.trim()}の値、${formatVarValue(value)}を代入しました。`,
@@ -1086,7 +1166,8 @@ function buildAssignExplanation(node, scope, result) {
         note: arrayAccess ? `${node.value.trim()} は配列 ${arrayAccess.arrayName} の ${arrayAccess.indexValue} 番目` : "",
         badge: Array.isArray(value)
             ? `${escapeHtml(node.name)} に <b>配列</b> を入れる`
-            : assignBadge(`${node.name}${arrayTag}`, value)
+            : assignBadge(`${node.name}${arrayTag}`, value),
+        dataset: Array.isArray(value) ? null : assignDataset
     });
 
     return buildStepDetails(
@@ -1179,7 +1260,7 @@ function buildForExplanation(node, current, end, step, isLast, start) {
 
 function buildForDetails(node, current, end, step, isLast, start) {
     const text = buildForExplanation(node, current, end, step, isLast, start);
-    const rangeNote = `${start} から ${end} まで ${step} ずつ くりかえす`;
+    const rangeNote = `${start}〜${end} を ${step} ずつ`;
 
     let rows;
     let note;
@@ -1188,12 +1269,12 @@ function buildForDetails(node, current, end, step, isLast, start) {
     if (current === start) {
         rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
         note = rangeNote;
-        badge = "くりかえし スタート";
+        badge = "スタート";
     } else {
         const previousValue = current - step;
         rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
-        note = `前は ${formatVarValue(previousValue)} → ${step} ふえて 今は ${formatVarValue(current)}（${rangeNote}）`;
-        badge = isLast ? "これが さいごの くりかえし" : "まだ くりかえす";
+        note = rangeNote;
+        badge = isLast ? "さいご" : "まだ つづく";
         // 2回目以降は「前の値 + ステップ → 新しい値」のアニメ用データを持たせる
         dataset = {
             "loop-prev": formatVarValue(previousValue),
@@ -1523,11 +1604,8 @@ function buildTrace(ast, targetTrace = trace) {
                         suffix = `繰り返しを続けます${countText}。`;
                     }
 
-                    const html = parts.html
-                        ? `${parts.html}<div class="step-card-note step-card-loop-note">${escapeHtml(suffix)}</div>`
-                        : null;
-
-                    return buildStepDetails(`${parts.text} ${suffix}`, { html, highlightVars: parts.highlightVars });
+                    // 補足ノートはカードに出さず、説明文（data-alt/動画用）にだけ残す
+                    return buildStepDetails(`${parts.text} ${suffix}`, { html: parts.html, highlightVars: parts.highlightVars });
                 }
             });
         }
