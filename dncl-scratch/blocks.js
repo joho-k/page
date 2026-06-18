@@ -1692,6 +1692,63 @@ function quizSetChoicesVisible(visible) {
     row.style.display = visible ? "" : "none";
 }
 
+// 横にあふれていて（スクロールが必要なとき）だけ、5秒間だけ「← 👆 → 横スクロール可能です」の
+// ヒントを上に重ねて知らせる。ユーザーが触れたらすぐ消して操作の邪魔をしない。
+function quizShowScrollHint(scrollEl, durationMs = 5000) {
+    if (!scrollEl) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (scrollEl.scrollWidth - scrollEl.clientWidth <= 4) return; // あふれていなければ出さない
+
+    const parent = scrollEl.parentElement;
+    if (!parent) return;
+    if (getComputedStyle(parent).position === "static") parent.style.position = "relative";
+
+    const overlay = document.createElement("div");
+    overlay.className = "scroll-hint-overlay";
+    overlay.innerHTML =
+        '<div class="scroll-hint-badge">'
+        + '<span class="scroll-hint-swipe">'
+        + '<i class="fa-solid fa-angle-left"></i>'
+        + '<i class="fa-solid fa-hand-pointer scroll-hint-hand"></i>'
+        + '<i class="fa-solid fa-angle-right"></i>'
+        + '</span>'
+        + '<span>横スクロール可能です</span>'
+        + '</div>';
+    // スクロールする要素の位置・大きさに重ねる
+    overlay.style.left = `${scrollEl.offsetLeft}px`;
+    overlay.style.top = `${scrollEl.offsetTop}px`;
+    overlay.style.width = `${scrollEl.offsetWidth}px`;
+    overlay.style.height = `${scrollEl.offsetHeight}px`;
+    parent.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add("is-visible"));
+
+    let done = false;
+    const remove = () => {
+        if (done) return;
+        done = true;
+        overlay.classList.remove("is-visible");
+        setTimeout(() => overlay.remove(), 400);
+    };
+    const timer = setTimeout(remove, durationMs);
+    const onInteract = () => { clearTimeout(timer); remove(); };
+    ["pointerdown", "wheel", "touchstart", "scroll", "keydown"].forEach((type) =>
+        scrollEl.addEventListener(type, onInteract, { once: true, passive: true })
+    );
+}
+
+// ステップ回答中は、操作スペースを「前へ」「次へ」だけにする
+// （通常の「回答」「ステップ回答」「一覧へ」を隠す）。終了したら戻す。
+function quizSetSteppingUI(stepping) {
+    const actionHost = document.getElementById("quiz-actions-buttons");
+    if (!actionHost) return;
+    const runBtn = actionHost.querySelector('button[onclick="run()"]');
+    const stepBtn = actionHost.querySelector('button[onclick="stepStart()"]');
+    const backBtn = actionHost.querySelector(".quiz-back-button");
+    [runBtn, stepBtn, backBtn].forEach((b) => {
+        if (b) b.style.display = stepping ? "none" : "";
+    });
+}
+
 function quizUpdateCompletionPrompt() {
     const blanks = quizGetBlankInputs();
     if (blanks.length === 0) return;
@@ -1795,6 +1852,16 @@ function quizGoToList() {
 }
 
 function quizHookJudge(quiz) {
+    // ステップの「前へ/次へ」の表示切り替えに連動して、操作スペースの中身を切り替える
+    if (typeof window.setStepButtonsVisible === "function") {
+        const originalSetStepButtonsVisible = window.setStepButtonsVisible;
+        window.setStepButtonsVisible = function (visible) {
+            const ret = originalSetStepButtonsVisible.apply(this, arguments);
+            quizSetSteppingUI(!!visible);
+            return ret;
+        };
+    }
+
     if (typeof window.run === "function") {
         const originalRun = window.run;
         window.run = function (...args) {
@@ -1915,7 +1982,7 @@ function setupQuizModeIfPresent() {
                 actionHost.appendChild(runBtn);
             }
             if (stepStartBtn) {
-                stepStartBtn.textContent = "⏭ ステップで回答";
+                stepStartBtn.textContent = "⏭ ステップ回答";
                 actionHost.appendChild(stepStartBtn);
             }
             // 「前へ」「次へ」は hidden 属性で初期非表示。stepStart() で表示される。
@@ -1925,7 +1992,7 @@ function setupQuizModeIfPresent() {
             // 問題一覧に戻るボタン
             const backBtn = document.createElement("button");
             backBtn.type = "button";
-            backBtn.textContent = "📋 問題一覧に戻る";
+            backBtn.textContent = "一覧へ";
             backBtn.className = "quiz-back-button";
             backBtn.addEventListener("click", () => quizGoToList());
             actionHost.appendChild(backBtn);
@@ -1943,6 +2010,24 @@ function setupQuizModeIfPresent() {
     quizHookJudge(quiz);
     quizFocusFirstBlank();
     quizUpdateCompletionPrompt();
+
+    // レイアウト確定後、横スクロールが必要な行があれば「スクロールできる」ヒントを5秒だけ出す。
+    // 主役の選択肢を優先し、あふれている最初の2か所に重ねる。
+    setTimeout(() => {
+        const targets = [
+            document.getElementById("quiz-choices"),
+            document.getElementById("quiz-question-title"),
+            document.getElementById("quiz-actions-buttons"),
+        ].filter(Boolean);
+        targets
+            .filter((el) => el.scrollWidth - el.clientWidth > 4)
+            .slice(0, 2)
+            .forEach((el) => quizShowScrollHint(el));
+
+        // プログラム（ブロック表示）の横スクロールにもガイドを出す
+        quizShowScrollHint(document.getElementById("workspace"));
+    }, 250);
+
     return true;
 }
 

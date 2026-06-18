@@ -793,6 +793,8 @@ pre {
 /* ─── 図解カード（案1） ─────────────────────────── */
 .step-explanation-figure {
     white-space: normal;
+    /* 値が収まる「変数の箱」を絶対配置する位置基準 */
+    position: relative;
 }
 
 .step-card {
@@ -884,29 +886,15 @@ pre {
     font-weight: 700;
 }
 
-.calc-arrow {
-    color: #b89640;
-    font-size: 18px;
-    line-height: 1;
+/* note と badge を1行にまとめたキャプション */
+.step-card-caption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
-.step-card-note {
-    font-size: 13px;
-    color: #6b5a2a;
-    background: #fdf6e0;
-    border-radius: 8px;
-    padding: 4px 10px;
-}
-
-.step-card-loop-note {
-    color: #2f6b88;
-    background: #eaf4f9;
-}
-
-/* 式の上に置く説明文（比較記号の意味など） */
-.step-card-note-top {
-    margin-bottom: 2px;
-}
 
 .result-badge {
     display: inline-block;
@@ -932,6 +920,17 @@ pre {
     background: #fbe0e0;
     color: #9a2727;
     box-shadow: 0 0 0 2px rgba(200, 60, 60, 0.30);
+}
+
+/* 条件チェックの言葉での説明（例：「amari と 0 が 等しければ」） */
+.cond-phrase {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2f6b88;
+    background: #eaf4f9;
+    border-radius: 8px;
+    padding: 3px 10px;
+    white-space: nowrap;
 }
 
 /* 連結（表示）のチップ表示 */
@@ -1081,6 +1080,7 @@ pre {
     line-height: 1.5;
 }
 
+
 /* 共通：選択肢・操作の見出しラベル */
 .quiz-choices-label,
 .quiz-actions-label {
@@ -1208,6 +1208,8 @@ pre {
 
 .quiz-choice {
     scroll-snap-align: start;
+    /* 狭い画面でチップが潰れて文字が切れる（goukei→gouk）のを防ぐ。本来の幅を保って横スクロールで見せる */
+    flex: 0 0 auto;
     border: 2px solid var(--primary-light);
     background: #ffffff;
     color: var(--primary);
@@ -1228,6 +1230,114 @@ pre {
 
 .quiz-choice:active {
     transform: scale(0.95);
+}
+
+/* スマホ表示：問題文・選択肢・操作は折り返さず1行で、はみ出しは横スクロールで見せる。
+   （ベース定義より後ろに置いて確実に上書きする） */
+@media (max-width: 768px) {
+    .quiz-question-title {
+        flex: 1 1 0;
+        min-width: 0;
+        white-space: nowrap;
+        overflow-x: auto;
+    }
+
+    .quiz-choices {
+        flex-wrap: nowrap;
+    }
+
+    /* 操作も「操作 回答 ステップ回答 一覧へ」と1行で並べ、あふれたら横スクロール */
+    .quiz-actions {
+        flex-wrap: nowrap;
+        min-width: 0;
+    }
+
+    .quiz-actions-buttons {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        min-width: 0;
+    }
+
+    .quiz-actions-buttons button {
+        flex: 0 0 auto;
+        padding: 8px 13px;
+        font-size: 14px;
+    }
+
+    /* 1行に並べるため、一覧へ の右端寄せは解除 */
+    .quiz-back-button {
+        margin-left: 0;
+    }
+}
+
+/* 横スクロールできることを知らせるヒント（あふれているときに5秒だけ表示） */
+.scroll-hint-overlay {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* 下の選択肢などはそのまま操作できる */
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.scroll-hint-overlay.is-visible {
+    opacity: 1;
+}
+
+.scroll-hint-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 94%;
+    padding: 7px 14px;
+    background: rgba(38, 42, 51, 0.85);
+    color: #ffffff;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+}
+
+.scroll-hint-swipe {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+}
+
+.scroll-hint-hand {
+    font-size: 17px;
+    animation: scrollHintSwipe 1.3s ease-in-out infinite;
+}
+
+/* 上書き代入のラベル：元の値の説明「今までの値」→ 消えるとき「上書き」 */
+.assign-prev-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #5a6b80;
+    background: #eef2f7;
+    border: 1px solid #d3dce8;
+    border-radius: 6px;
+    padding: 1px 6px;
+    white-space: nowrap;
+}
+
+.assign-overwrite-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    background: #e0506a;
+    border-radius: 6px;
+    padding: 1px 6px;
+    white-space: nowrap;
+}
+
+@keyframes scrollHintSwipe {
+    0%, 100% { transform: translateX(-5px); }
+    50%      { transform: translateX(5px); }
 }
 
 /* 全部埋まったら回答ボタンを強調 */
