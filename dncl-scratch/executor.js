@@ -277,9 +277,9 @@ function renderExplanation() {
 // 変数を囲む「箱」（名前が上・値が下）を描く。値の最終下端 valueBottomRel まで覆う。
 // 箱が下に伸びるぶん、下の説明（note/badge）と重ならないよう row に余白を確保する。
 function makeVarBox(container, row, tRect, cRect, valueBottomRel, pad = 6) {
-    const boxLeft = (tRect.left - cRect.left) - pad;
+    const boxLeft = (tRect.left - cRect.left) - pad - 8;
     const boxTop = (tRect.top - cRect.top) - pad;
-    const boxWidth = tRect.width + pad * 2;
+    const boxWidth = tRect.width + pad * 2 + 10;
     const boxHeight = (valueBottomRel + pad) - boxTop;
 
     const box = document.createElement("div");
@@ -447,6 +447,9 @@ function animateAssignmentCard(container) {
     const value = row.lastElementChild;
     if (!value || value === target) return;
 
+    // 値が「ラベル＋値」チップ（a = b の b/1）かどうか
+    const isChip = !!value.querySelector?.(".chip-label");
+
     const cRect = container.getBoundingClientRect();
     const vRect = value.getBoundingClientRect();
     const tRect = target.getBoundingClientRect();
@@ -466,14 +469,14 @@ function animateAssignmentCard(container) {
     // = は使わないので隠す（レイアウト位置は保つため visibility）
     if (op) op.style.visibility = "hidden";
 
-    // 同じ変数の上書き代入のとき：元の値を最初から箱の中に表示しておき、
+    const slotCenterX = tRect.left + tRect.width / 2 - cRect.left;
+    const slotCenterY = (vRect.top - cRect.top) + dy + vRect.height / 2;
+
+    // 同じ変数の上書き代入（a = b 以外）：元の値を最初から箱の中に表示しておき、
     // 新しい値が入ってくるのに合わせて「上書き」と出して元の値を消す。
     const card = container.querySelector(".step-card");
     const prevText = card?.dataset.prevValue;
-    if (prevText !== undefined && prevText !== "") {
-        const slotCenterX = tRect.left + tRect.width / 2 - cRect.left;
-        const slotCenterY = (vRect.top - cRect.top) + dy + vRect.height / 2;
-
+    if (!isChip && prevText !== undefined && prevText !== "") {
         // 元の値（最初から表示）
         const prevEl = document.createElement("span");
         prevEl.className = "calc-token calc-result";
@@ -532,18 +535,49 @@ function animateAssignmentCard(container) {
         ], { duration: FLYIN_DURATION, iterations: Infinity });
     }
 
-    // 値トークンそのものを、箱の外（右）から箱の中のスロットへ入れる動きを繰り返す
+    // 値を箱の外（右）から箱の中のスロットへ入れる
     target.style.position = "relative";
     target.style.zIndex = "2";
     value.style.position = "relative";
     value.style.zIndex = "5";
-    value.animate([
-        { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },     // 箱の外（右）
-        { transform: "translate(10px, 0) scale(1)", opacity: 1, offset: 0.12 },       // 外に現れる
-        { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱の中に入って収まる
-        { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.9 },  // 約1秒そのまま止める
-        { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 0, offset: 1 }     // 消えて先頭からやり直し
-    ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+
+    if (isChip) {
+        // a = b：b/1 が外から入ってきて、到着したら消える。
+        // 代わりに a の値（1）がスロットに残る。
+        const valText = value.querySelector(".chip-val")?.textContent ?? "";
+        const resultEl = document.createElement("span");
+        resultEl.className = "calc-token calc-result";
+        resultEl.textContent = valText;
+        Object.assign(resultEl.style, { position: "absolute", margin: "0", zIndex: "4", pointerEvents: "none", opacity: "0" });
+        container.appendChild(resultEl);
+        resultEl.style.left = `${slotCenterX - resultEl.offsetWidth / 2}px`;
+        resultEl.style.top = `${slotCenterY - resultEl.offsetHeight / 2}px`;
+
+        value.animate([
+            { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },          // 箱の外（右）
+            { transform: "translate(10px, 0) scale(1)", opacity: 1, offset: 0.12 },            // 外に現れる
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱に到着（b/1）
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 0.6 }, // b/1 が消える
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 1 }
+        ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+
+        // a の値（1）：b/1 が消えるのに合わせて現れて、そのまま残る → ループ用に消す
+        resultEl.animate([
+            { opacity: 0, offset: 0 },
+            { opacity: 0, offset: 0.52 },
+            { opacity: 1, offset: 0.62 },
+            { opacity: 1, offset: 0.92 },
+            { opacity: 0, offset: 1 }
+        ], { duration: FLYIN_DURATION, iterations: Infinity });
+    } else {
+        value.animate([
+            { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },          // 箱の外（右）
+            { transform: "translate(10px, 0) scale(1)", opacity: 1, offset: 0.12 },            // 外に現れる
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱の中に入って収まる
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.9 },  // 約1秒そのまま止める
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 0, offset: 1 }     // 消えて先頭からやり直し
+        ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+    }
 
     // 値が箱に入る瞬間に、箱をポンと跳ねさせる
     box.animate([
