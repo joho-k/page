@@ -1410,12 +1410,12 @@ function buildForDetails(node, current, end, step, isLast, start) {
     if (current === start) {
         rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
         note = rangeNote;
-        badge = "スタート";
+        badge = `スタート (${end} まで ${step} ずつ増やす)`;
     } else {
         const previousValue = current - step;
         rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
         note = rangeNote;
-        badge = isLast ? "さいご" : "まだ つづく";
+        badge = `${end} までなので` + (isLast ? "これがさいご" : `まだつづく。${step}ずつ増やす`);
         // 2回目以降は「前の値 + ステップ → 新しい値」のアニメ用データを持たせる
         dataset = {
             "loop-prev": formatVarValue(previousValue),
