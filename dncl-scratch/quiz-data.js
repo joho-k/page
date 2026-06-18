@@ -554,5 +554,73 @@ window.quizData = {
             }
         ],
         defaultHint: "ひとつ進むごとにいくつ増やせば 0 2 4 6 8 になるか考えよう"
+    },
+    q012: {
+        title: "マス目の数（二重ループ）",
+        addedAt: "2026-06-18",
+        difficulty: 4,
+        question: "たて3行のマス目をうめます。マスが全部で12個になるように、内側のくり返し（横方向の列）の終わりの値をうめよう",
+        ast: [
+            {
+                type: "assign",
+                name: "kosu",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "3",
+                step: "1",
+                body: [
+                    {
+                        type: "for",
+                        varName: "j",
+                        start: "1",
+                        end: "__BLANK_blank_a__",
+                        step: "1",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "kosu",
+                                value: "kosu + 1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"マスは全部で\" + kosu + \"個\""
+            }
+        ],
+        choices: [
+            { label: "2", value: "2" },
+            { label: "3", value: "3" },
+            { label: "4", value: "4" },
+            { label: "12", value: "12" },
+        ],
+        answers: [
+            {
+                values: ["4"],
+                correct: true,
+            },
+            {
+                values: ["3"],
+                correct: false,
+                hint: "横が3だと 3×3=9マスにしかなりません。全部で12マスにするには横を4にしよう",
+            },
+            {
+                values: ["12"],
+                correct: false,
+                hint: "12は答え（マスの総数）です。内側のくり返しは横を1マスずつ数えるので、横の列の数（4）を入れよう。3×4=12です",
+            },
+            {
+                values: ["2"],
+                correct: false,
+                hint: "横が2だと 3×2=6マスにしかなりません",
+            }
+        ],
+        defaultHint: "たて3行 × 横□列 = 12 になる□を考えよう。内側のくり返しは1から□まで回って、横方向に1マスずつ数えるよ"
     }
 }
