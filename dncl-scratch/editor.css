@@ -1267,6 +1267,54 @@ pre {
     }
 }
 
+/* 横スクロールできることを知らせるヒント（あふれているときに5秒だけ表示） */
+.scroll-hint-overlay {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* 下の選択肢などはそのまま操作できる */
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.scroll-hint-overlay.is-visible {
+    opacity: 1;
+}
+
+.scroll-hint-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 94%;
+    padding: 7px 14px;
+    background: rgba(38, 42, 51, 0.85);
+    color: #ffffff;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+}
+
+.scroll-hint-swipe {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+}
+
+.scroll-hint-hand {
+    font-size: 17px;
+    animation: scrollHintSwipe 1.3s ease-in-out infinite;
+}
+
+@keyframes scrollHintSwipe {
+    0%, 100% { transform: translateX(-5px); }
+    50%      { transform: translateX(5px); }
+}
+
 /* 全部埋まったら回答ボタンを強調 */
 .quiz-cta {
     border-color: var(--accent) !important;
