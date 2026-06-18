@@ -264,6 +264,7 @@ function renderExplanation() {
         explanationEl.setAttribute("data-alt", currentExplanation || "");
         explanationEl.setAttribute("title", currentExplanation || "");
         explanationEl.innerHTML = currentExplanationHtml;
+        requestAnimationFrame(() => animateAssignmentCard(explanationEl));
         return;
     }
 
@@ -271,6 +272,92 @@ function renderExplanation() {
     explanationEl.removeAttribute("data-alt");
     explanationEl.removeAttribute("title");
     explanationEl.textContent = currentExplanation || "このステップの説明はありません。";
+}
+
+// 代入カードのアニメーション：右側の「値」そのものが 左へ寄る → 下の行へ降りて
+// 変数の下に収まり、最後は「変数名の上・値が下」の箱になって約1秒止まる、を繰り返す。
+// 行の先頭トークン(.calc-target)が代入先、末尾トークンが入れる値という構造を利用する。
+// 動かすのは実際の値トークンなので、transform で動かしてもカードと一緒にスクロールしてずれない。
+const FLYIN_DURATION = 3000;
+
+function animateAssignmentCard(container) {
+    if (!container) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof Element.prototype.animate !== "function") return;
+
+    const row = [...container.querySelectorAll(".calc-row")]
+        .find(r => r.querySelector(".calc-target"));
+    if (!row) return;
+
+    const target = row.querySelector(".calc-target");
+    const op = row.querySelector(".calc-op");
+    const value = row.lastElementChild;
+    if (!value || value === target) return;
+
+    const cRect = container.getBoundingClientRect();
+    const vRect = value.getBoundingClientRect();
+    const tRect = target.getBoundingClientRect();
+    if (!vRect.width || !tRect.width) return;
+
+    const pad = 6;
+    const gapY = 6;
+
+    // 値は変数 goukei の真下に中央ぞろえで収まる
+    const dxFinal = (tRect.left + tRect.width / 2 - vRect.width / 2) - vRect.left;
+    const dy = (tRect.bottom + gapY) - vRect.top;
+
+    // 変数を囲む箱（名前が上・値が下）。値の最終位置の下端まで覆う
+    const boxLeft = (tRect.left - cRect.left) - pad;
+    const boxTop = (tRect.top - cRect.top) - pad;
+    const boxWidth = tRect.width + pad * 2;
+    const valueBottomRel = (vRect.top - cRect.top) + dy + vRect.height;
+    const boxHeight = (valueBottomRel + pad) - boxTop;
+
+    // 箱は最初から表示しておく（変数名が上、値のスロットが下）
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+        position: "absolute",
+        left: `${boxLeft}px`,
+        top: `${boxTop}px`,
+        width: `${boxWidth}px`,
+        height: `${boxHeight}px`,
+        border: "2px solid var(--primary, #3b7ddd)",
+        borderRadius: "10px",
+        background: "rgba(59, 125, 221, 0.06)",
+        pointerEvents: "none",
+        zIndex: "1"
+    });
+    container.appendChild(box);
+
+    // 箱が下に伸びるぶん、カード下の説明（note/badge）と重ならないよう余白を確保
+    const rowBottomRel = row.getBoundingClientRect().bottom - cRect.top;
+    const extra = (boxTop + boxHeight + 6) - rowBottomRel;
+    if (extra > 0) row.style.marginBottom = `${extra}px`;
+
+    // = は使わないので隠す（レイアウト位置は保つため visibility）
+    if (op) op.style.visibility = "hidden";
+
+    // 値トークンそのものを、箱の外（右）から箱の中のスロットへ入れる動きを繰り返す
+    target.style.position = "relative";
+    target.style.zIndex = "2";
+    value.style.position = "relative";
+    value.style.zIndex = "5";
+    value.animate([
+        { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },     // 箱の外（右）
+        { transform: "translate(10px, 0) scale(1)", opacity: 1, offset: 0.12 },       // 外に現れる
+        { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱の中に入って収まる
+        { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.9 },  // 約1秒そのまま止める
+        { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 0, offset: 1 }     // 消えて先頭からやり直し
+    ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+
+    // 値が箱に入る瞬間に、箱をポンと跳ねさせる
+    box.animate([
+        { transform: "scale(1)", offset: 0 },
+        { transform: "scale(1)", offset: 0.4 },
+        { transform: "scale(1.08)", offset: 0.5 },
+        { transform: "scale(1)", offset: 0.62 },
+        { transform: "scale(1)", offset: 1 }
+    ], { duration: FLYIN_DURATION, iterations: Infinity });
 }
 
 function safeEvalWithScope(expr, scope) {
