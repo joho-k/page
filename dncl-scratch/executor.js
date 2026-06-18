@@ -264,7 +264,7 @@ function renderExplanation() {
         explanationEl.setAttribute("data-alt", currentExplanation || "");
         explanationEl.setAttribute("title", currentExplanation || "");
         explanationEl.innerHTML = currentExplanationHtml;
-        requestAnimationFrame(() => animateAssignmentCard(explanationEl));
+        requestAnimationFrame(() => animateStepCard(explanationEl));
         return;
     }
 
@@ -274,12 +274,165 @@ function renderExplanation() {
     explanationEl.textContent = currentExplanation || "このステップの説明はありません。";
 }
 
+// 変数を囲む「箱」（名前が上・値が下）を描く。値の最終下端 valueBottomRel まで覆う。
+// 箱が下に伸びるぶん、下の説明（note/badge）と重ならないよう row に余白を確保する。
+function makeVarBox(container, row, tRect, cRect, valueBottomRel, pad = 6) {
+    const boxLeft = (tRect.left - cRect.left) - pad;
+    const boxTop = (tRect.top - cRect.top) - pad;
+    const boxWidth = tRect.width + pad * 2;
+    const boxHeight = (valueBottomRel + pad) - boxTop;
+
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+        position: "absolute",
+        left: `${boxLeft}px`,
+        top: `${boxTop}px`,
+        width: `${boxWidth}px`,
+        height: `${boxHeight}px`,
+        border: "2px solid var(--primary, #3b7ddd)",
+        borderRadius: "10px",
+        background: "rgba(59, 125, 221, 0.06)",
+        pointerEvents: "none",
+        zIndex: "1"
+    });
+    container.appendChild(box);
+
+    const rowBottomRel = row.getBoundingClientRect().bottom - cRect.top;
+    const extra = (boxTop + boxHeight + 6) - rowBottomRel;
+    if (extra > 0) row.style.marginBottom = `${extra}px`;
+    return box;
+}
+
+// ステップカードのアニメーションの振り分け。
+// 2回目以降のループ（増分データを持つ）はループ用アニメ、それ以外は代入アニメ。
+function animateStepCard(container) {
+    if (!container) return;
+    const card = container.querySelector(".step-card");
+    if (card && card.classList.contains("step-card-loop") && card.dataset.loopStep !== undefined) {
+        animateLoopCard(container, card);
+        return;
+    }
+    animateAssignmentCard(container);
+}
+
+const FLYIN_DURATION = 3000;
+const LOOP_ANIM_DURATION = 2800;
+
+// ループ（2回目以降）のアニメーション：変数の箱（名前が上・値が下）で、
+// 「前の値」のとなりに「+ステップ」が上から降りてきて足され、「新しい値」に変わる、を繰り返す。
+//   i  +1        i           i
+//   0      →    0 +1   →    1
+function animateLoopCard(container, card) {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof Element.prototype.animate !== "function") return;
+
+    const row = card.querySelector(".calc-row");
+    if (!row) return;
+    const target = row.querySelector(".calc-target"); // 変数名 i
+    const op = row.querySelector(".calc-op");
+    const valueTok = row.lastElementChild;            // 元の値トークン（= 新しい値）
+    if (!target) return;
+
+    const prevText = card.dataset.loopPrev ?? "";
+    const stepNum = Number(card.dataset.loopStep);
+    const curText = card.dataset.loopCurrent ?? "";
+    const plusText = stepNum >= 0 ? `+${card.dataset.loopStep}` : String(card.dataset.loopStep);
+
+    const cRect = container.getBoundingClientRect();
+    const tRect = target.getBoundingClientRect();
+    if (!tRect.width) return;
+
+    const gapY = 8;
+    const nameCenterX = tRect.left + tRect.width / 2 - cRect.left;
+    const nameCenterY = tRect.top + tRect.height / 2 - cRect.top;
+    const slotCenterY = tRect.bottom + gapY + tRect.height / 2 - cRect.top;
+
+    // 元の「= 値」は隠して、こちらで前の値/＋ステップ/新しい値を描く
+    if (op) op.style.visibility = "hidden";
+    if (valueTok && valueTok !== target) valueTok.style.visibility = "hidden";
+
+    // 変数名を箱より前面に出す
+    target.style.position = "relative";
+    target.style.zIndex = "3";
+
+    const mkToken = (text, cls) => {
+        const el = document.createElement("span");
+        el.className = `calc-token ${cls}`;
+        el.textContent = text;
+        Object.assign(el.style, {
+            position: "absolute", margin: "0", zIndex: "5", pointerEvents: "none"
+        });
+        container.appendChild(el);
+        return el;
+    };
+    const prevEl = mkToken(prevText, "calc-result");
+    const curEl = mkToken(curText, "calc-result");
+    const plusEl = mkToken(plusText, "calc-token-val");
+
+    const placeCenter = (el, cx, cy) => {
+        el.style.left = `${cx - el.offsetWidth / 2}px`;
+        el.style.top = `${cy - el.offsetHeight / 2}px`;
+    };
+    // 前の値・新しい値は、変数の真下のスロット中央に重ねて置く（クロスフェード）
+    placeCenter(prevEl, nameCenterX, slotCenterY);
+    placeCenter(curEl, nameCenterX, slotCenterY);
+
+    // ＋ステップ：最初は変数名の右どなり（右上）。そこから「元の値」めがけて
+    // 斜めに降りて重なる（＝元の値に足される）。
+    const plusStartX = (tRect.right - cRect.left) + plusEl.offsetWidth / 2 + 8;
+    const plusEndX = nameCenterX; // 前の値（元の値）の中央
+    placeCenter(plusEl, plusStartX, nameCenterY);
+    const dxDown = plusEndX - plusStartX;
+    const dyDown = slotCenterY - nameCenterY;
+
+    // 箱（名前の上・値が下）
+    const valueBottomRel = slotCenterY + tRect.height / 2;
+    const box = makeVarBox(container, row, tRect, cRect, valueBottomRel);
+
+    const D = LOOP_ANIM_DURATION;
+
+    // ＋ステップ：名前の右で現れる → 前の値の右へ降りる → 足されて消える
+    plusEl.animate([
+        { transform: "translate(0,0)", opacity: 0, offset: 0 },
+        { transform: "translate(0,0)", opacity: 1, offset: 0.12 },                       // i +1
+        { transform: "translate(0,0)", opacity: 1, offset: 0.34 },
+        { transform: `translate(${dxDown}px, ${dyDown}px)`, opacity: 1, offset: 0.52 },  // 0 +1
+        { transform: `translate(${dxDown}px, ${dyDown}px)`, opacity: 0, offset: 0.64 },  // 足されて消える
+        { transform: `translate(${dxDown}px, ${dyDown}px)`, opacity: 0, offset: 1 }
+    ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+
+    // 前の値：見えている → 新しい値に変わるところで消える → 次のループ用に戻す
+    prevEl.animate([
+        { opacity: 1, offset: 0 },
+        { opacity: 1, offset: 0.52 },
+        { opacity: 0, offset: 0.62 },
+        { opacity: 0, offset: 0.92 },
+        { opacity: 1, offset: 1 }
+    ], { duration: D, iterations: Infinity });
+
+    // 新しい値：足し終わってから現れる → しばらく表示 → 次のループ用に消す
+    curEl.animate([
+        { opacity: 0, offset: 0 },
+        { opacity: 0, offset: 0.6 },
+        { opacity: 1, offset: 0.7 },
+        { opacity: 1, offset: 0.92 },
+        { opacity: 0, offset: 1 }
+    ], { duration: D, iterations: Infinity });
+
+    // 新しい値になる瞬間に、箱をポンと跳ねさせる
+    box.animate([
+        { transform: "scale(1)", offset: 0 },
+        { transform: "scale(1)", offset: 0.6 },
+        { transform: "scale(1.08)", offset: 0.7 },
+        { transform: "scale(1)", offset: 0.82 },
+        { transform: "scale(1)", offset: 1 }
+    ], { duration: D, iterations: Infinity });
+}
+
 // 代入カードのアニメーション：右側の「値」そのものが 左へ寄る → 下の行へ降りて
 // 変数の下に収まり、最後は「変数名の上・値が下」の箱になって約1秒止まる、を繰り返す。
 // 行の先頭トークン(.calc-target)が代入先、末尾トークンが入れる値という構造を利用する。
 // 動かすのは実際の値トークンなので、transform で動かしてもカードと一緒にスクロールしてずれない。
-const FLYIN_DURATION = 3000;
-
 function animateAssignmentCard(container) {
     if (!container) return;
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -307,32 +460,8 @@ function animateAssignmentCard(container) {
     const dy = (tRect.bottom + gapY) - vRect.top;
 
     // 変数を囲む箱（名前が上・値が下）。値の最終位置の下端まで覆う
-    const boxLeft = (tRect.left - cRect.left) - pad;
-    const boxTop = (tRect.top - cRect.top) - pad;
-    const boxWidth = tRect.width + pad * 2;
     const valueBottomRel = (vRect.top - cRect.top) + dy + vRect.height;
-    const boxHeight = (valueBottomRel + pad) - boxTop;
-
-    // 箱は最初から表示しておく（変数名が上、値のスロットが下）
-    const box = document.createElement("div");
-    Object.assign(box.style, {
-        position: "absolute",
-        left: `${boxLeft}px`,
-        top: `${boxTop}px`,
-        width: `${boxWidth}px`,
-        height: `${boxHeight}px`,
-        border: "2px solid var(--primary, #3b7ddd)",
-        borderRadius: "10px",
-        background: "rgba(59, 125, 221, 0.06)",
-        pointerEvents: "none",
-        zIndex: "1"
-    });
-    container.appendChild(box);
-
-    // 箱が下に伸びるぶん、カード下の説明（note/badge）と重ならないよう余白を確保
-    const rowBottomRel = row.getBoundingClientRect().bottom - cRect.top;
-    const extra = (boxTop + boxHeight + 6) - rowBottomRel;
-    if (extra > 0) row.style.marginBottom = `${extra}px`;
+    const box = makeVarBox(container, row, tRect, cRect, valueBottomRel, pad);
 
     // = は使わないので隠す（レイアウト位置は保つため visibility）
     if (op) op.style.visibility = "hidden";
@@ -675,12 +804,15 @@ function opPhrase(op, leftValue, rightValue) {
     }
 }
 
-function buildStepCard({ title, rows = [], note = "", topNote = "", badge = "", badgeClass = "", cardClass = "" }) {
+function buildStepCard({ title, rows = [], note = "", topNote = "", badge = "", badgeClass = "", cardClass = "", dataset = null }) {
     const topNoteHtml = topNote ? `<div class="step-card-note step-card-note-top">${escapeHtml(topNote)}</div>` : "";
     const rowsHtml = rows.filter(Boolean).map(r => `<div class="calc-row">${r}</div>`).join("");
     const noteHtml = note ? `<div class="step-card-note">${escapeHtml(note)}</div>` : "";
     const badgeHtml = badge ? `<div><span>説明: </span><span class="result-badge ${badgeClass}">${badge}</span></div>` : "";
-    return `<div class="step-card ${cardClass}">`
+    const dataAttrs = dataset
+        ? Object.entries(dataset).map(([k, v]) => ` data-${k}="${escapeHtml(String(v))}"`).join("")
+        : "";
+    return `<div class="step-card ${cardClass}"${dataAttrs}>`
         + `<div class="step-card-title">${escapeHtml(title)}</div>`
         + topNoteHtml + rowsHtml + noteHtml + badgeHtml
         + `</div>`;
@@ -1052,6 +1184,7 @@ function buildForDetails(node, current, end, step, isLast, start) {
     let rows;
     let note;
     let badge;
+    let dataset = null;
     if (current === start) {
         rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
         note = rangeNote;
@@ -1061,6 +1194,12 @@ function buildForDetails(node, current, end, step, isLast, start) {
         rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
         note = `前は ${formatVarValue(previousValue)} → ${step} ふえて 今は ${formatVarValue(current)}（${rangeNote}）`;
         badge = isLast ? "これが さいごの くりかえし" : "まだ くりかえす";
+        // 2回目以降は「前の値 + ステップ → 新しい値」のアニメ用データを持たせる
+        dataset = {
+            "loop-prev": formatVarValue(previousValue),
+            "loop-step": step,
+            "loop-current": formatVarValue(current)
+        };
     }
 
     const html = buildStepCard({
@@ -1068,7 +1207,8 @@ function buildForDetails(node, current, end, step, isLast, start) {
         cardClass: "step-card-loop",
         rows,
         note,
-        badge
+        badge,
+        dataset
     });
 
     return buildStepDetails(text, { html, highlightVars: [node.varName] });
