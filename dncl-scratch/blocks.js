@@ -1692,6 +1692,19 @@ function quizSetChoicesVisible(visible) {
     row.style.display = visible ? "" : "none";
 }
 
+// ステップ回答中は、操作スペースを「前へ」「次へ」だけにする
+// （通常の「回答」「ステップ回答」「一覧へ」を隠す）。終了したら戻す。
+function quizSetSteppingUI(stepping) {
+    const actionHost = document.getElementById("quiz-actions-buttons");
+    if (!actionHost) return;
+    const runBtn = actionHost.querySelector('button[onclick="run()"]');
+    const stepBtn = actionHost.querySelector('button[onclick="stepStart()"]');
+    const backBtn = actionHost.querySelector(".quiz-back-button");
+    [runBtn, stepBtn, backBtn].forEach((b) => {
+        if (b) b.style.display = stepping ? "none" : "";
+    });
+}
+
 function quizUpdateCompletionPrompt() {
     const blanks = quizGetBlankInputs();
     if (blanks.length === 0) return;
@@ -1795,6 +1808,16 @@ function quizGoToList() {
 }
 
 function quizHookJudge(quiz) {
+    // ステップの「前へ/次へ」の表示切り替えに連動して、操作スペースの中身を切り替える
+    if (typeof window.setStepButtonsVisible === "function") {
+        const originalSetStepButtonsVisible = window.setStepButtonsVisible;
+        window.setStepButtonsVisible = function (visible) {
+            const ret = originalSetStepButtonsVisible.apply(this, arguments);
+            quizSetSteppingUI(!!visible);
+            return ret;
+        };
+    }
+
     if (typeof window.run === "function") {
         const originalRun = window.run;
         window.run = function (...args) {
@@ -1915,7 +1938,7 @@ function setupQuizModeIfPresent() {
                 actionHost.appendChild(runBtn);
             }
             if (stepStartBtn) {
-                stepStartBtn.textContent = "⏭ ステップで回答";
+                stepStartBtn.textContent = "⏭ ステップ回答";
                 actionHost.appendChild(stepStartBtn);
             }
             // 「前へ」「次へ」は hidden 属性で初期非表示。stepStart() で表示される。
@@ -1925,7 +1948,7 @@ function setupQuizModeIfPresent() {
             // 問題一覧に戻るボタン
             const backBtn = document.createElement("button");
             backBtn.type = "button";
-            backBtn.textContent = "📋 問題一覧に戻る";
+            backBtn.textContent = "一覧へ";
             backBtn.className = "quiz-back-button";
             backBtn.addEventListener("click", () => quizGoToList());
             actionHost.appendChild(backBtn);

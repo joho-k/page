@@ -1075,6 +1075,7 @@ pre {
     line-height: 1.5;
 }
 
+
 /* 共通：選択肢・操作の見出しラベル */
 .quiz-choices-label,
 .quiz-actions-label {
@@ -1202,6 +1203,8 @@ pre {
 
 .quiz-choice {
     scroll-snap-align: start;
+    /* 狭い画面でチップが潰れて文字が切れる（goukei→gouk）のを防ぐ。本来の幅を保って横スクロールで見せる */
+    flex: 0 0 auto;
     border: 2px solid var(--primary-light);
     background: #ffffff;
     color: var(--primary);
@@ -1222,6 +1225,44 @@ pre {
 
 .quiz-choice:active {
     transform: scale(0.95);
+}
+
+/* スマホ表示：問題文・選択肢・操作は折り返さず1行で、はみ出しは横スクロールで見せる。
+   （ベース定義より後ろに置いて確実に上書きする） */
+@media (max-width: 768px) {
+    .quiz-question-title {
+        flex: 1 1 0;
+        min-width: 0;
+        white-space: nowrap;
+        overflow-x: auto;
+    }
+
+    .quiz-choices {
+        flex-wrap: nowrap;
+    }
+
+    /* 操作も「操作 回答 ステップ回答 一覧へ」と1行で並べ、あふれたら横スクロール */
+    .quiz-actions {
+        flex-wrap: nowrap;
+        min-width: 0;
+    }
+
+    .quiz-actions-buttons {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        min-width: 0;
+    }
+
+    .quiz-actions-buttons button {
+        flex: 0 0 auto;
+        padding: 8px 13px;
+        font-size: 14px;
+    }
+
+    /* 1行に並べるため、一覧へ の右端寄せは解除 */
+    .quiz-back-button {
+        margin-left: 0;
+    }
 }
 
 /* 全部埋まったら回答ボタンを強調 */
