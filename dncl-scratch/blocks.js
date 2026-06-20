@@ -1599,9 +1599,23 @@ function quizDisableEditingExceptBlanks() {
             el.readOnly = true;
         } else if (isSelectBlank) {
             // select の空欄もタップでポップオーバーを出せるよう有効化する。
-            // （無効だとクリックが発生せず選択肢が出ない。ネイティブのドロップダウンは
-            //   quizSetupBlankTapBehavior 側で抑止する。）
+            // （無効だとクリックが発生せず選択肢が出ない。）
             el.disabled = false;
+            // ネイティブのグレーのドロップダウンを開かせない。委譲(workspace)では
+            // 実ブラウザで効かないことがあるので、各 select に直接付ける。
+            // mousedown を target 段階で preventDefault すればドロップダウンは出ず click は発火する。
+            if (!el.dataset.nativeDropdownBlocked) {
+                el.dataset.nativeDropdownBlocked = "1";
+                const block = (e) => e.preventDefault();
+                el.addEventListener("mousedown", block);
+                el.addEventListener("pointerdown", block);
+                // キーボードで開くのも抑止
+                el.addEventListener("keydown", (e) => {
+                    if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === " " || e.key === "Enter") {
+                        e.preventDefault();
+                    }
+                });
+            }
         } else {
             el.disabled = true;
         }
@@ -1618,6 +1632,9 @@ function quizSetupChoices(quiz) {
     window.__quizChoices = quiz.choices ?? [];
     const row = bar.querySelector(".quiz-choices-row");
     if (row) row.style.display = "none";
+    // 問題ごとに作り直せるよう、いったんポップオーバーの中身を空にしておく
+    const pop = document.getElementById("quiz-choices-popover");
+    if (pop) pop.replaceChildren();
     quizHideChoicePopover();
 }
 
@@ -1629,17 +1646,20 @@ function quizApplyChoice(choice) {
         `[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
     );
     if (!target) return;
+    // 埋める前に空だったか（未選択か）を覚えておく
+    const wasEmpty = !String(target.value ?? "").trim();
     target.value = String(choice.value ?? "");
     target.dispatchEvent(new Event("change"));
     target.dispatchEvent(new Event("input"));
     target.classList.remove("quiz-blank-pulse");
 
-    // 次の空欄へフォーカスを移す
-    const idx = blanks.indexOf(target);
-    const next = idx >= 0 ? blanks[idx + 1] : null;
     workspace
-        .querySelectorAll("input[data-blank-index]")
+        .querySelectorAll(".quiz-blank-active")
         .forEach((el) => el.classList.remove("quiz-blank-active"));
+
+    // 未選択だった空欄を埋めたときだけ次の空欄へ自動で進む。
+    const idx = blanks.indexOf(target);
+    const next = wasEmpty && idx >= 0 ? blanks[idx + 1] : null;
     if (next) {
         next.classList.add("quiz-blank-active");
         next.classList.add("quiz-blank-pulse");
@@ -1647,8 +1667,9 @@ function quizApplyChoice(choice) {
         next.focus();
         quizShowChoicesUnder(next); // 選択肢ポップオーバーを次の空欄の下へ移動
     } else {
+        // 次へ進まないとき（修正したとき / 最後の空欄を埋めたとき）は選択肢を閉じる
         window.activeBlankId = null;
-        quizHideChoicePopover(); // 全部入れ終わったら閉じる
+        quizHideChoicePopover();
     }
     updateCode();
     quizUpdateCompletionPrompt();
@@ -1694,15 +1715,18 @@ function quizPositionChoicePopover(pop, target) {
 function quizShowChoicesUnder(target) {
     if (!target) return;
     const pop = quizEnsureChoicePopover();
-    pop.replaceChildren();
-    (window.__quizChoices ?? []).forEach((choice) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "quiz-choice";
-        btn.textContent = choice.label ?? "";
-        btn.addEventListener("click", () => quizApplyChoice(choice));
-        pop.append(btn);
-    });
+    // ボタンは一度だけ作る（毎回作り直すと、選択直後にボタンがDOMから外れて
+    // 画面外クリック判定が誤作動し選択肢が閉じてしまうため）。位置だけ更新する。
+    if (pop.childElementCount === 0) {
+        (window.__quizChoices ?? []).forEach((choice) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "quiz-choice";
+            btn.textContent = choice.label ?? "";
+            btn.addEventListener("click", () => quizApplyChoice(choice));
+            pop.append(btn);
+        });
+    }
     quizPositionChoicePopover(pop, target);
 }
 
@@ -1838,14 +1862,28 @@ function quizUpdateCompletionPrompt() {
 function quizSetupBlankTapBehavior() {
     window.activeBlankId = null;
 
-    // select の空欄はネイティブのドロップダウンを開かせない（選択肢はポップオーバーで出す）。
-    // mousedown を抑止するとネイティブメニューは出ず、click は通常どおり発火する。
-    ["mousedown", "touchstart"].forEach((type) => {
+    // select のネイティブのドロップダウン抑止は各要素へ直接付ける（quizDisableEditingExceptBlanks）。
+    // ここではキャプチャ段階の保険として委譲でも止めておく（動的に増えた select 対策）。
+    // ※ touchstart で preventDefault すると実機でタップ(click)自体がキャンセルされるため使わない。
+    ["pointerdown", "mousedown"].forEach((type) => {
         workspace.addEventListener(type, (event) => {
             if (event.target.closest?.("select[data-blank-index]")) {
                 event.preventDefault();
             }
-        }, { passive: false });
+        }, { capture: true });
+    });
+
+    // 画面の外（空欄でも選択肢でもない場所）をクリックしたら選択肢を閉じる。
+    document.addEventListener("click", (event) => {
+        if (event.target.closest?.("#quiz-choices-popover")) return; // 選択肢自体
+        if (event.target.closest?.("input[data-blank-index], select[data-blank-index]")) return; // 空欄
+        if (window.activeBlankId) {
+            workspace
+                .querySelectorAll(".quiz-blank-active")
+                .forEach((el) => el.classList.remove("quiz-blank-active"));
+            window.activeBlankId = null;
+        }
+        quizHideChoicePopover();
     });
 
     workspace.addEventListener("click", (event) => {
