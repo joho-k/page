@@ -559,7 +559,7 @@ window.quizData = {
         title: "マス目の数（二重ループ）",
         addedAt: "2026-06-18",
         difficulty: 4,
-        question: "たて3行のマス目を1マスずつ数えます。kosu はマスの個数で、内側のくり返しを1回まわるたびに kosu + 1 して横1マスを数えます。外側のくり返し（i）はたての3行、内側のくり返し（j）は1行分の横のマスです。マスが全部で12個（kosu が 12）になるように、内側のくり返し（横方向の列）の終わりの値をうめよう",
+        question: "たて3行のマス目を1マスずつ数えます。kosu はマスの個数で、内側のくり返しを1回まわるたびに kosu + 1 して横1マスを数えます。外側のくり返し（tate）はたての3行、内側のくり返し（yoko）は1行分の横のマスです。マスが全部で12個（kosu が 12）になるように、内側のくり返し（横方向の列）の終わりの値をうめよう",
         ast: [
             {
                 type: "assign",
@@ -568,14 +568,14 @@ window.quizData = {
             },
             {
                 type: "for",
-                varName: "i",
+                varName: "tate",
                 start: "1",
                 end: "3",
                 step: "1",
                 body: [
                     {
                         type: "for",
-                        varName: "j",
+                        varName: "yoko",
                         start: "1",
                         end: "__BLANK_blank_a__",
                         step: "1",
