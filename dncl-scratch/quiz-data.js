@@ -613,5 +613,86 @@ window.quizData = {
             }
         ],
         defaultHint: "これまでの積が入っている seki に i をかけて、新しい seki にしよう"
+    },
+    q013: {
+        title: "最大公約数（ユークリッドの互除法）",
+        addedAt: "2026-06-20",
+        difficulty: 5,
+        question: "2つの数 a=18, b=12 の最大公約数を求めて表示するようにしよう。大きいほうから小さいほうを引く操作を、2つが等しくなるまで繰り返します（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "a",
+                value: "18"
+            },
+            {
+                type: "assign",
+                name: "b",
+                value: "12"
+            },
+            {
+                type: "while",
+                condition: "a __BLANK_blank_a__ b",
+                body: [
+                    {
+                        type: "ifelse",
+                        condition: "a __BLANK_blank_b__ b",
+                        ifBody: [
+                            {
+                                type: "assign",
+                                name: "a",
+                                value: "a __BLANK_blank_c__ b"
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "assign",
+                                name: "b",
+                                value: "b - a"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"最大公約数は\" + a"
+            }
+        ],
+        choices: [
+            { label: "!=", value: "!=" },
+            { label: "==", value: "==" },
+            { label: ">", value: ">" },
+            { label: "<", value: "<" },
+            { label: "+", value: "+" },
+            { label: "-", value: "-" }
+        ],
+        answers: [
+            {
+                values: ["!=", ">", "-"],
+                correct: true,
+            },
+            {
+                values: ["==", ">", "-"],
+                correct: false,
+                hint: "a==b だと最初(18と12)で条件を満たさず、1度も繰り返されません。「等しくない間」繰り返したいので != です",
+            },
+            {
+                values: ["!=", "<", "-"],
+                correct: false,
+                hint: "a<b のときに a から b を引くと a がマイナスになってしまいます。大きいほう(a>bのとき)から引きましょう",
+            },
+            {
+                values: ["!=", ">", "+"],
+                correct: false,
+                hint: "足し算では値がどんどん増えて等しくならず、繰り返しが終わりません。引き算で小さくしていきます",
+            },
+            {
+                values: ["!=", "==", "-"],
+                correct: false,
+                hint: "a==b だと while の条件(a!=b)と矛盾し、この if は決して成り立ちません。大小を比べる > を使いましょう",
+            }
+        ],
+        defaultHint: "「2つが等しくない間」繰り返し、「a のほうが大きいとき」だけ a から b を引く、と考えよう。最後に残った値が最大公約数です"
     }
 }
