@@ -1232,6 +1232,43 @@ pre {
     transform: scale(0.95);
 }
 
+/* タッチした空欄の真下に出る選択肢ポップオーバー */
+.quiz-choices-popover {
+    position: fixed;
+    z-index: 1000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: min(92vw, 520px);
+    padding: 10px 12px;
+    background: #ffffff;
+    border: 2px solid var(--primary-light);
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0, 45, 90, 0.22);
+    animation: quizChoicesPop 0.12s ease-out;
+}
+
+/* [hidden] を確実に効かせる（display:flex の上書き対策） */
+.quiz-choices-popover[hidden] {
+    display: none;
+}
+
+/* 空欄を指す上向きの三角 */
+.quiz-choices-popover::before {
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 18px;
+    border: 9px solid transparent;
+    border-top: 0;
+    border-bottom-color: var(--primary-light);
+}
+
+@keyframes quizChoicesPop {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 /* スマホ表示：問題文・選択肢・操作は折り返さず1行で、はみ出しは横スクロールで見せる。
    （ベース定義より後ろに置いて確実に上書きする） */
 @media (max-width: 768px) {
