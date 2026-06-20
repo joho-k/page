@@ -613,5 +613,50 @@ window.quizData = {
             }
         ],
         defaultHint: "これまでの積が入っている seki に i をかけて、新しい seki にしよう"
+    },
+    q012: {
+        title: "快適な気温の範囲",
+        addedAt: "2026-06-21",
+        difficulty: 3,
+        question: "気温 temp が「20以上」かつ「30以下」のときだけ「快適です」と表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "temp",
+                value: "25"
+            },
+            {
+                type: "if",
+                condition: "temp >= 20 __BLANK_blank_a__ temp <= 30",
+                body: [
+                    {
+                        type: "print",
+                        value: "\"快適です\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "かつ", value: "かつ" },
+            { label: "または", value: "または" },
+            { label: "でない", value: "でない" },
+        ],
+        answers: [
+            {
+                values: ["かつ"],
+                correct: true,
+            },
+            {
+                values: ["または"],
+                correct: false,
+                hint: "「または」だとどちらか一方を満たすだけで表示され、寒すぎる日も暑すぎる日も当てはまってしまいます",
+            },
+            {
+                values: ["でない"],
+                correct: false,
+                hint: "2つの条件を打ち消すのではなく、両方を同時に満たすときだけ表示したいです",
+            }
+        ],
+        defaultHint: "「20以上」と「30以下」の両方を同時に満たすときだけ表示したいよ"
     }
 }
