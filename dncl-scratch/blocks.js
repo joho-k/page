@@ -1592,58 +1592,123 @@ function quizDisableEditingExceptBlanks() {
 
     const editable = workspace.querySelectorAll("input, select, textarea, button");
     editable.forEach((el) => {
-        const isBlank = el.matches?.("input[data-blank-index]");
-        if (!isBlank) {
-            el.disabled = true;
-        } else {
+        const isInputBlank = el.matches?.("input[data-blank-index]");
+        const isSelectBlank = el.matches?.("select[data-blank-index]");
+        if (isInputBlank) {
             el.disabled = false;
             el.readOnly = true;
+        } else if (isSelectBlank) {
+            // select の空欄もタップでポップオーバーを出せるよう有効化する。
+            // （無効だとクリックが発生せず選択肢が出ない。ネイティブのドロップダウンは
+            //   quizSetupBlankTapBehavior 側で抑止する。）
+            el.disabled = false;
+        } else {
+            el.disabled = true;
         }
     });
 }
 
 function quizSetupChoices(quiz) {
     const bar = document.getElementById("quiz-choices-bar");
-    const choicesEl = document.getElementById("quiz-choices");
-    if (!bar || !choicesEl) return;
+    if (!bar) return;
 
     bar.hidden = false;
-    choicesEl.replaceChildren();
+    // 選択肢はタッチした空欄の真下にポップオーバーで出すため、
+    // 上部に常設していた選択肢の行は隠す（選択肢データだけ覚えておく）。
+    window.__quizChoices = quiz.choices ?? [];
+    const row = bar.querySelector(".quiz-choices-row");
+    if (row) row.style.display = "none";
+    quizHideChoicePopover();
+}
 
-    (quiz.choices ?? []).forEach((choice) => {
+// アクティブな空欄に、選んだ選択肢の値を入れて次の空欄へ進める。
+function quizApplyChoice(choice) {
+    if (!window.activeBlankId) return;
+    const blanks = quizGetBlankInputs();
+    const target = workspace.querySelector(
+        `[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
+    );
+    if (!target) return;
+    target.value = String(choice.value ?? "");
+    target.dispatchEvent(new Event("change"));
+    target.dispatchEvent(new Event("input"));
+    target.classList.remove("quiz-blank-pulse");
+
+    // 次の空欄へフォーカスを移す
+    const idx = blanks.indexOf(target);
+    const next = idx >= 0 ? blanks[idx + 1] : null;
+    workspace
+        .querySelectorAll("input[data-blank-index]")
+        .forEach((el) => el.classList.remove("quiz-blank-active"));
+    if (next) {
+        next.classList.add("quiz-blank-active");
+        next.classList.add("quiz-blank-pulse");
+        window.activeBlankId = next.dataset.blankIndex;
+        next.focus();
+        quizShowChoicesUnder(next); // 選択肢ポップオーバーを次の空欄の下へ移動
+    } else {
+        window.activeBlankId = null;
+        quizHideChoicePopover(); // 全部入れ終わったら閉じる
+    }
+    updateCode();
+    quizUpdateCompletionPrompt();
+}
+
+// 選択肢ポップオーバー本体（body直下に1つだけ作る）。
+function quizEnsureChoicePopover() {
+    let pop = document.getElementById("quiz-choices-popover");
+    if (pop) return pop;
+    pop = document.createElement("div");
+    pop.id = "quiz-choices-popover";
+    pop.className = "quiz-choices-popover";
+    pop.hidden = true;
+    document.body.append(pop);
+    // スクロール/リサイズしても空欄の下に追従させる
+    const reposition = () => {
+        if (pop.hidden || !window.activeBlankId) return;
+        const t = workspace.querySelector(
+            `[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
+        );
+        if (t) quizPositionChoicePopover(pop, t);
+        else quizHideChoicePopover();
+    };
+    window.addEventListener("scroll", reposition, true);
+    window.addEventListener("resize", reposition);
+    return pop;
+}
+
+function quizPositionChoicePopover(pop, target) {
+    pop.hidden = false; // 幅を測るため先に表示
+    const r = target.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const margin = 8;
+    let left = r.left;
+    if (left + pop.offsetWidth > vw - margin) {
+        left = vw - margin - pop.offsetWidth;
+    }
+    pop.style.left = `${Math.max(margin, left)}px`;
+    pop.style.top = `${r.bottom + 6}px`;
+}
+
+// 指定した空欄の真下に選択肢ポップオーバーを表示する。
+function quizShowChoicesUnder(target) {
+    if (!target) return;
+    const pop = quizEnsureChoicePopover();
+    pop.replaceChildren();
+    (window.__quizChoices ?? []).forEach((choice) => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "quiz-choice";
         btn.textContent = choice.label ?? "";
-        btn.addEventListener("click", () => {
-            if (!window.activeBlankId) return;
-            const blanks = quizGetBlankInputs();
-            const target = workspace.querySelector(
-                `[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
-            );
-            if (!target) return;
-            target.value = String(choice.value ?? "");
-            target.dispatchEvent(new Event("change"));
-            target.dispatchEvent(new Event("input"));
-            target.classList.remove("quiz-blank-pulse");
-
-            // move focus to next blank
-            const idx = blanks.indexOf(target);
-            const next = idx >= 0 ? blanks[idx + 1] : null;
-            workspace
-                .querySelectorAll("input[data-blank-index]")
-                .forEach((el) => el.classList.remove("quiz-blank-active"));
-            if (next) {
-                next.classList.add("quiz-blank-active");
-                next.classList.add("quiz-blank-pulse");
-                window.activeBlankId = next.dataset.blankIndex;
-                next.focus();
-            }
-            updateCode();
-            quizUpdateCompletionPrompt();
-        });
-        choicesEl.append(btn);
+        btn.addEventListener("click", () => quizApplyChoice(choice));
+        pop.append(btn);
     });
+    quizPositionChoicePopover(pop, target);
+}
+
+function quizHideChoicePopover() {
+    const pop = document.getElementById("quiz-choices-popover");
+    if (pop) pop.hidden = true;
 }
 
 function quizGetBlankInputs() {
@@ -1747,6 +1812,7 @@ function quizSetSteppingUI(stepping) {
     [runBtn, stepBtn, backBtn].forEach((b) => {
         if (b) b.style.display = stepping ? "none" : "";
     });
+    if (stepping) quizHideChoicePopover(); // ステップ回答中は選択肢を閉じる
 }
 
 function quizUpdateCompletionPrompt() {
@@ -1771,6 +1837,17 @@ function quizUpdateCompletionPrompt() {
 
 function quizSetupBlankTapBehavior() {
     window.activeBlankId = null;
+
+    // select の空欄はネイティブのドロップダウンを開かせない（選択肢はポップオーバーで出す）。
+    // mousedown を抑止するとネイティブメニューは出ず、click は通常どおり発火する。
+    ["mousedown", "touchstart"].forEach((type) => {
+        workspace.addEventListener(type, (event) => {
+            if (event.target.closest?.("select[data-blank-index]")) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    });
+
     workspace.addEventListener("click", (event) => {
         const target = event.target.closest?.(
             "input[data-blank-index], select[data-blank-index]"
@@ -1784,6 +1861,7 @@ function quizSetupBlankTapBehavior() {
             }
             target.classList.remove("quiz-blank-active");
             window.activeBlankId = null;
+            quizHideChoicePopover(); // もう一度タッチして解除したら選択肢も閉じる
             updateCode();
             quizUpdateCompletionPrompt();
             return;
@@ -1795,6 +1873,7 @@ function quizSetupBlankTapBehavior() {
         target.classList.remove("quiz-blank-pulse");
         window.activeBlankId = id;
         target.focus();
+        quizShowChoicesUnder(target); // タッチした空欄の真下に選択肢を出す
     });
 }
 
@@ -1804,10 +1883,10 @@ function quizFocusFirstBlank() {
     workspace
         .querySelectorAll("input[data-blank-index]")
         .forEach((el) => el.classList.remove("quiz-blank-active", "quiz-blank-pulse"));
-    blanks[0].classList.add("quiz-blank-active");
+    // 選択肢はタップで出す。最初は出さず、先頭の空欄を点滅させてタップを促すだけにする。
     blanks[0].classList.add("quiz-blank-pulse");
-    window.activeBlankId = blanks[0].dataset.blankIndex;
-    blanks[0].focus();
+    window.activeBlankId = null;
+    quizHideChoicePopover();
 }
 
 function quizShowResultDialog(ok, hintMessage = "") {
