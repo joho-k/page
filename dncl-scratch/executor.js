@@ -969,7 +969,12 @@ function describeConcatOperand(expr) {
 // ─── 図解カード（案1: 図解中心）のための部品 ───────────────
 function isStringLiteral(expr) {
     const t = String(expr).trim();
-    return (t.startsWith('"') && t.endsWith('"')) || (t.startsWith('“') && t.endsWith('”'));
+    const isDouble = t.startsWith('"') && t.endsWith('"');
+    const isCurly = t.startsWith('“') && t.endsWith('”');
+    if (!isDouble && !isCurly) return false;
+    // 連結（"おつりは" + otsuri + "円" など）を1つの文字列リテラルと
+    // 誤認しないよう、内側に引用符が残っていればリテラルとみなさない
+    return !/["“”]/.test(t.slice(1, -1));
 }
 
 function stripQuotes(expr) {
