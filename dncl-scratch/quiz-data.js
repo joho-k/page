@@ -613,5 +613,60 @@ window.quizData = {
             }
         ],
         defaultHint: "これまでの積が入っている seki に i をかけて、新しい seki にしよう"
+    },
+    q013: {
+        title: "おつりの計算",
+        addedAt: "2026-06-22",
+        difficulty: 1,
+        question: "1000円を出して、350円のお弁当を買ったときのおつりが表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "harau",
+                value: "1000"
+            },
+            {
+                type: "assign",
+                name: "nedan",
+                value: "350"
+            },
+            {
+                type: "assign",
+                name: "otsuri",
+                value: "harau __BLANK_blank_a__ nedan"
+            },
+            {
+                type: "print",
+                value: "\"おつりは\" + otsuri + \"円\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["-"],
+                correct: true,
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算では払った金額より増えてしまいます",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "掛け算ではおつりになりません",
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "割り算ではおつりになりません",
+            }
+        ],
+        defaultHint: "払ったお金から値段を引くとおつりになるよ"
     }
 }
