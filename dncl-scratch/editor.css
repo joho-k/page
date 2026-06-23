@@ -546,6 +546,37 @@
     outline: none;
 }
 
+/* 計算ブロックの右の被演算子・表示するの中身のドロップゾーン。
+   入れ子の文字列結合 [(A)+([(B)+(C)])] などをインラインで並べる。 */
+.expr-right-zone,
+.print-zone {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 0;
+    padding: 0 6px;
+    border-left: none;
+    border: 1px dashed rgba(41, 56, 75, 0.32);
+    border-radius: 7px;
+    background: rgba(41, 56, 75, 0.04);
+    min-width: 48px;
+    min-height: 26px;
+    vertical-align: middle;
+}
+
+.expr-right-zone::after,
+.print-zone::after {
+    display: none;
+}
+
+.expr-right-zone .assign-value,
+.print-zone .assign-value {
+    background: transparent;
+    border: none;
+    outline: none;
+    min-width: 0;
+}
+
 /* else */
 .else-area {
     margin-top: 4px;

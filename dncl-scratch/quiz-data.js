@@ -627,7 +627,7 @@ window.quizData = {
             },
             {
                 type: "print",
-                value: "\"こんにちは、\" __BLANK_blank_a__ namae __BLANK_blank_b__ \"さん！\""
+                value: "\"こんにちは、\" __BLANK_blank_a__ (namae __BLANK_blank_b__ \"さん！\")"
             }
         ],
         choices: [

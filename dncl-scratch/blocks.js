@@ -713,8 +713,10 @@ function createExprBlock() {
     div.dataset.type = "expr";
     assignBlockId(div);
 
+    // 右の被演算子は計算ブロックも入れられるドロップゾーンにする。
+    // これにより [(A)+([(B)+(C)])] のように入れ子で文字列結合などをつなげられる。
     div.innerHTML = `
-      <input value="x">
+      <input class="expr-left" value="x">
       <select>
         <option value="+">＋</option>
         <option value="-">－</option>
@@ -722,13 +724,24 @@ function createExprBlock() {
         <option value="/">／</option>
         <option value="%">%</option>
       </select>
-      <input value="1">
+      <div class="children dropzone expr-zone expr-right-zone">
+        <input class="assign-value expr-right" value="1" placeholder="直接入力、または計算ブロックをここに">
+      </div>
     `;
 
     const inputs = div.querySelectorAll("input");
     inputs.forEach(autoResizeInput);
 
     div.querySelector("select").addEventListener("change", updateCode);
+
+    const rightZone = div.querySelector(".expr-right-zone");
+    enableDrop(rightZone, {
+        onlyExprLike: true,
+        singleBlock: true,
+        skipPlaceholder: true,
+        onChange: () => syncAssignZone(rightZone)
+    });
+    syncAssignZone(rightZone);
 
     addDeleteButton(div);
     return div;
@@ -813,13 +826,25 @@ function createPrintBlock() {
     div.dataset.type = "print";
     assignBlockId(div);
 
+    // 表示する(...) の中身も、直接入力に加えて計算ブロック（文字列結合など）を
+    // 入れられるドロップゾーンにする。
     div.innerHTML = `
       表示する(
-        <input value="x">
+        <div class="children dropzone expr-zone print-zone">
+          <input class="assign-value print-value" value="x" placeholder="直接入力、または計算ブロックをここに">
+        </div>
       )
     `;
 
-    autoResizeInput(div.querySelector("input"));
+    const zone = div.querySelector(".print-zone");
+    autoResizeInput(zone.querySelector("input"));
+    enableDrop(zone, {
+        onlyExprLike: true,
+        singleBlock: true,
+        skipPlaceholder: true,
+        onChange: () => syncAssignZone(zone)
+    });
+    syncAssignZone(zone);
 
     addDeleteButton(div);
     return div;
@@ -1096,10 +1121,15 @@ function buildAST(container) {
         }
 
         if (type === "print") {
+            const zone = node.querySelector(".print-zone");
+            const child = zone ? zone.querySelector(".block") : null;
+            const valueInput = zone
+                ? zone.querySelector(".assign-value")
+                : node.querySelector("input");
             ast.push({
                 type,
                 blockId: node.dataset.blockId,
-                value: node.querySelector("input").value
+                value: child ? buildExpression(child) : (valueInput ? valueInput.value : "")
             });
         }
 
@@ -1237,10 +1267,22 @@ function buildExpression(node) {
     const hasOperatorSelect = Boolean(node.querySelector("select"));
 
     if (type === "expr" || (node.classList.contains("expr") && hasOperatorSelect)) {
-        const i = node.querySelectorAll("input");
         const op = node.querySelector("select").value;
+        const leftInput = node.querySelector(".expr-left") || node.querySelectorAll("input")[0];
+        const left = leftInput ? leftInput.value : "";
 
-        return `${i[0].value} ${op} ${i[1].value}`;
+        const rightZone = node.querySelector(".expr-right-zone");
+        let right;
+        if (rightZone) {
+            const rightBlock = rightZone.querySelector(".block");
+            right = rightBlock
+                ? `(${buildExpression(rightBlock)})`
+                : (rightZone.querySelector(".assign-value")?.value ?? "");
+        } else {
+            right = node.querySelectorAll("input")[1]?.value ?? "";
+        }
+
+        return `${left} ${op} ${right}`;
     }
 
     if (type === "random") {
@@ -1417,6 +1459,85 @@ function parseSimpleBinaryExpr(raw) {
     return null;
 }
 
+// 式全体を1組で囲んでいる丸カッコを1段はずす。
+// 文字列リテラル内のカッコは数えない。( (a)+(b) のような全体を囲んでいないカッコは残す )
+function stripOuterParens(raw) {
+    let s = String(raw ?? "").trim();
+    while (s.startsWith("(") && s.endsWith(")")) {
+        let depth = 0;
+        let inStr = false;
+        let strClose = "";
+        let wraps = true;
+        for (let i = 0; i < s.length; i += 1) {
+            const c = s[i];
+            if (inStr) {
+                if (c === strClose) inStr = false;
+                continue;
+            }
+            if (c === '"' || c === "“") {
+                inStr = true;
+                strClose = c === "“" ? "”" : '"';
+                continue;
+            }
+            if (c === "(") depth += 1;
+            else if (c === ")") {
+                depth -= 1;
+                if (depth === 0 && i !== s.length - 1) { wraps = false; break; }
+            }
+        }
+        if (!wraps || depth !== 0) break;
+        s = s.slice(1, -1).trim();
+    }
+    return s;
+}
+
+// 演算子のスロットを、空欄(__BLANK__)なら空欄セレクトに、そうでなければ通常の値にする。
+function applyOpSelectBlankOrValue(opSelect, op) {
+    const blankId = parseBlankToken(op);
+    if (blankId !== null) {
+        opSelect.dataset.blankIndex = blankId;
+        opSelect.classList.add("quiz-blank");
+        opSelect.innerHTML = `
+            <option value=""></option>
+            <option value="+">＋</option>
+            <option value="-">－</option>
+            <option value="*">＊</option>
+            <option value="/">／</option>
+            <option value="%">%</option>
+        `;
+        opSelect.value = "";
+    } else {
+        opSelect.value = op;
+    }
+}
+
+// 二項式の文字列から計算ブロック(expr)を組み立てる。
+// 右側がさらに二項式なら入れ子の expr ブロックにして、
+// [(A)+([(B)+(C)])] のように文字列結合などをつなげられるようにする。
+function buildExprBlockFromRaw(raw) {
+    const parts = parseSimpleBinaryExpr(raw);
+    if (!parts) return null;
+
+    const expr = createExprBlock();
+    const leftInput = expr.querySelector(".expr-left");
+    const opSelect = expr.querySelector("select");
+    const rightZone = expr.querySelector(".expr-right-zone");
+    const rightInput = rightZone.querySelector(".assign-value");
+
+    setInputMaybeBlank(leftInput, parts.left);
+    applyOpSelectBlankOrValue(opSelect, parts.op);
+
+    const nested = buildExprBlockFromRaw(stripOuterParens(parts.right));
+    if (nested) {
+        rightZone.insertBefore(nested, rightInput);
+        syncAssignZone(rightZone);
+    } else {
+        setInputMaybeBlank(rightInput, stripOuterParens(parts.right));
+    }
+
+    return expr;
+}
+
 function loadProgramFromAst(ast) {
     workspace.innerHTML = "";
     setSelectedArrayBlock(null);
@@ -1439,23 +1560,15 @@ function loadProgramFromAst(ast) {
                     const inputs = expr.querySelectorAll("input");
                     const opSelect = expr.querySelector("select");
                     setInputMaybeBlank(inputs[0], parts.left);
-                    const blankId = parseBlankToken(parts.op);
-                    if (blankId !== null) {
-                        opSelect.dataset.blankIndex = blankId;
-                        opSelect.classList.add("quiz-blank");
-                        opSelect.innerHTML = `
-                            <option value=""></option>
-                            <option value="+">＋</option>
-                            <option value="-">－</option>
-                            <option value="*">＊</option>
-                            <option value="/">／</option>
-                            <option value="%">%</option>
-                        `;
-                        opSelect.value = "";
+                    applyOpSelectBlankOrValue(opSelect, parts.op);
+                    const nestedRight = buildExprBlockFromRaw(stripOuterParens(parts.right));
+                    const rightZone = expr.querySelector(".expr-right-zone");
+                    if (nestedRight && rightZone) {
+                        rightZone.insertBefore(nestedRight, inputs[1]);
+                        syncAssignZone(rightZone);
                     } else {
-                        opSelect.value = parts.op;
+                        setInputMaybeBlank(inputs[1], parts.right);
                     }
-                    setInputMaybeBlank(inputs[1], parts.right);
                     zone.insertBefore(expr, valueInput);
                     syncAssignZone(zone);
                 } else {
@@ -1468,7 +1581,22 @@ function loadProgramFromAst(ast) {
 
             if (node.type === "print") {
                 const b = createPrintBlock();
-                setInputMaybeBlank(b.querySelector("input"), node.value ?? "0");
+                const zone = b.querySelector(".print-zone");
+                const valueInput = zone.querySelector(".assign-value");
+                const rawValue = node.value ?? "0";
+
+                // 空欄を含む式（例: 文字列結合の + を答えさせる）は計算ブロックで表現する。
+                // 空欄を含まない通常の表示はこれまでどおり直接入力のまま。
+                const exprBlock = /__BLANK/.test(rawValue)
+                    ? buildExprBlockFromRaw(rawValue)
+                    : null;
+                if (exprBlock) {
+                    zone.insertBefore(exprBlock, valueInput);
+                    syncAssignZone(zone);
+                } else {
+                    setInputMaybeBlank(valueInput, rawValue);
+                }
+
                 container.appendChild(b);
                 return;
             }
