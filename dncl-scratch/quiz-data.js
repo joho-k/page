@@ -618,7 +618,7 @@ window.quizData = {
         title: "最大公約数（ユークリッドの互除法）",
         addedAt: "2026-06-20",
         difficulty: 5,
-        question: "2つの数 a=18, b=12 の最大公約数を求めて表示するようにしよう。大きいほうから小さいほうを引く操作を、2つが等しくなるまで繰り返します（3か所の穴をうめよう）",
+        question: "2つの数 a=18, b=12 の最大公約数を求めて表示しよう。ユークリッドの互除法では、2つの数が等しくなるまで「大きいほうから小さいほうを引く」操作を繰り返し、最後に残った値が最大公約数になります。たとえば (18, 12) は (6, 12) → (6, 6) と変化し、最大公約数は 6 です。一番上の while の条件（等しくない間くり返す）はうめてあるので、残り2か所の穴をうめよう",
         ast: [
             {
                 type: "assign",
@@ -632,7 +632,7 @@ window.quizData = {
             },
             {
                 type: "while",
-                condition: "a __BLANK_blank_a__ b",
+                condition: "a != b",
                 body: [
                     {
                         type: "ifelse",
@@ -660,7 +660,6 @@ window.quizData = {
             }
         ],
         choices: [
-            { label: "!=", value: "!=" },
             { label: "==", value: "==" },
             { label: ">", value: ">" },
             { label: "<", value: "<" },
@@ -669,26 +668,21 @@ window.quizData = {
         ],
         answers: [
             {
-                values: ["!=", ">", "-"],
+                values: [">", "-"],
                 correct: true,
             },
             {
-                values: ["==", ">", "-"],
-                correct: false,
-                hint: "a==b だと最初(18と12)で条件を満たさず、1度も繰り返されません。「等しくない間」繰り返したいので != です",
-            },
-            {
-                values: ["!=", "<", "-"],
+                values: ["<", "-"],
                 correct: false,
                 hint: "a<b のときに a から b を引くと a がマイナスになってしまいます。大きいほう(a>bのとき)から引きましょう",
             },
             {
-                values: ["!=", ">", "+"],
+                values: [">", "+"],
                 correct: false,
                 hint: "足し算では値がどんどん増えて等しくならず、繰り返しが終わりません。引き算で小さくしていきます",
             },
             {
-                values: ["!=", "==", "-"],
+                values: ["==", "-"],
                 correct: false,
                 hint: "a==b だと while の条件(a!=b)と矛盾し、この if は決して成り立ちません。大小を比べる > を使いましょう",
             }
