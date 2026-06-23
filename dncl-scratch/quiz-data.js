@@ -613,5 +613,50 @@ window.quizData = {
             }
         ],
         defaultHint: "これまでの積が入っている seki に i をかけて、新しい seki にしよう"
+    },
+    q014: {
+        title: "あいさつメッセージ",
+        addedAt: "2026-06-23",
+        difficulty: 2,
+        question: "namae に入っている名前を使って、「こんにちは、花子さん！」のように表示するようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "namae",
+                value: "\"花子\""
+            },
+            {
+                type: "print",
+                value: "\"こんにちは、\" __BLANK_blank_a__ namae __BLANK_blank_b__ \"さん！\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["+", "+"],
+                correct: true,
+            },
+            {
+                values: ["-", "-"],
+                correct: false,
+                hint: "引き算では文字をつなげられません。文字をつなぐ記号を考えよう",
+            },
+            {
+                values: ["*", "*"],
+                correct: false,
+                hint: "掛け算では文字をつなげられません。文字をつなぐ記号を考えよう",
+            },
+            {
+                values: ["+", "-"],
+                correct: false,
+                hint: "前と後ろ、どちらも同じ「つなぐ」記号にそろえよう",
+            }
+        ],
+        defaultHint: "DNCLでは文字どうしを「+」でつなげて1つの文章にできるよ"
     }
 }
