@@ -613,5 +613,73 @@ window.quizData = {
             }
         ],
         defaultHint: "これまでの積が入っている seki に i をかけて、新しい seki にしよう"
+    },
+    q014: {
+        title: "大きいほうを求める",
+        addedAt: "2026-06-24",
+        difficulty: 3,
+        question: "2つの数 a=3, b=7 のうち大きいほうを saidai に入れて表示しよう。まず saidai に a を入れておき、b のほうが大きければ saidai を b に更新します（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "a",
+                value: "3"
+            },
+            {
+                type: "assign",
+                name: "b",
+                value: "7"
+            },
+            {
+                type: "assign",
+                name: "saidai",
+                value: "a"
+            },
+            {
+                type: "if",
+                condition: "b __BLANK_blank_a__ saidai",
+                body: [
+                    {
+                        type: "assign",
+                        name: "saidai",
+                        value: "__BLANK_blank_b__"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"大きいほうは\" + saidai"
+            }
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: "<", value: "<" },
+            { label: "==", value: "==" },
+            { label: "a", value: "a" },
+            { label: "b", value: "b" },
+            { label: "saidai", value: "saidai" }
+        ],
+        answers: [
+            {
+                values: [">", "b"],
+                correct: true,
+            },
+            {
+                values: ["<", "b"],
+                correct: false,
+                hint: "小さいときに更新すると、小さいほうを選んでしまいます。bが大きいときに更新します",
+            },
+            {
+                values: [">", "saidai"],
+                correct: false,
+                hint: "saidai をそのまま入れても値は変わりません。大きかった b を入れます",
+            },
+            {
+                values: ["==", "b"],
+                correct: false,
+                hint: "等しいかどうかではなく、b のほうが大きいかどうかで比べます",
+            }
+        ],
+        defaultHint: "「b が saidai より大きいとき」だけ、saidai を b に更新しよう"
     }
 }
