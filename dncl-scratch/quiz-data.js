@@ -376,7 +376,7 @@ window.quizData = {
     },
     q008: {
         title: "偶数の合計（1〜10）",
-        addedAt: "2026-06-13",
+        addedAt: "2026-06-14",
         difficulty: 3,
         question: "1から10までの整数のうち、偶数だけを合計して表示するようにしよう（3か所の穴をうめよう）",
         ast: [
@@ -613,5 +613,79 @@ window.quizData = {
             }
         ],
         defaultHint: "これまでの積が入っている seki に i をかけて、新しい seki にしよう"
+    },
+    q012: {
+        title: "配ったおかしの数（二重ループ）",
+        addedAt: "2026-06-18",
+        difficulty: 4,
+        question: "お菓子の個数が15個あります。3人の友だちに、おかしを1人あたり同じ数ずつ配れるように、空欄を埋めよう。",
+        ast: [
+            {
+                type: "assign",
+                name: "kosu",
+                value: "15"
+            },
+            {
+                type: "for",
+                varName: "hito",
+                start: "1",
+                end: "3",
+                step: "1",
+                body: [
+                    {
+                        type: "print",
+                        value: "hito + \"人目にお菓子を配ります。\""
+                    },
+                    {
+                        type: "for",
+                        varName: "okashi",
+                        start: "1",
+                        end: "__BLANK_blank_a__",
+                        step: "1",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "kosu",
+                                value: "kosu - 1"
+                            },
+                            {
+                                type: "print",
+                                value: "\"  \" + okashi + \"個目のお菓子を渡しました。残りは\" + kosu + \"個です。\""
+                            },
+                        ]
+                    }, {
+                        value: "\"今残っているお菓子の個数は\" + kosu + \"個です。\""
+                    }
+                ],
+            }
+        ],
+        choices: [
+            { label: "3", value: "3" },
+            { label: "5", value: "5" },
+            { label: "7", value: "7" },
+            { label: "15", value: "15" },
+        ],
+        answers: [
+            {
+                values: ["5"],
+                correct: true,
+            },
+            {
+                values: ["3"],
+                correct: false,
+                hint: "1人に3個渡していることになります。15個のお菓子を平等に渡すためには、1人に何個のお菓子を渡せばいいでしょうか？",
+            },
+            {
+                values: ["7"],
+                correct: false,
+                hint: "1人に7個渡していることになります。15個のお菓子を平等に渡すためには、1人に何個のお菓子を渡せばいいでしょうか？",
+            },
+            {
+                values: ["15"],
+                correct: false,
+                hint: "1人に15個渡していることになります。15個のお菓子を平等に渡すためには、1人に何個のお菓子を渡せばいいでしょうか？",
+            }
+        ],
+        defaultHint: "15個のお菓子を平等に渡すためには、1人に何個のお菓子を渡せばいいでしょうか？"
     }
 }
