@@ -198,6 +198,18 @@ function updatePlaceholder(container) {
 // ----------------
 // 入力幅
 // ----------------
+// 全角（日本語など）の文字は半角の約2倍の幅で表示されるので、
+// 文字数ではなく「見た目の幅」で input の幅を決める（横幅不足で見切れるのを防ぐ）。
+function inputDisplayWidth(value) {
+    let width = 0;
+    for (const ch of String(value)) {
+        // 日本語の全角文字（CJK記号・約物、ひらがな、カタカナ、漢字、全角英数記号）を幅2とみなす
+        const isWide = /[\u3000-\u303F\u3040-\u30FF\u31F0-\u31FF\u3200-\u33FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF00-\uFF60\uFFE0-\uFFE6]/.test(ch);
+        width += isWide ? 2 : 1;
+    }
+    return width;
+}
+
 function autoResizeInput(input) {
     const resize = () => {
         if (input.classList.contains("assign-value")) {
@@ -205,7 +217,7 @@ function autoResizeInput(input) {
             return;
         }
 
-        input.style.width = (input.value.length + 1) + "ch";
+        input.style.width = (inputDisplayWidth(input.value) + 1) + "ch";
     };
 
     input.addEventListener("input", () => {
@@ -1952,6 +1964,10 @@ function quizShowResultDialog(ok, hintMessage = "") {
     hintBox.className = "quiz-result-body";
     hintBox.textContent = hintText;
     body.append(outputLabel, outputBox, hintBox);
+    // 正解時は「他の問題を解く」を主ボタンに、「もう一度問題を確認する」を控えめに。
+    // 不正解時は「もう一度問題を確認する」を主ボタンに、「他の問題を解く」を控えめに。
+    retryBtn.classList.toggle("quiz-result-secondary", ok);
+    othersBtn.classList.toggle("quiz-result-secondary", !ok);
     // 「もう一度問題を確認する」＝ダイアログを閉じて問題画面に戻る
     retryBtn.onclick = () => dialog.close();
     // 「他の問題を解く」＝問題一覧へ移動
@@ -2087,6 +2103,7 @@ function setupQuizModeIfPresent() {
         const stepStartBtn = runButtons.querySelector('button[onclick="stepStart()"]');
         const prevBtn = runButtons.querySelector('#step-prev-button');
         const nextBtn = runButtons.querySelector('#step-next-button');
+        const skipBtn = runButtons.querySelector('#step-skip-button');
         const shareBtn = runButtons.querySelector('button[onclick="shareProgramUrl()"]');
 
         if (shareBtn) shareBtn.style.display = "none";
@@ -2105,6 +2122,11 @@ function setupQuizModeIfPresent() {
             // 「前へ」「次へ」は hidden 属性で初期非表示。stepStart() で表示される。
             if (prevBtn) actionHost.appendChild(prevBtn);
             if (nextBtn) actionHost.appendChild(nextBtn);
+            // ステップ回答中に最後まで進めて答え合わせするボタン（通常の「▶ 回答」と同じ）
+            if (skipBtn) {
+                skipBtn.textContent = "⏩ 最後まで回答";
+                actionHost.appendChild(skipBtn);
+            }
 
             // 問題一覧に戻るボタン
             const backBtn = document.createElement("button");

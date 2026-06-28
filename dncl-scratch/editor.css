@@ -969,10 +969,14 @@ pre {
 .concat-chip-str {
     justify-content: center;
     background: #e7f4e7;
+}
+
+.concat-chip-str .chip-label {
+    color: #4a8a4a;
+}
+
+.concat-chip-str .chip-val {
     color: #2c5a2c;
-    font-family: "Courier New", monospace;
-    font-size: 17px;
-    font-weight: 700;
 }
 
 .concat-plus {
