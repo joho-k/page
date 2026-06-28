@@ -969,7 +969,10 @@ function describeConcatOperand(expr) {
 // ─── 図解カード（案1: 図解中心）のための部品 ───────────────
 function isStringLiteral(expr) {
     const t = String(expr).trim();
-    return (t.startsWith('"') && t.endsWith('"')) || (t.startsWith('“') && t.endsWith('”'));
+    // 先頭と末尾が引用符でも、中身が連結式（例: " " + x + "…"）の場合があるので、
+    // トークン化して「文字列リテラル1個だけ」のときのみ true とする。
+    const tokens = tokenize(t);
+    return tokens.length === 1 && (tokens[0].startsWith('"') || tokens[0].startsWith('“'));
 }
 
 function stripQuotes(expr) {
@@ -1324,7 +1327,11 @@ function buildAssignExplanation(node, scope, result) {
 function buildConcatChip(operand, scope) {
     const t = operand.trim();
     if (isStringLiteral(t)) {
-        return `<span class="concat-chip concat-chip-str">${escapeHtml(stripQuotes(t))}</span>`;
+        // 「文字列」ラベルを上に出して、書いた文字をそのまま表示することを伝える
+        return `<span class="concat-chip concat-chip-str">`
+            + `<span class="chip-label">文字列</span>`
+            + `<span class="chip-val">${escapeHtml(stripQuotes(t))}</span>`
+            + `</span>`;
     }
     const v = safeEvalWithScope(t, scope);
     const label = isSimpleVariable(t) ? t : prettyExpr(t);
@@ -1870,8 +1877,10 @@ function restoreState(s) {
 function setStepButtonsVisible(visible) {
     const prev = document.getElementById("step-prev-button");
     const next = document.getElementById("step-next-button");
+    const skip = document.getElementById("step-skip-button");
     if (prev) prev.hidden = !visible;
     if (next) next.hidden = !visible;
+    if (skip) skip.hidden = !visible;
 }
 
 function updateStepButtons() {

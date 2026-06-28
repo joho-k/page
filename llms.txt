@@ -1,0 +1,43 @@
+# 情報の教室（joho-kyoshitsu.com）
+
+> 高校「情報I」および国家試験「ITパスポート」「基本情報技術者試験」の学習を支援する無料の教材サイト。用語解説・実行型プログラミング教材・共通テスト対策の演習問題を提供しています。すべて日本語、登録不要・無料で利用できます。
+
+運営方針: 解説は厳密な正確さよりも、初学者への伝わりやすさを優先しています。そのため実際の定義とは多少異なる表現になっている場合があります。
+
+## 主要コンテンツ
+
+- [用語の辞典](https://joho-kyoshitsu.com/lexicon/index.html): 情報I・基本情報技術者試験・ITパスポートの重要用語を図解と例えで解説する用語集（全21語）。
+- [実プロ](https://joho-kyoshitsu.com/dncl/index.html): 実際にプログラムを動かしながら学べる情報I対応のプログラミング教材。
+- [実プロ問題集](https://joho-kyoshitsu.com/dncl/question.html): 情報Iの内容に沿ったプログラミング課題を実行して解く演習。
+- [共テプロトレ](https://joho-kyoshitsu.com/dncl-scratch/index.html): 共通テスト「情報I」対応。ブロックを並べてDNCLプログラムを組み立て実行できるトレーニング教材。
+- [共テプロトレ 練習問題集](https://joho-kyoshitsu.com/dncl-scratch/practice.html): 共通テスト形式のDNCL典型問題をヒント・解説付きで段階的に練習。
+- [情報I 試作問題まとめ](https://joho-kyoshitsu.com/sisaku/index.html): 大学入学共通テスト「情報I」の試作問題リンク集。出題傾向の把握に。
+
+## 用語の辞典（個別ページ）
+
+- [二分探索アルゴリズム](https://joho-kyoshitsu.com/lexicon/word/algorithm-binary-search/index.html): ソート済みデータの中央と比べ、探索範囲を半分ずつ絞り込む「二分探索」の仕組みを図解でやさしく解説。情報Iやアルゴリズムの基礎学習に。
+- [音声のデジタル表現](https://joho-kyoshitsu.com/lexicon/word/audio-digital/index.html): 標本化(サンプリング)・量子化・符号化で音声を0と1に変換する仕組みを、実際に聞き比べながら解説。情報Iの基礎固めに最適です。
+- [色のデジタル表現](https://joho-kyoshitsu.com/lexicon/word/color-digital/index.html): RGBやカラーコードとは？色がどのように0と1で表現されているのかを、図解でやさしく解説します。情報Ⅰ対策や共通テストの基礎固めにも最適です。
+- [共通鍵暗号方式](https://joho-kyoshitsu.com/lexicon/word/common-key/index.html): 共通鍵暗号は、暗号化と復号に同じ鍵を用いる暗号方式です。情報Iの用語をやさしく解説します。
+- [著作権](https://joho-kyoshitsu.com/lexicon/word/copyright/index.html): 著作権とは何か、著作者が持つ権利と守られる範囲、禁止される利用方法、正しい引用や利用の仕方を学びます。
+- [データの圧縮](https://joho-kyoshitsu.com/lexicon/word/data-compression/index.html): ファイルサイズを小さくする「データの圧縮」の考え方（可逆圧縮・非可逆圧縮）を図解でやさしく解説。情報Iや共通テスト対策に。
+- [データの大きさを表す単位](https://joho-kyoshitsu.com/lexicon/word/data-size-units/index.html): ビットやバイトなど、データの大きさを表す単位を、初心者にもわかりやすく図解で解説。共通テスト「情報Ⅰ」対策にも対応。
+- [デジタル情報と進数表現](https://joho-kyoshitsu.com/lexicon/word/digital-and-binary/index.html): コンピュータが扱う数の仕組みを、10進数と2進数の違いから桁の考え方まで、わかりやすく解説。デジタル情報の基本を楽しく学ぼう！
+- [暗号化](https://joho-kyoshitsu.com/lexicon/word/encryption/index.html): 暗号とは、情報を保護するための技術です。情報Iで学ぶ基礎知識をわかりやすく解説します。
+- [画像のデジタル表現](https://joho-kyoshitsu.com/lexicon/word/image-digital/index.html): 画像はどのようにデジタルで保存されるのか？ビットマップや解像度、色の表現など、画像のデジタル化の仕組みを図とともにやさしく解説します。情報Ⅰや共通テスト対策にも役立ちます。
+- [情報デザイン](https://joho-kyoshitsu.com/lexicon/word/info-design/index.html): 情報デザインとユニバーサルデザインの考え方を学び、年齢や能力にかかわらず誰もが理解しやすく利用しやすい情報表現を考えます。
+- [情報の特性](https://joho-kyoshitsu.com/lexicon/word/info-properties/index.html): 形がない情報ならではの「残存性・複製性・伝播性」などの特性を、身近な例えで図解。高校「情報I」の基礎理解に。
+- [情報セキュリティ](https://joho-kyoshitsu.com/lexicon/word/info-security/index.html): 情報セキュリティの基本を学び、データの漏洩や不正利用、サイバー攻撃から身を守るための安全な行動を理解します。
+- [情報源](https://joho-kyoshitsu.com/lexicon/word/info-sources/index.html): 情報の発信元である「情報源」の信頼性をどう見極めるかを、身近な例で考える解説。情報Iのメディアリテラシー学習に。
+- [情報の検証](https://joho-kyoshitsu.com/lexicon/word/info-verification/index.html): 得た情報が本当に正しいかを確かめる「情報の検証」の方法を、具体例でやさしく解説。情報Iのメディアリテラシーに。
+- [情報](https://joho-kyoshitsu.com/lexicon/word/information/index.html): そもそも「情報」とは何かを、天気予報などの身近な例から考える入門解説。高校「情報I」の最初の一歩に。
+- [知的財産権](https://joho-kyoshitsu.com/lexicon/word/intellectual-property/index.html): 特許・商標・意匠などを含む知的財産権について学び、創作やアイデアがどのように法的に守られているかを理解します。
+- [個人情報](https://joho-kyoshitsu.com/lexicon/word/personal-information/index.html): 個人情報とは何か、どのように収集・利用されるのか、日常生活やインターネット上で安全に取り扱うための基礎を学びます。
+- [公開鍵暗号方式](https://joho-kyoshitsu.com/lexicon/word/public-key/index.html): 公開鍵暗号は、暗号化と復号に異なる鍵を使う方式です。情報Iでの理解に役立つよう図解つきで解説します。
+- [文字のデジタル表現](https://joho-kyoshitsu.com/lexicon/word/text-binaly/index.html): 文字コードとは？「こんにちは」や「ア」のような文字がどのように0と1で表されているのか、図解とともにやさしく解説します。情報Ⅰ対策にも最適です。
+- [動画のデジタル表現](https://joho-kyoshitsu.com/lexicon/word/video-digital/index.html): フレーム(静止画)の連続とフレームレートによって動画を0と1で表す仕組みを図解で解説。情報Iの基礎学習に。
+
+## 補足
+
+- [サイトマップ](https://joho-kyoshitsu.com/sitemap.xml)
+- [全文版（LLM向け）](https://joho-kyoshitsu.com/llms-full.txt)
