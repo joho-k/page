@@ -376,7 +376,7 @@ window.quizData = {
     },
     q008: {
         title: "偶数の合計（1〜10）",
-        addedAt: "2026-06-13",
+        addedAt: "2026-06-14",
         difficulty: 3,
         question: "1から10までの整数のうち、偶数だけを合計して表示するようにしよう（3か所の穴をうめよう）",
         ast: [
