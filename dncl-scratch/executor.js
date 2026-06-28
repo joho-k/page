@@ -1351,6 +1351,19 @@ function buildPrintExplanation(node, scope, result) {
         );
     }
 
+    // ただの文字列（連結なし）の表示は簡潔に説明する（例: "合格" を表示しました。）
+    if (isStringLiteral(node.value.trim())) {
+        const html = buildStepCard({
+            title: "表示する",
+            rows: [operandChip(node.value, scope)],
+            badge: `<b>${escapeHtml(formatVarValue(value))}</b> を出力`
+        });
+        return buildStepDetails(
+            `${node.value.trim()} を表示しました。`,
+            { html, highlightVars: [] }
+        );
+    }
+
     // 文字列の連結（例: i + "×" + j + "=" + i*j）は各パーツをチップで並べて説明する
     if (typeof value === "string") {
         const operands = splitConcatOperands(node.value);
@@ -1387,7 +1400,7 @@ function buildPrintExplanation(node, scope, result) {
 
 function buildForExplanation(node, current, end, step, isLast, start) {
     if (current === start) {
-        return `繰り返しが始まりました。変数 ${node.varName} を用意します。最初の値は ${current} です。${end} まで繰り返します。`;
+        return `繰り返しが始まりました。変数 ${node.varName} を用意します。${node.varName} は、いま何回目かを数えて繰り返しを制御するための変数です。最初の値は ${current} です。${end} まで繰り返します。`;
     }
 
     const previousValue = current - step;
