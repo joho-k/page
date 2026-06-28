@@ -556,6 +556,65 @@ window.quizData = {
         defaultHint: "ひとつ進むごとにいくつ増やせば 0 2 4 6 8 になるか考えよう"
     },
     q011: {
+        title: "1から5までの積",
+        addedAt: "2026-06-17",
+        difficulty: 3,
+        question: "1から5までの整数をすべてかけ合わせた値（1×2×3×4×5）が表示されるようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "seki",
+                value: "1"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "5",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "seki",
+                        value: "__BLANK_blank_a__ * i"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"答えは\" + seki"
+            }
+        ],
+        choices: [
+            { label: "seki", value: "seki" },
+            { label: "i", value: "i" },
+            { label: "1", value: "1" },
+            { label: "5", value: "5" },
+        ],
+        answers: [
+            {
+                values: ["seki"],
+                correct: true,
+            },
+            {
+                values: ["i"],
+                correct: false,
+                hint: "i × i になってしまい、これまでの積を引き継げません",
+            },
+            {
+                values: ["1"],
+                correct: false,
+                hint: "毎回 1 × i になり、積が積み上がりません（最後は5のまま）",
+            },
+            {
+                values: ["5"],
+                correct: false,
+                hint: "毎回 5 × i になり、1から5までの積にはなりません",
+            }
+        ],
+        defaultHint: "これまでの積が入っている seki に i をかけて、新しい seki にしよう"
+    },
+    q012: {
         title: "配ったおかしの数（二重ループ）",
         addedAt: "2026-06-18",
         difficulty: 4,
@@ -594,12 +653,10 @@ window.quizData = {
                                 value: "\"  \" + okashi + \"個目のお菓子を渡しました。残りは\" + kosu + \"個です。\""
                             },
                         ]
+                    }, {
+                        value: "\"今残っているお菓子の個数は\" + kosu + \"個です。\""
                     }
-                ]
-            },
-            {
-                type: "print",
-                value: "\"今残っているお菓子の個数は\" + kosu + \"個です。\""
+                ],
             }
         ],
         choices: [

@@ -264,6 +264,7 @@ function renderExplanation() {
         explanationEl.setAttribute("data-alt", currentExplanation || "");
         explanationEl.setAttribute("title", currentExplanation || "");
         explanationEl.innerHTML = currentExplanationHtml;
+        requestAnimationFrame(() => animateStepCard(explanationEl));
         return;
     }
 
@@ -271,6 +272,407 @@ function renderExplanation() {
     explanationEl.removeAttribute("data-alt");
     explanationEl.removeAttribute("title");
     explanationEl.textContent = currentExplanation || "このステップの説明はありません。";
+}
+
+// 変数を囲む「箱」（名前が上・値が下）を描く。値の最終下端 valueBottomRel まで覆う。
+// 箱が下に伸びるぶん、下の説明（note/badge）と重ならないよう row に余白を確保する。
+function makeVarBox(container, row, tRect, cRect, valueBottomRel, pad = 6) {
+    const boxLeft = (tRect.left - cRect.left) - pad - 8;
+    const boxTop = (tRect.top - cRect.top) - pad;
+    const boxWidth = tRect.width + pad * 2 + 10;
+    const boxHeight = (valueBottomRel + pad) - boxTop;
+
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+        position: "absolute",
+        left: `${boxLeft}px`,
+        top: `${boxTop}px`,
+        width: `${boxWidth}px`,
+        height: `${boxHeight}px`,
+        border: "2px solid var(--primary, #3b7ddd)",
+        borderRadius: "10px",
+        background: "rgba(59, 125, 221, 0.06)",
+        pointerEvents: "none",
+        zIndex: "1"
+    });
+    container.appendChild(box);
+
+    const rowBottomRel = row.getBoundingClientRect().bottom - cRect.top;
+    const extra = (boxTop + boxHeight + 6) - rowBottomRel;
+    if (extra > 0) row.style.marginBottom = `${extra}px`;
+    return box;
+}
+
+// ステップカードのアニメーションの振り分け。
+// 2回目以降のループ（増分データを持つ）はループ用アニメ、それ以外は代入アニメ。
+function animateStepCard(container) {
+    if (!container) return;
+    const card = container.querySelector(".step-card");
+    if (card && card.classList.contains("step-card-loop") && card.dataset.loopStep !== undefined) {
+        animateLoopCard(container, card);
+        return;
+    }
+    if (card && card.classList.contains("step-card-cond")) {
+        animateConditionCard(container, card);
+        return;
+    }
+    animateAssignmentCard(container);
+}
+
+const FLYIN_DURATION = 3000;
+const LOOP_ANIM_DURATION = 2800;
+const COND_ANIM_DURATION = 3800;
+
+// 条件チェックのアニメーション：左の値 → 右の値 → 演算子 を順にズーム強調し、
+// それぞれの下に言葉を出す。最後に結果（true/false バッジ）をズームして強調する。
+function animateConditionCard(container, card) {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof Element.prototype.animate !== "function") return;
+
+    const row = card.querySelector(".calc-row");
+    if (!row) return;
+    const opEl = row.querySelector(".calc-op");
+    const leftEl = row.firstElementChild;
+    const rightEl = row.lastElementChild;
+    if (!leftEl) return;
+
+    const cRect = container.getBoundingClientRect();
+    const D = COND_ANIM_DURATION;
+    const rowBottomRel = row.getBoundingClientRect().bottom - cRect.top;
+    const labelTop = rowBottomRel + 6;
+
+    // 要素を、指定の時間帯にズーム強調する
+    const zoom = (el, s, e) => {
+        if (!el) return;
+        el.animate([
+            { transform: "scale(1)", offset: 0 },
+            { transform: "scale(1)", offset: s },
+            { transform: "scale(1.25)", offset: (s + e) / 2 },
+            { transform: "scale(1)", offset: e },
+            { transform: "scale(1)", offset: 1 }
+        ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+    };
+
+    // 要素の真下に、対応する言葉を その要素のズーム中だけ出す
+    const labelFor = (text, el, s, e) => {
+        if (!text || !el) return;
+        const lab = document.createElement("span");
+        lab.className = "cond-phrase";
+        lab.textContent = text;
+        Object.assign(lab.style, { position: "absolute", margin: "0", zIndex: "6", pointerEvents: "none", opacity: "0" });
+        container.appendChild(lab);
+        const er = el.getBoundingClientRect();
+        lab.style.left = `${er.left + er.width / 2 - cRect.left - lab.offsetWidth / 2}px`;
+        lab.style.top = `${labelTop}px`;
+        const reserve = (labelTop + lab.offsetHeight + 6) - rowBottomRel;
+        if (reserve > 0 && (parseFloat(row.style.marginBottom) || 0) < reserve) {
+            row.style.marginBottom = `${reserve}px`;
+        }
+        lab.animate([
+            { opacity: 0, offset: 0 },
+            { opacity: 0, offset: Math.max(0, s - 0.04) },
+            { opacity: 1, offset: s },
+            { opacity: 1, offset: e },
+            { opacity: 0, offset: Math.min(1, e + 0.05) },
+            { opacity: 0, offset: 1 }
+        ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+    };
+
+    // ① 左の値  ② 右の値  ③ 演算子 を順にズームし、その下に言葉を出す（間隔を空けて）
+    zoom(leftEl, 0.05, 0.18);
+    labelFor(card.dataset.condLeft, leftEl, 0.06, 0.20);
+    if (rightEl && rightEl !== leftEl) {
+        zoom(rightEl, 0.30, 0.43);
+        labelFor(card.dataset.condRight, rightEl, 0.31, 0.45);
+    }
+    zoom(opEl, 0.55, 0.68);
+    // 演算子の説明は、結果が出るまで長めに出しておく
+    labelFor(card.dataset.condOp, opEl, 0.56, 0.97);
+
+    // ④ 最後に結果（true/false バッジ）をズームして強調する
+    const badgeEl = card.querySelector(".result-badge");
+    if (badgeEl) {
+        badgeEl.style.display = "inline-block";
+        badgeEl.animate([
+            { transform: "scale(1)", offset: 0 },
+            { transform: "scale(1)", offset: 0.80 },
+            { transform: "scale(1.3)", offset: 0.88 },
+            { transform: "scale(1.15)", offset: 0.93 },
+            { transform: "scale(1.15)", offset: 0.97 },
+            { transform: "scale(1)", offset: 1 }
+        ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+    }
+}
+
+// ループ（2回目以降）のアニメーション：変数の箱（名前が上・値が下）で、
+// 「前の値」のとなりに「+ステップ」が上から降りてきて足され、「新しい値」に変わる、を繰り返す。
+//   i  +1        i           i
+//   0      →    0 +1   →    1
+function animateLoopCard(container, card) {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof Element.prototype.animate !== "function") return;
+
+    const row = card.querySelector(".calc-row");
+    if (!row) return;
+    const target = row.querySelector(".calc-target"); // 変数名 i
+    const op = row.querySelector(".calc-op");
+    const valueTok = row.lastElementChild;            // 元の値トークン（= 新しい値）
+    if (!target) return;
+
+    const prevText = card.dataset.loopPrev ?? "";
+    const stepNum = Number(card.dataset.loopStep);
+    const curText = card.dataset.loopCurrent ?? "";
+    const plusText = stepNum >= 0 ? `+${card.dataset.loopStep}` : String(card.dataset.loopStep);
+
+    const cRect = container.getBoundingClientRect();
+    const tRect = target.getBoundingClientRect();
+    if (!tRect.width) return;
+
+    const gapY = 8;
+    const nameCenterX = tRect.left + tRect.width / 2 - cRect.left;
+    const nameCenterY = tRect.top + tRect.height / 2 - cRect.top;
+    const slotCenterY = tRect.bottom + gapY + tRect.height / 2 - cRect.top;
+
+    // 元の「= 値」は隠して、こちらで前の値/＋ステップ/新しい値を描く
+    if (op) op.style.visibility = "hidden";
+    if (valueTok && valueTok !== target) valueTok.style.visibility = "hidden";
+
+    // 変数名を箱より前面に出す
+    target.style.position = "relative";
+    target.style.zIndex = "3";
+
+    const mkToken = (text, cls) => {
+        const el = document.createElement("span");
+        el.className = `calc-token ${cls}`;
+        el.textContent = text;
+        Object.assign(el.style, {
+            position: "absolute", margin: "0", zIndex: "5", pointerEvents: "none"
+        });
+        container.appendChild(el);
+        return el;
+    };
+    const prevEl = mkToken(prevText, "calc-result");
+    const curEl = mkToken(curText, "calc-result");
+    const plusEl = mkToken(plusText, "calc-token-val");
+
+    const placeCenter = (el, cx, cy) => {
+        el.style.left = `${cx - el.offsetWidth / 2}px`;
+        el.style.top = `${cy - el.offsetHeight / 2}px`;
+    };
+    // 前の値・新しい値は、変数の真下のスロット中央に重ねて置く（クロスフェード）
+    placeCenter(prevEl, nameCenterX, slotCenterY);
+    placeCenter(curEl, nameCenterX, slotCenterY);
+
+    // ＋ステップ：最初は変数名の右どなり（右上）。そこから「元の値」めがけて
+    // 斜めに降りて重なる（＝元の値に足される）。
+    const plusStartX = (tRect.right - cRect.left) + plusEl.offsetWidth / 2 + 8;
+    const plusEndX = nameCenterX; // 前の値（元の値）の中央
+    placeCenter(plusEl, plusStartX, nameCenterY);
+    const dxDown = plusEndX - plusStartX;
+    const dyDown = slotCenterY - nameCenterY;
+
+    // 箱（名前の上・値が下）
+    const valueBottomRel = slotCenterY + tRect.height / 2;
+    const box = makeVarBox(container, row, tRect, cRect, valueBottomRel);
+
+    const D = LOOP_ANIM_DURATION;
+
+    // ＋ステップ：名前の右で現れる → 前の値の右へ降りる → 足されて消える
+    plusEl.animate([
+        { transform: "translate(0,0)", opacity: 0, offset: 0 },
+        { transform: "translate(0,0)", opacity: 1, offset: 0.12 },                       // i +1
+        { transform: "translate(0,0)", opacity: 1, offset: 0.34 },
+        { transform: `translate(${dxDown}px, ${dyDown}px)`, opacity: 1, offset: 0.52 },  // 0 +1
+        { transform: `translate(${dxDown}px, ${dyDown}px)`, opacity: 0, offset: 0.64 },  // 足されて消える
+        { transform: `translate(${dxDown}px, ${dyDown}px)`, opacity: 0, offset: 1 }
+    ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+
+    // 前の値：見えている → 新しい値に変わるところで消える → 次のループ用に戻す
+    prevEl.animate([
+        { opacity: 1, offset: 0 },
+        { opacity: 1, offset: 0.52 },
+        { opacity: 0, offset: 0.62 },
+        { opacity: 0, offset: 0.92 },
+        { opacity: 1, offset: 1 }
+    ], { duration: D, iterations: Infinity });
+
+    // 新しい値：足し終わってから現れる → しばらく表示 → 次のループ用に消す
+    curEl.animate([
+        { opacity: 0, offset: 0 },
+        { opacity: 0, offset: 0.6 },
+        { opacity: 1, offset: 0.7 },
+        { opacity: 1, offset: 0.92 },
+        { opacity: 0, offset: 1 }
+    ], { duration: D, iterations: Infinity });
+
+    // 新しい値になる瞬間に、箱をポンと跳ねさせる
+    box.animate([
+        { transform: "scale(1)", offset: 0 },
+        { transform: "scale(1)", offset: 0.6 },
+        { transform: "scale(1.08)", offset: 0.7 },
+        { transform: "scale(1)", offset: 0.82 },
+        { transform: "scale(1)", offset: 1 }
+    ], { duration: D, iterations: Infinity });
+}
+
+// 代入カードのアニメーション：右側の「値」そのものが 左へ寄る → 下の行へ降りて
+// 変数の下に収まり、最後は「変数名の上・値が下」の箱になって約1秒止まる、を繰り返す。
+// 行の先頭トークン(.calc-target)が代入先、末尾トークンが入れる値という構造を利用する。
+// 動かすのは実際の値トークンなので、transform で動かしてもカードと一緒にスクロールしてずれない。
+function animateAssignmentCard(container) {
+    if (!container) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof Element.prototype.animate !== "function") return;
+
+    const row = [...container.querySelectorAll(".calc-row")]
+        .find(r => r.querySelector(".calc-target"));
+    if (!row) return;
+
+    const target = row.querySelector(".calc-target");
+    const op = row.querySelector(".calc-op");
+    const value = row.lastElementChild;
+    if (!value || value === target) return;
+
+    // 値が「ラベル＋値」チップ（a = b の b/1）かどうか
+    const isChip = !!value.querySelector?.(".chip-label");
+
+    const cRect = container.getBoundingClientRect();
+    const vRect = value.getBoundingClientRect();
+    const tRect = target.getBoundingClientRect();
+    if (!vRect.width || !tRect.width) return;
+
+    const pad = 6;
+    const gapY = 6;
+
+    // 値は変数 goukei の真下に中央ぞろえで収まる
+    const dxFinal = (tRect.left + tRect.width / 2 - vRect.width / 2) - vRect.left;
+    const dy = (tRect.bottom + gapY) - vRect.top;
+
+    // 変数を囲む箱（名前が上・値が下）。値の最終位置の下端まで覆う
+    const valueBottomRel = (vRect.top - cRect.top) + dy + vRect.height;
+    const box = makeVarBox(container, row, tRect, cRect, valueBottomRel, pad);
+
+    // = は使わないので隠す（レイアウト位置は保つため visibility）
+    if (op) op.style.visibility = "hidden";
+
+    const slotCenterX = tRect.left + tRect.width / 2 - cRect.left;
+    const slotCenterY = (vRect.top - cRect.top) + dy + vRect.height / 2;
+
+    // 同じ変数の上書き代入（a = b 以外）：元の値を最初から箱の中に表示しておき、
+    // 新しい値が入ってくるのに合わせて「上書き」と出して元の値を消す。
+    const card = container.querySelector(".step-card");
+    const prevText = card?.dataset.prevValue;
+    if (!isChip && prevText !== undefined && prevText !== "") {
+        // 元の値（最初から表示）
+        const prevEl = document.createElement("span");
+        prevEl.className = "calc-token calc-result";
+        prevEl.textContent = prevText;
+        Object.assign(prevEl.style, { position: "absolute", margin: "0", zIndex: "4", pointerEvents: "none" });
+        container.appendChild(prevEl);
+        prevEl.style.left = `${slotCenterX - prevEl.offsetWidth / 2}px`;
+        prevEl.style.top = `${slotCenterY - prevEl.offsetHeight / 2}px`;
+
+        const labelLeft = `${slotCenterX + tRect.width / 2 + pad + 6}px`;
+
+        // 「今までの値」ラベル（元の値を表示している間、箱のすぐ右に出す）
+        const prevLabelEl = document.createElement("span");
+        prevLabelEl.className = "assign-prev-label";
+        prevLabelEl.textContent = "今までの値";
+        Object.assign(prevLabelEl.style, { position: "absolute", margin: "0", zIndex: "6", pointerEvents: "none" });
+        container.appendChild(prevLabelEl);
+        prevLabelEl.style.left = labelLeft;
+        prevLabelEl.style.top = `${slotCenterY - prevLabelEl.offsetHeight / 2}px`;
+
+        // 「上書き」ラベル（同じ位置に、元の値が消えるのに合わせて出す）
+        const overwriteEl = document.createElement("span");
+        overwriteEl.className = "assign-overwrite-label";
+        overwriteEl.textContent = "上書き";
+        Object.assign(overwriteEl.style, { position: "absolute", margin: "0", zIndex: "6", pointerEvents: "none", opacity: "0" });
+        container.appendChild(overwriteEl);
+        overwriteEl.style.left = labelLeft;
+        overwriteEl.style.top = `${slotCenterY - overwriteEl.offsetHeight / 2}px`;
+
+        // 元の値：表示 → 新しい値が入るところで消える → 次のループ用に戻す
+        prevEl.animate([
+            { opacity: 1, offset: 0 },
+            { opacity: 1, offset: 0.4 },
+            { opacity: 0, offset: 0.55 },
+            { opacity: 0, offset: 0.92 },
+            { opacity: 1, offset: 1 }
+        ], { duration: FLYIN_DURATION, iterations: Infinity });
+
+        // 「今までの値」：最初から表示 → 上書きの直前に消える → 次のループ用に戻す
+        prevLabelEl.animate([
+            { opacity: 1, offset: 0 },
+            { opacity: 1, offset: 0.4 },
+            { opacity: 0, offset: 0.5 },
+            { opacity: 0, offset: 0.92 },
+            { opacity: 1, offset: 1 }
+        ], { duration: FLYIN_DURATION, iterations: Infinity });
+
+        // 「上書き」：「今までの値」が消えた直後に出して、少し見せてから消す
+        overwriteEl.animate([
+            { opacity: 0, offset: 0 },
+            { opacity: 0, offset: 0.5 },
+            { opacity: 1, offset: 0.58 },
+            { opacity: 1, offset: 0.76 },
+            { opacity: 0, offset: 0.86 },
+            { opacity: 0, offset: 1 }
+        ], { duration: FLYIN_DURATION, iterations: Infinity });
+    }
+
+    // 値を箱の外（右）から箱の中のスロットへ入れる
+    target.style.position = "relative";
+    target.style.zIndex = "2";
+    value.style.position = "relative";
+    value.style.zIndex = "5";
+
+    if (isChip) {
+        // a = b：b/1 が外から入ってきて、到着したら消える。
+        // 代わりに a の値（1）がスロットに残る。
+        const valText = value.querySelector(".chip-val")?.textContent ?? "";
+        const resultEl = document.createElement("span");
+        resultEl.className = "calc-token calc-result";
+        resultEl.textContent = valText;
+        Object.assign(resultEl.style, { position: "absolute", margin: "0", zIndex: "4", pointerEvents: "none", opacity: "0" });
+        container.appendChild(resultEl);
+        resultEl.style.left = `${slotCenterX - resultEl.offsetWidth / 2}px`;
+        resultEl.style.top = `${slotCenterY - resultEl.offsetHeight / 2}px`;
+
+        value.animate([
+            { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },          // 箱の外（右）
+            { transform: "translate(10px, 0) scale(1)", opacity: 1, offset: 0.12 },            // 外に現れる
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱に到着（b/1）
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 0.6 }, // b/1 が消える
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 1 }
+        ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+
+        // a の値（1）：b/1 が消えるのに合わせて現れて、そのまま残る → ループ用に消す
+        resultEl.animate([
+            { opacity: 0, offset: 0 },
+            { opacity: 0, offset: 0.52 },
+            { opacity: 1, offset: 0.62 },
+            { opacity: 1, offset: 0.92 },
+            { opacity: 0, offset: 1 }
+        ], { duration: FLYIN_DURATION, iterations: Infinity });
+    } else {
+        value.animate([
+            { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },          // 箱の外（右）
+            { transform: "translate(10px, 0) scale(1)", opacity: 1, offset: 0.12 },            // 外に現れる
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱の中に入って収まる
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.9 },  // 約1秒そのまま止める
+            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 0, offset: 1 }     // 消えて先頭からやり直し
+        ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+    }
+
+    // 値が箱に入る瞬間に、箱をポンと跳ねさせる
+    box.animate([
+        { transform: "scale(1)", offset: 0 },
+        { transform: "scale(1)", offset: 0.4 },
+        { transform: "scale(1.08)", offset: 0.5 },
+        { transform: "scale(1)", offset: 0.62 },
+        { transform: "scale(1)", offset: 1 }
+    ], { duration: FLYIN_DURATION, iterations: Infinity });
 }
 
 function safeEvalWithScope(expr, scope) {
@@ -387,7 +789,7 @@ function isNumericConstant(expr) {
 }
 
 function formatBoolValue(value) {
-    return value ? "true(真)" : "false(偽)";
+    return value ? "真(true)" : "偽(false)";
 }
 
 // 比較式（amari == 0 など）を左辺・演算子・右辺に分解する
@@ -442,7 +844,7 @@ function buildConditionText(condition, conditionValue, scope) {
             const rightPart = isNumericConstant(cmp.right)
                 ? ""
                 : `、${cmp.right}は ${formatVarValue(safeEvalWithScope(cmp.right, scope))}`;
-            return `条件 ${condition} は、${phrase} true(真)です。${leftDesc}は ${formatVarValue(leftValue)}${rightPart} なので、${resultText} です。`;
+            return `条件 ${condition} は、${phrase} 真(true)です。${leftDesc}は ${formatVarValue(leftValue)}${rightPart} なので、${resultText} です。`;
         }
     }
 
@@ -462,22 +864,41 @@ function operatorMeaningNote(op) {
     }
 }
 
+// 比較を、左オペランド・右オペランド・演算子の3パーツの文章に分ける。
+// （b != 0 → 左「b と」/ 右「0 が」/ 演算子「等しくなければ」）
+function conditionPhraseParts(cmp) {
+    const L = prettyExpr(cmp.left.trim());
+    const R = prettyExpr(cmp.right.trim());
+    switch (cmp.op) {
+        case "==": return { left: `${L} と`, right: `${R} が`, op: "等しければ" };
+        case "!=": return { left: `${L} と`, right: `${R} が`, op: "等しくなければ" };
+        case "<": return { left: `${L} が`, right: `${R} より`, op: "小さければ" };
+        case ">": return { left: `${L} が`, right: `${R} より`, op: "大きければ" };
+        case "<=": return { left: `${L} が`, right: `${R}`, op: "以下なら" };
+        case ">=": return { left: `${L} が`, right: `${R}`, op: "以上なら" };
+        default: return { left: "", right: "", op: "" };
+    }
+}
+
 function buildConditionCardHtml(condition, conditionValue, scope) {
     const cmp = parseComparison(condition);
     const badgeClass = conditionValue ? "bool-true" : "bool-false";
-    const badge = conditionValue ? "✓ true（真）" : "✗ false（偽）";
+    const badge = conditionValue ? "✓ 真（true）" : "✗ 偽（false）";
+
+    const dataset = { "cond-result": conditionValue ? "true" : "false" };
 
     if (cmp) {
-        // 各オペランドを concat-chip（ラベル＝式・値）で見せる。演算子の説明文は式の上。
+        // 各オペランドを concat-chip（ラベル＝式・値）で見せる
         const row = `${operandChip(cmp.left, scope)}${calcOp(cmp.op)}${operandChip(cmp.right, scope)}`;
 
+        const parts = conditionPhraseParts(cmp);
         return buildStepCard({
             title: "条件をチェック",
             cardClass: "step-card-cond",
-            topNote: operatorMeaningNote(cmp.op),
             rows: [row],
             badge,
-            badgeClass
+            badgeClass,
+            dataset: { ...dataset, "cond-left": parts.left, "cond-right": parts.right, "cond-op": parts.op + "真(true)" }
         });
     }
 
@@ -486,7 +907,8 @@ function buildConditionCardHtml(condition, conditionValue, scope) {
         cardClass: "step-card-cond",
         rows: [exprToTokensHtml(condition)],
         badge,
-        badgeClass
+        badgeClass,
+        dataset
     });
 }
 
@@ -588,15 +1010,18 @@ function opPhrase(op, leftValue, rightValue) {
     }
 }
 
-function buildStepCard({ title, rows = [], note = "", topNote = "", badge = "", badgeClass = "", cardClass = "" }) {
-    const topNoteHtml = topNote ? `<div class="step-card-note step-card-note-top">${escapeHtml(topNote)}</div>` : "";
+function buildStepCard({ title, rows = [], badge = "", badgeClass = "", cardClass = "", dataset = null }) {
     const rowsHtml = rows.filter(Boolean).map(r => `<div class="calc-row">${r}</div>`).join("");
-    const noteHtml = note ? `<div class="step-card-note">${escapeHtml(note)}</div>` : "";
-    const arrowHtml = badge ? `<div class="calc-arrow">↓</div>` : "";
-    const badgeHtml = badge ? `<div class="result-badge ${badgeClass}">${badge}</div>` : "";
-    return `<div class="step-card ${cardClass}">`
+    // バッジのみ表示（ノートは出さない）
+    const captionHtml = badge
+        ? `<div class="step-card-caption"><span class="result-badge ${badgeClass}">${badge}</span></div>`
+        : "";
+    const dataAttrs = dataset
+        ? Object.entries(dataset).map(([k, v]) => ` data-${k}="${escapeHtml(String(v))}"`).join("")
+        : "";
+    return `<div class="step-card ${cardClass}"${dataAttrs}>`
         + `<div class="step-card-title">${escapeHtml(title)}</div>`
-        + topNoteHtml + rowsHtml + noteHtml + arrowHtml + badgeHtml
+        + rowsHtml + captionHtml
         + `</div>`;
 }
 
@@ -745,6 +1170,18 @@ function assignBadge(targetName, value) {
 function buildAssignExplanation(node, scope, result) {
     const target = parseAssignmentTarget(node.name, scope);
 
+    // 同じ変数を上書きする代入のとき、元の値をアニメで見せるためのデータ。
+    // 代入前のスコープ(varsBefore)に値があればそれが「元の値」。
+    const simpleTargetName = isSimpleVariable(node.name) ? node.name.trim() : null;
+    const hasPrevValue = simpleTargetName
+        && scope
+        && Object.prototype.hasOwnProperty.call(scope, simpleTargetName)
+        && scope[simpleTargetName] !== undefined
+        && !Array.isArray(scope[simpleTargetName]);
+    const assignDataset = hasPrevValue
+        ? { "prev-value": formatVarValue(scope[simpleTargetName]) }
+        : null;
+
     if (target) {
         const assignedValue = result?.assignedValue ?? safeEvalWithScope(node.value, scope);
         const base = target.baseName;
@@ -821,7 +1258,8 @@ function buildAssignExplanation(node, scope, result) {
             title: "今のステップ",
             rows: [row],
             note: opPhrase(binary.op, leftValue, rightValue),
-            badge: assignBadge(node.name, resultValue)
+            badge: assignBadge(node.name, resultValue),
+            dataset: assignDataset
         });
 
         return buildStepDetails(
@@ -846,7 +1284,8 @@ function buildAssignExplanation(node, scope, result) {
         const html = buildStepCard({
             title: "今のステップ",
             rows: [row],
-            badge: assignBadge(node.name, value)
+            badge: assignBadge(node.name, value),
+            dataset: assignDataset
         });
         return buildStepDetails(
             `変数 ${node.name}${arrayTag} に ${node.value.trim()}の値、${formatVarValue(value)}を代入しました。`,
@@ -868,7 +1307,8 @@ function buildAssignExplanation(node, scope, result) {
         note: arrayAccess ? `${node.value.trim()} は配列 ${arrayAccess.arrayName} の ${arrayAccess.indexValue} 番目` : "",
         badge: Array.isArray(value)
             ? `${escapeHtml(node.name)} に <b>配列</b> を入れる`
-            : assignBadge(`${node.name}${arrayTag}`, value)
+            : assignBadge(`${node.name}${arrayTag}`, value),
+        dataset: Array.isArray(value) ? null : assignDataset
     });
 
     return buildStepDetails(
@@ -911,6 +1351,19 @@ function buildPrintExplanation(node, scope, result) {
         );
     }
 
+    // ただの文字列（連結なし）の表示は簡潔に説明する（例: "合格" を表示しました。）
+    if (isStringLiteral(node.value.trim())) {
+        const html = buildStepCard({
+            title: "表示する",
+            rows: [operandChip(node.value, scope)],
+            badge: `<b>${escapeHtml(formatVarValue(value))}</b> を出力`
+        });
+        return buildStepDetails(
+            `${node.value.trim()} を表示しました。`,
+            { html, highlightVars: [] }
+        );
+    }
+
     // 文字列の連結（例: i + "×" + j + "=" + i*j）は各パーツをチップで並べて説明する
     if (typeof value === "string") {
         const operands = splitConcatOperands(node.value);
@@ -947,7 +1400,7 @@ function buildPrintExplanation(node, scope, result) {
 
 function buildForExplanation(node, current, end, step, isLast, start) {
     if (current === start) {
-        return `繰り返しが始まりました。変数 ${node.varName} を用意します。最初の値は ${current} です。${end} まで繰り返します。`;
+        return `繰り返しが始まりました。変数 ${node.varName} を用意します。${node.varName} は、いま何回目かを数えて繰り返しを制御するための変数です。最初の値は ${current} です。${end} まで繰り返します。`;
     }
 
     const previousValue = current - step;
@@ -961,20 +1414,27 @@ function buildForExplanation(node, current, end, step, isLast, start) {
 
 function buildForDetails(node, current, end, step, isLast, start) {
     const text = buildForExplanation(node, current, end, step, isLast, start);
-    const rangeNote = `${start} から ${end} まで ${step} ずつ くりかえす`;
+    const rangeNote = `${start}〜${end} を ${step} ずつ`;
 
     let rows;
     let note;
     let badge;
+    let dataset = null;
     if (current === start) {
         rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
         note = rangeNote;
-        badge = "くりかえし スタート";
+        badge = `スタート (${end} まで ${step} ずつ増やす)`;
     } else {
         const previousValue = current - step;
         rows = [`${calcToken(node.varName, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(current), "calc-result")}`];
-        note = `前は ${formatVarValue(previousValue)} → ${step} ふえて 今は ${formatVarValue(current)}（${rangeNote}）`;
-        badge = isLast ? "これが さいごの くりかえし" : "まだ くりかえす";
+        note = rangeNote;
+        badge = `${end} までなので` + (isLast ? "これがさいご" : `まだつづく。${step}ずつ増やす`);
+        // 2回目以降は「前の値 + ステップ → 新しい値」のアニメ用データを持たせる
+        dataset = {
+            "loop-prev": formatVarValue(previousValue),
+            "loop-step": step,
+            "loop-current": formatVarValue(current)
+        };
     }
 
     const html = buildStepCard({
@@ -982,7 +1442,8 @@ function buildForDetails(node, current, end, step, isLast, start) {
         cardClass: "step-card-loop",
         rows,
         note,
-        badge
+        badge,
+        dataset
     });
 
     return buildStepDetails(text, { html, highlightVars: [node.varName] });
@@ -1297,11 +1758,8 @@ function buildTrace(ast, targetTrace = trace) {
                         suffix = `繰り返しを続けます${countText}。`;
                     }
 
-                    const html = parts.html
-                        ? `${parts.html}<div class="step-card-note step-card-loop-note">${escapeHtml(suffix)}</div>`
-                        : null;
-
-                    return buildStepDetails(`${parts.text} ${suffix}`, { html, highlightVars: parts.highlightVars });
+                    // 補足ノートはカードに出さず、説明文（data-alt/動画用）にだけ残す
+                    return buildStepDetails(`${parts.text} ${suffix}`, { html: parts.html, highlightVars: parts.highlightVars });
                 }
             });
         }
