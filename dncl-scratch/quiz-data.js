@@ -762,5 +762,72 @@ window.quizData = {
             }
         ],
         defaultHint: "「2つが等しくない間」繰り返し、「a のほうが大きいとき」だけ a から b を引く、と考えよう。最後に残った値が最大公約数です"
+    },
+    q014: {
+        title: "平均点で合格クラス判定",
+        addedAt: "2026-07-01",
+        difficulty: 3,
+        question: "4人のテストの合計点は240点です。平均点を求め、平均が60点以上のときだけ「合格クラス」と表示されるようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "goukei",
+                value: "240"
+            },
+            {
+                type: "assign",
+                name: "ninzu",
+                value: "4"
+            },
+            {
+                type: "assign",
+                name: "heikin",
+                value: "goukei __BLANK_blank_a__ ninzu"
+            },
+            {
+                type: "if",
+                condition: "heikin __BLANK_blank_b__ 60",
+                body: [
+                    {
+                        type: "print",
+                        value: "\"合格クラス\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: ">", value: ">" },
+            { label: ">=", value: ">=" },
+            { label: "<", value: "<" },
+        ],
+        answers: [
+            {
+                values: ["/", ">="],
+                correct: true,
+            },
+            {
+                values: ["*", ">="],
+                correct: false,
+                hint: "掛け算では平均になりません。合計を人数で割りましょう",
+            },
+            {
+                values: ["/", ">"],
+                correct: false,
+                hint: "60点ちょうどのときも合格クラスにしたいです",
+            },
+            {
+                values: ["/", "<"],
+                correct: false,
+                hint: "60点以上のときに合格クラスにしたいので、小さいときではありません",
+            },
+            {
+                values: ["*", ">"],
+                correct: false,
+                hint: "平均は合計÷人数で求めます。また60点ちょうども合格にしたいです",
+            }
+        ],
+        defaultHint: "まず合計を人数で割って平均を出し、その平均が60以上かどうかを判定しよう"
     }
 }
