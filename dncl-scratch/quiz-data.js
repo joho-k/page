@@ -829,5 +829,61 @@ window.quizData = {
             }
         ],
         defaultHint: "まず合計を人数で割って平均を出し、その平均が60以上かどうかを判定しよう"
+    },
+    q015: {
+        title: "一の位を取り出す",
+        addedAt: "2026-07-07",
+        difficulty: 2,
+        question: "整数 num（＝47）の一の位（いちのくらい）の数字だけを取り出して表示するようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "num",
+                value: "47"
+            },
+            {
+                type: "assign",
+                name: "ichi",
+                value: "num __BLANK_blank_a__ 10"
+            },
+            {
+                type: "print",
+                value: "\"一の位は\" + ichi"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%"],
+                correct: true,
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "10で割ると商の4になってしまいます。一の位は「あまり」です",
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算では一の位を取り出せません",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "引き算では一の位を取り出せません",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "掛け算では一の位を取り出せません",
+            }
+        ],
+        defaultHint: "10で割った「あまり」が一の位になることを使おう"
     }
 }
