@@ -885,5 +885,84 @@ window.quizData = {
             }
         ],
         defaultHint: "それぞれの演算子で num を計算するとどうなるか考えてみよう。10で割った「あまり」が一の位になるよ"
+    },
+    q017: {
+        title: "フィボナッチ数列",
+        addedAt: "2026-07-09",
+        difficulty: 4,
+        question: "フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "zen",
+                value: "0"
+            },
+            {
+                type: "assign",
+                name: "ima",
+                value: "1"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "8",
+                step: "1",
+                body: [
+                    {
+                        type: "print",
+                        value: "ima"
+                    },
+                    {
+                        type: "assign",
+                        name: "tsugi",
+                        value: "zen + ima"
+                    },
+                    {
+                        type: "assign",
+                        name: "zen",
+                        value: "__BLANK_blank_a__"
+                    },
+                    {
+                        type: "assign",
+                        name: "ima",
+                        value: "__BLANK_blank_b__"
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "zen", value: "zen" },
+            { label: "ima", value: "ima" },
+            { label: "tsugi", value: "tsugi" },
+            { label: "i", value: "i" },
+        ],
+        answers: [
+            {
+                values: ["ima", "tsugi"],
+                correct: true,
+            },
+            {
+                values: ["tsugi", "ima"],
+                correct: false,
+                hint: "組み合わせが逆です。zen には「ひとつ前」だった ima を、ima には新しい tsugi を入れます",
+            },
+            {
+                values: ["ima", "ima"],
+                correct: false,
+                hint: "ima に ima を入れても値は変わりません。新しい数 tsugi を入れましょう",
+            },
+            {
+                values: ["zen", "tsugi"],
+                correct: false,
+                hint: "zen に zen を入れても更新されません。zen には今の数 ima を移します",
+            },
+            {
+                values: ["tsugi", "tsugi"],
+                correct: false,
+                hint: "両方に tsugi を入れると zen と ima が同じ値になり、数列が正しく進みません",
+            }
+        ],
+        defaultHint: "次の数を作ったら、今の数 ima を zen へ移し、新しい tsugi を ima にします（zen ← ima、ima ← tsugi）"
     }
 }
