@@ -43,7 +43,12 @@
           "name": "情報の教室",
           "url": "https://joho-kyoshitsu.com/",
           "logo": "https://joho-kyoshitsu.com/img/logo_transparent.png",
-          "description": "高校「情報I」・ITパスポート・基本情報技術者試験の学習を支援する無料の教材サイト。"
+          "description": "高校「情報I」・ITパスポート・基本情報技術者試験の学習を支援する無料の教材サイト。",
+          "sameAs": [
+            "https://www.youtube.com/@joho-no-kyoshitsu",
+            "https://x.com/johonokyoshitsu",
+            "https://coconala.com/users/3877173"
+          ]
         },
         {
           "@type": "WebSite",
@@ -55,6 +60,17 @@
           "publisher": { "@id": "https://joho-kyoshitsu.com/#organization" }
         },
         {
+          "@type": "WebPage",
+          "@id": "https://joho-kyoshitsu.com/#webpage",
+          "url": "https://joho-kyoshitsu.com/",
+          "name": "情報の教室 | 「情報I」「基本情報技術者」「ITパスポート」解説サイト",
+          "description": "高校「情報I」や国家試験「ITパスポート」「基本情報技術者試験」の学習に役立つ解説・資料を提供するサイトです。",
+          "inLanguage": "ja",
+          "isPartOf": { "@id": "https://joho-kyoshitsu.com/#website" },
+          "author": { "@id": "https://joho-kyoshitsu.com/#organization" },
+          "publisher": { "@id": "https://joho-kyoshitsu.com/#organization" }
+        },
+        {
           "@type": "ItemList",
           "name": "情報の教室 主要コンテンツ",
           "itemListElement": [
@@ -62,6 +78,52 @@
             { "@type": "ListItem", "position": 2, "name": "実プロ（実際に動かすプログラミング学習）", "url": "https://joho-kyoshitsu.com/dncl/index.html" },
             { "@type": "ListItem", "position": 3, "name": "共テプロトレ（共通テストプログラミングトレーニング）", "url": "https://joho-kyoshitsu.com/dncl-scratch/index.html" },
             { "@type": "ListItem", "position": 4, "name": "情報I 試作問題まとめ", "url": "https://joho-kyoshitsu.com/sisaku/index.html" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://joho-kyoshitsu.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "情報の教室はどんなサイトですか？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "高校「情報I」やITパスポート・基本情報技術者試験の学習を支援する無料の学習サイトです。DNCLを実際に動かせる演習ツール「共テプロトレ」、用語解説「用語の辞典」、試作問題リンク、YouTube解説動画などを、すべて無料・会員登録不要で利用できます。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "利用に料金や会員登録は必要ですか？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "いいえ。サイト内のコンテンツはすべて無料で、会員登録やログインなしで利用できます（一部の外部連携サービスを除く）。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "「共テプロトレ」とは何ですか？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "共通テスト「情報I」で使われる擬似言語DNCLを、ブロックで組み立てて実際に動かしながら学べる演習ツールです。コード表示・ステップ実行・解説を使って、プログラムを「書ける・読める」力を身につけられます。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "DNCLとは何ですか？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "DNCLは、大学入学共通テスト「情報I」の試験で使われる、日本語ベースの擬似言語（プログラミング表記）です。特定のプログラミング言語の文法を覚えなくても、アルゴリズムの考え方を問えるように設計されています。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "共通テスト「情報I」の対策に使えますか？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "はい。共テプロトレのDNCL演習と穴埋め問題、解説動画、試作問題リンクを組み合わせることで、共通テスト「情報I」のプログラミング分野を段階的に対策できます。"
+              }
+            }
           ]
         }
       ]
@@ -110,9 +172,9 @@
 
 <body>
     <header class="hero">
-        <h1><img src="img/logo_transparent.png"></h1>
+        <h1><img src="img/logo_transparent.png" alt="情報の教室 ― 高校「情報I」・ITパスポート・基本情報技術者試験の無料学習支援サイト"></h1>
         <main class="intro">
-            <p>情報の教室は、高校「情報I」や国家試験「ITパスポート」「基本情報技術者試験」などの学習に役立つ解説・教材を提供する学習支援サイトです。</p>
+            <p>情報の教室は、高校「情報I」や国家試験「ITパスポート」「基本情報技術者試験」などの学習に役立つ解説・教材を提供する学習支援サイトです。DNCL（共通テスト用擬似言語）を実際に動かせる演習ツール、用語解説、試作問題リンク、解説動画などを、すべて無料・会員登録不要で利用できます。</p>
         </main>
     </header>
 
@@ -263,6 +325,62 @@
     </section>
     <!-- ======= ここまで ======= -->
 
+
+    <!-- よくある質問（FAQ） -->
+    <section class="faq" aria-label="よくある質問">
+        <h2>よくある質問</h2>
+        <p class="faq-intro">情報の教室の使い方や、共通テスト「情報I」・DNCLについて、よく寄せられる質問をまとめました。</p>
+        <details class="faq-item">
+            <summary>情報の教室はどんなサイトですか？</summary>
+            <p>高校「情報I」やITパスポート・基本情報技術者試験の学習を支援する無料の学習サイトです。DNCLを実際に動かせる演習ツール「共テプロトレ」、用語解説「用語の辞典」、試作問題リンク、YouTube解説動画などを、すべて無料・会員登録不要で利用できます。</p>
+        </details>
+        <details class="faq-item">
+            <summary>利用に料金や会員登録は必要ですか？</summary>
+            <p>いいえ。サイト内のコンテンツはすべて無料で、会員登録やログインなしで利用できます（一部の外部連携サービスを除く）。</p>
+        </details>
+        <details class="faq-item">
+            <summary>「共テプロトレ」とは何ですか？</summary>
+            <p>共通テスト「情報I」で使われる擬似言語DNCLを、ブロックで組み立てて実際に動かしながら学べる演習ツールです。コード表示・ステップ実行・解説を使って、プログラムを「書ける・読める」力を身につけられます。</p>
+        </details>
+        <details class="faq-item">
+            <summary>DNCLとは何ですか？</summary>
+            <p>DNCLは、大学入学共通テスト「情報I」の試験で使われる、日本語ベースの擬似言語（プログラミング表記）です。特定のプログラミング言語の文法を覚えなくても、アルゴリズムの考え方を問えるように設計されています。</p>
+        </details>
+        <details class="faq-item">
+            <summary>共通テスト「情報I」の対策に使えますか？</summary>
+            <p>はい。共テプロトレのDNCL演習と穴埋め問題、解説動画、試作問題リンクを組み合わせることで、共通テスト「情報I」のプログラミング分野を段階的に対策できます。</p>
+        </details>
+    </section>
+
+    <!-- 運営者情報・参考リンク -->
+    <section class="about" aria-label="運営者情報">
+        <h2>運営者情報</h2>
+        <div class="author-box">
+            <img class="author-avatar" src="img/logo_transparent.png" alt="情報の教室のロゴ">
+            <div class="author-detail">
+                <p class="author-name">文責：情報の教室 編集部</p>
+                <p class="author-bio">
+                    情報の教室は、高校「情報I」や国家試験「ITパスポート」「基本情報技術者試験」の学習を支援する教材サイトです。
+                    2023年のYouTubeチャンネル開設以来、単語解説から共通テスト対策まで、映像・演習ツール・用語解説を通じて情報教育の学び直しを支援しています。
+                    運営に関するご相談・ご依頼はマンツーマン指導（ココナラ）や各SNSから承っています。
+                </p>
+                <ul class="author-links">
+                    <li><a href="https://www.youtube.com/@joho-no-kyoshitsu" target="_blank" rel="noopener">YouTube チャンネル</a></li>
+                    <li><a href="https://x.com/johonokyoshitsu" target="_blank" rel="noopener">X（旧Twitter）</a></li>
+                    <li><a href="https://coconala.com/users/3877173" target="_blank" rel="noopener">ココナラ（マンツーマン指導）</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="references">
+            <h3>参考・出典（公的機関の一次情報）</h3>
+            <ul>
+                <li><a href="https://www.dnc.ac.jp/kyotsu/shiken_jouhou/r7ikou.html" target="_blank" rel="noopener">大学入試センター ― 令和7年度以降の共通テスト「情報」試験情報</a></li>
+                <li><a href="https://www.mext.go.jp/a_menu/shotou/zyouhou/detail/mext_00001.html" target="_blank" rel="noopener">文部科学省 ― 高等学校情報科に関する情報</a></li>
+                <li><a href="https://www.ipa.go.jp/shiken/kubun/ip.html" target="_blank" rel="noopener">IPA ― ITパスポート試験（試験区分の説明）</a></li>
+                <li><a href="https://www.ipa.go.jp/shiken/kubun/fe.html" target="_blank" rel="noopener">IPA ― 基本情報技術者試験（試験区分の説明）</a></li>
+            </ul>
+        </div>
+    </section>
 
     <section class="news">
         <h2>新着情報</h2>
