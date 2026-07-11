@@ -830,6 +830,62 @@ window.quizData = {
         ],
         defaultHint: "まず合計を人数で割って平均を出し、その平均が60以上かどうかを判定しよう"
     },
+    q015: {
+        title: "一の位を取り出す",
+        addedAt: "2026-07-07",
+        difficulty: 3,
+        question: "整数 num（＝47）の一の位（いちのくらい）の数字だけを取り出して表示するようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "num",
+                value: "47"
+            },
+            {
+                type: "assign",
+                name: "ichi",
+                value: "num __BLANK_blank_a__ 10"
+            },
+            {
+                type: "print",
+                value: "\"一の位は\" + ichi"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%"],
+                correct: true,
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "num / 10 を計算するとどうなる？ 47 / 10 は商の4になります。一の位を取り出すには「あまり」がほしいですね",
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "num + 10 を計算するとどうなる？ 47 + 10 は 57 です。一の位の7を取り出せているでしょうか？",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "num - 10 を計算するとどうなる？ 47 - 10 は 37 です。一の位の7を取り出せているでしょうか？",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "num * 10 を計算するとどうなる？ 47 * 10 は 470 です。一の位の7を取り出せているでしょうか？",
+            }
+        ],
+        defaultHint: "それぞれの演算子で num を計算するとどうなるか考えてみよう。10で割った「あまり」が一の位になるよ"
+    },
     q016: {
         title: "3の倍数を数える",
         addedAt: "2026-07-08",
