@@ -31,11 +31,8 @@ if (!noHeader) {
     header.appendChild(warning);
 }
 
-// タイトル部分
-const wordTitle = document.createElement('h1');
-wordTitle.id = 'word-title';
-wordTitle.innerHTML = `用語の辞典「${title}」`;
-document.title = `${document.title}「${title}」`;
+// タイトル部分は静的HTMLの <h1 class="page-title"> を使用（クローラにも見える／重複回避）。
+// document.title も静的 <title> をそのまま使う（用語名の二重付与を避ける）。
 
 // 動画セクション
 const videoTitle = document.createElement('h4');
@@ -151,7 +148,6 @@ toggleBtn.onclick = () => {
 };
 
 // メイン要素に子要素を追加
-main.prepend(wordTitle);
 main.insertBefore(videoTitle, main.lastElementChild);
 main.insertBefore(videoExplanation, main.lastElementChild);
 main.insertBefore(relatedWordsTitle, main.lastElementChild);
