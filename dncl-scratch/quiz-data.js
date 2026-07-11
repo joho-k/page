@@ -885,5 +885,75 @@ window.quizData = {
             }
         ],
         defaultHint: "それぞれの演算子で num を計算するとどうなるか考えてみよう。10で割った「あまり」が一の位になるよ"
+    },
+    q019: {
+        title: "買い物のおつり",
+        addedAt: "2026-07-11",
+        difficulty: 2,
+        question: "300円と450円の品物を買い、1000円札を出しました。2つの品物の合計金額を求めてから、おつりがいくらになるかを表示しよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "nedan1",
+                value: "300"
+            },
+            {
+                type: "assign",
+                name: "nedan2",
+                value: "450"
+            },
+            {
+                type: "assign",
+                name: "goukei",
+                value: "nedan1 __BLANK_blank_a__ nedan2"
+            },
+            {
+                type: "assign",
+                name: "harau",
+                value: "1000"
+            },
+            {
+                type: "assign",
+                name: "otsuri",
+                value: "harau __BLANK_blank_b__ goukei"
+            },
+            {
+                type: "print",
+                value: "\"おつりは\" + otsuri + \"円\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["+", "-"],
+                correct: true,
+            },
+            {
+                values: ["-", "-"],
+                correct: false,
+                hint: "2つの品物の合計金額は「足し算」で求めます。引き算だと 300 - 450 になってしまい、合計になりません",
+            },
+            {
+                values: ["+", "+"],
+                correct: false,
+                hint: "おつりは「払ったお金 - 代金」で求めます。足し算だと払ったお金と代金がさらに増えてしまいます",
+            },
+            {
+                values: ["*", "-"],
+                correct: false,
+                hint: "合計金額は 300 と 450 を足すだけです。掛け算だと 300 × 450 になってしまいます",
+            },
+            {
+                values: ["+", "*"],
+                correct: false,
+                hint: "おつりは払ったお金から代金を引きます。掛け算では 1000 × 750 になってしまい、おつりになりません",
+            }
+        ],
+        defaultHint: "まず2つの品物の値段を足して合計を出し、次に払ったお金(1000円)からその合計を引くとおつりが求まるよ"
     }
 }
