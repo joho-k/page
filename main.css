@@ -70,6 +70,14 @@ h2 {
     border-radius: 20px;
 }
 
+/* ページ主見出し：見た目はh2バナーのまま、意味上は最上位見出し(h1)にする */
+h1.page-title {
+    font-size: 2em;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 20px;
+}
+
 h3 {
     font-size: 1.5em;
     border: 4px solid var(--primary);
