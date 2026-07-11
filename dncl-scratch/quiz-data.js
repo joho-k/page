@@ -886,6 +886,83 @@ window.quizData = {
         ],
         defaultHint: "それぞれの演算子で num を計算するとどうなるか考えてみよう。10で割った「あまり」が一の位になるよ"
     },
+    q016: {
+        title: "3の倍数を数える",
+        addedAt: "2026-07-08",
+        difficulty: 3,
+        question: "1から20までの整数のうち、3の倍数が何個あるかを数えて表示するようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "count",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "20",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "i % 3"
+                    },
+                    {
+                        type: "if",
+                        condition: "amari == 0",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "count",
+                                value: "count __BLANK_blank_a__ __BLANK_blank_b__"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"3の倍数は\" + count + \"個\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+            { label: "i", value: "i" },
+        ],
+        answers: [
+            {
+                values: ["+", "1"],
+                correct: true,
+            },
+            {
+                values: ["+", "i"],
+                correct: false,
+                hint: "count + i だと個数ではなく3の倍数の合計になってしまいます。数えるときは毎回1ずつ増やします",
+            },
+            {
+                values: ["-", "1"],
+                correct: false,
+                hint: "引き算では count が減っていきます。見つけた数を数えるには足していきます",
+            },
+            {
+                values: ["*", "2"],
+                correct: false,
+                hint: "掛け算では正しく数えられません。1個見つけるたびに1を足しましょう",
+            },
+            {
+                values: ["+", "2"],
+                correct: false,
+                hint: "1個見つけるたびに2ずつ増えてしまい、個数が2倍になります。足すのは1です",
+            }
+        ],
+        defaultHint: "3の倍数を1個見つけるたびに、count を1ずつ増やそう（count = count + 1）"
+    },
     q017: {
         title: "フィボナッチ数列",
         addedAt: "2026-07-09",
