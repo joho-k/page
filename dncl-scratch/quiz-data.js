@@ -886,6 +886,162 @@ window.quizData = {
         ],
         defaultHint: "それぞれの演算子で num を計算するとどうなるか考えてみよう。10で割った「あまり」が一の位になるよ"
     },
+    q016: {
+        title: "3の倍数を数える",
+        addedAt: "2026-07-08",
+        difficulty: 3,
+        question: "1から20までの整数のうち、3の倍数が何個あるかを数えて表示するようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "count",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "20",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "i % 3"
+                    },
+                    {
+                        type: "if",
+                        condition: "amari == 0",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "count",
+                                value: "count __BLANK_blank_a__ __BLANK_blank_b__"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"3の倍数は\" + count + \"個\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+            { label: "i", value: "i" },
+        ],
+        answers: [
+            {
+                values: ["+", "1"],
+                correct: true,
+            },
+            {
+                values: ["+", "i"],
+                correct: false,
+                hint: "count + i だと個数ではなく3の倍数の合計になってしまいます。数えるときは毎回1ずつ増やします",
+            },
+            {
+                values: ["-", "1"],
+                correct: false,
+                hint: "引き算では count が減っていきます。見つけた数を数えるには足していきます",
+            },
+            {
+                values: ["*", "2"],
+                correct: false,
+                hint: "掛け算では正しく数えられません。1個見つけるたびに1を足しましょう",
+            },
+            {
+                values: ["+", "2"],
+                correct: false,
+                hint: "1個見つけるたびに2ずつ増えてしまい、個数が2倍になります。足すのは1です",
+            }
+        ],
+        defaultHint: "3の倍数を1個見つけるたびに、count を1ずつ増やそう（count = count + 1）"
+    },
+    q017: {
+        title: "フィボナッチ数列",
+        addedAt: "2026-07-09",
+        difficulty: 4,
+        question: "フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "zen",
+                value: "0"
+            },
+            {
+                type: "assign",
+                name: "ima",
+                value: "1"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "8",
+                step: "1",
+                body: [
+                    {
+                        type: "print",
+                        value: "ima"
+                    },
+                    {
+                        type: "assign",
+                        name: "tsugi",
+                        value: "zen + ima"
+                    },
+                    {
+                        type: "assign",
+                        name: "zen",
+                        value: "__BLANK_blank_a__"
+                    },
+                    {
+                        type: "assign",
+                        name: "ima",
+                        value: "__BLANK_blank_b__"
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "zen", value: "zen" },
+            { label: "ima", value: "ima" },
+            { label: "tsugi", value: "tsugi" },
+            { label: "i", value: "i" },
+        ],
+        answers: [
+            {
+                values: ["ima", "tsugi"],
+                correct: true,
+            },
+            {
+                values: ["tsugi", "ima"],
+                correct: false,
+                hint: "組み合わせが逆です。zen には「ひとつ前」だった ima を、ima には新しい tsugi を入れます",
+            },
+            {
+                values: ["ima", "ima"],
+                correct: false,
+                hint: "ima に ima を入れても値は変わりません。新しい数 tsugi を入れましょう",
+            },
+            {
+                values: ["zen", "tsugi"],
+                correct: false,
+                hint: "zen に zen を入れても更新されません。zen には今の数 ima を移します",
+            },
+            {
+                values: ["tsugi", "tsugi"],
+                correct: false,
+                hint: "両方に tsugi を入れると zen と ima が同じ値になり、数列が正しく進みません",
+            }
+        ],
+        defaultHint: "次の数を作ったら、今の数 ima を zen へ移し、新しい tsugi を ima にします（zen ← ima、ima ← tsugi）"
+    },
     q018: {
         title: "素数判定（約数の個数）",
         addedAt: "2026-07-10",
