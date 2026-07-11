@@ -9,6 +9,7 @@ let currentExplanationHtml = null;
 let highlightedArrayAccesses = new Set();
 let highlightedVars = new Set();
 let whileIterationCounts = new Map();
+let forIterationStates = new Map();  // for ループを実行時に動的展開するための現在値
 let stepHistory = [];          // 「前へ」用に各ステップ実行前の状態を積む
 let executionActive = false;   // ステップ/一括実行が動いているか（プログラム変更でキャンセル）
 
@@ -1641,6 +1642,7 @@ function safeEval(expr) {
 function buildTrace(ast, targetTrace = trace) {
     if (targetTrace === trace && trace.length === 0 && stepIndex === 0) {
         whileIterationCounts = new Map();
+        forIterationStates = new Map();
     }
 
     for (let node of ast) {
@@ -1709,26 +1711,45 @@ function buildTrace(ast, targetTrace = trace) {
         }
 
         if (node.type === "for") {
-            const start = safeEval(node.start);
-            const end = safeEval(node.end);
-            const step = safeEval(node.step);
+            // for も while / if と同じく実行時に動的展開する。
+            // start/end/step をビルド時ではなく run() の中で評価することで、
+            // 「1 から n まで」のように終了値が実行時に決まる変数でも正しく回る。
+            const forKey = node.blockId || node;
+            targetTrace.push({
+                blockId: node.blockId,
+                run: () => {
+                    const start = safeEval(node.start);
+                    const end = safeEval(node.end);
+                    const step = safeEval(node.step);
 
-            for (let i = start; i <= end; i += step) {
-                const current = i;
-                const isLast = current + step > end;
+                    const prev = forIterationStates.get(forKey);
+                    const current = prev === undefined ? start : prev.current + step;
 
-                targetTrace.push({
-                    blockId: node.blockId,
-                    run: () => {
-                        setVar(node.varName, current);
-                        return { current };
-                    },
-                    getDetails: () => buildForDetails(node, current, end, step, isLast, start)
-                });
+                    // 繰り返し終了（0回のケースも含む）
+                    if (current > end) {
+                        forIterationStates.delete(forKey);
+                        return { ended: true };
+                    }
 
-                // ★ここが重要：展開する
-                buildTrace(node.body, targetTrace);
-            }
+                    const isLast = current + step > end;
+                    setVar(node.varName, current);
+
+                    // 本体を現在位置に挿入。続きがあるならループ制御ノード自身も後ろに積む。
+                    if (isLast) {
+                        forIterationStates.delete(forKey);
+                        insertTraceAtCurrentPosition([...node.body]);
+                    } else {
+                        forIterationStates.set(forKey, { current });
+                        insertTraceAtCurrentPosition([...node.body, node]);
+                    }
+
+                    return { current, end, step, start, isLast, ended: false };
+                },
+                getDetails: (scope, result) => {
+                    if (!result || result.ended) return null;
+                    return buildForDetails(node, result.current, result.end, result.step, result.isLast, result.start);
+                }
+            });
         }
 
         if (node.type === "while") {
@@ -1852,6 +1873,7 @@ function snapshotState() {
         highlightedArrayAccesses: new Set(highlightedArrayAccesses),
         highlightedVars: new Set(highlightedVars),
         whileIterationCounts: new Map(whileIterationCounts),
+        forIterationStates: new Map(forIterationStates),
         activeBlockId: document.querySelector(".step-active")?.dataset.blockId || null
     };
 }
@@ -1867,6 +1889,7 @@ function restoreState(s) {
     highlightedArrayAccesses = new Set(s.highlightedArrayAccesses);
     highlightedVars = new Set(s.highlightedVars);
     whileIterationCounts = new Map(s.whileIterationCounts);
+    forIterationStates = new Map(s.forIterationStates);
     if (s.activeBlockId) {
         highlightBlock(s.activeBlockId);
     } else {
@@ -1898,6 +1921,7 @@ function stepStart() {
     stepHistory = [];
     changedVars = new Set();
     whileIterationCounts = new Map();
+    forIterationStates = new Map();
     currentExplanation = STEP_INTRO_TEXT;
     currentExplanationHtml = null;
     highlightedArrayAccesses = new Set();
@@ -1935,6 +1959,7 @@ function cancelExecution() {
     stepHistory = [];
     changedVars = new Set();
     whileIterationCounts = new Map();
+    forIterationStates = new Map();
     currentExplanation = STEP_INTRO_TEXT;
     currentExplanationHtml = null;
     highlightedArrayAccesses = new Set();

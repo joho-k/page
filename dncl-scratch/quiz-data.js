@@ -886,6 +886,257 @@ window.quizData = {
         ],
         defaultHint: "それぞれの演算子で num を計算するとどうなるか考えてみよう。10で割った「あまり」が一の位になるよ"
     },
+    q016: {
+        title: "3の倍数を数える",
+        addedAt: "2026-07-08",
+        difficulty: 3,
+        question: "1から20までの整数のうち、3の倍数が何個あるかを数えて表示するようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "count",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "20",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "i % 3"
+                    },
+                    {
+                        type: "if",
+                        condition: "amari == 0",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "count",
+                                value: "count __BLANK_blank_a__ __BLANK_blank_b__"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"3の倍数は\" + count + \"個\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+            { label: "i", value: "i" },
+        ],
+        answers: [
+            {
+                values: ["+", "1"],
+                correct: true,
+            },
+            {
+                values: ["+", "i"],
+                correct: false,
+                hint: "count + i だと個数ではなく3の倍数の合計になってしまいます。数えるときは毎回1ずつ増やします",
+            },
+            {
+                values: ["-", "1"],
+                correct: false,
+                hint: "引き算では count が減っていきます。見つけた数を数えるには足していきます",
+            },
+            {
+                values: ["*", "2"],
+                correct: false,
+                hint: "掛け算では正しく数えられません。1個見つけるたびに1を足しましょう",
+            },
+            {
+                values: ["+", "2"],
+                correct: false,
+                hint: "1個見つけるたびに2ずつ増えてしまい、個数が2倍になります。足すのは1です",
+            }
+        ],
+        defaultHint: "3の倍数を1個見つけるたびに、count を1ずつ増やそう（count = count + 1）"
+    },
+    q017: {
+        title: "フィボナッチ数列",
+        addedAt: "2026-07-09",
+        difficulty: 4,
+        question: "フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "zen",
+                value: "0"
+            },
+            {
+                type: "assign",
+                name: "ima",
+                value: "1"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "8",
+                step: "1",
+                body: [
+                    {
+                        type: "print",
+                        value: "ima"
+                    },
+                    {
+                        type: "assign",
+                        name: "tsugi",
+                        value: "zen + ima"
+                    },
+                    {
+                        type: "assign",
+                        name: "zen",
+                        value: "__BLANK_blank_a__"
+                    },
+                    {
+                        type: "assign",
+                        name: "ima",
+                        value: "__BLANK_blank_b__"
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "zen", value: "zen" },
+            { label: "ima", value: "ima" },
+            { label: "tsugi", value: "tsugi" },
+            { label: "i", value: "i" },
+        ],
+        answers: [
+            {
+                values: ["ima", "tsugi"],
+                correct: true,
+            },
+            {
+                values: ["tsugi", "ima"],
+                correct: false,
+                hint: "組み合わせが逆です。zen には「ひとつ前」だった ima を、ima には新しい tsugi を入れます",
+            },
+            {
+                values: ["ima", "ima"],
+                correct: false,
+                hint: "ima に ima を入れても値は変わりません。新しい数 tsugi を入れましょう",
+            },
+            {
+                values: ["zen", "tsugi"],
+                correct: false,
+                hint: "zen に zen を入れても更新されません。zen には今の数 ima を移します",
+            },
+            {
+                values: ["tsugi", "tsugi"],
+                correct: false,
+                hint: "両方に tsugi を入れると zen と ima が同じ値になり、数列が正しく進みません",
+            }
+        ],
+        defaultHint: "次の数を作ったら、今の数 ima を zen へ移し、新しい tsugi を ima にします（zen ← ima、ima ← tsugi）"
+    },
+    q018: {
+        title: "素数判定（約数の個数）",
+        addedAt: "2026-07-10",
+        difficulty: 5,
+        question: "素数とは「1とその数自身でしか割り切れない数」で、これは「約数がちょうど2個ある数」と言いかえられます。1からnまで順に割ってみて約数の個数を数え、n=13が素数かどうかを表示しよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "n",
+                value: "13"
+            },
+            {
+                type: "assign",
+                name: "yakusu",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "n",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "n __BLANK_blank_a__ i"
+                    },
+                    {
+                        type: "if",
+                        condition: "amari == 0",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "yakusu",
+                                value: "yakusu __BLANK_blank_b__ 1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "ifelse",
+                condition: "yakusu __BLANK_blank_c__ 2",
+                ifBody: [
+                    {
+                        type: "print",
+                        value: "\"素数です\""
+                    }
+                ],
+                elseBody: [
+                    {
+                        type: "print",
+                        value: "\"素数ではありません\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "%", value: "%" },
+            { label: "/", value: "/" },
+            { label: "+", value: "+" },
+            { label: "*", value: "*" },
+            { label: "==", value: "==" },
+            { label: ">", value: ">" },
+            { label: ">=", value: ">=" }
+        ],
+        answers: [
+            {
+                values: ["%", "+", "=="],
+                correct: true,
+            },
+            {
+                values: ["/", "+", "=="],
+                correct: false,
+                hint: "割り算の答えでは「割り切れるかどうか」は分かりません。わったあまりが0かを見たいので % を使います",
+            },
+            {
+                values: ["%", "*", "=="],
+                correct: false,
+                hint: "yakusu は0から始まるので掛け算では0のまま増えません。約数を1個ずつ + で数えます",
+            },
+            {
+                values: ["%", "+", ">"],
+                correct: false,
+                hint: "「約数が2個より多い」だと、約数がたくさんある数まで素数と判定してしまいます。ちょうど2個(==)が素数の条件です",
+            },
+            {
+                values: ["%", "+", ">="],
+                correct: false,
+                hint: "「約数が2個以上」だと、約数を多く持つ合成数もすべて素数になってしまいます。ちょうど2個だけを == で判定します",
+            }
+        ],
+        defaultHint: "n を i でわったあまりが0なら、i は n の約数です。約数の個数を数え、それがちょうど2個(1と自分自身のみ)なら素数、と考えよう"
+    },
     q019: {
         title: "買い物のおつり",
         addedAt: "2026-07-11",
