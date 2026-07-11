@@ -1041,5 +1041,100 @@ window.quizData = {
             }
         ],
         defaultHint: "次の数を作ったら、今の数 ima を zen へ移し、新しい tsugi を ima にします（zen ← ima、ima ← tsugi）"
+    },
+    q018: {
+        title: "素数判定（約数の個数）",
+        addedAt: "2026-07-10",
+        difficulty: 5,
+        question: "素数とは「1とその数自身でしか割り切れない数」で、これは「約数がちょうど2個ある数」と言いかえられます。1からnまで順に割ってみて約数の個数を数え、n=13が素数かどうかを表示しよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "n",
+                value: "13"
+            },
+            {
+                type: "assign",
+                name: "yakusu",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "n",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "n __BLANK_blank_a__ i"
+                    },
+                    {
+                        type: "if",
+                        condition: "amari == 0",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "yakusu",
+                                value: "yakusu __BLANK_blank_b__ 1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "ifelse",
+                condition: "yakusu __BLANK_blank_c__ 2",
+                ifBody: [
+                    {
+                        type: "print",
+                        value: "\"素数です\""
+                    }
+                ],
+                elseBody: [
+                    {
+                        type: "print",
+                        value: "\"素数ではありません\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "%", value: "%" },
+            { label: "/", value: "/" },
+            { label: "+", value: "+" },
+            { label: "*", value: "*" },
+            { label: "==", value: "==" },
+            { label: ">", value: ">" },
+            { label: ">=", value: ">=" }
+        ],
+        answers: [
+            {
+                values: ["%", "+", "=="],
+                correct: true,
+            },
+            {
+                values: ["/", "+", "=="],
+                correct: false,
+                hint: "割り算の答えでは「割り切れるかどうか」は分かりません。わったあまりが0かを見たいので % を使います",
+            },
+            {
+                values: ["%", "*", "=="],
+                correct: false,
+                hint: "yakusu は0から始まるので掛け算では0のまま増えません。約数を1個ずつ + で数えます",
+            },
+            {
+                values: ["%", "+", ">"],
+                correct: false,
+                hint: "「約数が2個より多い」だと、約数がたくさんある数まで素数と判定してしまいます。ちょうど2個(==)が素数の条件です",
+            },
+            {
+                values: ["%", "+", ">="],
+                correct: false,
+                hint: "「約数が2個以上」だと、約数を多く持つ合成数もすべて素数になってしまいます。ちょうど2個だけを == で判定します",
+            }
+        ],
+        defaultHint: "n を i でわったあまりが0なら、i は n の約数です。約数の個数を数え、それがちょうど2個(1と自分自身のみ)なら素数、と考えよう"
     }
 }
