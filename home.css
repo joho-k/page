@@ -224,6 +224,23 @@ body {
     font-size: 0.9rem;
 }
 
+.author-contact {
+    display: inline-block;
+    margin-top: 1rem;
+    text-decoration: none;
+    font-weight: 700;
+    color: #fff;
+    background: var(--primary);
+    border-radius: 999px;
+    padding: 8px 18px;
+    transition: .15s ease;
+}
+
+.author-contact:hover {
+    transform: translateY(-1px);
+    background: var(--accent);
+}
+
 .about .references ul {
     padding-left: 1.2rem;
     line-height: 1.9;
