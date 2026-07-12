@@ -1990,8 +1990,9 @@ function quizShowResultDialog(ok, hintMessage = "") {
 
 // 正解した問題をX（旧Twitter）で拡散するための投稿画面を開く
 function quizShareOnX(info) {
+    // シェア用ページ（問題ごとのTwitterカード画像 meta 付き。人間は問題ページへ転送される）
     const quizUrl =
-        `https://joho-kyoshitsu.com/dncl-scratch/editor.html?mode=quiz&id=${encodeURIComponent(info.id)}`;
+        `https://joho-kyoshitsu.com/dncl-scratch/share/${encodeURIComponent(info.id)}.html`;
     const text = [
         `共テプロトレで「${info.title}」に正解しました！🎉`,
         `共通テスト「情報I」のプログラミングを、実際に動かしながら学べます。`,
