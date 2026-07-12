@@ -1476,6 +1476,29 @@ pre {
     gap: 8px;
 }
 
+/* 正解時のみ表示するX（旧Twitter）シェアボタン */
+.quiz-result-share {
+    margin-top: 14px;
+    width: 100%;
+    border: 2px solid #000000;
+    background: #000000;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.quiz-result-share:hover {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+}
+
+.quiz-result-share[hidden] {
+    display: none;
+}
+
 .question-panel {
     margin: 14px 5px 6px;
     padding: 12px 14px;

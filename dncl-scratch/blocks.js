@@ -1972,7 +1972,37 @@ function quizShowResultDialog(ok, hintMessage = "") {
     retryBtn.onclick = () => dialog.close();
     // 「他の問題を解く」＝問題一覧へ移動
     othersBtn.onclick = () => quizGoToList();
+
+    // 正解時だけ「Xでシェアする」ボタンを出し、拡散してもらう
+    const shareBtn = document.getElementById("quiz-result-share-button");
+    if (shareBtn) {
+        if (ok && window.quizShareInfo) {
+            shareBtn.hidden = false;
+            shareBtn.onclick = () => quizShareOnX(window.quizShareInfo);
+        } else {
+            shareBtn.hidden = true;
+            shareBtn.onclick = null;
+        }
+    }
+
     dialog.showModal();
+}
+
+// 正解した問題をX（旧Twitter）で拡散するための投稿画面を開く
+function quizShareOnX(info) {
+    const quizUrl =
+        `https://joho-kyoshitsu.com/dncl-scratch/editor.html?mode=quiz&id=${encodeURIComponent(info.id)}`;
+    const text = [
+        `共テプロトレで「${info.title}」に正解しました！🎉`,
+        `共通テスト「情報I」のプログラミングを、実際に動かしながら学べます。`,
+        `#共テプロトレ #情報I`,
+    ].join("\n");
+    const params = new URLSearchParams({ text, url: quizUrl });
+    window.open(
+        `https://twitter.com/intent/tweet?${params.toString()}`,
+        "_blank",
+        "noopener,noreferrer"
+    );
 }
 
 // 問題一覧（practice.html）へ移動する。state=noheader を引き継ぐ
@@ -2080,6 +2110,9 @@ function setupQuizModeIfPresent() {
     if (!quiz) return false;
 
     document.body.classList.add("quiz-mode");
+
+    // 正解時のSNSシェアで使う問題情報を控えておく
+    window.quizShareInfo = { id: p.id, title: quiz.title ?? `問題 ${p.id}` };
 
     // quiz mode: question is shown in choices bar (title only)
     const panel = document.getElementById("question-panel");
