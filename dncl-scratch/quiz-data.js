@@ -1206,5 +1206,60 @@ window.quizData = {
             }
         ],
         defaultHint: "まず2つの品物の値段を足して合計を出し、次に払ったお金(1000円)からその合計を引くとおつりが求まるよ"
+    },
+    q020: {
+        title: "残りのページ数",
+        addedAt: "2026-07-13",
+        difficulty: 1,
+        question: "全部で120ページの本を、45ページまで読みました。残りが何ページあるかを表示するようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "zentai",
+                value: "120"
+            },
+            {
+                type: "assign",
+                name: "yonda",
+                value: "45"
+            },
+            {
+                type: "assign",
+                name: "nokori",
+                value: "zentai __BLANK_blank_a__ yonda"
+            },
+            {
+                type: "print",
+                value: "\"残りは\" + nokori + \"ページ\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["-"],
+                correct: true,
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算だと 120 + 45 で 165 ページになり、本のページ数より多くなってしまいます",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "掛け算だと 120 × 45 になってしまいます。残りは「全体から読んだぶんを取り除いた数」です",
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "割り算では残りのページ数になりません。何ページ減ったかを考えよう",
+            }
+        ],
+        defaultHint: "全体のページ数から、すでに読んだページ数を取り除くと残りが求まるよ"
     }
 }
