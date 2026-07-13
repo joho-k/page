@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第15問 一の位を取り出す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="整数 num（＝47）の一の位（いちのくらい）の数字だけを取り出して表示するようにしよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,一の位を取り出す">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q015/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第15問 一の位を取り出す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="整数 num（＝47）の一の位（いちのくらい）の数字だけを取り出して表示するようにしよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q015/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q015.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第15問 一の位を取り出す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="整数 num（＝47）の一の位（いちのくらい）の数字だけを取り出して表示するようにしよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q015.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q015/index.html#quiz",
+      "name": "第15問 一の位を取り出す",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q015/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "整数 num（＝47）の一の位（いちのくらい）の数字だけを取り出して表示するようにしよう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "%"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第15問 一の位を取り出す",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q015/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q015";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第15問 一の位を取り出す</h1>
+            <p>整数 num（＝47）の一の位（いちのくらい）の数字だけを取り出して表示するようにしよう</p>
+            <p>難易度：★★★☆☆（3／標準）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>num = 47
+ichi = num ［A］ 10
+表示する(&quot;一の位は&quot; + ichi)</code></pre>
+            <p>空欄 ［A］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+                <li><code>%</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>それぞれの演算子で num を計算するとどうなるか考えてみよう。10で割った「あまり」が一の位になるよ</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>%</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>/</code> … num / 10 を計算するとどうなる？ 47 / 10 は商の4になります。一の位を取り出すには「あまり」がほしいですね</li>
+            <li>［A］<code>+</code> … num + 10 を計算するとどうなる？ 47 + 10 は 57 です。一の位の7を取り出せているでしょうか？</li>
+            <li>［A］<code>-</code> … num - 10 を計算するとどうなる？ 47 - 10 は 37 です。一の位の7を取り出せているでしょうか？</li>
+            <li>［A］<code>*</code> … num * 10 を計算するとどうなる？ 47 * 10 は 470 です。一の位の7を取り出せているでしょうか？</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q014/index.html">第14問へ</a></li>
+                <li><a href="../q016/index.html">第16問へ</a></li>
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>

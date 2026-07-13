@@ -1477,8 +1477,27 @@ pre {
 }
 
 /* 正解時のみ表示するX（旧Twitter）シェアボタン */
+/* シェアのお願いダイアログ（正解ダイアログのあとに出る） */
+.quiz-plea-dialog {
+    border: 3px dashed #ffb300;
+    background: #fffdf5;
+}
+
+.quiz-plea-title {
+    margin: 0 0 10px;
+    text-align: center;
+    color: #ab0333;
+}
+
+.quiz-plea-body {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.9;
+    color: #5a4a1f;
+}
+
 .quiz-result-share {
-    margin-top: 14px;
+    margin-top: 16px;
     width: 100%;
     border: 2px solid #000000;
     background: #000000;

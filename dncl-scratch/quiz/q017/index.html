@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第17問 フィボナッチ数列｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,フィボナッチ数列">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q017/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第17問 フィボナッチ数列｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q017/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q017.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第17問 フィボナッチ数列｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q017.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q017/index.html#quiz",
+      "name": "第17問 フィボナッチ数列",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q017/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ima , tsugi"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "zen"
+          },
+          {
+            "@type": "Answer",
+            "text": "ima"
+          },
+          {
+            "@type": "Answer",
+            "text": "tsugi"
+          },
+          {
+            "@type": "Answer",
+            "text": "i"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第17問 フィボナッチ数列",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q017/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q017";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第17問 フィボナッチ数列</h1>
+            <p>フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）</p>
+            <p>難易度：★★★★☆（4／やや難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>zen = 0
+ima = 1
+i を 1 から 8 まで 1 ずつ増やしながら繰り返す:
+  表示する(ima)
+  tsugi = zen + ima
+  zen = ［A］
+  ima = ［B］</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>zen</code></li>
+                <li><code>ima</code></li>
+                <li><code>tsugi</code></li>
+                <li><code>i</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>次の数を作ったら、今の数 ima を zen へ移し、新しい tsugi を ima にします（zen ← ima、ima ← tsugi）</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>ima</code></li>
+            <li>空欄 ［B］ … <code>tsugi</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>tsugi</code>　［B］<code>ima</code> … 組み合わせが逆です。zen には「ひとつ前」だった ima を、ima には新しい tsugi を入れます</li>
+            <li>［A］<code>ima</code>　［B］<code>ima</code> … ima に ima を入れても値は変わりません。新しい数 tsugi を入れましょう</li>
+            <li>［A］<code>zen</code>　［B］<code>tsugi</code> … zen に zen を入れても更新されません。zen には今の数 ima を移します</li>
+            <li>［A］<code>tsugi</code>　［B］<code>tsugi</code> … 両方に tsugi を入れると zen と ima が同じ値になり、数列が正しく進みません</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q016/index.html">第16問へ</a></li>
+                <li><a href="../q018/index.html">第18問へ</a></li>
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>

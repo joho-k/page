@@ -70,7 +70,8 @@ function renderPracticeProblems() {
 
         const a = document.createElement("a");
 
-        a.href = `./editor.html?mode=quiz&id=${encodeURIComponent(id)}`;
+        // 問題ごとの静的ページ（中身は editor と同じ画面。問題ごとのカード画像とURLを持つ）
+        a.href = `./quiz/${encodeURIComponent(id)}/index.html`;
 
         a.innerHTML = `
 ${id}：${quiz.title ?? "問題"}
