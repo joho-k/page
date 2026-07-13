@@ -1579,6 +1579,9 @@ function loadProgramFromUrlIfPresent() {
 }
 
 function quizGetParams() {
+    // 問題ごとの静的ページ（quiz/qNNN/）は window.QUIZ_ID で問題を指定する。
+    // editor.html は従来どおり ?mode=quiz&id=qNNN で指定する。
+    if (window.QUIZ_ID) return { id: window.QUIZ_ID };
     const params = new URLSearchParams(window.location.search);
     const mode = params.get("mode");
     const id = params.get("id");
@@ -1969,18 +1972,112 @@ function quizShowResultDialog(ok, hintMessage = "") {
     retryBtn.classList.toggle("quiz-result-secondary", ok);
     othersBtn.classList.toggle("quiz-result-secondary", !ok);
     // 「もう一度問題を確認する」＝ダイアログを閉じて問題画面に戻る
-    retryBtn.onclick = () => dialog.close();
-    // 「他の問題を解く」＝問題一覧へ移動
-    othersBtn.onclick = () => quizGoToList();
+    retryBtn.onclick = () => {
+        quizAfterShareAction = null;
+        dialog.close();
+    };
+    // 「他の問題を解く」＝問題一覧へ移動（正解時はお願いダイアログを挟んでから移動する）
+    othersBtn.onclick = () => {
+        quizAfterShareAction = quizGoToList;
+        dialog.close(); // 遷移は close イベント（＝お願いダイアログのあと）で行う
+    };
+
+    // 正解した回だけ、このダイアログを閉じたあとにシェアのお願いを出す
+    quizPleaPending = ok && Boolean(window.quizShareInfo);
+    dialog.onclose = () => {
+        if (quizPleaPending) {
+            quizPleaPending = false;
+            quizShowSharePleaDialog();
+        } else {
+            quizRunAfterShareAction();
+        }
+    };
+
     dialog.showModal();
 }
 
-// 問題一覧（practice.html）へ移動する。state=noheader を引き継ぐ
+// 正解ダイアログを閉じたあとの遷移（「他の問題を解く」など）を、お願いダイアログのあとまで待たせる
+let quizPleaPending = false;
+let quizAfterShareAction = null;
+
+function quizRunAfterShareAction() {
+    const action = quizAfterShareAction;
+    quizAfterShareAction = null;
+    if (action) action();
+}
+
+// ============================================================
+// シェアの文言はここだけを直せばよい（お願いダイアログ／X投稿文の両方がこれを使う）
+// ============================================================
+const QUIZ_SHARE_COPY = {
+    title: "お願いがあります🙏",
+    // ダイアログ本文。HTML可（<strong> や <br> が使える）
+    body: `「共テプロトレ」は、ひとりで作っている無料の教材です。広告も宣伝費もなく、
+        知ってもらえる方法が<strong>あなたのシェアだけ</strong>しかありません。<br>
+        役に立ったと思ってもらえたなら、同じ「情報I」でつまずいている友だちに、
+        どうかこの問題を教えてあげてください。それが、次に困っている誰かに届く唯一の道です。`,
+    postButton: "𝕏 でシェアして応援する",
+    closeButton: "あとで",
+    // X（旧Twitter）の投稿本文。info = { id, title }
+    tweet: (info) => [
+        `共テプロトレで「${info.title}」に正解しました！🎉`,
+        `共通テスト「情報I」のプログラミングを、実際に動かしながら学べる無料教材です。`,
+        `同じ「情報I」でつまずいてる友だちにも、ぜひ教えてあげてください🙏`,
+        `#共テプロトレ #情報I`,
+    ].join("\n"),
+};
+
+// シェアのお願いダイアログ（正解ダイアログのあとに出す）
+function quizShowSharePleaDialog() {
+    const dialog = document.getElementById("quiz-share-dialog");
+    const titleEl = document.getElementById("quiz-share-title");
+    const bodyEl = document.getElementById("quiz-share-body");
+    const postBtn = document.getElementById("quiz-share-post-button");
+    const closeBtn = document.getElementById("quiz-share-close-button");
+    if (!dialog || !titleEl || !bodyEl || !postBtn || !closeBtn) {
+        quizRunAfterShareAction();
+        return;
+    }
+
+    titleEl.textContent = QUIZ_SHARE_COPY.title;
+    bodyEl.innerHTML = QUIZ_SHARE_COPY.body;
+    postBtn.textContent = QUIZ_SHARE_COPY.postButton;
+    closeBtn.textContent = QUIZ_SHARE_COPY.closeButton;
+
+    postBtn.onclick = () => {
+        quizShareOnX(window.quizShareInfo);
+        dialog.close();
+    };
+    closeBtn.onclick = () => dialog.close();
+    dialog.onclose = () => quizRunAfterShareAction();
+
+    dialog.showModal();
+}
+
+// 正解した問題をX（旧Twitter）で拡散するための投稿画面を開く
+function quizShareOnX(info) {
+    // 問題ページ（問題ごとのTwitterカード画像 meta を持ち、そのまま解説も読める）
+    const quizUrl =
+        `https://joho-kyoshitsu.com/dncl-scratch/quiz/${encodeURIComponent(info.id)}/index.html`;
+    const params = new URLSearchParams({
+        text: QUIZ_SHARE_COPY.tweet(info),
+        url: quizUrl,
+    });
+    window.open(
+        `https://twitter.com/intent/tweet?${params.toString()}`,
+        "_blank",
+        "noopener,noreferrer"
+    );
+}
+
+// 問題一覧（practice.html）へ移動する。state=noheader を引き継ぐ。
+// 問題ごとの静的ページ（quiz/qNNN/）は階層が深いので DNCL_BASE を前に付ける。
 function quizGoToList() {
     const params = new URLSearchParams(location.search);
+    const base = window.DNCL_BASE || "";
     const target = params.get("state") === "noheader"
-        ? "practice.html?state=noheader"
-        : "practice.html";
+        ? `${base}practice.html?state=noheader`
+        : `${base}practice.html`;
     location.href = target;
 }
 
@@ -2080,6 +2177,9 @@ function setupQuizModeIfPresent() {
     if (!quiz) return false;
 
     document.body.classList.add("quiz-mode");
+
+    // 正解時のSNSシェアで使う問題情報を控えておく
+    window.quizShareInfo = { id: p.id, title: quiz.title ?? `問題 ${p.id}` };
 
     // quiz mode: question is shown in choices bar (title only)
     const panel = document.getElementById("question-panel");

@@ -239,6 +239,17 @@
         </div>
     </dialog>
 
+    <!-- 正解ダイアログを閉じたあとに出す、シェアのお願い。
+         文言（見出し・本文・ボタン名・ツイート本文）は blocks.js の QUIZ_SHARE_COPY にまとめてある。 -->
+    <dialog id="quiz-share-dialog" class="quiz-result-dialog quiz-plea-dialog">
+        <h3 id="quiz-share-title" class="quiz-plea-title"></h3>
+        <p id="quiz-share-body" class="quiz-plea-body"></p>
+        <button id="quiz-share-post-button" type="button" class="quiz-result-share"></button>
+        <div class="quiz-result-buttons">
+            <button id="quiz-share-close-button" type="button" class="quiz-result-secondary"></button>
+        </div>
+    </dialog>
+
     <script src="./quiz-data.js"></script>
     <script src="./blocks.js"></script>
     <script src="./executor.js"></script>

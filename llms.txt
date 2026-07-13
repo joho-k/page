@@ -41,3 +41,25 @@
 
 - [サイトマップ](https://joho-kyoshitsu.com/sitemap.xml)
 - [全文版（LLM向け）](https://joho-kyoshitsu.com/llms-full.txt)
+
+## 共テプロトレ 問題ページ（個別ページ）
+
+- [第1問 合計（穴埋め）](https://joho-kyoshitsu.com/dncl-scratch/quiz/q001/index.html): sumに、xとyを合計した値を代入するプログラムを作成せよ（難易度1）
+- [第2問 繰り返し回数](https://joho-kyoshitsu.com/dncl-scratch/quiz/q002/index.html): 「これを3回表示してください」を3回表示するようにしよう（難易度1）
+- [第3問 2の倍数判定](https://joho-kyoshitsu.com/dncl-scratch/quiz/q003/index.html): 2の倍数のときだけ「2の倍数です」と表示されるようにしよう（難易度2）
+- [第4問 カウントダウン](https://joho-kyoshitsu.com/dncl-scratch/quiz/q004/index.html): 「あと少し！」を4回表示するようにしよう（難易度2）
+- [第5問 テスト合格判定](https://joho-kyoshitsu.com/dncl-scratch/quiz/q005/index.html): score が80以上のときだけ「合格」と表示されるようにしよう（難易度3）
+- [第6問 HPが0になるまで](https://joho-kyoshitsu.com/dncl-scratch/quiz/q006/index.html): hp が0より大きい間、繰り返されるようにしよう（難易度3）
+- [第7問 合計金額の計算](https://joho-kyoshitsu.com/dncl-scratch/quiz/q007/index.html): 1個120円のりんごを3個買ったときの合計金額が表示されるようにしよう（難易度1）
+- [第8問 偶数の合計（1〜10）](https://joho-kyoshitsu.com/dncl-scratch/quiz/q008/index.html): 1から10までの整数のうち、偶数だけを合計して表示するようにしよう（3か所の穴をうめよう）（難易度3）
+- [第9問 平均点の計算](https://joho-kyoshitsu.com/dncl-scratch/quiz/q009/index.html): 5人のテストの合計点が140点のとき、1人あたりの平均点が表示されるようにしよう（難易度1）
+- [第10問 2ずつ増やして表示](https://joho-kyoshitsu.com/dncl-scratch/quiz/q010/index.html): 0から始めて2ずつ増やし、0 2 4 6 8 と表示するようにしよう（難易度2）
+- [第11問 1から5までの積](https://joho-kyoshitsu.com/dncl-scratch/quiz/q011/index.html): 1から5までの整数をすべてかけ合わせた値（1×2×3×4×5）が表示されるようにしよう（難易度3）
+- [第12問 配ったおかしの数（二重ループ）](https://joho-kyoshitsu.com/dncl-scratch/quiz/q012/index.html): お菓子の個数が15個あります。3人の友だちに、おかしを1人あたり同じ数ずつ配れるように、空欄を埋めよう。（難易度4）
+- [第13問 最大公約数（ユークリッドの互除法）](https://joho-kyoshitsu.com/dncl-scratch/quiz/q013/index.html): ユークリッドの互除法では、2つの数が等しくなるまで「大きいほうから小さいほうを引く」操作を繰り返し、最後に残った値が最大公約数になります。2つの数 a=252, b=105 の最大公約数を求めて表示しよう。（難易度5）
+- [第14問 平均点で合格クラス判定](https://joho-kyoshitsu.com/dncl-scratch/quiz/q014/index.html): 4人のテストの合計点は240点です。平均点を求め、平均が60点以上のときだけ「合格クラス」と表示されるようにしよう（2か所の穴をうめよう）（難易度3）
+- [第15問 一の位を取り出す](https://joho-kyoshitsu.com/dncl-scratch/quiz/q015/index.html): 整数 num（＝47）の一の位（いちのくらい）の数字だけを取り出して表示するようにしよう（難易度3）
+- [第16問 3の倍数を数える](https://joho-kyoshitsu.com/dncl-scratch/quiz/q016/index.html): 1から20までの整数のうち、3の倍数が何個あるかを数えて表示するようにしよう（2か所の穴をうめよう）（難易度3）
+- [第17問 フィボナッチ数列](https://joho-kyoshitsu.com/dncl-scratch/quiz/q017/index.html): フィボナッチ数列は、直前の2つの数をたして次の数を作る数列です（1, 1, 2, 3, 5, 8, …）。tsugi に次の数を計算したあと、zen（ひとつ前）と ima（今の数）を正しく更新して、この数列を8個表示できるようにしよう（2か所の穴をうめよう）（難易度4）
+- [第18問 素数判定（約数の個数）](https://joho-kyoshitsu.com/dncl-scratch/quiz/q018/index.html): 素数とは「1とその数自身でしか割り切れない数」で、これは「約数がちょうど2個ある数」と言いかえられます。1からnまで順に割ってみて約数の個数を数え、n=13が素数かどうかを表示しよう（3か所の穴をうめよう）（難易度5）
+- [第19問 買い物のおつり](https://joho-kyoshitsu.com/dncl-scratch/quiz/q019/index.html): 300円と450円の品物を買い、1000円札を出しました。2つの品物の合計金額を求めてから、おつりがいくらになるかを表示しよう（2か所の穴をうめよう）（難易度2）
