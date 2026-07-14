@@ -1207,11 +1207,66 @@ window.quizData = {
         ],
         defaultHint: "まず2つの品物の値段を足して合計を出し、次に払ったお金(1000円)からその合計を引くとおつりが求まるよ"
     },
+    q020: {
+        title: "残りのページ数",
+        addedAt: "2026-07-13",
+        difficulty: 1,
+        question: "全部で120ページの本を、45ページまで読みました。残りが何ページあるかを表示するようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "zentai",
+                value: "120"
+            },
+            {
+                type: "assign",
+                name: "yonda",
+                value: "45"
+            },
+            {
+                type: "assign",
+                name: "nokori",
+                value: "zentai __BLANK_blank_a__ yonda"
+            },
+            {
+                type: "print",
+                value: "\"残りは\" + nokori + \"ページ\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["-"],
+                correct: true,
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算だと 120 + 45 で 165 ページになり、本のページ数より多くなってしまいます",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "掛け算だと 120 × 45 になってしまいます。残りは「全体から読んだぶんを取り除いた数」です",
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "割り算では残りのページ数になりません。何ページ減ったかを考えよう",
+            }
+        ],
+        defaultHint: "全体のページ数から、すでに読んだページ数を取り除くと残りが求まるよ"
+    },
     q021: {
         title: "毎日2倍に増える菌",
         addedAt: "2026-07-14",
         difficulty: 2,
-        question: "1個の菌が毎日2倍に増えます。菌の数が100個をこえるのは何日目かを表示しよう。菌の増やし方と、日数の数え方の2か所の穴をうめよう",
+        question: "1日目に1個だった菌が、毎日2倍に増えます。何日目に何個になるかを表示しながら、菌の数が100個をこえるのは何日目かを求めよう。菌の増やし方と、日数の数え方の2か所の穴をうめよう",
         ast: [
             {
                 type: "assign",
@@ -1221,7 +1276,11 @@ window.quizData = {
             {
                 type: "assign",
                 name: "nissu",
-                value: "0"
+                value: "1"
+            },
+            {
+                type: "print",
+                value: "nissu + \"日目は\" + kin + \"個\""
             },
             {
                 type: "while",
@@ -1236,6 +1295,10 @@ window.quizData = {
                         type: "assign",
                         name: "nissu",
                         value: "nissu __BLANK_blank_b__ 1"
+                    },
+                    {
+                        type: "print",
+                        value: "nissu + \"日目は\" + kin + \"個\""
                     }
                 ]
             },
@@ -1276,6 +1339,6 @@ window.quizData = {
                 hint: "引き算だと菌が増えません。「2倍に増える」を表す計算を選ぼう",
             }
         ],
-        defaultHint: "「2倍」は2をかけること。くり返しが1回進むたびに1日たつので、日数は1ずつ足していこう"
+        defaultHint: "1日目がすでに1個なので、2倍にするたびに日数も1ずつ進むよ。「2倍」は2をかけること"
     }
 }
