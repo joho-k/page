@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第21問 毎日2倍に増える菌｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="1日目に1個だった菌が、毎日2倍に増えます。何日目に何個になるかを表示しながら、菌の数が100個をこえるのは何日目かを求めよう。菌の増やし方と、日数の数え方の2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,毎日2倍に増える菌">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q021/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第21問 毎日2倍に増える菌｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="1日目に1個だった菌が、毎日2倍に増えます。何日目に何個になるかを表示しながら、菌の数が100個をこえるのは何日目かを求めよう。菌の増やし方と、日数の数え方の2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q021/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q021.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第21問 毎日2倍に増える菌｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="1日目に1個だった菌が、毎日2倍に増えます。何日目に何個になるかを表示しながら、菌の数が100個をこえるのは何日目かを求めよう。菌の増やし方と、日数の数え方の2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q021.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q021/index.html#quiz",
+      "name": "第21問 毎日2倍に増える菌",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q021/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "1日目に1個だった菌が、毎日2倍に増えます。何日目に何個になるかを表示しながら、菌の数が100個をこえるのは何日目かを求めよう。菌の増やし方と、日数の数え方の2か所の穴をうめよう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "* , +"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第21問 毎日2倍に増える菌",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q021/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q021";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第21問 毎日2倍に増える菌</h1>
+            <p>1日目に1個だった菌が、毎日2倍に増えます。何日目に何個になるかを表示しながら、菌の数が100個をこえるのは何日目かを求めよう。菌の増やし方と、日数の数え方の2か所の穴をうめよう</p>
+            <p>難易度：★★☆☆☆（2／やさしい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>kin = 1
+nissu = 1
+表示する(nissu + &quot;日目は&quot; + kin + &quot;個&quot;)
+kin &lt; 100 の間繰り返す:
+  kin = kin ［A］ 2
+  nissu = nissu ［B］ 1
+  表示する(nissu + &quot;日目は&quot; + kin + &quot;個&quot;)
+表示する(&quot;100個をこえるのは&quot; + nissu + &quot;日目&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>1日目がすでに1個なので、2倍にするたびに日数も1ずつ進むよ。「2倍」は2をかけること</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>*</code></li>
+            <li>空欄 ［B］ … <code>+</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>+</code>　［B］<code>+</code> … 「2倍になる」は2を足すのではなく、2をかけます。足し算だと 1, 3, 5 …と2ずつしか増えません</li>
+            <li>［A］<code>*</code>　［B］<code>-</code> … 日数は1日ずつ進むので、nissu は1ずつ増やします。引き算だと日数がマイナスになってしまいます</li>
+            <li>［A］<code>/</code>　［B］<code>+</code> … わり算だと菌が減っていき、100個をこえないので繰り返しが終わりません</li>
+            <li>［A］<code>-</code>　［B］<code>+</code> … 引き算だと菌が増えません。「2倍に増える」を表す計算を選ぼう</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q020/index.html">第20問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>

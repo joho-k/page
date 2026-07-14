@@ -1261,5 +1261,84 @@ window.quizData = {
             }
         ],
         defaultHint: "全体のページ数から、すでに読んだページ数を取り除くと残りが求まるよ"
+    },
+    q021: {
+        title: "毎日2倍に増える菌",
+        addedAt: "2026-07-14",
+        difficulty: 2,
+        question: "1日目に1個だった菌が、毎日2倍に増えます。何日目に何個になるかを表示しながら、菌の数が100個をこえるのは何日目かを求めよう。菌の増やし方と、日数の数え方の2か所の穴をうめよう",
+        ast: [
+            {
+                type: "assign",
+                name: "kin",
+                value: "1"
+            },
+            {
+                type: "assign",
+                name: "nissu",
+                value: "1"
+            },
+            {
+                type: "print",
+                value: "nissu + \"日目は\" + kin + \"個\""
+            },
+            {
+                type: "while",
+                condition: "kin < 100",
+                body: [
+                    {
+                        type: "assign",
+                        name: "kin",
+                        value: "kin __BLANK_blank_a__ 2"
+                    },
+                    {
+                        type: "assign",
+                        name: "nissu",
+                        value: "nissu __BLANK_blank_b__ 1"
+                    },
+                    {
+                        type: "print",
+                        value: "nissu + \"日目は\" + kin + \"個\""
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"100個をこえるのは\" + nissu + \"日目\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["*", "+"],
+                correct: true,
+            },
+            {
+                values: ["+", "+"],
+                correct: false,
+                hint: "「2倍になる」は2を足すのではなく、2をかけます。足し算だと 1, 3, 5 …と2ずつしか増えません",
+            },
+            {
+                values: ["*", "-"],
+                correct: false,
+                hint: "日数は1日ずつ進むので、nissu は1ずつ増やします。引き算だと日数がマイナスになってしまいます",
+            },
+            {
+                values: ["/", "+"],
+                correct: false,
+                hint: "わり算だと菌が減っていき、100個をこえないので繰り返しが終わりません",
+            },
+            {
+                values: ["-", "+"],
+                correct: false,
+                hint: "引き算だと菌が増えません。「2倍に増える」を表す計算を選ぼう",
+            }
+        ],
+        defaultHint: "1日目がすでに1個なので、2倍にするたびに日数も1ずつ進むよ。「2倍」は2をかけること"
     }
 }
