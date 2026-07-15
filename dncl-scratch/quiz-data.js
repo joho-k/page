@@ -1340,5 +1340,61 @@ window.quizData = {
             }
         ],
         defaultHint: "1日目がすでに1個なので、2倍にするたびに日数も1ずつ進むよ。「2倍」は2をかけること"
+    },
+    q022: {
+        title: "1000円以上で割引",
+        addedAt: "2026-07-15",
+        difficulty: 3,
+        question: "買い物の合計金額が1000円以上のときだけ200円引きになるようにしよう。合計はちょうど1000円です。1000円のときも割引されるように、条件と計算の2か所の穴をうめよう",
+        ast: [
+            {
+                type: "assign",
+                name: "goukei",
+                value: "1000"
+            },
+            {
+                type: "if",
+                condition: "goukei __BLANK_blank_a__ 1000",
+                body: [
+                    {
+                        type: "assign",
+                        name: "goukei",
+                        value: "goukei __BLANK_blank_b__ 200"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"支払いは\" + goukei + \"円\""
+            }
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: ">=", value: ">=" },
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+        ],
+        answers: [
+            {
+                values: [">=", "-"],
+                correct: true,
+            },
+            {
+                values: [">", "-"],
+                correct: false,
+                hint: "合計はちょうど1000円です。> だと1000円のときに割引されません。「1000円以上」はイコールをふくむ >= を使います",
+            },
+            {
+                values: [">=", "+"],
+                correct: false,
+                hint: "割引は金額を「引く」ことなので - を使います。+ だと逆に200円高くなってしまいます",
+            },
+            {
+                values: [">", "+"],
+                correct: false,
+                hint: "「以上」は >=、「割引（引く）」は - です。2か所ともまちがえています",
+            }
+        ],
+        defaultHint: "「1000円以上」はちょうど1000円もふくむので >=。割引は金額を引くので - を使うよ"
     }
 }
