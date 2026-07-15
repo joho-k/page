@@ -1344,8 +1344,8 @@ window.quizData = {
     q022: {
         title: "1000円以上で割引",
         addedAt: "2026-07-15",
-        difficulty: 3,
-        question: "買い物の合計金額が1000円以上のときだけ200円引きになるようにしよう。合計はちょうど1000円です。1000円のときも割引されるように、条件と計算の2か所の穴をうめよう",
+        difficulty: 1,
+        question: "買い物の合計金額が1000円以上のときだけ200円引きになるようにしよう。合計はちょうど1000円です。1000円のときも割引されるように、条件の穴をうめよう",
         ast: [
             {
                 type: "assign",
@@ -1359,7 +1359,7 @@ window.quizData = {
                     {
                         type: "assign",
                         name: "goukei",
-                        value: "goukei __BLANK_blank_b__ 200"
+                        value: "goukei - 200"
                     }
                 ]
             },
@@ -1371,30 +1371,18 @@ window.quizData = {
         choices: [
             { label: ">", value: ">" },
             { label: ">=", value: ">=" },
-            { label: "+", value: "+" },
-            { label: "-", value: "-" },
         ],
         answers: [
             {
-                values: [">=", "-"],
+                values: [">="],
                 correct: true,
             },
             {
-                values: [">", "-"],
+                values: [">"],
                 correct: false,
                 hint: "合計はちょうど1000円です。> だと1000円のときに割引されません。「1000円以上」はイコールをふくむ >= を使います",
-            },
-            {
-                values: [">=", "+"],
-                correct: false,
-                hint: "割引は金額を「引く」ことなので - を使います。+ だと逆に200円高くなってしまいます",
-            },
-            {
-                values: [">", "+"],
-                correct: false,
-                hint: "「以上」は >=、「割引（引く）」は - です。2か所ともまちがえています",
             }
         ],
-        defaultHint: "「1000円以上」はちょうど1000円もふくむので >=。割引は金額を引くので - を使うよ"
+        defaultHint: "「1000円以上」はちょうど1000円もふくむので >=。イコールをふくむ >= を使うよ"
     }
 }
