@@ -1340,5 +1340,49 @@ window.quizData = {
             }
         ],
         defaultHint: "1日目がすでに1個なので、2倍にするたびに日数も1ずつ進むよ。「2倍」は2をかけること"
+    },
+    q022: {
+        title: "1000円以上で割引",
+        addedAt: "2026-07-15",
+        difficulty: 1,
+        question: "買い物の合計金額が1000円以上のときだけ200円引きになるようにしよう。合計はちょうど1000円です。1000円のときも割引されるように、条件の穴をうめよう",
+        ast: [
+            {
+                type: "assign",
+                name: "goukei",
+                value: "1000"
+            },
+            {
+                type: "if",
+                condition: "goukei __BLANK_blank_a__ 1000",
+                body: [
+                    {
+                        type: "assign",
+                        name: "goukei",
+                        value: "goukei - 200"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"支払いは\" + goukei + \"円\""
+            }
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: ">=", value: ">=" },
+        ],
+        answers: [
+            {
+                values: [">="],
+                correct: true,
+            },
+            {
+                values: [">"],
+                correct: false,
+                hint: "合計はちょうど1000円です。> だと1000円のときに割引されません。「1000円以上」はイコールをふくむ >= を使います",
+            }
+        ],
+        defaultHint: "「1000円以上」はちょうど1000円もふくむので >=。イコールをふくむ >= を使うよ"
     }
 }
