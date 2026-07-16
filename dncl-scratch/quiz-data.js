@@ -1384,5 +1384,82 @@ window.quizData = {
             }
         ],
         defaultHint: "「1000円以上」はちょうど1000円もふくむので >=。イコールをふくむ >= を使うよ"
+    },
+    q023: {
+        title: "各桁の数字の合計",
+        addedAt: "2026-07-16",
+        difficulty: 4,
+        question: "整数 num（＝1234）の各桁の数字（1と2と3と4）をすべて合計して表示するようにしよう。一の位を取り出して合計にたし、10でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "num",
+                value: "1234"
+            },
+            {
+                type: "assign",
+                name: "goukei",
+                value: "0"
+            },
+            {
+                type: "while",
+                condition: "num > 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "ichi",
+                        value: "num __BLANK_blank_a__ 10"
+                    },
+                    {
+                        type: "assign",
+                        name: "goukei",
+                        value: "goukei __BLANK_blank_b__ ichi"
+                    },
+                    {
+                        type: "assign",
+                        name: "num",
+                        value: "num __BLANK_blank_c__ 10"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"各桁の合計は\" + goukei"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%", "+", "/"],
+                correct: true,
+            },
+            {
+                values: ["/", "+", "/"],
+                correct: false,
+                hint: "一の位を取り出すには10でわった「あまり」がほしいです。/ だと商（1234÷10＝123）になり、一の位の数字になりません。% を使いましょう",
+            },
+            {
+                values: ["%", "+", "%"],
+                correct: false,
+                hint: "桁をひとつ減らすには10で「わって」商にします。% だと num が同じあまりのままになり、0にならず繰り返しが終わりません。/ を使いましょう",
+            },
+            {
+                values: ["%", "*", "/"],
+                correct: false,
+                hint: "合計は取り出した数字を「たして」いきます。goukei は0から始まるので掛け算では0のまま増えません。+ を使いましょう",
+            },
+            {
+                values: ["%", "-", "/"],
+                correct: false,
+                hint: "引き算では合計が増えるどころかマイナスになっていきます。取り出した一の位を + でたし込みましょう",
+            }
+        ],
+        defaultHint: "num % 10 で一の位を取り出して goukei にたし、num / 10 で桁をひとつ減らす、と考えよう。これを num が0になるまで繰り返せば各桁の合計になります"
     }
 }
