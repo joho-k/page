@@ -1461,5 +1461,95 @@ window.quizData = {
             }
         ],
         defaultHint: "num % 10 で一の位を取り出して goukei にたし、num / 10 で桁をひとつ減らす、と考えよう。これを num が0になるまで繰り返せば各桁の合計になります"
+    },
+    q024: {
+        title: "コラッツ予想（角谷の問題）",
+        addedAt: "2026-07-17",
+        difficulty: 5,
+        question: "「偶数なら2でわる、奇数なら3倍して1をたす」を繰り返すと、どんな数でもいつかは1になる、というのがコラッツ予想（角谷の問題）です。n=6 が何回で1になるかを数えて表示しよう。まず n を2でわったあまりで偶数か奇数かを調べ、偶数なら半分に、奇数なら3n+1にします（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "n",
+                value: "6"
+            },
+            {
+                type: "assign",
+                name: "kaisu",
+                value: "0"
+            },
+            {
+                type: "while",
+                condition: "n > 1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "n __BLANK_blank_a__ 2"
+                    },
+                    {
+                        type: "ifelse",
+                        condition: "amari == 0",
+                        ifBody: [
+                            {
+                                type: "assign",
+                                name: "n",
+                                value: "n __BLANK_blank_b__ 2"
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "assign",
+                                name: "n",
+                                value: "n * 3 __BLANK_blank_c__ 1"
+                            }
+                        ]
+                    },
+                    {
+                        type: "assign",
+                        name: "kaisu",
+                        value: "kaisu + 1"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"回数は\" + kaisu"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%", "/", "+"],
+                correct: true,
+            },
+            {
+                values: ["/", "/", "+"],
+                correct: false,
+                hint: "偶数か奇数かは2でわった「あまり」で調べます。/ だと商になり、偶奇の判定ができません。あまりを出す % を使いましょう",
+            },
+            {
+                values: ["%", "*", "+"],
+                correct: false,
+                hint: "偶数のときは半分にします。* だと逆に大きくなり、1にたどり着かず繰り返しが終わりません。/ を使いましょう",
+            },
+            {
+                values: ["%", "/", "*"],
+                correct: false,
+                hint: "奇数のときは 3倍して1を「たします」（3n+1）。* だと1をかけるだけで値が変わらず、ずっと奇数のままで終わりません。+ を使いましょう",
+            },
+            {
+                values: ["%", "-", "+"],
+                correct: false,
+                hint: "偶数のとき半分にするのはわり算です。- だと2ずつしか減らず、コラッツの動きになりません。/ を使いましょう",
+            }
+        ],
+        defaultHint: "n % 2 で偶数（あまり0）か奇数かを調べ、偶数なら n / 2 で半分に、奇数なら n * 3 + 1 にします。これを n が1になるまで繰り返した回数を数えよう"
     }
 }
