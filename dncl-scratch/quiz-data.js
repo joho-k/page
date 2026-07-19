@@ -1485,7 +1485,7 @@ window.quizData = {
                     {
                         type: "assign",
                         name: "amari",
-                        value: "n __BLANK_blank_a__ 2"
+                        value: "__BLANK_blank_a__"
                     },
                     {
                         type: "ifelse",
@@ -1494,14 +1494,14 @@ window.quizData = {
                             {
                                 type: "assign",
                                 name: "n",
-                                value: "n __BLANK_blank_b__ 2"
+                                value: "__BLANK_blank_b__"
                             }
                         ],
                         elseBody: [
                             {
                                 type: "assign",
                                 name: "n",
-                                value: "n * 3 __BLANK_blank_c__ 1"
+                                value: "__BLANK_blank_c__"
                             }
                         ]
                     },
@@ -1518,38 +1518,38 @@ window.quizData = {
             }
         ],
         choices: [
-            { label: "+", value: "+" },
-            { label: "-", value: "-" },
-            { label: "*", value: "*" },
-            { label: "/", value: "/" },
-            { label: "%", value: "%" },
+            { label: "n % 2", value: "n % 2" },
+            { label: "n / 2", value: "n / 2" },
+            { label: "n * 3 + 1", value: "n * 3 + 1" },
+            { label: "n * 2", value: "n * 2" },
+            { label: "n - 2", value: "n - 2" },
         ],
         answers: [
             {
-                values: ["%", "/", "+"],
+                values: ["n % 2", "n / 2", "n * 3 + 1"],
                 correct: true,
             },
             {
-                values: ["/", "/", "+"],
+                values: ["n / 2", "n / 2", "n * 3 + 1"],
                 correct: false,
-                hint: "偶数か奇数かは2でわった「あまり」で調べます。/ だと商になり、偶奇の判定ができません。あまりを出す % を使いましょう",
+                hint: "偶数か奇数かは2でわった「あまり」で調べます。n / 2 では商になってしまうので、n % 2 を使いましょう",
             },
             {
-                values: ["%", "*", "+"],
+                values: ["n % 2", "n * 2", "n * 3 + 1"],
                 correct: false,
-                hint: "偶数のときは半分にします。* だと逆に大きくなり、1にたどり着かず繰り返しが終わりません。/ を使いましょう",
+                hint: "偶数のときは半分にします。2倍ではなく n / 2 を使います",
             },
             {
-                values: ["%", "/", "*"],
+                values: ["n % 2", "n - 2", "n * 3 + 1"],
                 correct: false,
-                hint: "奇数のときは 3倍して1を「たします」（3n+1）。* だと1をかけるだけで値が変わらず、ずっと奇数のままで終わりません。+ を使いましょう",
+                hint: "偶数のときは2を引くのではなく、2で割って半分にします",
             },
             {
-                values: ["%", "-", "+"],
+                values: ["n % 2", "n / 2", "n * 2"],
                 correct: false,
-                hint: "偶数のとき半分にするのはわり算です。- だと2ずつしか減らず、コラッツの動きになりません。/ を使いましょう",
+                hint: "奇数のときは「3倍して1をたす」ので、n * 3 + 1 を使いましょう",
             }
         ],
-        defaultHint: "n % 2 で偶数（あまり0）か奇数かを調べ、偶数なら n / 2 で半分に、奇数なら n * 3 + 1 にします。これを n が1になるまで繰り返した回数を数えよう"
-    }
+        defaultHint: "偶数・奇数は n % 2 で判定します。偶数なら n / 2、奇数なら n * 3 + 1 にして繰り返します"
+    },
 }

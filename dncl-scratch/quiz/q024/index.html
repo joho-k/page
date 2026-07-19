@@ -50,28 +50,28 @@
         "text": "「偶数なら2でわる、奇数なら3倍して1をたす」を繰り返すと、どんな数でもいつかは1になる、というのがコラッツ予想（角谷の問題）です。n=6 が何回で1になるかを数えて表示しよう。まず n を2でわったあまりで偶数か奇数かを調べ、偶数なら半分に、奇数なら3n+1にします（3か所の穴をうめよう）",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "% , / , +"
+          "text": "n % 2 , n / 2 , n * 3 + 1"
         },
         "suggestedAnswer": [
           {
             "@type": "Answer",
-            "text": "+"
+            "text": "n % 2"
           },
           {
             "@type": "Answer",
-            "text": "-"
+            "text": "n / 2"
           },
           {
             "@type": "Answer",
-            "text": "*"
+            "text": "n * 3 + 1"
           },
           {
             "@type": "Answer",
-            "text": "/"
+            "text": "n * 2"
           },
           {
             "@type": "Answer",
-            "text": "%"
+            "text": "n - 2"
           }
         ]
       }
@@ -128,39 +128,39 @@
             <pre><code>n = 6
 kaisu = 0
 n &gt; 1 の間繰り返す:
-  amari = n ［A］ 2
+  amari = ［A］
   もし amari == 0 ならば:
-    n = n ［B］ 2
+    n = ［B］
   そうでなければ:
-    n = n * 3 ［C］ 1
+    n = ［C］
   kaisu = kaisu + 1
 表示する(&quot;回数は&quot; + kaisu)</code></pre>
             <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
 
             <h2>選択肢</h2>
             <ul>
-                <li><code>+</code></li>
-                <li><code>-</code></li>
-                <li><code>*</code></li>
-                <li><code>/</code></li>
-                <li><code>%</code></li>
+                <li><code>n % 2</code></li>
+                <li><code>n / 2</code></li>
+                <li><code>n * 3 + 1</code></li>
+                <li><code>n * 2</code></li>
+                <li><code>n - 2</code></li>
             </ul>
 
             <h2>ヒント</h2>
-            <p>n % 2 で偶数（あまり0）か奇数かを調べ、偶数なら n / 2 で半分に、奇数なら n * 3 + 1 にします。これを n が1になるまで繰り返した回数を数えよう</p>
+            <p>偶数・奇数は n % 2 で判定します。偶数なら n / 2、奇数なら n * 3 + 1 にして繰り返します</p>
 
             <h2>解答</h2>
             <ul>
-            <li>空欄 ［A］ … <code>%</code></li>
-            <li>空欄 ［B］ … <code>/</code></li>
-            <li>空欄 ［C］ … <code>+</code></li>
+            <li>空欄 ［A］ … <code>n % 2</code></li>
+            <li>空欄 ［B］ … <code>n / 2</code></li>
+            <li>空欄 ［C］ … <code>n * 3 + 1</code></li>
             </ul>
             <h2>よくある間違い</h2>
             <ul>
-            <li>［A］<code>/</code>　［B］<code>/</code>　［C］<code>+</code> … 偶数か奇数かは2でわった「あまり」で調べます。/ だと商になり、偶奇の判定ができません。あまりを出す % を使いましょう</li>
-            <li>［A］<code>%</code>　［B］<code>*</code>　［C］<code>+</code> … 偶数のときは半分にします。* だと逆に大きくなり、1にたどり着かず繰り返しが終わりません。/ を使いましょう</li>
-            <li>［A］<code>%</code>　［B］<code>/</code>　［C］<code>*</code> … 奇数のときは 3倍して1を「たします」（3n+1）。* だと1をかけるだけで値が変わらず、ずっと奇数のままで終わりません。+ を使いましょう</li>
-            <li>［A］<code>%</code>　［B］<code>-</code>　［C］<code>+</code> … 偶数のとき半分にするのはわり算です。- だと2ずつしか減らず、コラッツの動きになりません。/ を使いましょう</li>
+            <li>［A］<code>n / 2</code>　［B］<code>n / 2</code>　［C］<code>n * 3 + 1</code> … 偶数か奇数かは2でわった「あまり」で調べます。n / 2 では商になってしまうので、n % 2 を使いましょう</li>
+            <li>［A］<code>n % 2</code>　［B］<code>n * 2</code>　［C］<code>n * 3 + 1</code> … 偶数のときは半分にします。2倍ではなく n / 2 を使います</li>
+            <li>［A］<code>n % 2</code>　［B］<code>n - 2</code>　［C］<code>n * 3 + 1</code> … 偶数のときは2を引くのではなく、2で割って半分にします</li>
+            <li>［A］<code>n % 2</code>　［B］<code>n / 2</code>　［C］<code>n * 2</code> … 奇数のときは「3倍して1をたす」ので、n * 3 + 1 を使いましょう</li>
             </ul>
 
             <h2>ほかの問題</h2>
