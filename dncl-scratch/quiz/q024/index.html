@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第24問 コラッツ予想（角谷の問題）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="「偶数なら2でわる、奇数なら3倍して1をたす」を繰り返すと、どんな数でもいつかは1になる、というのがコラッツ予想（角谷の問題）です。n=6 が何回で1になるかを数えて表示しよう。まず n を2でわったあまりで偶数か奇数かを調べ、偶数なら半分に、奇数なら3n+1にします（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,コラッツ予想（角谷の問題）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q024/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第24問 コラッツ予想（角谷の問題）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="「偶数なら2でわる、奇数なら3倍して1をたす」を繰り返すと、どんな数でもいつかは1になる、というのがコラッツ予想（角谷の問題）です。n=6 が何回で1になるかを数えて表示しよう。まず n を2でわったあまりで偶数か奇数かを調べ、偶数なら半分に、奇数なら3n+1にします（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q024/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q024.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第24問 コラッツ予想（角谷の問題）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="「偶数なら2でわる、奇数なら3倍して1をたす」を繰り返すと、どんな数でもいつかは1になる、というのがコラッツ予想（角谷の問題）です。n=6 が何回で1になるかを数えて表示しよう。まず n を2でわったあまりで偶数か奇数かを調べ、偶数なら半分に、奇数なら3n+1にします（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q024.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q024/index.html#quiz",
+      "name": "第24問 コラッツ予想（角谷の問題）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q024/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "「偶数なら2でわる、奇数なら3倍して1をたす」を繰り返すと、どんな数でもいつかは1になる、というのがコラッツ予想（角谷の問題）です。n=6 が何回で1になるかを数えて表示しよう。まず n を2でわったあまりで偶数か奇数かを調べ、偶数なら半分に、奇数なら3n+1にします（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "% , / , +"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第24問 コラッツ予想（角谷の問題）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q024/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q024";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第24問 コラッツ予想（角谷の問題）</h1>
+            <p>「偶数なら2でわる、奇数なら3倍して1をたす」を繰り返すと、どんな数でもいつかは1になる、というのがコラッツ予想（角谷の問題）です。n=6 が何回で1になるかを数えて表示しよう。まず n を2でわったあまりで偶数か奇数かを調べ、偶数なら半分に、奇数なら3n+1にします（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★★（5／難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>n = 6
+kaisu = 0
+n &gt; 1 の間繰り返す:
+  amari = n ［A］ 2
+  もし amari == 0 ならば:
+    n = n ［B］ 2
+  そうでなければ:
+    n = n * 3 ［C］ 1
+  kaisu = kaisu + 1
+表示する(&quot;回数は&quot; + kaisu)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+                <li><code>%</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>n % 2 で偶数（あまり0）か奇数かを調べ、偶数なら n / 2 で半分に、奇数なら n * 3 + 1 にします。これを n が1になるまで繰り返した回数を数えよう</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>%</code></li>
+            <li>空欄 ［B］ … <code>/</code></li>
+            <li>空欄 ［C］ … <code>+</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>/</code>　［B］<code>/</code>　［C］<code>+</code> … 偶数か奇数かは2でわった「あまり」で調べます。/ だと商になり、偶奇の判定ができません。あまりを出す % を使いましょう</li>
+            <li>［A］<code>%</code>　［B］<code>*</code>　［C］<code>+</code> … 偶数のときは半分にします。* だと逆に大きくなり、1にたどり着かず繰り返しが終わりません。/ を使いましょう</li>
+            <li>［A］<code>%</code>　［B］<code>/</code>　［C］<code>*</code> … 奇数のときは 3倍して1を「たします」（3n+1）。* だと1をかけるだけで値が変わらず、ずっと奇数のままで終わりません。+ を使いましょう</li>
+            <li>［A］<code>%</code>　［B］<code>-</code>　［C］<code>+</code> … 偶数のとき半分にするのはわり算です。- だと2ずつしか減らず、コラッツの動きになりません。/ を使いましょう</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q023/index.html">第23問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
