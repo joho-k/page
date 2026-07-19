@@ -796,7 +796,7 @@ function createAssignBlock() {
       <div class="assign-inline">
         <input value="x"> =
         <div class="children dropzone expr-zone">
-          <input class="assign-value" value="" placeholder="直接入力、または計算ブロックをここに代入">
+          <input class="assign-value" value="" placeholder="${window.QUIZ_ID ? "" : "直接入力、または計算ブロックをここに代入"}">
         </div>
       </div>
     `;
