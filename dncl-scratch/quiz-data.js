@@ -1556,5 +1556,151 @@ window.quizData = {
             }
         ],
         defaultHint: "偶数・奇数は n % 2 で判定します。偶数なら n / 2、奇数なら n * 3 + 1 にして繰り返します"
+    }, q025: {
+        title: "ナベアツ算",
+        addedAt: "2026-07-20",
+        difficulty: 5,
+        question: "1から40までの整数について、「3の倍数」または「3のつく数」のときに「🤪」、それ以外は「🤨」を表示するプログラムです。3の倍数かどうか、3が数字についているかどうかの式を、それぞれ選択肢から選んで空欄に入れよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "print",
+                value: "\"3の倍数と3のつくときにアホ(🤪)になります\""
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "40",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "kao",
+                        value: "\"🤨\""
+                    },
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "__BLANK_blank_a__"
+                    },
+                    {
+                        type: "ifelse",
+                        condition: "amari == 0",
+                        ifBody: [
+                            {
+                                type: "assign",
+                                name: "kao",
+                                value: "\"🤪\""
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "assign",
+                                name: "juu_no_kurai",
+                                value: "__BLANK_blank_b__"
+                            },
+                            {
+                                type: "assign",
+                                name: "ichi_no_kurai",
+                                value: "__BLANK_blank_c__"
+                            },
+                            {
+                                type: "ifelse",
+                                condition: "juu_no_kurai == 3",
+                                ifBody: [
+                                    {
+                                        type: "assign",
+                                        name: "kao",
+                                        value: "\"🤪\""
+                                    }
+                                ],
+                                elseBody: [
+                                    {
+                                        type: "if",
+                                        condition: "ichi_no_kurai == 3",
+                                        body: [
+                                            {
+                                                type: "assign",
+                                                name: "kao",
+                                                value: "\"🤪\""
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        type: "print",
+                        value: "kao + \"< \" + i"
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "i % 3", value: "i % 3" },
+            { label: "i % 10", value: "i % 10" },
+            { label: "i / 3", value: "i / 3" },
+            { label: "i / 10", value: "i / 10" },
+            { label: "切り捨て(i / 3)", value: "切り捨て(i / 3)" },
+            { label: "切り捨て(i / 10)", value: "切り捨て(i / 10)" },
+            { label: "i % 5", value: "i % 5" },
+        ],
+        answers: [
+            {
+                values: [
+                    "i % 3",
+                    "切り捨て(i / 10)",
+                    "i % 10"
+                ],
+                correct: true,
+            },
+            {
+                values: [
+                    "i / 3",
+                    "切り捨て(i / 10)",
+                    "i % 10"
+                ],
+                correct: false,
+                hint: "3の倍数かどうかは、3で割った「あまり」が0かどうかで判定します。3で割った商では判定できません。"
+            },
+            {
+                values: [
+                    "i % 3",
+                    "i / 10",
+                    "i % 10"
+                ],
+                correct: false,
+                hint: "十の位を取り出すには、小数部分を切り捨てる必要があります。切り捨て(i / 10) を使いましょう。"
+            },
+            {
+                values: [
+                    "i % 3",
+                    "切り捨て(i / 3)",
+                    "i % 10"
+                ],
+                correct: false,
+                hint: "十の位を取り出すには10で割ります。3で割ると十の位は取り出せません。"
+            },
+            {
+                values: [
+                    "i % 3",
+                    "切り捨て(i / 10)",
+                    "i / 10"
+                ],
+                correct: false,
+                hint: "一の位は10で割った「あまり」です。i % 10 を使いましょう。"
+            },
+            {
+                values: [
+                    "i % 5",
+                    "切り捨て(i / 10)",
+                    "i % 10"
+                ],
+                correct: false,
+                hint: "3の倍数かどうかを調べるので、3で割ったあまり（i % 3）を使います。"
+            }
+        ],
+        defaultHint: "3の倍数は「3で割ったあまり」が0かどうかで判定します。十の位は切り捨て(i / 10)、一の位は i % 10 で取り出せます。"
     },
 }
