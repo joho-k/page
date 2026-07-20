@@ -796,7 +796,7 @@ function createAssignBlock() {
       <div class="assign-inline">
         <input value="x"> =
         <div class="children dropzone expr-zone">
-          <input class="assign-value" value="" placeholder="直接入力、または計算ブロックをここに代入">
+          <input class="assign-value" value="" placeholder="${window.QUIZ_ID ? "" : "直接入力、または計算ブロックをここに代入"}">
         </div>
       </div>
     `;
@@ -1445,33 +1445,71 @@ function loadProgramFromAst(ast) {
                 const valueInput = b.querySelector(".assign-value");
                 const rawValue = node.value ?? "0";
 
-                const parts = parseSimpleBinaryExpr(rawValue);
-                if (parts) {
-                    const expr = createExprBlock();
-                    const inputs = expr.querySelectorAll("input");
-                    const opSelect = expr.querySelector("select");
-                    setInputMaybeBlank(inputs[0], parts.left);
-                    const blankId = parseBlankToken(parts.op);
-                    if (blankId !== null) {
-                        opSelect.dataset.blankIndex = blankId;
-                        opSelect.classList.add("quiz-blank");
-                        opSelect.innerHTML = `
-                            <option value=""></option>
-                            <option value="+">＋</option>
-                            <option value="-">－</option>
-                            <option value="*">＊</option>
-                            <option value="/">／</option>
-                            <option value="%">%</option>
-                        `;
-                        opSelect.value = "";
-                    } else {
-                        opSelect.value = parts.op;
+                const floorMatch = rawValue.match(/^切り捨て\((.*)\)$/);
+                const ceilMatch = rawValue.match(/^切り上げ\((.*)\)$/);
+                const roundMatch = rawValue.match(/^四捨五入\((.*)\)$/);
+
+                if (floorMatch || ceilMatch || roundMatch) {
+                    let kind = "floor";
+                    let value = floorMatch?.[1];
+
+                    if (ceilMatch) {
+                        kind = "ceil";
+                        value = ceilMatch[1];
                     }
-                    setInputMaybeBlank(inputs[1], parts.right);
-                    zone.insertBefore(expr, valueInput);
+
+                    if (roundMatch) {
+                        kind = "round";
+                        value = roundMatch[1];
+                    }
+
+                    const block = createRoundingBlock(kind);
+                    setInputMaybeBlank(block.querySelector("input"), value.trim());
+
+                    zone.insertBefore(block, valueInput);
                     syncAssignZone(zone);
+
+                } else if (rawValue === "乱数()") {
+
+                    const block = createRandomBlock();
+                    zone.insertBefore(block, valueInput);
+                    syncAssignZone(zone);
+
                 } else {
-                    setInputMaybeBlank(valueInput, rawValue);
+                    const parts = parseSimpleBinaryExpr(rawValue);
+
+                    if (parts) {
+                        const expr = createExprBlock();
+                        const inputs = expr.querySelectorAll("input");
+                        const opSelect = expr.querySelector("select");
+
+                        setInputMaybeBlank(inputs[0], parts.left);
+
+                        const blankId = parseBlankToken(parts.op);
+                        if (blankId !== null) {
+                            opSelect.dataset.blankIndex = blankId;
+                            opSelect.classList.add("quiz-blank");
+                            opSelect.innerHTML = `
+                <option value=""></option>
+                <option value="+">＋</option>
+                <option value="-">－</option>
+                <option value="*">＊</option>
+                <option value="/">／</option>
+                <option value="%">%</option>
+            `;
+                            opSelect.value = "";
+                        } else {
+                            opSelect.value = parts.op;
+                        }
+
+                        setInputMaybeBlank(inputs[1], parts.right);
+
+                        zone.insertBefore(expr, valueInput);
+                        syncAssignZone(zone);
+
+                    } else {
+                        setInputMaybeBlank(valueInput, rawValue);
+                    }
                 }
 
                 container.appendChild(b);

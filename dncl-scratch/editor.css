@@ -536,7 +536,7 @@
     font-size: 11px;
 }
 
-.block[data-type="assign"] .assign-value {
+.block[data-type="assign"] .assign-value:not(.quiz-blank) {
     flex: 1;
     width: 100%;
     min-width: 0;

@@ -1417,8 +1417,13 @@ window.quizData = {
                     },
                     {
                         type: "assign",
-                        name: "num",
+                        name: "tsugi",
                         value: "num __BLANK_blank_c__ 10"
+                    },
+                    {
+                        type: "assign",
+                        name: "num",
+                        value: "切り捨て(tsugi)"
                     }
                 ]
             },
@@ -1461,5 +1466,95 @@ window.quizData = {
             }
         ],
         defaultHint: "num % 10 で一の位を取り出して goukei にたし、num / 10 で桁をひとつ減らす、と考えよう。これを num が0になるまで繰り返せば各桁の合計になります"
-    }
+    },
+    q024: {
+        title: "コラッツ予想（角谷の問題）",
+        addedAt: "2026-07-17",
+        difficulty: 5,
+        question: "「偶数なら2でわる、奇数なら3倍して1をたす」を繰り返すと、どんな数でもいつかは1になる、というのがコラッツ予想（角谷の問題）です。n=6 が何回で1になるかを数えて表示しよう。まず n を2でわったあまりで偶数か奇数かを調べ、偶数なら半分に、奇数なら3n+1にします（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "n",
+                value: "6"
+            },
+            {
+                type: "assign",
+                name: "kaisu",
+                value: "0"
+            },
+            {
+                type: "while",
+                condition: "n > 1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "__BLANK_blank_a__"
+                    },
+                    {
+                        type: "ifelse",
+                        condition: "amari == 0",
+                        ifBody: [
+                            {
+                                type: "assign",
+                                name: "n",
+                                value: "__BLANK_blank_b__"
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "assign",
+                                name: "n",
+                                value: "__BLANK_blank_c__"
+                            }
+                        ]
+                    },
+                    {
+                        type: "assign",
+                        name: "kaisu",
+                        value: "kaisu + 1"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"回数は\" + kaisu"
+            }
+        ],
+        choices: [
+            { label: "n % 2", value: "n % 2" },
+            { label: "n / 2", value: "n / 2" },
+            { label: "n * 3 + 1", value: "n * 3 + 1" },
+            { label: "n * 2", value: "n * 2" },
+            { label: "n - 2", value: "n - 2" },
+        ],
+        answers: [
+            {
+                values: ["n % 2", "n / 2", "n * 3 + 1"],
+                correct: true,
+            },
+            {
+                values: ["n / 2", "n / 2", "n * 3 + 1"],
+                correct: false,
+                hint: "偶数か奇数かは2でわった「あまり」で調べます。n / 2 では商になってしまうので、n % 2 を使いましょう",
+            },
+            {
+                values: ["n % 2", "n * 2", "n * 3 + 1"],
+                correct: false,
+                hint: "偶数のときは半分にします。2倍ではなく n / 2 を使います",
+            },
+            {
+                values: ["n % 2", "n - 2", "n * 3 + 1"],
+                correct: false,
+                hint: "偶数のときは2を引くのではなく、2で割って半分にします",
+            },
+            {
+                values: ["n % 2", "n / 2", "n * 2"],
+                correct: false,
+                hint: "奇数のときは「3倍して1をたす」ので、n * 3 + 1 を使いましょう",
+            }
+        ],
+        defaultHint: "偶数・奇数は n % 2 で判定します。偶数なら n / 2、奇数なら n * 3 + 1 にして繰り返します"
+    },
 }
