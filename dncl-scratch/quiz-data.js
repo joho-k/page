@@ -1417,8 +1417,13 @@ window.quizData = {
                     },
                     {
                         type: "assign",
-                        name: "num",
+                        name: "tsugi",
                         value: "num __BLANK_blank_c__ 10"
+                    },
+                    {
+                        type: "assign",
+                        name: "num",
+                        value: "切り捨て(tsugi)"
                     }
                 ]
             },
