@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第25問 ナベアツ算｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="1から40までの整数について、「3の倍数」または「3のつく数」のときに「🤪」、それ以外は「🤨」を表示するプログラムです。3の倍数かどうか、3が数字についているかどうかの式を、それぞれ選択肢から選んで空欄に入れよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,ナベアツ算">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q025/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第25問 ナベアツ算｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="1から40までの整数について、「3の倍数」または「3のつく数」のときに「🤪」、それ以外は「🤨」を表示するプログラムです。3の倍数かどうか、3が数字についているかどうかの式を、それぞれ選択肢から選んで空欄に入れよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q025/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q025.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第25問 ナベアツ算｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="1から40までの整数について、「3の倍数」または「3のつく数」のときに「🤪」、それ以外は「🤨」を表示するプログラムです。3の倍数かどうか、3が数字についているかどうかの式を、それぞれ選択肢から選んで空欄に入れよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q025.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q025/index.html#quiz",
+      "name": "第25問 ナベアツ算",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q025/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "1から40までの整数について、「3の倍数」または「3のつく数」のときに「🤪」、それ以外は「🤨」を表示するプログラムです。3の倍数かどうか、3が数字についているかどうかの式を、それぞれ選択肢から選んで空欄に入れよう（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "i % 3 , 切り捨て(i / 10) , i % 10"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "i % 3"
+          },
+          {
+            "@type": "Answer",
+            "text": "i % 10"
+          },
+          {
+            "@type": "Answer",
+            "text": "i / 3"
+          },
+          {
+            "@type": "Answer",
+            "text": "i / 10"
+          },
+          {
+            "@type": "Answer",
+            "text": "切り捨て(i / 3)"
+          },
+          {
+            "@type": "Answer",
+            "text": "切り捨て(i / 10)"
+          },
+          {
+            "@type": "Answer",
+            "text": "i % 5"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第25問 ナベアツ算",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q025/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q025";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第25問 ナベアツ算</h1>
+            <p>1から40までの整数について、「3の倍数」または「3のつく数」のときに「🤪」、それ以外は「🤨」を表示するプログラムです。3の倍数かどうか、3が数字についているかどうかの式を、それぞれ選択肢から選んで空欄に入れよう（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★★（5／難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>表示する(&quot;3の倍数と3のつくときにアホ(🤪)になります&quot;)
+i を 1 から 40 まで 1 ずつ増やしながら繰り返す:
+  kao = &quot;🤨&quot;
+  amari = ［A］
+  もし amari == 0 ならば:
+    kao = &quot;🤪&quot;
+  そうでなければ:
+    juu_no_kurai = ［B］
+    ichi_no_kurai = ［C］
+    もし juu_no_kurai == 3 ならば:
+      kao = &quot;🤪&quot;
+    そうでなければ:
+      もし ichi_no_kurai == 3 ならば:
+        kao = &quot;🤪&quot;
+  表示する(kao + &quot;&lt; &quot; + i)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>i % 3</code></li>
+                <li><code>i % 10</code></li>
+                <li><code>i / 3</code></li>
+                <li><code>i / 10</code></li>
+                <li><code>切り捨て(i / 3)</code></li>
+                <li><code>切り捨て(i / 10)</code></li>
+                <li><code>i % 5</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>3の倍数は「3で割ったあまり」が0かどうかで判定します。十の位は切り捨て(i / 10)、一の位は i % 10 で取り出せます。</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>i % 3</code></li>
+            <li>空欄 ［B］ … <code>切り捨て(i / 10)</code></li>
+            <li>空欄 ［C］ … <code>i % 10</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>i / 3</code>　［B］<code>切り捨て(i / 10)</code>　［C］<code>i % 10</code> … 3の倍数かどうかは、3で割った「あまり」が0かどうかで判定します。3で割った商では判定できません。</li>
+            <li>［A］<code>i % 3</code>　［B］<code>i / 10</code>　［C］<code>i % 10</code> … 十の位を取り出すには、小数部分を切り捨てる必要があります。切り捨て(i / 10) を使いましょう。</li>
+            <li>［A］<code>i % 3</code>　［B］<code>切り捨て(i / 3)</code>　［C］<code>i % 10</code> … 十の位を取り出すには10で割ります。3で割ると十の位は取り出せません。</li>
+            <li>［A］<code>i % 3</code>　［B］<code>切り捨て(i / 10)</code>　［C］<code>i / 10</code> … 一の位は10で割った「あまり」です。i % 10 を使いましょう。</li>
+            <li>［A］<code>i % 5</code>　［B］<code>切り捨て(i / 10)</code>　［C］<code>i % 10</code> … 3の倍数かどうかを調べるので、3で割ったあまり（i % 3）を使います。</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q024/index.html">第24問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
