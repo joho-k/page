@@ -1702,5 +1702,88 @@ window.quizData = {
             }
         ],
         defaultHint: "3の倍数は「3で割ったあまり」が0かどうかで判定します。十の位は切り捨て(i / 10)、一の位は i % 10 で取り出せます。"
+    }, q026: {
+        title: "秒を分と秒に直す",
+        addedAt: "2026-07-22",
+        difficulty: 3,
+        question: "500秒は何分何秒でしょうか。1分は60秒です。分の数と、残りの秒数をそれぞれ計算して「8分20秒」のように表示するようにしよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "byou",
+                value: "500"
+            },
+            {
+                type: "assign",
+                name: "fun",
+                value: "__BLANK_blank_a__"
+            },
+            {
+                type: "assign",
+                name: "nokori",
+                value: "__BLANK_blank_b__"
+            },
+            {
+                type: "print",
+                value: "byou + \"秒は\" + fun + \"分\" + nokori + \"秒です\""
+            }
+        ],
+        choices: [
+            { label: "切り捨て(byou / 60)", value: "切り捨て(byou / 60)" },
+            { label: "byou % 60", value: "byou % 60" },
+            { label: "byou / 60", value: "byou / 60" },
+            { label: "byou * 60", value: "byou * 60" },
+            { label: "byou - 60", value: "byou - 60" },
+        ],
+        answers: [
+            {
+                values: [
+                    "切り捨て(byou / 60)",
+                    "byou % 60"
+                ],
+                correct: true,
+            },
+            {
+                values: [
+                    "byou / 60",
+                    "byou % 60"
+                ],
+                correct: false,
+                hint: "500 / 60 は 8.333… になり、「8.333…分」と表示されてしまいます。小数部分を落として8分にするには 切り捨て(byou / 60) を使いましょう"
+            },
+            {
+                values: [
+                    "byou % 60",
+                    "切り捨て(byou / 60)"
+                ],
+                correct: false,
+                hint: "2つが逆です。60でわった「商」が分の数、60でわった「あまり」が残りの秒数になります"
+            },
+            {
+                values: [
+                    "切り捨て(byou / 60)",
+                    "byou - 60"
+                ],
+                correct: false,
+                hint: "byou - 60 は 500 - 60 で440です。60秒を1回ぶんしか取り除けていません。何回ぶん取り除いても残るのが「あまり」なので byou % 60 を使いましょう"
+            },
+            {
+                values: [
+                    "byou * 60",
+                    "byou % 60"
+                ],
+                correct: false,
+                hint: "秒を分に直すときは60でかけるのではなく、60でわります。500 * 60 では逆に大きくなってしまいます"
+            },
+            {
+                values: [
+                    "切り捨て(byou / 60)",
+                    "byou / 60"
+                ],
+                correct: false,
+                hint: "残りの秒数がほしいので、わり算の「あまり」を使います。byou % 60 なら 500 を 60 でわったあまりの20が出ます"
+            }
+        ],
+        defaultHint: "1分＝60秒なので、60でわった「商」が分、「あまり」が残りの秒数です。商は小数が出ないように 切り捨て(...) を、あまりは % を使いましょう"
     },
 }
