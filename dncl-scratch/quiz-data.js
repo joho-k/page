@@ -1702,5 +1702,86 @@ window.quizData = {
             }
         ],
         defaultHint: "3の倍数は「3で割ったあまり」が0かどうかで判定します。十の位は切り捨て(i / 10)、一の位は i % 10 で取り出せます。"
+    }, q027: {
+        title: "数字を逆順にする",
+        addedAt: "2026-07-23",
+        difficulty: 4,
+        question: "整数 num（＝1234）の数字を逆の順（4321）に並べかえて表示するようにしよう。一の位を取り出し、これまでの結果(gyaku)を10倍して桁を上げてから一の位をたし、num を10でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "num",
+                value: "1234"
+            },
+            {
+                type: "assign",
+                name: "gyaku",
+                value: "0"
+            },
+            {
+                type: "while",
+                condition: "num > 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "ichi",
+                        value: "num __BLANK_blank_a__ 10"
+                    },
+                    {
+                        type: "assign",
+                        name: "gyaku",
+                        value: "gyaku __BLANK_blank_b__ 10 + ichi"
+                    },
+                    {
+                        type: "assign",
+                        name: "tsugi",
+                        value: "num __BLANK_blank_c__ 10"
+                    },
+                    {
+                        type: "assign",
+                        name: "num",
+                        value: "切り捨て(tsugi)"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"逆順にすると\" + gyaku"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%", "*", "/"],
+                correct: true,
+            },
+            {
+                values: ["/", "*", "/"],
+                correct: false,
+                hint: "一の位を取り出すには10でわった「あまり」がほしいです。/ だと商（1234÷10＝123）になり、一の位の数字になりません。% を使いましょう",
+            },
+            {
+                values: ["%", "+", "/"],
+                correct: false,
+                hint: "gyaku + 10 + ichi では、これまでの結果を10倍して桁を上げることができません。位を1つ上げるには「かけ算」で gyaku * 10 とします",
+            },
+            {
+                values: ["%", "-", "/"],
+                correct: false,
+                hint: "引き算では gyaku がどんどんマイナスになってしまいます。桁を1つ上げるのは gyaku * 10 です",
+            },
+            {
+                values: ["%", "*", "%"],
+                correct: false,
+                hint: "桁をひとつ減らすには10で「わって」商にします。% だと num があまりのままになり、0にならず繰り返しが終わりません。/ を使いましょう",
+            }
+        ],
+        defaultHint: "num % 10 で一の位を取り出し、これまでの結果を gyaku * 10 で桁上げしてから一の位をたす、そして num / 10 で桁をひとつ減らす、と考えよう。1234→4→43→432→4321 と組み立てていきます"
     },
 }
