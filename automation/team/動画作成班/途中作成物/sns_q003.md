@@ -4,6 +4,7 @@
 解説動画（YouTube Shorts）：https://youtube.com/shorts/gk9yO8ZUcLo
 
 > ⚠️ 6本すべて本文に問題ページURLを含める。**答えは明かさない**／ハッシュタグは `#情報I #共通テスト #共テプロトレ` に統一。動画URLも各本文に併記。
+> ※ 各ツイートは**コードブロック**にしてあります＝右上のコピーボタンでそのまま貼り付け可。
 > ※ `<!-- PR_BODY -->` 以降が build-review-pr-body.js でPR説明文へ差し込まれる本文。@claude 修正はこの下を編集する。
 
 <!-- PR_BODY -->
@@ -11,43 +12,55 @@
 （※このタイトルは答え=%を含むため、下の各ツイート本文には入れていません＝「答えは明かさない」方針を維持。動画/概要欄側でタイトルとして使用）
 
 ### 🧑‍🎓 生徒用①
+```text
 「2の倍数のときだけ表示」——空欄に入る記号は、たった1つ。
 あなたは即答できる？🤔　じつは「÷」を選ぶとハマるかも…！
 ▶30秒で解説：https://youtube.com/shorts/gk9yO8ZUcLo
 自分で解く👇 https://joho-kyoshitsu.com/dncl-scratch/quiz/q003/
-`#情報I #共通テスト #共テプロトレ`
+#情報I #共通テスト #共テプロトレ
+```
 
 ### 🧑‍🎓 生徒用②
+```text
 「偶数かどうか」って、プログラムでどう見分ける？
 選択肢は ＋ − × ÷ と、もう1つ。正解はこの中に1つだけ。
 ▶動画で確認：https://youtube.com/shorts/gk9yO8ZUcLo
 自分の手で答え合わせ👇 https://joho-kyoshitsu.com/dncl-scratch/quiz/q003/
-`#情報I #共通テスト #共テプロトレ`
+#情報I #共通テスト #共テプロトレ
+```
 
 ### 👩‍🏫 教員用①
+```text
 【授業ネタ】「2の倍数だけ表示する」穴埋め1問。
 生徒が「÷」を選びがちな“あの落とし穴”を、実際に動かして体感させられます。
 ▶解説動画（Shorts）：https://youtube.com/shorts/gk9yO8ZUcLo
 問題ページ👇 https://joho-kyoshitsu.com/dncl-scratch/quiz/q003/
-`#情報I #共通テスト #共テプロトレ`
+#情報I #共通テスト #共テプロトレ
+```
 
 ### 👩‍🏫 教員用②
+```text
 共通テスト対策の穴埋め1問（第3問）。
 空欄に入る演算子を選ぶだけ——なのに意外と手が止まります。
 ▶動きで見せる解説：https://youtube.com/shorts/gk9yO8ZUcLo
 選択肢＋ステップ実行で解く👇 https://joho-kyoshitsu.com/dncl-scratch/quiz/q003/
-`#情報I #共通テスト #共テプロトレ`
+#情報I #共通テスト #共テプロトレ
+```
 
 ### 👪 保護者用①
+```text
 「情報I」って親世代には未知の科目…でも大丈夫。
 「偶数の見分け方」をテーマにお子さんと1問。答え合わせは画面がしてくれます。
 ▶まず動画で雰囲気を：https://youtube.com/shorts/gk9yO8ZUcLo
 実際に解く👇 https://joho-kyoshitsu.com/dncl-scratch/quiz/q003/
-`#情報I #共通テスト #共テプロトレ`
+#情報I #共通テスト #共テプロトレ
+```
 
 ### 👪 保護者用②
+```text
 入試に「情報I」が登場し、プログラミングも出題範囲に。
 無料・登録不要、スマホで1問お試しできます。
 ▶30秒の解説動画：https://youtube.com/shorts/gk9yO8ZUcLo
 まずは第3問から👇 https://joho-kyoshitsu.com/dncl-scratch/quiz/q003/
-`#情報I #共通テスト #共テプロトレ`
+#情報I #共通テスト #共テプロトレ
+```
