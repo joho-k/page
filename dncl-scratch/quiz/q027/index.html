@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第27問 数字を逆順にする｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="整数 num（＝1234）の数字を逆の順（4321）に並べかえて表示するようにしよう。一の位を取り出し、これまでの結果(gyaku)を10倍して桁を上げてから一の位をたし、num を10でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,数字を逆順にする">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q027/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第27問 数字を逆順にする｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="整数 num（＝1234）の数字を逆の順（4321）に並べかえて表示するようにしよう。一の位を取り出し、これまでの結果(gyaku)を10倍して桁を上げてから一の位をたし、num を10でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q027/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q027.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第27問 数字を逆順にする｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="整数 num（＝1234）の数字を逆の順（4321）に並べかえて表示するようにしよう。一の位を取り出し、これまでの結果(gyaku)を10倍して桁を上げてから一の位をたし、num を10でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q027.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q027/index.html#quiz",
+      "name": "第27問 数字を逆順にする",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q027/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "整数 num（＝1234）の数字を逆の順（4321）に並べかえて表示するようにしよう。一の位を取り出し、これまでの結果(gyaku)を10倍して桁を上げてから一の位をたし、num を10でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "% , * , /"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第27問 数字を逆順にする",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q027/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q027";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第27問 数字を逆順にする</h1>
+            <p>整数 num（＝1234）の数字を逆の順（4321）に並べかえて表示するようにしよう。一の位を取り出し、これまでの結果(gyaku)を10倍して桁を上げてから一の位をたし、num を10でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★☆（4／やや難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>num = 1234
+gyaku = 0
+num &gt; 0 の間繰り返す:
+  ichi = num ［A］ 10
+  gyaku = gyaku ［B］ 10 + ichi
+  tsugi = num ［C］ 10
+  num = 切り捨て(tsugi)
+表示する(&quot;逆順にすると&quot; + gyaku)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+                <li><code>%</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>num % 10 で一の位を取り出し、これまでの結果を gyaku * 10 で桁上げしてから一の位をたす、そして num / 10 で桁をひとつ減らす、と考えよう。1234→4→43→432→4321 と組み立てていきます</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>%</code></li>
+            <li>空欄 ［B］ … <code>*</code></li>
+            <li>空欄 ［C］ … <code>/</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>/</code>　［B］<code>*</code>　［C］<code>/</code> … 一の位を取り出すには10でわった「あまり」がほしいです。/ だと商（1234÷10＝123）になり、一の位の数字になりません。% を使いましょう</li>
+            <li>［A］<code>%</code>　［B］<code>+</code>　［C］<code>/</code> … gyaku + 10 + ichi では、これまでの結果を10倍して桁を上げることができません。位を1つ上げるには「かけ算」で gyaku * 10 とします</li>
+            <li>［A］<code>%</code>　［B］<code>-</code>　［C］<code>/</code> … 引き算では gyaku がどんどんマイナスになってしまいます。桁を1つ上げるのは gyaku * 10 です</li>
+            <li>［A］<code>%</code>　［B］<code>*</code>　［C］<code>%</code> … 桁をひとつ減らすには10で「わって」商にします。% だと num があまりのままになり、0にならず繰り返しが終わりません。/ を使いましょう</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q025/index.html">第25問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
