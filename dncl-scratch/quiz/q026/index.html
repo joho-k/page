@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第26問 秒を分と秒に直す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="500秒は何分何秒でしょうか。1分は60秒です。分の数と、残りの秒数をそれぞれ計算して「8分20秒」のように表示するようにしよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,秒を分と秒に直す">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q026/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第26問 秒を分と秒に直す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="500秒は何分何秒でしょうか。1分は60秒です。分の数と、残りの秒数をそれぞれ計算して「8分20秒」のように表示するようにしよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q026/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q026.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第26問 秒を分と秒に直す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="500秒は何分何秒でしょうか。1分は60秒です。分の数と、残りの秒数をそれぞれ計算して「8分20秒」のように表示するようにしよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q026.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q026/index.html#quiz",
+      "name": "第26問 秒を分と秒に直す",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q026/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "500秒は何分何秒でしょうか。1分は60秒です。分の数と、残りの秒数をそれぞれ計算して「8分20秒」のように表示するようにしよう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "切り捨て(byou / 60) , byou % 60"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "切り捨て(byou / 60)"
+          },
+          {
+            "@type": "Answer",
+            "text": "byou % 60"
+          },
+          {
+            "@type": "Answer",
+            "text": "byou / 60"
+          },
+          {
+            "@type": "Answer",
+            "text": "byou * 60"
+          },
+          {
+            "@type": "Answer",
+            "text": "byou - 60"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第26問 秒を分と秒に直す",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q026/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q026";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第26問 秒を分と秒に直す</h1>
+            <p>500秒は何分何秒でしょうか。1分は60秒です。分の数と、残りの秒数をそれぞれ計算して「8分20秒」のように表示するようにしよう（2か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>byou = 500
+fun = ［A］
+nokori = ［B］
+表示する(byou + &quot;秒は&quot; + fun + &quot;分&quot; + nokori + &quot;秒です&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>切り捨て(byou / 60)</code></li>
+                <li><code>byou % 60</code></li>
+                <li><code>byou / 60</code></li>
+                <li><code>byou * 60</code></li>
+                <li><code>byou - 60</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>1分＝60秒なので、60でわった「商」が分、「あまり」が残りの秒数です。商は小数が出ないように 切り捨て(...) を、あまりは % を使いましょう</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>切り捨て(byou / 60)</code></li>
+            <li>空欄 ［B］ … <code>byou % 60</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>byou / 60</code>　［B］<code>byou % 60</code> … 500 / 60 は 8.333… になり、「8.333…分」と表示されてしまいます。小数部分を落として8分にするには 切り捨て(byou / 60) を使いましょう</li>
+            <li>［A］<code>byou % 60</code>　［B］<code>切り捨て(byou / 60)</code> … 2つが逆です。60でわった「商」が分の数、60でわった「あまり」が残りの秒数になります</li>
+            <li>［A］<code>切り捨て(byou / 60)</code>　［B］<code>byou - 60</code> … byou - 60 は 500 - 60 で440です。60秒を1回ぶんしか取り除けていません。何回ぶん取り除いても残るのが「あまり」なので byou % 60 を使いましょう</li>
+            <li>［A］<code>byou * 60</code>　［B］<code>byou % 60</code> … 秒を分に直すときは60でかけるのではなく、60でわります。500 * 60 では逆に大きくなってしまいます</li>
+            <li>［A］<code>切り捨て(byou / 60)</code>　［B］<code>byou / 60</code> … 残りの秒数がほしいので、わり算の「あまり」を使います。byou % 60 なら 500 を 60 でわったあまりの20が出ます</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q025/index.html">第25問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
