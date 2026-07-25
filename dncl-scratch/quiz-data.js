@@ -1785,5 +1785,70 @@ window.quizData = {
             }
         ],
         defaultHint: "1分＝60秒なので、60でわった「商」が分、「あまり」が残りの秒数です。商は小数が出ないように 切り捨て(...) を、あまりは % を使いましょう"
+    }, q028: {
+        title: "摂氏を華氏に変換",
+        addedAt: "2026-07-25",
+        difficulty: 2,
+        question: "摂氏の気温 C（＝20）を華氏に変換して表示するようにしよう。華氏は「摂氏を9倍して5でわり、32をたす」で求められます。まず9倍した bai を、5でわって shou を、最後に32をたして F を作ります（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "C",
+                value: "20"
+            },
+            {
+                type: "assign",
+                name: "bai",
+                value: "C __BLANK_blank_a__ 9"
+            },
+            {
+                type: "assign",
+                name: "shou",
+                value: "bai / 5"
+            },
+            {
+                type: "assign",
+                name: "F",
+                value: "shou __BLANK_blank_b__ 32"
+            },
+            {
+                type: "print",
+                value: "\"摂氏\" + C + \"度は華氏\" + F + \"度\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["*", "+"],
+                correct: true,
+            },
+            {
+                values: ["*", "-"],
+                correct: false,
+                hint: "最後は32をたします。36 - 32 ＝ 4 になってしまいます。+ を使って 36 + 32 ＝ 68 とします",
+            },
+            {
+                values: ["/", "+"],
+                correct: false,
+                hint: "「9倍」なのでわり算ではなくかけ算です。20 / 9 では9倍になりません。* を使って 20 * 9 ＝ 180 とします",
+            },
+            {
+                values: ["+", "+"],
+                correct: false,
+                hint: "「9倍」はたし算ではなくかけ算です。20 + 9 ＝ 29 では9倍になりません。* を使って 20 * 9 ＝ 180 とします",
+            },
+            {
+                values: ["*", "*"],
+                correct: false,
+                hint: "最後は32をかけるのではなくたします。36 * 32 ＝ 1152 と大きくなりすぎます。+ を使って 36 + 32 ＝ 68 とします",
+            }
+        ],
+        defaultHint: "華氏 ＝ 摂氏 × 9 ÷ 5 ＋ 32 です。「9倍」は * 、最後の「32をたす」は + を使います。20 * 9 ＝ 180、180 / 5 ＝ 36、36 + 32 ＝ 68 と考えよう"
     },
 }
