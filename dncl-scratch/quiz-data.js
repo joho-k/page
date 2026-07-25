@@ -1785,5 +1785,79 @@ window.quizData = {
             }
         ],
         defaultHint: "1分＝60秒なので、60でわった「商」が分、「あまり」が残りの秒数です。商は小数が出ないように 切り捨て(...) を、あまりは % を使いましょう"
+    }, q029: {
+        title: "ビットと2の累乗",
+        addedAt: "2026-07-26",
+        difficulty: 3,
+        question: "コンピュータは0と1を並べて数を表します。bit（＝8）ビットで表せる場合の数と、そのとき表せる最大の整数を求めよう。場合の数は1に2をbit回かけて求め、表せる最大の整数は「場合の数から1をひいた値」（0から数えはじめるため）になります（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "bit",
+                value: "8"
+            },
+            {
+                type: "assign",
+                name: "baai",
+                value: "1"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "bit",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "baai",
+                        value: "baai __BLANK_blank_a__ 2"
+                    }
+                ]
+            },
+            {
+                type: "assign",
+                name: "saidai",
+                value: "baai __BLANK_blank_b__ 1"
+            },
+            {
+                type: "print",
+                value: "\"場合の数は\" + baai + \"通り、最大の整数は\" + saidai"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["*", "-"],
+                correct: true,
+            },
+            {
+                values: ["+", "-"],
+                correct: false,
+                hint: "「2をかける」をくり返すので、たし算ではありません。+ だと 1 + 2 を8回で17にしかならず、2倍ずつには増えません。* を使うと 1→2→4→…→256 になります",
+            },
+            {
+                values: ["*", "+"],
+                correct: false,
+                hint: "表せる最大の整数は場合の数より1小さいです（0から数えはじめるため）。+ だと 256 + 1 ＝ 257 になってしまいます。- を使って 256 - 1 ＝ 255 とします",
+            },
+            {
+                values: ["/", "-"],
+                correct: false,
+                hint: "「2をかける」なのでわり算ではありません。/ だと 1 / 2 で小さくなり続けます。* を使って 2倍ずつ増やします",
+            },
+            {
+                values: ["*", "*"],
+                correct: false,
+                hint: "最後は「1をひく」のでかけ算ではありません。* だと 256 * 1 ＝ 256 のままです。- を使って 256 - 1 ＝ 255 とします",
+            }
+        ],
+        defaultHint: "8ビットは2を8回かけるので 2×2×…×2 ＝ 256通り。0から数えはじめるので表せる最大の整数は 256 − 1 ＝ 255 です。くり返しのかけ算は *、最後の「1をひく」は - を使おう"
     },
 }
