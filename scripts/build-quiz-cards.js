@@ -161,10 +161,15 @@ function esc(s) {
 function cardHtml(quiz, id, logoDataUri, programDataUri) {
     const n = quizNumber(id);
     const t = themeOf(quiz);
-    const question = String(quiz.question || quiz.title || "");
-    // 問題文が3行に収まる（末尾が「…」で切れない）よう、文字数でサイズを落とす
-    const len = question.length;
-    const titleSize = len > 80 ? 24 : len > 60 ? 28 : len > 40 ? 34 : 40;
+    const title = String(quiz.title || "");
+    const question = String(quiz.question || "");
+    const tlen = title.length;
+    const qlen = question.length;
+    // 問題文が長い問題は「q027形式」= タイトルを大きく／問題文は下に小さく3行。
+    // 問題文が短い問題は問題文自体を主役にして大きく見せる（タイトルは小さな見出し）。
+    const longQuestion = qlen > 45;
+    const titleSize = tlen > 18 ? 36 : tlen > 12 ? 44 : 52; // q027形式のタイトル
+    const qHeroSize = qlen > 35 ? 30 : qlen > 22 ? 36 : 42; // 短い問題文を主役に出すサイズ
 
     return `<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -196,10 +201,26 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
   .badge-text .no { font-size: 24px; font-weight: 800; line-height: 1; margin-top: 6px; }
   .badge-text .no b { font-size: 52px; letter-spacing: 1px; }
 
-  /* 右上：問題文 */
-  .title {
-    margin: 46px 56px 0 320px;
-    font-size: ${titleSize}px; font-weight: 800; line-height: 1.4; color: #16202b;
+  /* 右上：ヘッダー。問題文の長さで主役を切り替える */
+  .header { margin: 40px 56px 0 320px; }
+  /* q027形式（問題文が長い）：タイトル大 → 問題文小3行 */
+  .header .ttl {
+    font-size: ${titleSize}px; font-weight: 900; line-height: 1.25; color: #16202b;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .header .q {
+    margin-top: 12px;
+    font-size: 18px; font-weight: 600; line-height: 1.5; color: #46515c;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  /* 問題文が短い：小さな見出し（タイトル）→ 問題文を大きく主役に */
+  .header .kicker {
+    font-size: 22px; font-weight: 800; color: ${t.main}; letter-spacing: 1px;
+    display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .header .qbig {
+    margin-top: 10px;
+    font-size: ${qHeroSize}px; font-weight: 800; line-height: 1.35; color: #16202b;
     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
   }
 
@@ -232,7 +253,11 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
     <div class="stars">${stars(t.level)}</div>
     <div class="no">第<b>${n}</b>問</div>
   </div>
-  <div class="title">${esc(question)}</div>
+  <div class="header">${
+    longQuestion
+      ? `<div class="ttl">${esc(title)}</div>${question ? `<div class="q">${esc(question)}</div>` : ""}`
+      : `<div class="kicker">${esc(title)}</div><div class="qbig">${esc(question || title)}</div>`
+  }</div>
   <div class="program">${programDataUri ? `<img src="${programDataUri}" alt="">` : ""}</div>
   <div class="band">
     <div class="copy">
