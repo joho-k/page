@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第28問 摂氏を華氏に変換｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="摂氏の気温 C（＝20）を華氏に変換して表示するようにしよう。華氏は「摂氏を9倍して5でわり、32をたす」で求められます。まず9倍した bai を、5でわって shou を、最後に32をたして F を作ります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,摂氏を華氏に変換">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q028/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第28問 摂氏を華氏に変換｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="摂氏の気温 C（＝20）を華氏に変換して表示するようにしよう。華氏は「摂氏を9倍して5でわり、32をたす」で求められます。まず9倍した bai を、5でわって shou を、最後に32をたして F を作ります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q028/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q028.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第28問 摂氏を華氏に変換｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="摂氏の気温 C（＝20）を華氏に変換して表示するようにしよう。華氏は「摂氏を9倍して5でわり、32をたす」で求められます。まず9倍した bai を、5でわって shou を、最後に32をたして F を作ります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q028.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q028/index.html#quiz",
+      "name": "第28問 摂氏を華氏に変換",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q028/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "摂氏の気温 C（＝20）を華氏に変換して表示するようにしよう。華氏は「摂氏を9倍して5でわり、32をたす」で求められます。まず9倍した bai を、5でわって shou を、最後に32をたして F を作ります（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "* , +"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第28問 摂氏を華氏に変換",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q028/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q028";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第28問 摂氏を華氏に変換</h1>
+            <p>摂氏の気温 C（＝20）を華氏に変換して表示するようにしよう。華氏は「摂氏を9倍して5でわり、32をたす」で求められます。まず9倍した bai を、5でわって shou を、最後に32をたして F を作ります（2か所の穴をうめよう）</p>
+            <p>難易度：★★☆☆☆（2／やさしい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>C = 20
+bai = C ［A］ 9
+shou = bai / 5
+F = shou ［B］ 32
+表示する(&quot;摂氏&quot; + C + &quot;度は華氏&quot; + F + &quot;度&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+                <li><code>%</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>華氏 ＝ 摂氏 × 9 ÷ 5 ＋ 32 です。「9倍」は * 、最後の「32をたす」は + を使います。20 * 9 ＝ 180、180 / 5 ＝ 36、36 + 32 ＝ 68 と考えよう</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>*</code></li>
+            <li>空欄 ［B］ … <code>+</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>*</code>　［B］<code>-</code> … 最後は32をたします。36 - 32 ＝ 4 になってしまいます。+ を使って 36 + 32 ＝ 68 とします</li>
+            <li>［A］<code>/</code>　［B］<code>+</code> … 「9倍」なのでわり算ではなくかけ算です。20 / 9 では9倍になりません。* を使って 20 * 9 ＝ 180 とします</li>
+            <li>［A］<code>+</code>　［B］<code>+</code> … 「9倍」はたし算ではなくかけ算です。20 + 9 ＝ 29 では9倍になりません。* を使って 20 * 9 ＝ 180 とします</li>
+            <li>［A］<code>*</code>　［B］<code>*</code> … 最後は32をかけるのではなくたします。36 * 32 ＝ 1152 と大きくなりすぎます。+ を使って 36 + 32 ＝ 68 とします</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q027/index.html">第27問へ</a></li>
+                <li><a href="../q029/index.html">第29問へ</a></li>
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
