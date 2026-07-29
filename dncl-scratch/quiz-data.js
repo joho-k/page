@@ -1785,5 +1785,310 @@ window.quizData = {
             }
         ],
         defaultHint: "1分＝60秒なので、60でわった「商」が分、「あまり」が残りの秒数です。商は小数が出ないように 切り捨て(...) を、あまりは % を使いましょう"
+    }, q027: {
+        title: "数字を逆順にする",
+        addedAt: "2026-07-23",
+        difficulty: 4,
+        question: "整数 num（＝1234）の数字を逆の順（4321）に並べかえて表示するようにしよう。一の位を取り出し、これまでの結果(gyaku)を10倍して桁を上げてから一の位をたし、num を10でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "num",
+                value: "1234"
+            },
+            {
+                type: "assign",
+                name: "gyaku",
+                value: "0"
+            },
+            {
+                type: "while",
+                condition: "num > 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "ichi",
+                        value: "num __BLANK_blank_a__ 10"
+                    },
+                    {
+                        type: "assign",
+                        name: "gyaku",
+                        value: "gyaku __BLANK_blank_b__ 10 + ichi"
+                    },
+                    {
+                        type: "assign",
+                        name: "tsugi",
+                        value: "num __BLANK_blank_c__ 10"
+                    },
+                    {
+                        type: "assign",
+                        name: "num",
+                        value: "切り捨て(tsugi)"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"逆順にすると\" + gyaku"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%", "*", "/"],
+                correct: true,
+            },
+            {
+                values: ["/", "*", "/"],
+                correct: false,
+                hint: "一の位を取り出すには10でわった「あまり」がほしいです。/ だと商（1234÷10＝123）になり、一の位の数字になりません。% を使いましょう",
+            },
+            {
+                values: ["%", "+", "/"],
+                correct: false,
+                hint: "gyaku + 10 + ichi では、これまでの結果を10倍して桁を上げることができません。位を1つ上げるには「かけ算」で gyaku * 10 とします",
+            },
+            {
+                values: ["%", "-", "/"],
+                correct: false,
+                hint: "引き算では gyaku がどんどんマイナスになってしまいます。桁を1つ上げるのは gyaku * 10 です",
+            },
+            {
+                values: ["%", "*", "%"],
+                correct: false,
+                hint: "桁をひとつ減らすには10で「わって」商にします。% だと num があまりのままになり、0にならず繰り返しが終わりません。/ を使いましょう",
+            }
+        ],
+        defaultHint: "num % 10 で一の位を取り出し、これまでの結果を gyaku * 10 で桁上げしてから一の位をたす、そして num / 10 で桁をひとつ減らす、と考えよう。1234→4→43→432→4321 と組み立てていきます"
+    }, q028: {
+        title: "摂氏を華氏に変換",
+        addedAt: "2026-07-25",
+        difficulty: 2,
+        question: "摂氏の気温 C（＝20）を華氏に変換して表示するようにしよう。華氏は「摂氏を9倍して5でわり、32をたす」で求められます。まず9倍した bai を、5でわって shou を、最後に32をたして F を作ります（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "C",
+                value: "20"
+            },
+            {
+                type: "assign",
+                name: "bai",
+                value: "C __BLANK_blank_a__ 9"
+            },
+            {
+                type: "assign",
+                name: "shou",
+                value: "bai / 5"
+            },
+            {
+                type: "assign",
+                name: "F",
+                value: "shou __BLANK_blank_b__ 32"
+            },
+            {
+                type: "print",
+                value: "\"摂氏\" + C + \"度は華氏\" + F + \"度\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["*", "+"],
+                correct: true,
+            },
+            {
+                values: ["*", "-"],
+                correct: false,
+                hint: "最後は32をたします。36 - 32 ＝ 4 になってしまいます。+ を使って 36 + 32 ＝ 68 とします",
+            },
+            {
+                values: ["/", "+"],
+                correct: false,
+                hint: "「9倍」なのでわり算ではなくかけ算です。20 / 9 では9倍になりません。* を使って 20 * 9 ＝ 180 とします",
+            },
+            {
+                values: ["+", "+"],
+                correct: false,
+                hint: "「9倍」はたし算ではなくかけ算です。20 + 9 ＝ 29 では9倍になりません。* を使って 20 * 9 ＝ 180 とします",
+            },
+            {
+                values: ["*", "*"],
+                correct: false,
+                hint: "最後は32をかけるのではなくたします。36 * 32 ＝ 1152 と大きくなりすぎます。+ を使って 36 + 32 ＝ 68 とします",
+            }
+        ],
+        defaultHint: "華氏 ＝ 摂氏 × 9 ÷ 5 ＋ 32 です。「9倍」は * 、最後の「32をたす」は + を使います。20 * 9 ＝ 180、180 / 5 ＝ 36、36 + 32 ＝ 68 と考えよう"
+    }, q029: {
+        title: "ビットと2の累乗",
+        addedAt: "2026-07-26",
+        difficulty: 3,
+        question: "コンピュータは0と1を並べて数を表します。bit（＝8）ビットで表せる場合の数と、そのとき表せる最大の整数を求めよう。場合の数は1に2をbit回かけて求め、表せる最大の整数は「場合の数から1をひいた値」（0から数えはじめるため）になります（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "bit",
+                value: "8"
+            },
+            {
+                type: "assign",
+                name: "baai",
+                value: "1"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "bit",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "baai",
+                        value: "baai __BLANK_blank_a__ 2"
+                    }
+                ]
+            },
+            {
+                type: "assign",
+                name: "saidai",
+                value: "baai __BLANK_blank_b__ 1"
+            },
+            {
+                type: "print",
+                value: "\"場合の数は\" + baai + \"通り、最大の整数は\" + saidai"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["*", "-"],
+                correct: true,
+            },
+            {
+                values: ["+", "-"],
+                correct: false,
+                hint: "「2をかける」をくり返すので、たし算ではありません。+ だと 1 + 2 を8回で17にしかならず、2倍ずつには増えません。* を使うと 1→2→4→…→256 になります",
+            },
+            {
+                values: ["*", "+"],
+                correct: false,
+                hint: "表せる最大の整数は場合の数より1小さいです（0から数えはじめるため）。+ だと 256 + 1 ＝ 257 になってしまいます。- を使って 256 - 1 ＝ 255 とします",
+            },
+            {
+                values: ["/", "-"],
+                correct: false,
+                hint: "「2をかける」なのでわり算ではありません。/ だと 1 / 2 で小さくなり続けます。* を使って 2倍ずつ増やします",
+            },
+            {
+                values: ["*", "*"],
+                correct: false,
+                hint: "最後は「1をひく」のでかけ算ではありません。* だと 256 * 1 ＝ 256 のままです。- を使って 256 - 1 ＝ 255 とします",
+            }
+        ],
+        defaultHint: "8ビットは2を8回かけるので 2×2×…×2 ＝ 256通り。0から数えはじめるので表せる最大の整数は 256 − 1 ＝ 255 です。くり返しのかけ算は *、最後の「1をひく」は - を使おう"
+    }, q030: {
+        title: "画像のデータ量",
+        addedAt: "2026-07-29",
+        difficulty: 3,
+        question: "デジタル画像は小さな点（画素）が並んでできています。横640画素・縦480画素で、1画素あたり24ビットで色を表す画像は何バイトになるでしょうか。画素数・全体のビット数・バイト数の順に計算しよう。1バイトは8ビットです（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "yoko",
+                value: "640"
+            },
+            {
+                type: "assign",
+                name: "tate",
+                value: "480"
+            },
+            {
+                type: "assign",
+                name: "irobit",
+                value: "24"
+            },
+            {
+                type: "assign",
+                name: "gasosu",
+                value: "yoko __BLANK_blank_a__ tate"
+            },
+            {
+                type: "assign",
+                name: "sobit",
+                value: "gasosu __BLANK_blank_b__ irobit"
+            },
+            {
+                type: "assign",
+                name: "byte",
+                value: "sobit __BLANK_blank_c__ 8"
+            },
+            {
+                type: "print",
+                value: "\"画素数は\" + gasosu + \"画素、データ量は\" + byte + \"バイトです\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["*", "*", "/"],
+                correct: true,
+            },
+            {
+                values: ["+", "*", "/"],
+                correct: false,
+                hint: "画素は縦横にびっしり並んでいるので、640 + 480 ＝ 1120 ではありません。横の640個が480行ぶん並ぶので、* を使って 640 * 480 ＝ 307200画素です",
+            },
+            {
+                values: ["*", "+", "/"],
+                correct: false,
+                hint: "1画素につき24ビット使うので、307200画素ぶんの合計はかけ算です。+ だと 307200 + 24 で24ビットしか増えません。* を使いましょう",
+            },
+            {
+                values: ["*", "*", "*"],
+                correct: false,
+                hint: "1バイト＝8ビットなので、ビット数を8でわるとバイト数になります。* だと逆に8倍になってしまいます。/ を使いましょう",
+            },
+            {
+                values: ["*", "*", "%"],
+                correct: false,
+                hint: "% はわり算の「あまり」です。7372800 % 8 はあまりの0になってしまいます。何バイトぶんあるかを知りたいので、わり算の / を使いましょう",
+            },
+            {
+                values: ["*", "/", "/"],
+                correct: false,
+                hint: "1画素あたり24ビットを「使う」ので、わり算ではなくかけ算です。/ だと 307200 / 24 ＝ 12800 とかえって小さくなってしまいます",
+            },
+            {
+                values: ["*", "*", "-"],
+                correct: false,
+                hint: "8ビットのかたまりが何個あるかを数えるので、ひき算ではありません。- だと 7372800 - 8 とほとんど減りません。8でわって 921600バイトを求めます",
+            }
+        ],
+        defaultHint: "画素数は 横 × 縦。全体のビット数は 画素数 × 1画素のビット数。バイト数はビット数 ÷ 8（1バイト＝8ビット）です"
     },
 }
