@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第31問 うるう年の判定｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="うるう年は「4の倍数の年はうるう年。ただし100の倍数の年は平年。ただし400の倍数の年はうるう年」というルールで決まります。year（＝1900）について、うるう年なら uruu を1、平年なら0に書きかえながら判定するプログラムです。上から順に3つの条件で uruu を上書きしていくので、入れる式の順番がとても大事です（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,うるう年の判定">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q031/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第31問 うるう年の判定｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="うるう年は「4の倍数の年はうるう年。ただし100の倍数の年は平年。ただし400の倍数の年はうるう年」というルールで決まります。year（＝1900）について、うるう年なら uruu を1、平年なら0に書きかえながら判定するプログラムです。上から順に3つの条件で uruu を上書きしていくので、入れる式の順番がとても大事です（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q031/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q031.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第31問 うるう年の判定｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="うるう年は「4の倍数の年はうるう年。ただし100の倍数の年は平年。ただし400の倍数の年はうるう年」というルールで決まります。year（＝1900）について、うるう年なら uruu を1、平年なら0に書きかえながら判定するプログラムです。上から順に3つの条件で uruu を上書きしていくので、入れる式の順番がとても大事です（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q031.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q031/index.html#quiz",
+      "name": "第31問 うるう年の判定",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q031/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "うるう年は「4の倍数の年はうるう年。ただし100の倍数の年は平年。ただし400の倍数の年はうるう年」というルールで決まります。year（＝1900）について、うるう年なら uruu を1、平年なら0に書きかえながら判定するプログラムです。上から順に3つの条件で uruu を上書きしていくので、入れる式の順番がとても大事です（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "year % 4 , year % 100 , year % 400"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "year % 4"
+          },
+          {
+            "@type": "Answer",
+            "text": "year % 100"
+          },
+          {
+            "@type": "Answer",
+            "text": "year % 400"
+          },
+          {
+            "@type": "Answer",
+            "text": "year / 4"
+          },
+          {
+            "@type": "Answer",
+            "text": "year / 100"
+          },
+          {
+            "@type": "Answer",
+            "text": "year / 400"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第31問 うるう年の判定",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q031/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q031";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第31問 うるう年の判定</h1>
+            <p>うるう年は「4の倍数の年はうるう年。ただし100の倍数の年は平年。ただし400の倍数の年はうるう年」というルールで決まります。year（＝1900）について、うるう年なら uruu を1、平年なら0に書きかえながら判定するプログラムです。上から順に3つの条件で uruu を上書きしていくので、入れる式の順番がとても大事です（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★☆（4／やや難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>year = 1900
+uruu = 0
+もし ［A］ == 0 ならば:
+  uruu = 1
+もし ［B］ == 0 ならば:
+  uruu = 0
+もし ［C］ == 0 ならば:
+  uruu = 1
+もし uruu == 1 ならば:
+  表示する(year + &quot;年はうるう年です&quot;)
+そうでなければ:
+  表示する(year + &quot;年は平年です&quot;)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>year % 4</code></li>
+                <li><code>year % 100</code></li>
+                <li><code>year % 400</code></li>
+                <li><code>year / 4</code></li>
+                <li><code>year / 100</code></li>
+                <li><code>year / 400</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>ルールの文章と同じ順番に、4 → 100 → 400 と書いていきます。上の行から順に uruu が上書きされるので、あとに書いた例外のほうが強くなります。倍数の判定はどれも % のあまりが0かどうかで調べよう</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>year % 4</code></li>
+            <li>空欄 ［B］ … <code>year % 100</code></li>
+            <li>空欄 ［C］ … <code>year % 400</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>year % 400</code>　［B］<code>year % 100</code>　［C］<code>year % 4</code> … 順番が逆です。この並びだと最後の「4の倍数ならうるう年」がすべてを上書きしてしまい、1900年もうるう年になってしまいます。まず4の倍数でうるう年にして、次に100の倍数で平年にもどし、最後に400の倍数だけうるう年にします</li>
+            <li>［A］<code>year % 4</code>　［B］<code>year % 400</code>　［C］<code>year % 100</code> … 100と400が入れかわっています。この並びだと1900年が最後の「100の倍数」でうるう年に上書きされてしまいます。400の倍数の例外はいちばん最後に置きます</li>
+            <li>［A］<code>year % 100</code>　［B］<code>year % 4</code>　［C］<code>year % 400</code> … 1つ目は「4の倍数ならうるう年」という土台の条件です。100の倍数で先にうるう年にしてしまうと、そのあとの4の倍数で平年にもどってしまい、2024年のようなふつうのうるう年が平年になります</li>
+            <li>［A］<code>year / 4</code>　［B］<code>year % 100</code>　［C］<code>year % 400</code> … 「4の倍数かどうか」はわり算の「あまり」が0かで調べます。year / 4 は商なので 1900 / 4 ＝ 475 となり、0にならず倍数の判定ができません。% を使いましょう</li>
+            <li>［A］<code>year % 4</code>　［B］<code>year / 100</code>　［C］<code>year % 400</code> … 「100の倍数かどうか」も「あまり」で調べます。year / 100 は商の19になってしまい、0かどうかでは判定できません。year % 100 なら 1900 のあまりは0になります</li>
+            <li>［A］<code>year % 4</code>　［B］<code>year % 100</code>　［C］<code>year / 400</code> … 「400の倍数かどうか」も「あまり」で調べます。year / 400 は商なので、2000年でも 5 となって0になりません。year % 400 を使いましょう</li>
+            <li>［A］<code>year % 4</code>　［B］<code>year % 4</code>　［C］<code>year % 400</code> … 同じ条件を2回書くと、4の倍数の年をうるう年にしてすぐ平年にもどしてしまいます。2つ目には「100の倍数なら平年」の year % 100 を入れます</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q030/index.html">第30問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
