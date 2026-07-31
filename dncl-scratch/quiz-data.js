@@ -2090,5 +2090,102 @@ window.quizData = {
             }
         ],
         defaultHint: "画素数は 横 × 縦。全体のビット数は 画素数 × 1画素のビット数。バイト数はビット数 ÷ 8（1バイト＝8ビット）です"
+    }, q032: {
+        title: "10進数を2進数に直す",
+        addedAt: "2026-07-31",
+        difficulty: 5,
+        question: "10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "n",
+                value: "13"
+            },
+            {
+                type: "assign",
+                name: "nishin",
+                value: "0"
+            },
+            {
+                type: "assign",
+                name: "kurai",
+                value: "1"
+            },
+            {
+                type: "while",
+                condition: "n > 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "__BLANK_blank_a__"
+                    },
+                    {
+                        type: "assign",
+                        name: "nishin",
+                        value: "nishin + __BLANK_blank_b__"
+                    },
+                    {
+                        type: "assign",
+                        name: "kurai",
+                        value: "__BLANK_blank_c__"
+                    },
+                    {
+                        type: "assign",
+                        name: "tsugi",
+                        value: "n / 2"
+                    },
+                    {
+                        type: "assign",
+                        name: "n",
+                        value: "切り捨て(tsugi)"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"2進数にすると\" + nishin"
+            }
+        ],
+        choices: [
+            { label: "n % 2", value: "n % 2" },
+            { label: "n / 2", value: "n / 2" },
+            { label: "amari * kurai", value: "amari * kurai" },
+            { label: "amari + kurai", value: "amari + kurai" },
+            { label: "kurai * 10", value: "kurai * 10" },
+            { label: "kurai * 2", value: "kurai * 2" },
+        ],
+        answers: [
+            {
+                values: ["n % 2", "amari * kurai", "kurai * 10"],
+                correct: true,
+            },
+            {
+                values: ["n / 2", "amari * kurai", "kurai * 10"],
+                correct: false,
+                hint: "2進数の各けたは「2でわったあまり」です。n / 2 だと商（13÷2＝6）になり、0か1になりません。n % 2 を使いましょう",
+            },
+            {
+                values: ["n % 2", "amari + kurai", "kurai * 10"],
+                correct: false,
+                hint: "あまり（0か1）は、そのけたの位に置きたいので位を「かけ」ます。amari + kurai だと、あまりが0のときでも位の数がそのまま足されてしまいます。amari * kurai なら、あまりが0のときは0が足されます",
+            },
+            {
+                values: ["n % 2", "amari * kurai", "kurai * 2"],
+                correct: false,
+                hint: "n を2でわるので位も2倍にしたくなりますが、答えは「1101」という10進の見た目で組み立てています。kurai * 2 だと 1, 2, 4, 8 になり、1+0+4+8＝13 と元の数に戻ってしまいます。表示のけたを1つ上げるのは kurai * 10 です",
+            },
+            {
+                values: ["n % 2", "kurai * 10", "amari * kurai"],
+                correct: false,
+                hint: "式を入れる場所が入れかわっています。nishin に足すのは「あまり×位」の amari * kurai、次に位を10倍するのが kurai * 10 です",
+            },
+            {
+                values: ["n / 2", "amari + kurai", "kurai * 2"],
+                correct: false,
+                hint: "3か所とも違います。けたは n % 2 で取り出し、amari * kurai で位に置き、kurai * 10 で次のけたに進みます",
+            }
+        ],
+        defaultHint: "13 → あまり1（1の位）→ 6 → あまり0（10の位）→ 3 → あまり1（100の位）→ 1 → あまり1（1000の位）→ 0 で終わり。下から 1,0,1,1 を並べて 1101 です。n % 2 であまりを取り出し、amari * kurai で位に置き、kurai * 10 で次のけたへ進みます"
     },
 }
