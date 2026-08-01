@@ -2090,5 +2090,99 @@ window.quizData = {
             }
         ],
         defaultHint: "画素数は 横 × 縦。全体のビット数は 画素数 × 1画素のビット数。バイト数はビット数 ÷ 8（1バイト＝8ビット）です"
+    }, q034: {
+        title: "必要な箱の数（切り上げ）",
+        addedAt: "2026-08-02",
+        difficulty: 3,
+        question: "おかしが23個あります。1箱に6個ずつ入れて箱づめするとき、全部しまうには箱が何箱必要でしょうか。まず23と6から商 shou を求めて切り捨て、6個ずつぴったり入る箱の数 hako にします。次にあまりの個数を求め、あまりが1個でも残っていたらもう1箱使います（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "kosu",
+                value: "23"
+            },
+            {
+                type: "assign",
+                name: "iri",
+                value: "6"
+            },
+            {
+                type: "assign",
+                name: "shou",
+                value: "kosu __BLANK_blank_a__ iri"
+            },
+            {
+                type: "assign",
+                name: "hako",
+                value: "切り捨て(shou)"
+            },
+            {
+                type: "assign",
+                name: "amari",
+                value: "kosu __BLANK_blank_b__ iri"
+            },
+            {
+                type: "if",
+                condition: "amari __BLANK_blank_c__ 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "hako",
+                        value: "hako + 1"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"あまりは\" + amari + \"個、必要な箱は\" + hako + \"箱です\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+            { label: ">", value: ">" },
+            { label: "<", value: "<" },
+            { label: "==", value: "==" },
+        ],
+        answers: [
+            {
+                values: ["/", "%", ">"],
+                correct: true,
+            },
+            {
+                values: ["%", "%", ">"],
+                correct: false,
+                hint: "1つ目は「6個ずつ何箱ぶん入るか」なのでわり算です。% だと shou に 23 % 6 ＝ 5 とあまりの方が入ってしまい、箱が6箱も必要という答えになります。/ を使いましょう",
+            },
+            {
+                values: ["/", "/", ">"],
+                correct: false,
+                hint: "2つ目は「入りきらずに残った個数」なので、わり算のあまりを求める % です。/ だと「あまりは3.8333…個」と小数で表示されてしまい、個数になりません。正しくは 23 % 6 ＝ 5個です",
+            },
+            {
+                values: ["/", "%", "=="],
+                correct: false,
+                hint: "== だと「あまりがちょうど0のとき」だけ箱を増やすことになります。23 % 6 ＝ 5 なので箱は3箱のままで、18個しか入らず5個あふれてしまいます。あまりが残っているとき（> 0）に増やしましょう",
+            },
+            {
+                values: ["/", "%", "<"],
+                correct: false,
+                hint: "あまりは必ず0以上なので、amari < 0 は決して成り立ちません。箱は3箱のままで、あまりの5個を入れる箱がなくなります。> を使いましょう",
+            },
+            {
+                values: ["*", "%", ">"],
+                correct: false,
+                hint: "* だと shou が 23 * 6 ＝ 138 になり、箱が139箱も必要なことになってしまいます。23個を6個ずつに「分ける」ので / を使いましょう",
+            },
+            {
+                values: ["/", "-", ">"],
+                correct: false,
+                hint: "- だと「あまりは17個」と表示されてしまいます。1箱に6個ずつ何回も入れたあとの残りを知りたいので、あまりを求める % を使いましょう。23 % 6 ＝ 5個です",
+            }
+        ],
+        defaultHint: "23 ÷ 6 ＝ 3 あまり 5。商 shou は kosu / iri で 3.833…、これを切り捨てて3箱、残りは kosu % iri で5個です。あまりが0より大きいときはもう1箱いるので、答えは4箱。このように「わり算のあと、あまりがあれば1つ増やす」のが切り上げの考え方です"
     },
 }
