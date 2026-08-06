@@ -2090,5 +2090,111 @@ window.quizData = {
             }
         ],
         defaultHint: "画素数は 横 × 縦。全体のビット数は 画素数 × 1画素のビット数。バイト数はビット数 ÷ 8（1バイト＝8ビット）です"
+    }, q037: {
+        title: "10進数を2進数に直す",
+        addedAt: "2026-08-06",
+        difficulty: 4,
+        question: "整数 num（＝13）を2進数の表記（1101）に直して表示するようにしよう。2でわったあまり（0か1）が、下の桁から順に並びます。あまりに位の重み kurai（1, 10, 100, …）をかけて nishin にたし、num を2でわって桁をひとつ減らすことを、num が0になるまで繰り返します（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "num",
+                value: "13"
+            },
+            {
+                type: "assign",
+                name: "nishin",
+                value: "0"
+            },
+            {
+                type: "assign",
+                name: "kurai",
+                value: "1"
+            },
+            {
+                type: "while",
+                condition: "num > 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "num __BLANK_blank_a__ 2"
+                    },
+                    {
+                        type: "assign",
+                        name: "nishin",
+                        value: "amari __BLANK_blank_b__ kurai + nishin"
+                    },
+                    {
+                        type: "assign",
+                        name: "kurai",
+                        value: "kurai * 10"
+                    },
+                    {
+                        type: "assign",
+                        name: "shou",
+                        value: "num __BLANK_blank_c__ 2"
+                    },
+                    {
+                        type: "assign",
+                        name: "num",
+                        value: "切り捨て(shou)"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"2進数にすると\" + nishin"
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%", "*", "/"],
+                correct: true,
+            },
+            {
+                values: ["/", "*", "/"],
+                correct: false,
+                hint: "2進数の各桁になるのは「2でわったあまり」です。/ だと商（13÷2＝6.5）になり、0か1になりません。% を使って 13 % 2 ＝ 1 としましょう",
+            },
+            {
+                values: ["+", "*", "/"],
+                correct: false,
+                hint: "たし算では 13 + 2 ＝ 15 となり、桁の0か1になりません。あまりを出す % を使いましょう",
+            },
+            {
+                values: ["%", "+", "/"],
+                correct: false,
+                hint: "あまり（0か1）を正しい桁に置くには、位の重み kurai をかけます。amari + kurai だと 1 + 100 のように位がずれてしまいます。* を使いましょう",
+            },
+            {
+                values: ["%", "-", "/"],
+                correct: false,
+                hint: "ひき算では nishin がマイナスの方向にずれてしまいます。あまりを位の重みにのせるので amari * kurai です",
+            },
+            {
+                values: ["%", "*", "%"],
+                correct: false,
+                hint: "桁をひとつ減らすには2で「わって」商にします。% だと num が 13 % 2 ＝ 1 のあと 1 % 2 ＝ 1 のまま変わらず、繰り返しが終わりません。/ を使いましょう",
+            },
+            {
+                values: ["%", "*", "*"],
+                correct: false,
+                hint: "かけ算では num がどんどん大きくなり、0にならないので繰り返しが終わりません。桁を減らすのは num / 2 です",
+            },
+            {
+                values: ["%", "*", "-"],
+                correct: false,
+                hint: "ひき算だと 13→11→9… と2ずつしか減らず、桁を半分にできません。2進数では2でわって商にします",
+            }
+        ],
+        defaultHint: "num % 2 であまり（0か1）を取り出し、それに位の重み kurai をかけて nishin にたす、そして num / 2 で桁をひとつ減らす、と考えよう。13 → 1 → 01 → 101 → 1101 の順に下の桁から組み立てていきます"
     },
 }
