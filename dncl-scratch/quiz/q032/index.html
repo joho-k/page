@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第32問 10進数を2進数に直す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,10進数を2進数に直す">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q032/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第32問 10進数を2進数に直す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q032/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q032.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第32問 10進数を2進数に直す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q032.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q032/index.html#quiz",
+      "name": "第32問 10進数を2進数に直す",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q032/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "n % 2 , amari * kurai , kurai * 10"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "n % 2"
+          },
+          {
+            "@type": "Answer",
+            "text": "n / 2"
+          },
+          {
+            "@type": "Answer",
+            "text": "amari * kurai"
+          },
+          {
+            "@type": "Answer",
+            "text": "amari + kurai"
+          },
+          {
+            "@type": "Answer",
+            "text": "kurai * 10"
+          },
+          {
+            "@type": "Answer",
+            "text": "kurai * 2"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第32問 10進数を2進数に直す",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q032/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q032";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第32問 10進数を2進数に直す</h1>
+            <p>10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★★（5／難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>n = 13
+nishin = 0
+kurai = 1
+n &gt; 0 の間繰り返す:
+  amari = ［A］
+  nishin = nishin + ［B］
+  kurai = ［C］
+  tsugi = n / 2
+  n = 切り捨て(tsugi)
+表示する(&quot;2進数にすると&quot; + nishin)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>n % 2</code></li>
+                <li><code>n / 2</code></li>
+                <li><code>amari * kurai</code></li>
+                <li><code>amari + kurai</code></li>
+                <li><code>kurai * 10</code></li>
+                <li><code>kurai * 2</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>13 → あまり1（1の位）→ 6 → あまり0（10の位）→ 3 → あまり1（100の位）→ 1 → あまり1（1000の位）→ 0 で終わり。下から 1,0,1,1 を並べて 1101 です。n % 2 であまりを取り出し、amari * kurai で位に置き、kurai * 10 で次のけたへ進みます</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>n % 2</code></li>
+            <li>空欄 ［B］ … <code>amari * kurai</code></li>
+            <li>空欄 ［C］ … <code>kurai * 10</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>n / 2</code>　［B］<code>amari * kurai</code>　［C］<code>kurai * 10</code> … 2進数の各けたは「2でわったあまり」です。n / 2 だと商（13÷2＝6）になり、0か1になりません。n % 2 を使いましょう</li>
+            <li>［A］<code>n % 2</code>　［B］<code>amari + kurai</code>　［C］<code>kurai * 10</code> … あまり（0か1）は、そのけたの位に置きたいので位を「かけ」ます。amari + kurai だと、あまりが0のときでも位の数がそのまま足されてしまいます。amari * kurai なら、あまりが0のときは0が足されます</li>
+            <li>［A］<code>n % 2</code>　［B］<code>amari * kurai</code>　［C］<code>kurai * 2</code> … n を2でわるので位も2倍にしたくなりますが、答えは「1101」という10進の見た目で組み立てています。kurai * 2 だと 1, 2, 4, 8 になり、1+0+4+8＝13 と元の数に戻ってしまいます。表示のけたを1つ上げるのは kurai * 10 です</li>
+            <li>［A］<code>n % 2</code>　［B］<code>kurai * 10</code>　［C］<code>amari * kurai</code> … 式を入れる場所が入れかわっています。nishin に足すのは「あまり×位」の amari * kurai、次に位を10倍するのが kurai * 10 です</li>
+            <li>［A］<code>n / 2</code>　［B］<code>amari + kurai</code>　［C］<code>kurai * 2</code> … 3か所とも違います。けたは n % 2 で取り出し、amari * kurai で位に置き、kurai * 10 で次のけたに進みます</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q031/index.html">第31問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
