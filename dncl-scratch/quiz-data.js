@@ -2305,4 +2305,95 @@ window.quizData = {
         ],
         defaultHint: "13 → あまり1（1の位）→ 6 → あまり0（10の位）→ 3 → あまり1（100の位）→ 1 → あまり1（1000の位）→ 0 で終わり。下から 1,0,1,1 を並べて 1101 です。n % 2 であまりを取り出し、amari * kurai で位に置き、kurai * 10 で次のけたへ進みます"
     },
+    q033: {
+        title: "3人の中の最高点",
+        addedAt: "2026-08-01",
+        difficulty: 2,
+        question: "3人のテストの点数 a（＝72）、b（＝85）、c（＝63）の中から、一番高い点数を見つけて表示しよう。まず saidai に a を入れておき、b・c と順に比べて「saidai より大きければ saidai を入れかえる」を繰り返します。2つの if の条件に入る比較の記号を選ぼう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "a",
+                value: "72"
+            },
+            {
+                type: "assign",
+                name: "b",
+                value: "85"
+            },
+            {
+                type: "assign",
+                name: "c",
+                value: "63"
+            },
+            {
+                type: "assign",
+                name: "saidai",
+                value: "a"
+            },
+            {
+                type: "if",
+                condition: "saidai __BLANK_blank_a__ b",
+                body: [
+                    {
+                        type: "assign",
+                        name: "saidai",
+                        value: "b"
+                    }
+                ]
+            },
+            {
+                type: "if",
+                condition: "saidai __BLANK_blank_b__ c",
+                body: [
+                    {
+                        type: "assign",
+                        name: "saidai",
+                        value: "c"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"一番高い点数は\" + saidai + \"点\""
+            }
+        ],
+        choices: [
+            { label: "<", value: "<" },
+            { label: ">", value: ">" },
+            { label: "==", value: "==" },
+        ],
+        answers: [
+            {
+                values: ["<", "<"],
+                correct: true,
+            },
+            {
+                values: [">", ">"],
+                correct: false,
+                hint: "> だと「saidai の方が大きいとき」に入れかえてしまい、小さい方が残ります。72 > 85 は成り立たず 72 のまま、次に 72 > 63 が成り立って 63 になり、答えは 63 になってしまいます",
+            },
+            {
+                values: ["<", ">"],
+                correct: false,
+                hint: "1つ目は正しく 85 になりますが、2つ目が > なので 85 > 63 が成り立ち、せっかくの最高点 85 を 63 で上書きしてしまいます。2つ目も < にしましょう",
+            },
+            {
+                values: [">", "<"],
+                correct: false,
+                hint: "1つ目が > だと 72 > 85 が成り立たず、最高点の b（85）を見のがしてしまいます。答えは 72 のままです。「今の saidai より大きければ入れかえる」は saidai < b と書きます",
+            },
+            {
+                values: ["==", "<"],
+                correct: false,
+                hint: "== は「等しいか」を調べる記号なので、大小をくらべられません。72 == 85 は成り立たず、b の 85 を取りこぼします",
+            },
+            {
+                values: ["==", "=="],
+                correct: false,
+                hint: "== は「等しいか」を調べる記号です。点数が同じときしか入れかえないので、saidai は最初の 72 のまま変わりません。大小をくらべる < を使いましょう",
+            }
+        ],
+        defaultHint: "「今の最大 saidai より、くらべる相手の方が大きければ入れかえる」と考えよう。saidai < b なら saidai を b にします。72 → b(85) の方が大きいので 85 → c(63) は小さいのでそのまま、答えは 85 です"
+    },
 }

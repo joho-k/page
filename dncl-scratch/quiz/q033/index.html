@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第33問 3人の中の最高点｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="3人のテストの点数 a（＝72）、b（＝85）、c（＝63）の中から、一番高い点数を見つけて表示しよう。まず saidai に a を入れておき、b・c と順に比べて「saidai より大きければ saidai を入れかえる」を繰り返します。2つの if の条件に入る比較の記号を選ぼう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,3人の中の最高点">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q033/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第33問 3人の中の最高点｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="3人のテストの点数 a（＝72）、b（＝85）、c（＝63）の中から、一番高い点数を見つけて表示しよう。まず saidai に a を入れておき、b・c と順に比べて「saidai より大きければ saidai を入れかえる」を繰り返します。2つの if の条件に入る比較の記号を選ぼう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q033/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q033.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第33問 3人の中の最高点｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="3人のテストの点数 a（＝72）、b（＝85）、c（＝63）の中から、一番高い点数を見つけて表示しよう。まず saidai に a を入れておき、b・c と順に比べて「saidai より大きければ saidai を入れかえる」を繰り返します。2つの if の条件に入る比較の記号を選ぼう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q033.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q033/index.html#quiz",
+      "name": "第33問 3人の中の最高点",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q033/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "3人のテストの点数 a（＝72）、b（＝85）、c（＝63）の中から、一番高い点数を見つけて表示しよう。まず saidai に a を入れておき、b・c と順に比べて「saidai より大きければ saidai を入れかえる」を繰り返します。2つの if の条件に入る比較の記号を選ぼう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "< , <"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": "=="
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第33問 3人の中の最高点",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q033/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q033";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第33問 3人の中の最高点</h1>
+            <p>3人のテストの点数 a（＝72）、b（＝85）、c（＝63）の中から、一番高い点数を見つけて表示しよう。まず saidai に a を入れておき、b・c と順に比べて「saidai より大きければ saidai を入れかえる」を繰り返します。2つの if の条件に入る比較の記号を選ぼう（2か所の穴をうめよう）</p>
+            <p>難易度：★★☆☆☆（2／やさしい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>a = 72
+b = 85
+c = 63
+saidai = a
+もし saidai ［A］ b ならば:
+  saidai = b
+もし saidai ［B］ c ならば:
+  saidai = c
+表示する(&quot;一番高い点数は&quot; + saidai + &quot;点&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>&lt;</code></li>
+                <li><code>&gt;</code></li>
+                <li><code>==</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>「今の最大 saidai より、くらべる相手の方が大きければ入れかえる」と考えよう。saidai &lt; b なら saidai を b にします。72 → b(85) の方が大きいので 85 → c(63) は小さいのでそのまま、答えは 85 です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>&lt;</code></li>
+            <li>空欄 ［B］ … <code>&lt;</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>&gt;</code>　［B］<code>&gt;</code> … &gt; だと「saidai の方が大きいとき」に入れかえてしまい、小さい方が残ります。72 &gt; 85 は成り立たず 72 のまま、次に 72 &gt; 63 が成り立って 63 になり、答えは 63 になってしまいます</li>
+            <li>［A］<code>&lt;</code>　［B］<code>&gt;</code> … 1つ目は正しく 85 になりますが、2つ目が &gt; なので 85 &gt; 63 が成り立ち、せっかくの最高点 85 を 63 で上書きしてしまいます。2つ目も &lt; にしましょう</li>
+            <li>［A］<code>&gt;</code>　［B］<code>&lt;</code> … 1つ目が &gt; だと 72 &gt; 85 が成り立たず、最高点の b（85）を見のがしてしまいます。答えは 72 のままです。「今の saidai より大きければ入れかえる」は saidai &lt; b と書きます</li>
+            <li>［A］<code>==</code>　［B］<code>&lt;</code> … == は「等しいか」を調べる記号なので、大小をくらべられません。72 == 85 は成り立たず、b の 85 を取りこぼします</li>
+            <li>［A］<code>==</code>　［B］<code>==</code> … == は「等しいか」を調べる記号です。点数が同じときしか入れかえないので、saidai は最初の 72 のまま変わりません。大小をくらべる &lt; を使いましょう</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q032/index.html">第32問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
