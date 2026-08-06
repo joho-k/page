@@ -2396,4 +2396,59 @@ window.quizData = {
         ],
         defaultHint: "「今の最大 saidai より、くらべる相手の方が大きければ入れかえる」と考えよう。saidai < b なら saidai を b にします。72 → b(85) の方が大きいので 85 → c(63) は小さいのでそのまま、答えは 85 です"
     },
+    q035: {
+        title: "歩く速さ（時速）",
+        addedAt: "2026-08-03",
+        difficulty: 1,
+        question: "12kmの道のりを3時間かけて歩きました。1時間あたり何km進んだか（時速）を表示するようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "kyori",
+                value: "12"
+            },
+            {
+                type: "assign",
+                name: "jikan",
+                value: "3"
+            },
+            {
+                type: "assign",
+                name: "hayasa",
+                value: "kyori __BLANK_blank_a__ jikan"
+            },
+            {
+                type: "print",
+                value: "\"時速\" + hayasa + \"kmです\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["/"],
+                correct: true,
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "かけ算だと 12 × 3 で 時速36km になり、歩くどころか車なみの速さになってしまいます。12kmを3時間で「分ける」と考えよう",
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算だと 12 + 3 で 時速15km。km と 時間 という種類のちがう数どうしは足せません",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "ひき算だと 12 - 3 で 時速9km。ひき算では「1時間あたりに進む道のり」は求められません",
+            }
+        ],
+        defaultHint: "速さは「1時間あたりに進む道のり」。12kmを3時間で等しく分けると、1時間ぶんが求まるよ"
+    },
 }
