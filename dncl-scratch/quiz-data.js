@@ -2090,7 +2090,222 @@ window.quizData = {
             }
         ],
         defaultHint: "画素数は 横 × 縦。全体のビット数は 画素数 × 1画素のビット数。バイト数はビット数 ÷ 8（1バイト＝8ビット）です"
-    }, q033: {
+    }, q031: {
+        title: "うるう年の判定",
+        addedAt: "2026-07-30",
+        difficulty: 4,
+        question: "うるう年は「4の倍数の年はうるう年。ただし100の倍数の年は平年。ただし400の倍数の年はうるう年」というルールで決まります。year（＝1900）について、うるう年なら uruu を1、平年なら0に書きかえながら判定するプログラムです。上から順に3つの条件で uruu を上書きしていくので、入れる式の順番がとても大事です（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "year",
+                value: "1900"
+            },
+            {
+                type: "assign",
+                name: "uruu",
+                value: "0"
+            },
+            {
+                type: "if",
+                condition: "__BLANK_blank_a__ == 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "uruu",
+                        value: "1"
+                    }
+                ]
+            },
+            {
+                type: "if",
+                condition: "__BLANK_blank_b__ == 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "uruu",
+                        value: "0"
+                    }
+                ]
+            },
+            {
+                type: "if",
+                condition: "__BLANK_blank_c__ == 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "uruu",
+                        value: "1"
+                    }
+                ]
+            },
+            {
+                type: "ifelse",
+                condition: "uruu == 1",
+                ifBody: [
+                    {
+                        type: "print",
+                        value: "year + \"年はうるう年です\""
+                    }
+                ],
+                elseBody: [
+                    {
+                        type: "print",
+                        value: "year + \"年は平年です\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "year % 4", value: "year % 4" },
+            { label: "year % 100", value: "year % 100" },
+            { label: "year % 400", value: "year % 400" },
+            { label: "year / 4", value: "year / 4" },
+            { label: "year / 100", value: "year / 100" },
+            { label: "year / 400", value: "year / 400" },
+        ],
+        answers: [
+            {
+                values: ["year % 4", "year % 100", "year % 400"],
+                correct: true,
+            },
+            {
+                values: ["year % 400", "year % 100", "year % 4"],
+                correct: false,
+                hint: "順番が逆です。この並びだと最後の「4の倍数ならうるう年」がすべてを上書きしてしまい、1900年もうるう年になってしまいます。まず4の倍数でうるう年にして、次に100の倍数で平年にもどし、最後に400の倍数だけうるう年にします",
+            },
+            {
+                values: ["year % 4", "year % 400", "year % 100"],
+                correct: false,
+                hint: "100と400が入れかわっています。この並びだと1900年が最後の「100の倍数」でうるう年に上書きされてしまいます。400の倍数の例外はいちばん最後に置きます",
+            },
+            {
+                values: ["year % 100", "year % 4", "year % 400"],
+                correct: false,
+                hint: "1つ目は「4の倍数ならうるう年」という土台の条件です。100の倍数で先にうるう年にしてしまうと、そのあとの4の倍数で平年にもどってしまい、2024年のようなふつうのうるう年が平年になります",
+            },
+            {
+                values: ["year / 4", "year % 100", "year % 400"],
+                correct: false,
+                hint: "「4の倍数かどうか」はわり算の「あまり」が0かで調べます。year / 4 は商なので 1900 / 4 ＝ 475 となり、0にならず倍数の判定ができません。% を使いましょう",
+            },
+            {
+                values: ["year % 4", "year / 100", "year % 400"],
+                correct: false,
+                hint: "「100の倍数かどうか」も「あまり」で調べます。year / 100 は商の19になってしまい、0かどうかでは判定できません。year % 100 なら 1900 のあまりは0になります",
+            },
+            {
+                values: ["year % 4", "year % 100", "year / 400"],
+                correct: false,
+                hint: "「400の倍数かどうか」も「あまり」で調べます。year / 400 は商なので、2000年でも 5 となって0になりません。year % 400 を使いましょう",
+            },
+            {
+                values: ["year % 4", "year % 4", "year % 400"],
+                correct: false,
+                hint: "同じ条件を2回書くと、4の倍数の年をうるう年にしてすぐ平年にもどしてしまいます。2つ目には「100の倍数なら平年」の year % 100 を入れます",
+            }
+        ],
+        defaultHint: "ルールの文章と同じ順番に、4 → 100 → 400 と書いていきます。上の行から順に uruu が上書きされるので、あとに書いた例外のほうが強くなります。倍数の判定はどれも % のあまりが0かどうかで調べよう"
+    },
+    q032: {
+        title: "10進数を2進数に直す",
+        addedAt: "2026-07-31",
+        difficulty: 5,
+        question: "10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "n",
+                value: "13"
+            },
+            {
+                type: "assign",
+                name: "nishin",
+                value: "0"
+            },
+            {
+                type: "assign",
+                name: "kurai",
+                value: "1"
+            },
+            {
+                type: "while",
+                condition: "n > 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "amari",
+                        value: "__BLANK_blank_a__"
+                    },
+                    {
+                        type: "assign",
+                        name: "nishin",
+                        value: "nishin + __BLANK_blank_b__"
+                    },
+                    {
+                        type: "assign",
+                        name: "kurai",
+                        value: "__BLANK_blank_c__"
+                    },
+                    {
+                        type: "assign",
+                        name: "tsugi",
+                        value: "n / 2"
+                    },
+                    {
+                        type: "assign",
+                        name: "n",
+                        value: "切り捨て(tsugi)"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"2進数にすると\" + nishin"
+            }
+        ],
+        choices: [
+            { label: "n % 2", value: "n % 2" },
+            { label: "n / 2", value: "n / 2" },
+            { label: "amari * kurai", value: "amari * kurai" },
+            { label: "amari + kurai", value: "amari + kurai" },
+            { label: "kurai * 10", value: "kurai * 10" },
+            { label: "kurai * 2", value: "kurai * 2" },
+        ],
+        answers: [
+            {
+                values: ["n % 2", "amari * kurai", "kurai * 10"],
+                correct: true,
+            },
+            {
+                values: ["n / 2", "amari * kurai", "kurai * 10"],
+                correct: false,
+                hint: "2進数の各けたは「2でわったあまり」です。n / 2 だと商（13÷2＝6）になり、0か1になりません。n % 2 を使いましょう",
+            },
+            {
+                values: ["n % 2", "amari + kurai", "kurai * 10"],
+                correct: false,
+                hint: "あまり（0か1）は、そのけたの位に置きたいので位を「かけ」ます。amari + kurai だと、あまりが0のときでも位の数がそのまま足されてしまいます。amari * kurai なら、あまりが0のときは0が足されます",
+            },
+            {
+                values: ["n % 2", "amari * kurai", "kurai * 2"],
+                correct: false,
+                hint: "n を2でわるので位も2倍にしたくなりますが、答えは「1101」という10進の見た目で組み立てています。kurai * 2 だと 1, 2, 4, 8 になり、1+0+4+8＝13 と元の数に戻ってしまいます。表示のけたを1つ上げるのは kurai * 10 です",
+            },
+            {
+                values: ["n % 2", "kurai * 10", "amari * kurai"],
+                correct: false,
+                hint: "式を入れる場所が入れかわっています。nishin に足すのは「あまり×位」の amari * kurai、次に位を10倍するのが kurai * 10 です",
+            },
+            {
+                values: ["n / 2", "amari + kurai", "kurai * 2"],
+                correct: false,
+                hint: "3か所とも違います。けたは n % 2 で取り出し、amari * kurai で位に置き、kurai * 10 で次のけたに進みます",
+            }
+        ],
+        defaultHint: "13 → あまり1（1の位）→ 6 → あまり0（10の位）→ 3 → あまり1（100の位）→ 1 → あまり1（1000の位）→ 0 で終わり。下から 1,0,1,1 を並べて 1101 です。n % 2 であまりを取り出し、amari * kurai で位に置き、kurai * 10 で次のけたへ進みます"
+    },
+    q033: {
         title: "3人の中の最高点",
         addedAt: "2026-08-01",
         difficulty: 2,
