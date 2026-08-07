@@ -2629,4 +2629,132 @@ window.quizData = {
         ],
         defaultHint: "割合（％）＝ その人数 × 100 ÷ 全体の人数 です。34 * 100 ＝ 3400、3400 / 40 ＝ 85 で、答えは85％になります"
     },
+    q037: {
+        title: "バーコードのチェックディジット",
+        addedAt: "2026-08-07",
+        difficulty: 5,
+        question: "商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号 code（＝4912347）から、下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍して合計 gokei を出します。その合計を10でわったあまり amari を10からひき、さらに1桁におさめてチェックディジットを求めます（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "code",
+                value: "4912347"
+            },
+            {
+                type: "assign",
+                name: "gokei",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "7",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "keta",
+                        value: "code __BLANK_blank_a__ 10"
+                    },
+                    {
+                        type: "ifelse",
+                        condition: "i % 2 == 1",
+                        ifBody: [
+                            {
+                                type: "assign",
+                                name: "omomi",
+                                value: "3"
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "assign",
+                                name: "omomi",
+                                value: "1"
+                            }
+                        ]
+                    },
+                    {
+                        type: "assign",
+                        name: "gokei",
+                        value: "gokei + keta __BLANK_blank_b__ omomi"
+                    },
+                    {
+                        type: "assign",
+                        name: "code",
+                        value: "切り捨て(code / 10)"
+                    }
+                ]
+            },
+            {
+                type: "assign",
+                name: "amari",
+                value: "gokei % 10"
+            },
+            {
+                type: "assign",
+                name: "check",
+                value: "(10 - amari) __BLANK_blank_c__ 10"
+            },
+            {
+                type: "print",
+                value: "\"チェックディジットは\" + check + \"です\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%", "*", "%"],
+                correct: true,
+            },
+            {
+                values: ["/", "*", "%"],
+                correct: false,
+                hint: "1つ目は「一の位の数字」を取り出すところです。/ だと商になり、4912347 / 10 ＝ 491234.7 で1桁の数字になりません。あまりを出す % を使って 4912347 % 10 ＝ 7 としましょう",
+            },
+            {
+                values: ["+", "*", "%"],
+                correct: false,
+                hint: "たし算では 4912347 + 10 ＝ 4912357 となり、一の位を取り出せません。一の位は10でわったあまりなので % を使います",
+            },
+            {
+                values: ["%", "+", "%"],
+                correct: false,
+                hint: "重み omomi は「かける」ものです。keta + omomi だと 7 + 3 ＝ 10 となり、3倍したことになりません。keta * omomi で 7 * 3 ＝ 21 とします",
+            },
+            {
+                values: ["%", "/", "%"],
+                correct: false,
+                hint: "わり算では 7 / 3 ＝ 2.33… と小数になり、3倍の重みになりません。「3倍」はかけ算なので * を使います",
+            },
+            {
+                values: ["%", "%", "%"],
+                correct: false,
+                hint: "% はあまりです。keta % omomi だと 7 % 3 ＝ 1 となり、重みをかけたことになりません。3倍するのは * です",
+            },
+            {
+                values: ["%", "*", "-"],
+                correct: false,
+                hint: "この番号ではあまりが0なので (10 - 0) - 10 ＝ 0 とたまたま合いますが、あまりが4のときは (10 - 4) - 10 ＝ -6 とマイナスになってしまいます。10でわったあまりを取る % なら、いつでも0〜9におさまります",
+            },
+            {
+                values: ["%", "*", "/"],
+                correct: false,
+                hint: "わり算だと (10 - 0) / 10 ＝ 1 となり、正しい0になりません。ほしいのは商ではなく「10でわったあまり」なので % を使います",
+            },
+            {
+                values: ["%", "*", "+"],
+                correct: false,
+                hint: "たし算だと (10 - 0) + 10 ＝ 20 となり、1桁のチェックディジットになりません。10になってしまったときに0へもどすため % を使います",
+            }
+        ],
+        defaultHint: "一の位は code % 10 で取り出し、重みは keta * omomi でかけます。最後がポイントで、gokei ＝ 60 なら amari ＝ 0、10 - 0 ＝ 10 は2桁なので、% 10 でもう一度あまりを取って0にもどします。答えは0です"
+    },
 }
