@@ -678,7 +678,7 @@ pre {
 /* 配列を [20, 69, 30] の1行で表示（プログラムと同じ表記） */
 .array-inline {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-end;
     font-family: "Courier New", monospace;
     font-size: 16px;
     color: #1e2b3c;
@@ -695,16 +695,52 @@ pre {
 }
 
 .array-inline-cell {
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
     padding: 1px 4px;
     border-radius: 6px;
     font-weight: 700;
 }
 
+/* 各要素の上に添える添字（0, 1, 2 …）。値より小さく薄く */
+.array-inline-index {
+    font-size: 10px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #9aa9ba;
+}
+
+/* 参照中の要素は、背景を出しっぱなしにせず点滅させる */
 .array-inline-cell-highlight {
-    background: #fff2b8;
     color: #5a4200;
-    box-shadow: inset 0 0 0 2px rgba(255, 193, 7, 0.85);
+    animation: array-cell-blink 0.9s ease-in-out infinite;
+}
+
+.array-inline-cell-highlight .array-inline-index {
+    color: #a07b00;
+}
+
+@keyframes array-cell-blink {
+
+    0%,
+    100% {
+        background: transparent;
+        box-shadow: inset 0 0 0 2px rgba(255, 193, 7, 0);
+    }
+
+    50% {
+        background: #fff2b8;
+        box-shadow: inset 0 0 0 2px rgba(255, 193, 7, 0.85);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .array-inline-cell-highlight {
+        background: #fff2b8;
+        box-shadow: inset 0 0 0 2px rgba(255, 193, 7, 0.85);
+        animation: none;
+    }
 }
 
 .array-var-table {
@@ -744,10 +780,18 @@ pre {
     font-family: "Courier New", monospace;
 }
 
+/* 2次元配列も、参照中のマスは出しっぱなしにせず点滅させる */
 .array-var-cell-highlight {
-    box-shadow: inset 0 0 0 2px rgba(255, 193, 7, 0.85);
-    background: #fff2b8 !important;
     color: #5a4200 !important;
+    animation: array-cell-blink 0.9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .array-var-cell-highlight {
+        box-shadow: inset 0 0 0 2px rgba(255, 193, 7, 0.85);
+        background: #fff2b8 !important;
+        animation: none;
+    }
 }
 
 /* 今のステップで参照しているスカラー変数を光らせる */
@@ -964,6 +1008,58 @@ pre {
     font-size: 17px;
     font-weight: 700;
     color: #1e2b3c;
+}
+
+/* 配列アクセス a[i] → a[6] → 値。ラベルが入れかわってから値が入る */
+.concat-chip-array {
+    background: #f3ecfb;
+    padding: 8px 12px;
+    gap: 4px;
+}
+
+/* 入れかわる2つのラベルを同じマスに重ねる（幅・高さは広いほうに合わせる） */
+.concat-chip-array .chip-labels {
+    display: grid;
+    justify-items: center;
+}
+
+.concat-chip-array .chip-labels > .chip-label {
+    grid-area: 1 / 1;
+}
+
+.concat-chip-array .chip-label {
+    font-size: 16px;
+    color: #6b4a9c;
+}
+
+.concat-chip-array .chip-val {
+    font-size: 24px;
+    color: #4a2c80;
+}
+
+/* a[banme] の banme と 6 を同じマスに重ね、a[ と ] を動かさずに
+   添字だけ入れかえる（banme の値がそのまま添字になることを見せるため） */
+.concat-chip-array .chip-index-slot {
+    display: inline-grid;
+    justify-items: center;
+    vertical-align: baseline;
+}
+
+.concat-chip-array .chip-index-slot > .chip-index {
+    grid-area: 1 / 1;
+}
+
+/* 「ここの値を見に行く」合図として光らせる（動きは animateAssignmentCard） */
+.concat-chip-array .chip-index {
+    display: inline-block;
+    padding: 0 3px;
+    border-radius: 4px;
+}
+
+/* 入れかわる前のラベルは、動きが付かない場面では出さない
+   （動きは animateAssignmentCard が繰り返しで付ける） */
+.concat-chip-array .chip-swap-from {
+    opacity: 0;
 }
 
 .concat-chip-str {

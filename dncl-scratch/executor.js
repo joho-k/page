@@ -186,10 +186,14 @@ function renderVars() {
     }
 
     function render1DArray(name, value) {
-        // プログラムと同じ [20, 69, 30] の1行表記。参照中の要素だけ光らせる。
+        // プログラムと同じ [20, 69, 30] の1行表記。各要素の上に添字を薄く添え、
+        // 参照中の要素だけ点滅させる。
         const items = value.map((item, index) => {
             const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-inline-cell-highlight" : "";
-            return `<span class="array-inline-cell${highlightClass}">${escapeHtml(formatVarValue(item))}</span>`;
+            return `<span class="array-inline-cell${highlightClass}">`
+                + `<span class="array-inline-index">${index}</span>`
+                + `<span class="array-inline-value">${escapeHtml(formatVarValue(item))}</span>`
+                + `</span>`;
         }).join(`<span class="array-inline-sep">, </span>`);
 
         return `
@@ -277,10 +281,13 @@ function renderExplanation() {
 
 // 変数を囲む「箱」（名前が上・値が下）を描く。値の最終下端 valueBottomRel まで覆う。
 // 箱が下に伸びるぶん、下の説明（note/badge）と重ならないよう row に余白を確保する。
-function makeVarBox(container, row, tRect, cRect, valueBottomRel, pad = 6) {
-    const boxLeft = (tRect.left - cRect.left) - pad - 8;
+// minContentWidth: 入ってくる値が変数名より幅広いとき（配列アクセスのチップなど）に
+// 箱からはみ出さないよう、中身の幅を指定する。
+function makeVarBox(container, row, tRect, cRect, valueBottomRel, pad = 6, minContentWidth = 0) {
+    const contentWidth = Math.max(tRect.width, minContentWidth);
+    const boxWidth = contentWidth + pad * 2 + 10;
+    const boxLeft = (tRect.left - cRect.left) + tRect.width / 2 - boxWidth / 2;
     const boxTop = (tRect.top - cRect.top) - pad;
-    const boxWidth = tRect.width + pad * 2 + 10;
     const boxHeight = (valueBottomRel + pad) - boxTop;
 
     const box = document.createElement("div");
@@ -321,6 +328,8 @@ function animateStepCard(container) {
 }
 
 const FLYIN_DURATION = 3000;
+// 配列アクセス（a[i] → a[6] → 値）は段が多いので、1周を長めにとる
+const ARRAY_FLYIN_DURATION = 5000;
 const LOOP_ANIM_DURATION = 2800;
 const COND_ANIM_DURATION = 3800;
 
@@ -536,6 +545,10 @@ function animateAssignmentCard(container) {
 
     // 値が「ラベル＋値」チップ（a = b の b/1）かどうか
     const isChip = !!value.querySelector?.(".chip-label");
+    // 配列アクセス（a[i] → a[6] → 値）のチップかどうか
+    const isArrayChip = !!value.querySelector?.(".chip-swap-from") && !!value.querySelector?.(".chip-swap-to");
+    // 配列アクセスは a[i] を約1秒とめて読ませるぶん、1周を長くとる
+    const dur = isArrayChip ? ARRAY_FLYIN_DURATION : FLYIN_DURATION;
 
     const cRect = container.getBoundingClientRect();
     const vRect = value.getBoundingClientRect();
@@ -551,7 +564,7 @@ function animateAssignmentCard(container) {
 
     // 変数を囲む箱（名前が上・値が下）。値の最終位置の下端まで覆う
     const valueBottomRel = (vRect.top - cRect.top) + dy + vRect.height;
-    const box = makeVarBox(container, row, tRect, cRect, valueBottomRel, pad);
+    const box = makeVarBox(container, row, tRect, cRect, valueBottomRel, pad, vRect.width);
 
     // = は使わないので隠す（レイアウト位置は保つため visibility）
     if (op) op.style.visibility = "hidden";
@@ -600,7 +613,7 @@ function animateAssignmentCard(container) {
             { opacity: 0, offset: 0.55 },
             { opacity: 0, offset: 0.92 },
             { opacity: 1, offset: 1 }
-        ], { duration: FLYIN_DURATION, iterations: Infinity });
+        ], { duration: dur, iterations: Infinity });
 
         // 「今までの値」：最初から表示 → 上書きの直前に消える → 次のループ用に戻す
         prevLabelEl.animate([
@@ -609,7 +622,7 @@ function animateAssignmentCard(container) {
             { opacity: 0, offset: 0.5 },
             { opacity: 0, offset: 0.92 },
             { opacity: 1, offset: 1 }
-        ], { duration: FLYIN_DURATION, iterations: Infinity });
+        ], { duration: dur, iterations: Infinity });
 
         // 「上書き」：「今までの値」が消えた直後に出して、少し見せてから消す
         overwriteEl.animate([
@@ -619,7 +632,7 @@ function animateAssignmentCard(container) {
             { opacity: 1, offset: 0.76 },
             { opacity: 0, offset: 0.86 },
             { opacity: 0, offset: 1 }
-        ], { duration: FLYIN_DURATION, iterations: Infinity });
+        ], { duration: dur, iterations: Infinity });
     }
 
     // 値を箱の外（右）から箱の中のスロットへ入れる
@@ -629,6 +642,61 @@ function animateAssignmentCard(container) {
     value.style.zIndex = "5";
 
     if (isChip) {
+        // 配列アクセス（a[i]）のチップは、箱に着くまでに
+        // 「a[i] → 添字は6なので a[6]」とラベルが入れかわり、
+        // そのあと中身の値が入ってくる、という順で見せる。
+        const swapFrom = value.querySelector(".chip-swap-from");
+        const swapTo = value.querySelector(".chip-swap-to");
+        const chipVal = value.querySelector(".chip-val");
+        if (isArrayChip) {
+            // ① a[i] を見せる → ② 添字が分かって a[6] に入れかわる
+            // ① a[banme] のまま約1秒とめて、しっかり読ませる
+            swapFrom.animate([
+                { opacity: 0, offset: 0 },
+                { opacity: 1, offset: 0.04 },
+                { opacity: 1, offset: 0.36 },
+                { opacity: 0, offset: 0.40 },
+                { opacity: 0, offset: 1 }
+            ], { duration: dur, iterations: Infinity });
+
+            // ② 添字（banme）が光る＝ここの値を見に行く、を伝えてから入れかわる
+            const indexEl = swapFrom.classList.contains("chip-index")
+                ? swapFrom
+                : swapFrom.querySelector(".chip-index");
+            if (indexEl) {
+                indexEl.animate([
+                    { backgroundColor: "rgba(255, 224, 131, 0)", transform: "scale(1)", offset: 0 },
+                    { backgroundColor: "rgba(255, 224, 131, 0)", transform: "scale(1)", offset: 0.22 },
+                    { backgroundColor: "rgba(255, 224, 131, 1)", transform: "scale(1.16)", offset: 0.25 },
+                    { backgroundColor: "rgba(255, 224, 131, 0.15)", transform: "scale(1)", offset: 0.28 },
+                    { backgroundColor: "rgba(255, 224, 131, 1)", transform: "scale(1.16)", offset: 0.31 },
+                    { backgroundColor: "rgba(255, 224, 131, 1)", transform: "scale(1.16)", offset: 0.34 },
+                    { backgroundColor: "rgba(255, 224, 131, 0)", transform: "scale(1)", offset: 0.355 },
+                    { backgroundColor: "rgba(255, 224, 131, 0)", transform: "scale(1)", offset: 1 }
+                ], { duration: dur, easing: "ease-in-out", iterations: Infinity });
+            }
+
+            // ③ 添字が分かって a[6] に入れかわる
+            swapTo.animate([
+                { opacity: 0, offset: 0 },
+                { opacity: 0, offset: 0.36 },
+                { opacity: 1, offset: 0.40 },
+                { opacity: 1, offset: 0.97 },
+                { opacity: 0, offset: 1 }
+            ], { duration: dur, iterations: Infinity });
+
+            if (chipVal) {
+                // ④ 中身の値が上から入ってくる（ここまではチップは動かさない）
+                chipVal.animate([
+                    { opacity: 0, transform: "translateY(-8px)", offset: 0 },
+                    { opacity: 0, transform: "translateY(-8px)", offset: 0.48 },
+                    { opacity: 1, transform: "none", offset: 0.54 },
+                    { opacity: 1, transform: "none", offset: 0.97 },
+                    { opacity: 0, transform: "translateY(-8px)", offset: 1 }
+                ], { duration: dur, easing: "ease-out", iterations: Infinity });
+            }
+        }
+
         // a = b：b/1 が外から入ってきて、到着したら消える。
         // 代わりに a の値（1）がスロットに残る。
         const valText = value.querySelector(".chip-val")?.textContent ?? "";
@@ -640,22 +708,43 @@ function animateAssignmentCard(container) {
         resultEl.style.left = `${slotCenterX - resultEl.offsetWidth / 2}px`;
         resultEl.style.top = `${slotCenterY - resultEl.offsetHeight / 2}px`;
 
-        value.animate([
-            { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },          // 箱の外（右）
-            { transform: "translate(10px, 0) scale(1)", opacity: 1, offset: 0.12 },            // 外に現れる
-            { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱に到着（b/1）
-            { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 0.6 }, // b/1 が消える
-            { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 1 }
-        ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+        if (isArrayChip) {
+            // 配列アクセスは、a[i] → a[6] → 値 が出そろうまで その場で静止し、
+            // そろってから箱へ入っていく。
+            value.animate([
+                { transform: "translate(0, 0) scale(0.92)", opacity: 0, offset: 0 },
+                { transform: "translate(0, 0) scale(1)", opacity: 1, offset: 0.04 },            // その場に現れる
+                { transform: "translate(0, 0) scale(1)", opacity: 1, offset: 0.62 },            // 値が出そろうまで動かない
+                { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.74 }, // 箱に到着
+                { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 0.82 },
+                { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 1 }
+            ], { duration: dur, easing: "ease-in-out", iterations: Infinity });
 
-        // a の値（1）：b/1 が消えるのに合わせて現れて、そのまま残る → ループ用に消す
-        resultEl.animate([
-            { opacity: 0, offset: 0 },
-            { opacity: 0, offset: 0.52 },
-            { opacity: 1, offset: 0.62 },
-            { opacity: 1, offset: 0.92 },
-            { opacity: 0, offset: 1 }
-        ], { duration: FLYIN_DURATION, iterations: Infinity });
+            resultEl.animate([
+                { opacity: 0, offset: 0 },
+                { opacity: 0, offset: 0.80 },
+                { opacity: 1, offset: 0.86 },
+                { opacity: 1, offset: 0.98 },
+                { opacity: 0, offset: 1 }
+            ], { duration: dur, iterations: Infinity });
+        } else {
+            value.animate([
+                { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },          // 箱の外（右）
+                { transform: "translate(10px, 0) scale(1)", opacity: 1, offset: 0.12 },            // 外に現れる
+                { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱に到着（b/1）
+                { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 0.6 }, // b/1 が消える
+                { transform: `translate(${dxFinal}px, ${dy}px) scale(0.85)`, opacity: 0, offset: 1 }
+            ], { duration: dur, easing: "ease-in-out", iterations: Infinity });
+
+            // a の値（1）：b/1 が消えるのに合わせて現れて、そのまま残る → ループ用に消す
+            resultEl.animate([
+                { opacity: 0, offset: 0 },
+                { opacity: 0, offset: 0.52 },
+                { opacity: 1, offset: 0.62 },
+                { opacity: 1, offset: 0.92 },
+                { opacity: 0, offset: 1 }
+            ], { duration: dur, iterations: Infinity });
+        }
     } else {
         value.animate([
             { transform: "translate(18px, -2px) scale(0.9)", opacity: 0, offset: 0 },          // 箱の外（右）
@@ -663,17 +752,18 @@ function animateAssignmentCard(container) {
             { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.45 }, // 箱の中に入って収まる
             { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 1, offset: 0.9 },  // 約1秒そのまま止める
             { transform: `translate(${dxFinal}px, ${dy}px) scale(1)`, opacity: 0, offset: 1 }     // 消えて先頭からやり直し
-        ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+        ], { duration: dur, easing: "ease-in-out", iterations: Infinity });
     }
 
     // 値が箱に入る瞬間に、箱をポンと跳ねさせる
+    const bounceAt = isArrayChip ? 0.74 : 0.5;
     box.animate([
         { transform: "scale(1)", offset: 0 },
-        { transform: "scale(1)", offset: 0.4 },
-        { transform: "scale(1.08)", offset: 0.5 },
-        { transform: "scale(1)", offset: 0.62 },
+        { transform: "scale(1)", offset: bounceAt - 0.1 },
+        { transform: "scale(1.08)", offset: bounceAt },
+        { transform: "scale(1)", offset: bounceAt + 0.12 },
         { transform: "scale(1)", offset: 1 }
-    ], { duration: FLYIN_DURATION, iterations: Infinity });
+    ], { duration: dur, iterations: Infinity });
 }
 
 function safeEvalWithScope(expr, scope) {
@@ -1039,6 +1129,44 @@ function operandChip(exprText, scope) {
     if (isStringLiteral(t)) {
         return calcToken(`「${stripQuotes(t)}」`, "calc-token-str");
     }
+    // 配列アクセス（a[i]）は「a[i] → 添字は6なので code[6]」とラベルが入れかわり、
+    // そのあと中身の値が入ってくる、という順で見せる（動きは animateAssignmentCard）。
+    const access = scope ? parseSimpleArrayAccess(t, scope) : null;
+    if (access && access.itemValue !== undefined) {
+        const resolved = access.indexExpr2 !== undefined
+            ? `${access.arrayName}[${access.indexValue}][${access.indexValue2}]`
+            : `${access.arrayName}[${access.indexValue}]`;
+        const original = prettyExpr(t);
+
+        // ラベルの作り方。1次元で添字が式のときは、a[ … ] の中身だけを
+        // その場で入れかえる（a[ と ] を動かさないと、値がそのまま添字に
+        // なることが見えにくくなるため）。
+        let labelsHtml;
+        if (resolved === original) {
+            // 添字がもともと数字（a[0] など）：入れかえる段は要らない
+            labelsHtml = `<span class="chip-label chip-swap-to">${escapeHtml(resolved)}</span>`;
+        } else if (access.indexExpr2 === undefined) {
+            labelsHtml = `<span class="chip-label">`
+                + `${escapeHtml(access.arrayName)}[`
+                + `<span class="chip-index-slot">`
+                + `<span class="chip-index chip-swap-from">${escapeHtml(access.indexExpr)}</span>`
+                + `<span class="chip-index chip-swap-to">${escapeHtml(String(access.indexValue))}</span>`
+                + `</span>`
+                + `]</span>`;
+        } else {
+            // 2次元（a[i][j]）はラベルまるごと入れかえる
+            labelsHtml = `<span class="chip-label chip-swap-from">${escapeHtml(original)}</span>`
+                + `<span class="chip-label chip-swap-to">${escapeHtml(resolved)}</span>`;
+        }
+
+        return `<span class="concat-chip concat-chip-array">`
+            + `<span class="chip-labels">`
+            + labelsHtml
+            + `</span>`
+            + `<span class="chip-val">${escapeHtml(formatVarValue(access.itemValue))}</span>`
+            + `</span>`;
+    }
+
     const value = safeEvalWithScope(t, scope);
     return `<span class="concat-chip">`
         + `<span class="chip-label">${escapeHtml(prettyExpr(t))}</span>`
