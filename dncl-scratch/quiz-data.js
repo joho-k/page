@@ -2397,6 +2397,132 @@ window.quizData = {
         defaultHint: "「今の最大 saidai より、くらべる相手の方が大きければ入れかえる」と考えよう。saidai < b なら saidai を b にします。72 → b(85) の方が大きいので 85 → c(63) は小さいのでそのまま、答えは 85 です"
     },
     q034: {
+        title: "歩く速さ（時速）",
+        addedAt: "2026-08-03",
+        difficulty: 1,
+        question: "12kmの道のりを3時間かけて歩きました。1時間あたり何km進んだか（時速）を表示するようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "kyori",
+                value: "12"
+            },
+            {
+                type: "assign",
+                name: "jikan",
+                value: "3"
+            },
+            {
+                type: "assign",
+                name: "hayasa",
+                value: "kyori __BLANK_blank_a__ jikan"
+            },
+            {
+                type: "print",
+                value: "\"時速\" + hayasa + \"kmです\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["/"],
+                correct: true,
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "かけ算だと 12 × 3 で 時速36km になり、歩くどころか車なみの速さになってしまいます。12kmを3時間で「分ける」と考えよう",
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算だと 12 + 3 で 時速15km。km と 時間 という種類のちがう数どうしは足せません",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "ひき算だと 12 - 3 で 時速9km。ひき算では「1時間あたりに進む道のり」は求められません",
+            }
+        ],
+        defaultHint: "速さは「1時間あたりに進む道のり」。12kmを3時間で等しく分けると、1時間ぶんが求まるよ"
+    },
+    q035: {
+        title: "アンケートの割合（％）",
+        addedAt: "2026-08-04",
+        difficulty: 2,
+        question: "クラス40人にアンケートをとったところ、34人が「毎日スマホを使う」と答えました。これは全体の何％かを求めて表示するようにしよう。割合（％）は「その人数を100倍してから、全体の人数でわる」で求められます。まず100倍した bai を、全体でわって wari を作ります（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "zentai",
+                value: "40"
+            },
+            {
+                type: "assign",
+                name: "tsukau",
+                value: "34"
+            },
+            {
+                type: "assign",
+                name: "bai",
+                value: "tsukau __BLANK_blank_a__ 100"
+            },
+            {
+                type: "assign",
+                name: "wari",
+                value: "bai __BLANK_blank_b__ zentai"
+            },
+            {
+                type: "print",
+                value: "\"全体の\" + wari + \"％\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["*", "/"],
+                correct: true,
+            },
+            {
+                values: ["/", "/"],
+                correct: false,
+                hint: "「100倍」なのでわり算ではなくかけ算です。34 / 100 では小さくなってしまいます。* を使って 34 * 100 ＝ 3400 とします",
+            },
+            {
+                values: ["+", "/"],
+                correct: false,
+                hint: "「100倍」はたし算ではなくかけ算です。34 + 100 ＝ 134 では100倍になりません。* を使って 34 * 100 ＝ 3400 とします",
+            },
+            {
+                values: ["*", "*"],
+                correct: false,
+                hint: "全体の人数はかけるのではなくわります。3400 * 40 ＝ 136000 と大きくなりすぎます。/ を使って 3400 / 40 ＝ 85 とします",
+            },
+            {
+                values: ["*", "-"],
+                correct: false,
+                hint: "全体の人数はひくのではなくわります。3400 - 40 ＝ 3360 では割合になりません。/ を使って 3400 / 40 ＝ 85 とします",
+            },
+            {
+                values: ["*", "%"],
+                correct: false,
+                hint: "% はわったあまりです。3400 % 40 ＝ 0 になってしまいます。あまりではなく商がほしいので / を使って 3400 / 40 ＝ 85 とします",
+            }
+        ],
+        defaultHint: "割合（％）＝ その人数 × 100 ÷ 全体の人数 です。34 * 100 ＝ 3400、3400 / 40 ＝ 85 で、答えは85％になります"
+    },
+    q036: {
         title: "10進数を2進数に直す",
         addedAt: "2026-08-06",
         difficulty: 4,
@@ -2502,132 +2628,6 @@ window.quizData = {
             }
         ],
         defaultHint: "num % 2 であまり（0か1）を取り出し、それに位の重み kurai をかけて nishin にたす、そして num / 2 で桁をひとつ減らす、と考えよう。13 → 1 → 01 → 101 → 1101 の順に下の桁から組み立てていきます"
-    },
-    q035: {
-        title: "歩く速さ（時速）",
-        addedAt: "2026-08-03",
-        difficulty: 1,
-        question: "12kmの道のりを3時間かけて歩きました。1時間あたり何km進んだか（時速）を表示するようにしよう",
-        ast: [
-            {
-                type: "assign",
-                name: "kyori",
-                value: "12"
-            },
-            {
-                type: "assign",
-                name: "jikan",
-                value: "3"
-            },
-            {
-                type: "assign",
-                name: "hayasa",
-                value: "kyori __BLANK_blank_a__ jikan"
-            },
-            {
-                type: "print",
-                value: "\"時速\" + hayasa + \"kmです\""
-            }
-        ],
-        choices: [
-            { label: "+", value: "+" },
-            { label: "-", value: "-" },
-            { label: "*", value: "*" },
-            { label: "/", value: "/" },
-        ],
-        answers: [
-            {
-                values: ["/"],
-                correct: true,
-            },
-            {
-                values: ["*"],
-                correct: false,
-                hint: "かけ算だと 12 × 3 で 時速36km になり、歩くどころか車なみの速さになってしまいます。12kmを3時間で「分ける」と考えよう",
-            },
-            {
-                values: ["+"],
-                correct: false,
-                hint: "足し算だと 12 + 3 で 時速15km。km と 時間 という種類のちがう数どうしは足せません",
-            },
-            {
-                values: ["-"],
-                correct: false,
-                hint: "ひき算だと 12 - 3 で 時速9km。ひき算では「1時間あたりに進む道のり」は求められません",
-            }
-        ],
-        defaultHint: "速さは「1時間あたりに進む道のり」。12kmを3時間で等しく分けると、1時間ぶんが求まるよ"
-    },
-    q036: {
-        title: "アンケートの割合（％）",
-        addedAt: "2026-08-04",
-        difficulty: 2,
-        question: "クラス40人にアンケートをとったところ、34人が「毎日スマホを使う」と答えました。これは全体の何％かを求めて表示するようにしよう。割合（％）は「その人数を100倍してから、全体の人数でわる」で求められます。まず100倍した bai を、全体でわって wari を作ります（2か所の穴をうめよう）",
-        ast: [
-            {
-                type: "assign",
-                name: "zentai",
-                value: "40"
-            },
-            {
-                type: "assign",
-                name: "tsukau",
-                value: "34"
-            },
-            {
-                type: "assign",
-                name: "bai",
-                value: "tsukau __BLANK_blank_a__ 100"
-            },
-            {
-                type: "assign",
-                name: "wari",
-                value: "bai __BLANK_blank_b__ zentai"
-            },
-            {
-                type: "print",
-                value: "\"全体の\" + wari + \"％\""
-            }
-        ],
-        choices: [
-            { label: "+", value: "+" },
-            { label: "-", value: "-" },
-            { label: "*", value: "*" },
-            { label: "/", value: "/" },
-            { label: "%", value: "%" },
-        ],
-        answers: [
-            {
-                values: ["*", "/"],
-                correct: true,
-            },
-            {
-                values: ["/", "/"],
-                correct: false,
-                hint: "「100倍」なのでわり算ではなくかけ算です。34 / 100 では小さくなってしまいます。* を使って 34 * 100 ＝ 3400 とします",
-            },
-            {
-                values: ["+", "/"],
-                correct: false,
-                hint: "「100倍」はたし算ではなくかけ算です。34 + 100 ＝ 134 では100倍になりません。* を使って 34 * 100 ＝ 3400 とします",
-            },
-            {
-                values: ["*", "*"],
-                correct: false,
-                hint: "全体の人数はかけるのではなくわります。3400 * 40 ＝ 136000 と大きくなりすぎます。/ を使って 3400 / 40 ＝ 85 とします",
-            },
-            {
-                values: ["*", "-"],
-                correct: false,
-                hint: "全体の人数はひくのではなくわります。3400 - 40 ＝ 3360 では割合になりません。/ を使って 3400 / 40 ＝ 85 とします",
-            },
-            {
-                values: ["*", "%"],
-                correct: false,
-                hint: "% はわったあまりです。3400 % 40 ＝ 0 になってしまいます。あまりではなく商がほしいので / を使って 3400 / 40 ＝ 85 とします",
-            }
-        ],
-        defaultHint: "割合（％）＝ その人数 × 100 ÷ 全体の人数 です。34 * 100 ＝ 3400、3400 / 40 ＝ 85 で、答えは85％になります"
     },
     q037: {
         title: "バーコードのチェックディジット",
