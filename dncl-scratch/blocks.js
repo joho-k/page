@@ -1429,6 +1429,18 @@ function parseSimpleBinaryExpr(raw) {
     return null;
 }
 
+// 1次元の配列リテラル（"[4,9,1,2,3,4,7]"）を要素の配列にする。
+// 空配列・2次元は配列ブロックに戻さない（そのままテキストで見せる）。
+function parseArrayLiteral(raw) {
+    const s = String(raw ?? "").trim();
+    if (!s.startsWith("[") || !s.endsWith("]")) return null;
+    const inner = s.slice(1, -1).trim();
+    if (inner === "" || inner.includes("[")) return null;
+    const values = inner.split(",").map((v) => v.trim());
+    if (values.some((v) => v === "")) return null;
+    return values;
+}
+
 function loadProgramFromAst(ast) {
     workspace.innerHTML = "";
     setSelectedArrayBlock(null);
@@ -1438,6 +1450,16 @@ function loadProgramFromAst(ast) {
             if (!node || typeof node !== "object") return;
 
             if (node.type === "assign") {
+                // 配列リテラルの代入（a = [4,9,1,2,3,4,7]）は配列ブロックに戻す
+                const arrayValues = parseArrayLiteral(node.value);
+                if (arrayValues) {
+                    const b = createArrayBlock();
+                    setInputValue(b.querySelector(".array2d-head input"), node.name ?? "a");
+                    setArray1DValues(b, arrayValues);
+                    container.appendChild(b);
+                    return;
+                }
+
                 const b = createAssignBlock();
                 setInputMaybeBlank(b.querySelector(".assign-inline > input"), node.name ?? "x");
 

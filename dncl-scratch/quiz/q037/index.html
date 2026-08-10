@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第37問 バーコードのチェックディジット｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号を1桁ずつ入れた配列 code（＝[4,9,1,2,3,4,7]）があり、左から code[0], code[1], … , code[6] の7個です。下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍し、合計 gokei を出します。その合計の下1桁 amari を10からひいたものがチェックディジットです。ただし、下1桁が0となった場合は、チェックディジットは0となります（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,バーコードのチェックディジット">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q037/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第37問 バーコードのチェックディジット｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号を1桁ずつ入れた配列 code（＝[4,9,1,2,3,4,7]）があり、左から code[0], code[1], … , code[6] の7個です。下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍し、合計 gokei を出します。その合計の下1桁 amari を10からひいたものがチェックディジットです。ただし、下1桁が0となった場合は、チェックディジットは0となります（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q037/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q037.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第37問 バーコードのチェックディジット｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号を1桁ずつ入れた配列 code（＝[4,9,1,2,3,4,7]）があり、左から code[0], code[1], … , code[6] の7個です。下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍し、合計 gokei を出します。その合計の下1桁 amari を10からひいたものがチェックディジットです。ただし、下1桁が0となった場合は、チェックディジットは0となります（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q037.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q037/index.html#quiz",
+      "name": "第37問 バーコードのチェックディジット",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q037/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号を1桁ずつ入れた配列 code（＝[4,9,1,2,3,4,7]）があり、左から code[0], code[1], … , code[6] の7個です。下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍し、合計 gokei を出します。その合計の下1桁 amari を10からひいたものがチェックディジットです。ただし、下1桁が0となった場合は、チェックディジットは0となります（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "- , * , 0"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          },
+          {
+            "@type": "Answer",
+            "text": "0"
+          },
+          {
+            "@type": "Answer",
+            "text": "1"
+          },
+          {
+            "@type": "Answer",
+            "text": "10"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第37問 バーコードのチェックディジット",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q037/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q037";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第37問 バーコードのチェックディジット</h1>
+            <p>商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号を1桁ずつ入れた配列 code（＝[4,9,1,2,3,4,7]）があり、左から code[0], code[1], … , code[6] の7個です。下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍し、合計 gokei を出します。その合計の下1桁 amari を10からひいたものがチェックディジットです。ただし、下1桁が0となった場合は、チェックディジットは0となります（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★★（5／難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>code = [4,9,1,2,3,4,7]
+gokei = 0
+i を 1 から 7 まで 1 ずつ増やしながら繰り返す:
+  banme = 7 ［A］ i
+  keta = code[banme]
+  もし i % 2 == 1 ならば:
+    omomi = 3
+  そうでなければ:
+    omomi = 1
+  gokei = gokei + keta ［B］ omomi
+amari = gokei % 10
+もし amari == ［C］ ならば:
+  check = 0
+そうでなければ:
+  check = 10 - amari
+表示する(&quot;チェックディジットは&quot; + check + &quot;です&quot;)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+                <li><code>%</code></li>
+                <li><code>0</code></li>
+                <li><code>1</code></li>
+                <li><code>10</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>配列の番号は code[0] から始まるので、下から i 番目は code[7 - i] です（i ＝ 1 なら右はしの code[6] ＝ 7）。重みは keta * omomi でかけます。この番号は gokei ＝ 60 なので下1桁は0。10 - 0 ＝ 10 は2桁になってしまうので、下1桁が0となった場合はチェックディジットを0とします。答えは0です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>-</code></li>
+            <li>空欄 ［B］ … <code>*</code></li>
+            <li>空欄 ［C］ … <code>0</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>+</code>　［B］<code>*</code>　［C］<code>0</code> … 1つ目は「下から i 番目は配列の何番目か」を決めるところです。7 + i だと i ＝ 1 のとき code[8] になり、7個しかない配列にその番号はありません。下から1番目は右はしの code[6] なので 7 - i とします</li>
+            <li>［A］<code>*</code>　［B］<code>*</code>　［C］<code>0</code> … 7 * i だと i ＝ 1 のとき code[7] になり、配列の外を見てしまいます。番号は code[0] から code[6] までなので、7 - i で右はしからさかのぼります</li>
+            <li>［A］<code>/</code>　［B］<code>*</code>　［C］<code>0</code> … 7 / i だと i ＝ 3 のとき 2.33… と小数になり、配列の番号になりません。1ずつ左へずらしたいので、ひき算の 7 - i を使います</li>
+            <li>［A］<code>%</code>　［B］<code>*</code>　［C］<code>0</code> … % はあまりです。7 % i だと i ＝ 1 で0、i ＝ 2 で1 とバラバラな番号になり、右から順に見ていけません。i が1ふえるごとに番号が1へるように 7 - i とします</li>
+            <li>［A］<code>-</code>　［B］<code>+</code>　［C］<code>0</code> … 重み omomi は「かける」ものです。keta + omomi だと 7 + 3 ＝ 10 となり、3倍したことになりません。keta * omomi で 7 * 3 ＝ 21 とします</li>
+            <li>［A］<code>-</code>　［B］<code>/</code>　［C］<code>0</code> … わり算では 7 / 3 ＝ 2.33… と小数になり、3倍の重みになりません。「3倍」はかけ算なので * を使います</li>
+            <li>［A］<code>-</code>　［B］<code>%</code>　［C］<code>0</code> … % はあまりです。keta % omomi だと 7 % 3 ＝ 1 となり、重みをかけたことになりません。3倍するのは * です</li>
+            <li>［A］<code>-</code>　［B］<code>*</code>　［C］<code>1</code> … 下1桁が1のときは 10 - 1 ＝ 9 で、ちゃんと1桁におさまります。特別あつかいがいるのは、10 - amari が2桁の10になってしまうとき、つまり下1桁が0のときです</li>
+            <li>［A］<code>-</code>　［B］<code>*</code>　［C］<code>10</code> … amari は合計の下1桁なので0〜9にしかならず、10 になることはありません。これでは一度も使われない分岐です。2桁になってしまうのは下1桁が0のときなので、amari == 0 とします</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q036/index.html">第36問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>

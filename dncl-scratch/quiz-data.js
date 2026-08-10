@@ -2397,6 +2397,132 @@ window.quizData = {
         defaultHint: "「今の最大 saidai より、くらべる相手の方が大きければ入れかえる」と考えよう。saidai < b なら saidai を b にします。72 → b(85) の方が大きいので 85 → c(63) は小さいのでそのまま、答えは 85 です"
     },
     q034: {
+        title: "歩く速さ（時速）",
+        addedAt: "2026-08-03",
+        difficulty: 1,
+        question: "12kmの道のりを3時間かけて歩きました。1時間あたり何km進んだか（時速）を表示するようにしよう",
+        ast: [
+            {
+                type: "assign",
+                name: "kyori",
+                value: "12"
+            },
+            {
+                type: "assign",
+                name: "jikan",
+                value: "3"
+            },
+            {
+                type: "assign",
+                name: "hayasa",
+                value: "kyori __BLANK_blank_a__ jikan"
+            },
+            {
+                type: "print",
+                value: "\"時速\" + hayasa + \"kmです\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+        ],
+        answers: [
+            {
+                values: ["/"],
+                correct: true,
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "かけ算だと 12 × 3 で 時速36km になり、歩くどころか車なみの速さになってしまいます。12kmを3時間で「分ける」と考えよう",
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算だと 12 + 3 で 時速15km。km と 時間 という種類のちがう数どうしは足せません",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "ひき算だと 12 - 3 で 時速9km。ひき算では「1時間あたりに進む道のり」は求められません",
+            }
+        ],
+        defaultHint: "速さは「1時間あたりに進む道のり」。12kmを3時間で等しく分けると、1時間ぶんが求まるよ"
+    },
+    q035: {
+        title: "アンケートの割合（％）",
+        addedAt: "2026-08-04",
+        difficulty: 2,
+        question: "クラス40人にアンケートをとったところ、34人が「毎日スマホを使う」と答えました。これは全体の何％かを求めて表示するようにしよう。割合（％）は「その人数を100倍してから、全体の人数でわる」で求められます。まず100倍した bai を、全体でわって wari を作ります（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "zentai",
+                value: "40"
+            },
+            {
+                type: "assign",
+                name: "tsukau",
+                value: "34"
+            },
+            {
+                type: "assign",
+                name: "bai",
+                value: "tsukau __BLANK_blank_a__ 100"
+            },
+            {
+                type: "assign",
+                name: "wari",
+                value: "bai __BLANK_blank_b__ zentai"
+            },
+            {
+                type: "print",
+                value: "\"全体の\" + wari + \"％\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["*", "/"],
+                correct: true,
+            },
+            {
+                values: ["/", "/"],
+                correct: false,
+                hint: "「100倍」なのでわり算ではなくかけ算です。34 / 100 では小さくなってしまいます。* を使って 34 * 100 ＝ 3400 とします",
+            },
+            {
+                values: ["+", "/"],
+                correct: false,
+                hint: "「100倍」はたし算ではなくかけ算です。34 + 100 ＝ 134 では100倍になりません。* を使って 34 * 100 ＝ 3400 とします",
+            },
+            {
+                values: ["*", "*"],
+                correct: false,
+                hint: "全体の人数はかけるのではなくわります。3400 * 40 ＝ 136000 と大きくなりすぎます。/ を使って 3400 / 40 ＝ 85 とします",
+            },
+            {
+                values: ["*", "-"],
+                correct: false,
+                hint: "全体の人数はひくのではなくわります。3400 - 40 ＝ 3360 では割合になりません。/ を使って 3400 / 40 ＝ 85 とします",
+            },
+            {
+                values: ["*", "%"],
+                correct: false,
+                hint: "% はわったあまりです。3400 % 40 ＝ 0 になってしまいます。あまりではなく商がほしいので / を使って 3400 / 40 ＝ 85 とします",
+            }
+        ],
+        defaultHint: "割合（％）＝ その人数 × 100 ÷ 全体の人数 です。34 * 100 ＝ 3400、3400 / 40 ＝ 85 で、答えは85％になります"
+    },
+    q036: {
         title: "10進数を2進数に直す",
         addedAt: "2026-08-06",
         difficulty: 4,
@@ -2503,90 +2629,90 @@ window.quizData = {
         ],
         defaultHint: "num % 2 であまり（0か1）を取り出し、それに位の重み kurai をかけて nishin にたす、そして num / 2 で桁をひとつ減らす、と考えよう。13 → 1 → 01 → 101 → 1101 の順に下の桁から組み立てていきます"
     },
-    q035: {
-        title: "歩く速さ（時速）",
-        addedAt: "2026-08-03",
-        difficulty: 1,
-        question: "12kmの道のりを3時間かけて歩きました。1時間あたり何km進んだか（時速）を表示するようにしよう",
+    q037: {
+        title: "バーコードのチェックディジット",
+        addedAt: "2026-08-07",
+        difficulty: 5,
+        question: "商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号を1桁ずつ入れた配列 code（＝[4,9,1,2,3,4,7]）があり、左から code[0], code[1], … , code[6] の7個です。下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍し、合計 gokei を出します。その合計の下1桁 amari を10からひいたものがチェックディジットです。ただし、下1桁が0となった場合は、チェックディジットは0となります（3か所の穴をうめよう）",
         ast: [
             {
                 type: "assign",
-                name: "kyori",
-                value: "12"
+                name: "code",
+                value: "[4,9,1,2,3,4,7]"
             },
             {
                 type: "assign",
-                name: "jikan",
-                value: "3"
+                name: "gokei",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "7",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "banme",
+                        value: "7 __BLANK_blank_a__ i"
+                    },
+                    {
+                        type: "assign",
+                        name: "keta",
+                        value: "code[banme]"
+                    },
+                    {
+                        type: "ifelse",
+                        condition: "i % 2 == 1",
+                        ifBody: [
+                            {
+                                type: "assign",
+                                name: "omomi",
+                                value: "3"
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "assign",
+                                name: "omomi",
+                                value: "1"
+                            }
+                        ]
+                    },
+                    {
+                        type: "assign",
+                        name: "gokei",
+                        value: "gokei + keta __BLANK_blank_b__ omomi"
+                    }
+                ]
             },
             {
                 type: "assign",
-                name: "hayasa",
-                value: "kyori __BLANK_blank_a__ jikan"
+                name: "amari",
+                value: "gokei % 10"
+            },
+            {
+                type: "ifelse",
+                condition: "amari == __BLANK_blank_c__",
+                ifBody: [
+                    {
+                        type: "assign",
+                        name: "check",
+                        value: "0"
+                    }
+                ],
+                elseBody: [
+                    {
+                        type: "assign",
+                        name: "check",
+                        value: "10 - amari"
+                    }
+                ]
             },
             {
                 type: "print",
-                value: "\"時速\" + hayasa + \"kmです\""
-            }
-        ],
-        choices: [
-            { label: "+", value: "+" },
-            { label: "-", value: "-" },
-            { label: "*", value: "*" },
-            { label: "/", value: "/" },
-        ],
-        answers: [
-            {
-                values: ["/"],
-                correct: true,
-            },
-            {
-                values: ["*"],
-                correct: false,
-                hint: "かけ算だと 12 × 3 で 時速36km になり、歩くどころか車なみの速さになってしまいます。12kmを3時間で「分ける」と考えよう",
-            },
-            {
-                values: ["+"],
-                correct: false,
-                hint: "足し算だと 12 + 3 で 時速15km。km と 時間 という種類のちがう数どうしは足せません",
-            },
-            {
-                values: ["-"],
-                correct: false,
-                hint: "ひき算だと 12 - 3 で 時速9km。ひき算では「1時間あたりに進む道のり」は求められません",
-            }
-        ],
-        defaultHint: "速さは「1時間あたりに進む道のり」。12kmを3時間で等しく分けると、1時間ぶんが求まるよ"
-    },
-    q036: {
-        title: "アンケートの割合（％）",
-        addedAt: "2026-08-04",
-        difficulty: 2,
-        question: "クラス40人にアンケートをとったところ、34人が「毎日スマホを使う」と答えました。これは全体の何％かを求めて表示するようにしよう。割合（％）は「その人数を100倍してから、全体の人数でわる」で求められます。まず100倍した bai を、全体でわって wari を作ります（2か所の穴をうめよう）",
-        ast: [
-            {
-                type: "assign",
-                name: "zentai",
-                value: "40"
-            },
-            {
-                type: "assign",
-                name: "tsukau",
-                value: "34"
-            },
-            {
-                type: "assign",
-                name: "bai",
-                value: "tsukau __BLANK_blank_a__ 100"
-            },
-            {
-                type: "assign",
-                name: "wari",
-                value: "bai __BLANK_blank_b__ zentai"
-            },
-            {
-                type: "print",
-                value: "\"全体の\" + wari + \"％\""
+                value: "\"チェックディジットは\" + check + \"です\""
             }
         ],
         choices: [
@@ -2595,38 +2721,61 @@ window.quizData = {
             { label: "*", value: "*" },
             { label: "/", value: "/" },
             { label: "%", value: "%" },
+            { label: "0", value: "0" },
+            { label: "1", value: "1" },
+            { label: "10", value: "10" },
         ],
         answers: [
             {
-                values: ["*", "/"],
+                values: ["-", "*", "0"],
                 correct: true,
             },
             {
-                values: ["/", "/"],
+                values: ["+", "*", "0"],
                 correct: false,
-                hint: "「100倍」なのでわり算ではなくかけ算です。34 / 100 では小さくなってしまいます。* を使って 34 * 100 ＝ 3400 とします",
+                hint: "1つ目は「下から i 番目は配列の何番目か」を決めるところです。7 + i だと i ＝ 1 のとき code[8] になり、7個しかない配列にその番号はありません。下から1番目は右はしの code[6] なので 7 - i とします",
             },
             {
-                values: ["+", "/"],
+                values: ["*", "*", "0"],
                 correct: false,
-                hint: "「100倍」はたし算ではなくかけ算です。34 + 100 ＝ 134 では100倍になりません。* を使って 34 * 100 ＝ 3400 とします",
+                hint: "7 * i だと i ＝ 1 のとき code[7] になり、配列の外を見てしまいます。番号は code[0] から code[6] までなので、7 - i で右はしからさかのぼります",
             },
             {
-                values: ["*", "*"],
+                values: ["/", "*", "0"],
                 correct: false,
-                hint: "全体の人数はかけるのではなくわります。3400 * 40 ＝ 136000 と大きくなりすぎます。/ を使って 3400 / 40 ＝ 85 とします",
+                hint: "7 / i だと i ＝ 3 のとき 2.33… と小数になり、配列の番号になりません。1ずつ左へずらしたいので、ひき算の 7 - i を使います",
             },
             {
-                values: ["*", "-"],
+                values: ["%", "*", "0"],
                 correct: false,
-                hint: "全体の人数はひくのではなくわります。3400 - 40 ＝ 3360 では割合になりません。/ を使って 3400 / 40 ＝ 85 とします",
+                hint: "% はあまりです。7 % i だと i ＝ 1 で0、i ＝ 2 で1 とバラバラな番号になり、右から順に見ていけません。i が1ふえるごとに番号が1へるように 7 - i とします",
             },
             {
-                values: ["*", "%"],
+                values: ["-", "+", "0"],
                 correct: false,
-                hint: "% はわったあまりです。3400 % 40 ＝ 0 になってしまいます。あまりではなく商がほしいので / を使って 3400 / 40 ＝ 85 とします",
+                hint: "重み omomi は「かける」ものです。keta + omomi だと 7 + 3 ＝ 10 となり、3倍したことになりません。keta * omomi で 7 * 3 ＝ 21 とします",
+            },
+            {
+                values: ["-", "/", "0"],
+                correct: false,
+                hint: "わり算では 7 / 3 ＝ 2.33… と小数になり、3倍の重みになりません。「3倍」はかけ算なので * を使います",
+            },
+            {
+                values: ["-", "%", "0"],
+                correct: false,
+                hint: "% はあまりです。keta % omomi だと 7 % 3 ＝ 1 となり、重みをかけたことになりません。3倍するのは * です",
+            },
+            {
+                values: ["-", "*", "1"],
+                correct: false,
+                hint: "下1桁が1のときは 10 - 1 ＝ 9 で、ちゃんと1桁におさまります。特別あつかいがいるのは、10 - amari が2桁の10になってしまうとき、つまり下1桁が0のときです",
+            },
+            {
+                values: ["-", "*", "10"],
+                correct: false,
+                hint: "amari は合計の下1桁なので0〜9にしかならず、10 になることはありません。これでは一度も使われない分岐です。2桁になってしまうのは下1桁が0のときなので、amari == 0 とします",
             }
         ],
-        defaultHint: "割合（％）＝ その人数 × 100 ÷ 全体の人数 です。34 * 100 ＝ 3400、3400 / 40 ＝ 85 で、答えは85％になります"
+        defaultHint: "配列の番号は code[0] から始まるので、下から i 番目は code[7 - i] です（i ＝ 1 なら右はしの code[6] ＝ 7）。重みは keta * omomi でかけます。この番号は gokei ＝ 60 なので下1桁は0。10 - 0 ＝ 10 は2桁になってしまうので、下1桁が0となった場合はチェックディジットを0とします。答えは0です"
     },
 }
