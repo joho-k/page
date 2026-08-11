@@ -122,8 +122,8 @@ body.home .header.is-visible {
     animation-delay: .18s;
 }
 
-.slide.is-active .slide-visual video,
-.slide-visual img {
+.slide.is-active .slide-visual img,
+.slide.is-active .slide-visual video {
     animation: slide-in-visual .6s ease both;
 }
 
@@ -207,13 +207,25 @@ body.home .header.is-visible {
     overflow: hidden;
 }
 
-.slide-visual img {
+.slide-visual img,
+.slide-visual video {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center right;
     opacity: .85;
+}
+
+/*
+ * 一覧系のスクリーンショットは左端にタイトルが来るので、
+ * 画像を右にずらして、見えている側（右）にタイトルが入るようにする。
+ */
+.slide-visual-right img {
+    width: 120%;
+    /* ずらす量は、左側の濃いスクリムに切れ目が隠れる範囲に収める */
+    margin-left: 26%;
+    object-position: left center;
 }
 
 /* 文字がのる左側だけ濃く、右にいくほど薄くして画像を見せる */
@@ -337,7 +349,8 @@ body.home .header.is-visible {
 
     .slide,
     .slide.is-active .slide-body>*,
-    .slide.is-active .slide-visual img {
+    .slide.is-active .slide-visual img,
+    .slide.is-active .slide-visual video {
         transition: none;
         animation: none;
     }
@@ -522,7 +535,8 @@ body.home .header.is-visible {
         min-height: 340px;
     }
 
-    .slide-visual img {
+    .slide-visual img,
+    .slide-visual video {
         opacity: .85;
         object-position: center;
     }
