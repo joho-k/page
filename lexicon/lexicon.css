@@ -40,11 +40,27 @@
 .item .item-list li {
     display: block;
     margin: 0;
-    padding: 11px 16px;
+    padding: 0;
     border-radius: 0;
     background: none;
     box-shadow: none;
     border-bottom: 1px solid rgba(0, 45, 90, .08);
+}
+
+/* 行のどこを押しても開けるように、リンクを行いっぱいに広げる */
+.item .item-list li a {
+    display: block;
+    padding: 11px 16px;
+    color: var(--primary);
+}
+
+.item .item-list li a:hover {
+    text-decoration: none;
+}
+
+/* まだページが無い項目はリンクが無いので、余白は li に持たせる */
+.item .item-list li.coming-soon {
+    padding: 11px 16px;
 }
 
 .item .item-list li:last-child {
@@ -58,6 +74,7 @@
 .item .item-list li.coming-soon {
     color: #888;
     background-color: rgba(0, 45, 90, .03);
+    cursor: default;
 }
 
 .item {
