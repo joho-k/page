@@ -1,3 +1,25 @@
+/*
+ * ニューモーフィズム用の影（色相は既存パレットのまま、明暗だけで立体感を出す）
+ * --bg (#EDF1F5) の上に置く面は「同じ色＋左上が明るく右下が暗い影」で浮かせる。
+ */
+:root {
+    --neu-light: #ffffff;
+    --neu-dark: #c0c7cf;
+    --neu-raised: 7px 7px 16px var(--neu-dark), -7px -7px 16px var(--neu-light);
+    --neu-raised-lg: 12px 12px 26px var(--neu-dark), -10px -10px 22px var(--neu-light);
+    --neu-raised-sm: 4px 4px 9px var(--neu-dark), -4px -4px 9px var(--neu-light);
+    --neu-pressed: inset 5px 5px 10px var(--neu-dark), inset -5px -5px 10px var(--neu-light);
+    /* 濃い色で塗ったボタンを押し込んだときの影 */
+    --neu-pressed-color: inset 5px 5px 10px rgba(0, 0, 0, .35), inset -5px -5px 10px rgba(255, 255, 255, .15);
+
+    /* 濃紺(--primary)の面を浮かせるとき用 */
+    --neu-navy-light: #003f7e;
+    --neu-navy-dark: #001a34;
+    --neu-navy-raised: 6px 6px 14px var(--neu-navy-dark), -6px -6px 14px var(--neu-navy-light);
+    --neu-navy-raised-sm: 3px 3px 7px var(--neu-navy-dark), -3px -3px 7px var(--neu-navy-light);
+    --neu-navy-pressed: inset 4px 4px 9px var(--neu-navy-dark), inset -4px -4px 9px var(--neu-navy-light);
+}
+
 body {
     margin: 0;
     color: #222;
@@ -34,9 +56,10 @@ body {
 .hero-actions {
     max-width: 760px;
     margin: 0 auto;
-    padding: 1rem;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, .1);
+    padding: 1.25rem;
+    border-radius: 24px;
+    background: var(--primary);
+    box-shadow: var(--neu-navy-raised);
 }
 
 .hero-actions-label {
@@ -62,11 +85,17 @@ body {
     padding: .9rem 1rem;
     border-radius: 999px;
     text-decoration: none;
-    transition: transform .15s ease, background-color .15s ease;
+    box-shadow: var(--neu-navy-raised);
+    transition: transform .15s ease, background-color .15s ease, box-shadow .15s ease;
 }
 
 .hero-cta:hover {
     transform: translateY(-2px);
+}
+
+.hero-cta:active {
+    transform: translateY(0);
+    box-shadow: var(--neu-pressed-color);
 }
 
 .hero-cta-main {
@@ -79,12 +108,12 @@ body {
 }
 
 .hero-cta-sub {
-    background: #fff;
-    color: var(--primary);
+    background: var(--primary);
+    color: #fff;
 }
 
 .hero-cta-sub:hover {
-    background: var(--primary-light);
+    background: #003b73;
 }
 
 .hero-cta-title {
@@ -112,15 +141,19 @@ body {
     color: #fff;
     text-decoration: none;
     font-size: .9rem;
-    padding: .4rem .9rem;
-    border: 1px solid rgba(255, 255, 255, .55);
+    padding: .5rem 1rem;
     border-radius: 999px;
-    transition: background-color .15s ease, color .15s ease;
+    background: var(--primary);
+    box-shadow: var(--neu-navy-raised-sm);
+    transition: box-shadow .15s ease, background-color .15s ease;
 }
 
 .hero-links a:hover {
-    background: #fff;
-    color: var(--primary);
+    background: #003b73;
+}
+
+.hero-links a:active {
+    box-shadow: var(--neu-navy-pressed);
 }
 
 .hero-note {
@@ -143,6 +176,16 @@ body {
     font-size: .92rem;
     line-height: 1.9;
     opacity: .85;
+}
+
+/* 見出しバナーも浮かせる（塗りは既存の濃紺のまま） */
+#protoro-spotlight h2,
+#content-hero h2,
+#tutoring h2,
+.news h2,
+.faq h2,
+.about h2 {
+    box-shadow: var(--neu-raised);
 }
 
 /* 各セクション共通のリード文 */
@@ -169,32 +212,32 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 22px 24px 24px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, .04);
+    background: var(--bg);
+    border-radius: 24px;
+    padding: 24px 26px 26px;
+    box-shadow: var(--neu-raised);
     transition: transform .15s ease, box-shadow .15s ease;
 }
 
 .spot-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, .08);
+    box-shadow: var(--neu-raised-lg);
 }
 
 .spot-card-main {
-    border: 2px solid var(--primary);
+    box-shadow: var(--neu-raised-lg);
 }
 
 .spot-badge {
     align-self: flex-start;
     margin: 0;
-    padding: 3px 12px;
+    padding: 5px 14px;
     border-radius: 999px;
     font-size: .8rem;
     font-weight: 700;
     background: var(--accent);
     color: #fff;
+    box-shadow: var(--neu-raised-sm);
 }
 
 .spot-badge-sub {
@@ -251,7 +294,12 @@ body {
     font-size: 1.05rem;
     color: #fff;
     background: var(--primary);
-    transition: background-color .15s ease;
+    box-shadow: var(--neu-raised-sm);
+    transition: background-color .15s ease, box-shadow .15s ease;
+}
+
+.spot-cta:active {
+    box-shadow: var(--neu-pressed-color);
 }
 
 .spot-card-main .spot-cta {
@@ -271,7 +319,7 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 16px;
+    border-radius: 24px;
 }
 
 .spot-more {
@@ -291,6 +339,14 @@ body {
 
     .spot-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* 影が画面端で切れないように余白を足す */
+    #protoro-spotlight,
+    #content-hero,
+    #tutoring {
+        padding-left: 10px;
+        padding-right: 10px;
     }
 }
 
@@ -320,21 +376,32 @@ body {
 .news-toggle {
     display: block;
     margin: 1rem auto 0;
-    padding: 10px 22px;
-    border: 1px solid var(--primary);
+    padding: 12px 26px;
+    border: none;
     border-radius: 999px;
-    background: #fff;
+    background: var(--bg);
     color: var(--primary);
     font-weight: 700;
+    box-shadow: var(--neu-raised-sm);
+    transition: box-shadow .15s ease;
 }
 
 .news-toggle:hover {
-    background: var(--primary);
-    color: #fff;
+    background: var(--bg);
+    color: var(--primary);
+    box-shadow: var(--neu-raised);
+}
+
+.news-toggle:active {
+    box-shadow: var(--neu-pressed);
 }
 
 .news li {
     margin-bottom: 0.75rem;
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 12px 16px;
+    box-shadow: var(--neu-raised-sm);
 }
 
 .news time {
@@ -397,12 +464,17 @@ body {
     margin: -0.5rem 0 1.5rem;
 }
 
-/* FAQ項目：サイト共通のグレー角丸リスト（li）と同じ質感 */
+/* FAQ項目：ニューモーフィズムの浮いた面 */
 .faq-item {
-    background-color: #f5f5f5;
-    border-radius: 12px;
-    margin: 10px 0;
+    background-color: var(--bg);
+    border-radius: 18px;
+    margin: 14px 0;
     overflow: hidden;
+    box-shadow: var(--neu-raised-sm);
+}
+
+.faq-item[open] {
+    box-shadow: var(--neu-raised);
 }
 
 .faq-item summary {
@@ -439,11 +511,10 @@ body {
     display: flex;
     gap: 1.2rem;
     align-items: flex-start;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, .04);
-    padding: 1.5rem;
-    background: #fff;
+    border-radius: 24px;
+    box-shadow: var(--neu-raised);
+    padding: 1.8rem;
+    background: var(--bg);
 }
 
 .author-avatar {
@@ -451,9 +522,10 @@ body {
     height: 80px;
     object-fit: contain;
     flex-shrink: 0;
-    border-radius: 10px;
+    border-radius: 16px;
     background: var(--primary);
     padding: 8px;
+    box-shadow: var(--neu-raised-sm);
 }
 
 .author-name {
@@ -480,7 +552,22 @@ body {
 
 .author-links li {
     margin: 0;
-    padding: 0.4rem 0.9rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg);
+    border-radius: 999px;
+    box-shadow: var(--neu-raised-sm);
+}
+
+/* 参考・出典リストも同じ浮いた面に */
+.references li {
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 12px 16px;
+    box-shadow: var(--neu-raised-sm);
+}
+
+.references h3 {
+    box-shadow: var(--neu-raised-sm);
 }
 
 /* お問い合わせCTA：サイト共通のオレンジ系リンクボタン（.link-button相当） */
@@ -490,13 +577,18 @@ body {
     font-weight: 700;
     color: #fff;
     background: var(--accent);
-    border-radius: 20px;
-    padding: 10px 20px;
-    transition: background-color 0.3s ease;
+    border-radius: 999px;
+    padding: 12px 24px;
+    box-shadow: var(--neu-raised-sm);
+    transition: background-color 0.3s ease, box-shadow .15s ease;
 }
 
 .author-contact:hover {
     background: #e64a19;
+}
+
+.author-contact:active {
+    box-shadow: var(--neu-pressed-color);
 }
 
 @media (max-width: 768px) {
@@ -510,7 +602,7 @@ footer {
     padding: 2rem 1rem;
     font-size: .875rem;
     color: #888;
-    background: #fff;
+    background: var(--bg);
 }
 
 
@@ -537,18 +629,17 @@ footer {
     display: flex;
     flex-direction: column;
     margin: 0;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, .04);
+    border-radius: 24px;
+    padding: 14px;
+    background: var(--bg);
+    box-shadow: var(--neu-raised);
     transition: transform .15s ease, box-shadow .15s ease;
 }
 
 #content-hero .feature:hover,
 #tutoring .feature:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, .08);
+    box-shadow: var(--neu-raised-lg);
 }
 
 #content-hero .feat-img img,
@@ -558,11 +649,13 @@ footer {
     height: 100%;
     object-fit: cover;
     aspect-ratio: 16/9;
+    border-radius: 14px;
+    box-sizing: border-box;
 }
 
 #content-hero .feat-body,
 #tutoring .feat-body {
-    padding: 18px 20px 20px;
+    padding: 16px 8px 4px;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -605,7 +698,8 @@ footer {
     color: white;
     border-radius: 999px;
     padding: 12px 16px;
-    transition: background-color .15s ease;
+    box-shadow: var(--neu-raised-sm);
+    transition: background-color .15s ease, box-shadow .15s ease;
     background: var(--primary);
 }
 
@@ -614,13 +708,18 @@ footer {
     background: var(--accent);
 }
 
+#content-hero .cta:active,
+#tutoring .cta:active {
+    box-shadow: var(--neu-pressed-color);
+}
+
 /* カード全体をクリック可能に（:after は外部リンクアイコンで使用中のため :before を使う） */
 #content-hero .cta::before,
 #tutoring .cta::before {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 14px;
+    border-radius: 24px;
 }
 
 /* マンツーマン指導は1枚だけなので中央に置く */
