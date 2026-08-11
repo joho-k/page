@@ -36,22 +36,27 @@
     min-width: 760px;
 }
 
-/* 内容は1行だけ。はみ出す分は「…」で省略し、全文は「詳細」で開く */
+/* 内容は1行だけ。はみ出す分は「…」で省略し、全文は同じセルの「詳細」で開く */
+.practice-content {
+    min-width: 360px;
+}
+
+.practice-content-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .practice-content-line {
-    display: block;
-    max-width: 46ch;
+    flex: 1 1 auto;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.practice-detail-cell {
-    width: 1%;
-    white-space: nowrap;
-    text-align: right;
-}
-
 .practice-detail-button {
+    flex: 0 0 auto;
     padding: 7px 14px;
     border: none;
     border-radius: 999px;

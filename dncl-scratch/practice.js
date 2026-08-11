@@ -46,7 +46,7 @@ function renderPracticeProblems() {
     if (entries.length === 0) {
         const tr = document.createElement("tr");
         const td = document.createElement("td");
-        td.colSpan = 5;
+        td.colSpan = 4;
         td.className = "practice-empty";
         td.textContent = "該当する問題がありません。";
         tr.append(td);
@@ -86,10 +86,21 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
         const tdContent = document.createElement("td");
         tdContent.className = "practice-content";
 
+        const contentRow = document.createElement("div");
+        contentRow.className = "practice-content-row";
+
         const contentLine = document.createElement("span");
         contentLine.className = "practice-content-line";
         contentLine.textContent = question.split("\n")[0];
-        tdContent.append(contentLine);
+
+        const detailButton = document.createElement("button");
+        detailButton.type = "button";
+        detailButton.className = "practice-detail-button";
+        detailButton.setAttribute("aria-expanded", "false");
+        detailButton.innerHTML = '詳細 <i class="fa-solid fa-chevron-down"></i>';
+
+        contentRow.append(contentLine, detailButton);
+        tdContent.append(contentRow);
 
         const tdAddedAt = document.createElement("td");
         tdAddedAt.className = "practice-addedAt";
@@ -101,17 +112,7 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
 
         tdAddedAt.textContent = `${y}/${m}/${d}` ?? "-";
 
-        const tdDetail = document.createElement("td");
-        tdDetail.className = "practice-detail-cell";
-
-        const detailButton = document.createElement("button");
-        detailButton.type = "button";
-        detailButton.className = "practice-detail-button";
-        detailButton.setAttribute("aria-expanded", "false");
-        detailButton.innerHTML = '詳細 <i class="fa-solid fa-chevron-down"></i>';
-        tdDetail.append(detailButton);
-
-        tr.append(tdDifficulty, tdTitle, tdContent, tdAddedAt, tdDetail);
+        tr.append(tdDifficulty, tdTitle, tdContent, tdAddedAt);
 
         // 全文を出す行（初期は隠す）
         const detailRow = document.createElement("tr");
@@ -119,7 +120,7 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
         detailRow.hidden = true;
 
         const detailCell = document.createElement("td");
-        detailCell.colSpan = 5;
+        detailCell.colSpan = 4;
         detailCell.className = "practice-detail-body";
         detailCell.textContent = question;
         detailRow.append(detailCell);
