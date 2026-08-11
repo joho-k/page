@@ -220,12 +220,19 @@ body.home .header.is-visible {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg,
-            rgba(0, 45, 90, .97) 0%,
-            rgba(0, 45, 90, .94) 40%,
-            rgba(0, 45, 90, .62) 60%,
-            rgba(0, 45, 90, .28) 80%,
-            rgba(0, 45, 90, .12) 100%);
+    background:
+        /* 上：ロゴとリード文が重なる帯を濃くする */
+        linear-gradient(180deg,
+            rgba(0, 45, 90, .94) 0%,
+            rgba(0, 45, 90, .62) 20%,
+            rgba(0, 45, 90, 0) 38%),
+        /* 左：本文がのる側を濃くし、右にいくほど画像を見せる */
+        linear-gradient(90deg,
+            rgba(0, 45, 90, .96) 0%,
+            rgba(0, 45, 90, .92) 36%,
+            rgba(0, 45, 90, .52) 56%,
+            rgba(0, 45, 90, .2) 76%,
+            rgba(0, 45, 90, .08) 100%);
 }
 
 /* 前後の矢印 */
