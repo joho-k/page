@@ -170,7 +170,7 @@
     <!-- 共通部分ここまで -->
 </head>
 
-<body>
+<body class="home">
     <header class="hero">
         <div class="hero-head">
             <h1><img src="img/logo_transparent.png"
@@ -511,6 +511,34 @@
     </footer>
 </body>
 <script>
+    // トップページ：ヒーローを過ぎて「いま人気のコンテンツ」まで来たら固定ヘッダーを出す
+    window.addEventListener("load", () => {
+        const header = document.querySelector(".header");
+        const trigger = document.getElementById("protoro-spotlight");
+        if (!header || !trigger) return;
+
+        const update = () => {
+            header.classList.toggle("is-visible", trigger.getBoundingClientRect().top <= 70);
+        };
+
+        update();
+        window.addEventListener("scroll", update, { passive: true });
+        window.addEventListener("resize", update, { passive: true });
+    });
+
+    // ロゴ部分はスライドの上に重ねるので、その高さ分だけ本文を下げる
+    (() => {
+        const hero = document.querySelector(".hero");
+        const head = document.querySelector(".hero-head");
+        if (!hero || !head) return;
+
+        const setHeadHeight = () => hero.style.setProperty("--hero-head-h", `${head.offsetHeight}px`);
+
+        setHeadHeight();
+        window.addEventListener("load", setHeadHeight);
+        window.addEventListener("resize", setHeadHeight, { passive: true });
+    })();
+
     // ヒーローのコンテンツ紹介スライドショー
     (() => {
         const slider = document.getElementById("hero-slider");

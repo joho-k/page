@@ -112,6 +112,7 @@
     margin: 0;
     padding: 0;
     background: none;
+    box-shadow: none;
     border-radius: 12px;
 }
 
@@ -167,6 +168,7 @@
     margin: 0 0 10px;
     padding: 0;
     background: none;
+    box-shadow: none;
 }
 
 .protro-new-list a {
