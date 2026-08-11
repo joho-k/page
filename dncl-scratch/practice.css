@@ -26,10 +26,16 @@
     gap: 8px;
 }
 
-/* 表そのものの見た目は main.css の共通スタイルに揃える。ここでは器だけ */
+/*
+ * 表の見出しを固定して、中身だけ縦にスクロールさせる。
+ * sticky の基準になるのはこの器なので、高さの上限をここに付ける。
+ */
 .practice-table-wrap {
-    border-radius: 18px;
+    max-height: min(70vh, 620px);
     overflow: auto;
+    border-radius: 18px;
+    background-color: var(--bg);
+    box-shadow: var(--neu-raised);
 }
 
 /*
@@ -40,6 +46,8 @@
     table-layout: fixed;
     width: 100%;
     min-width: 720px;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .practice-table th:nth-child(1),
@@ -60,16 +68,25 @@
 /* 内容は1行だけ。はみ出す分は「…」で省略し、全文は同じセルの「詳細」で開く */
 .practice-content-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 }
 
 .practice-content-line {
     flex: 1 1 auto;
     min-width: 0;
+    padding-top: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* 「詳細」を押したら、その場で省略を解いて全文を出す */
+.practice-content-line.is-open {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: pre-wrap;
+    line-height: 1.9;
 }
 
 .practice-detail-button {
@@ -88,20 +105,6 @@
 
 .practice-detail-button[aria-expanded="true"] {
     box-shadow: var(--neu-pressed);
-}
-
-.practice-detail-row td {
-    padding: 0 14px 14px;
-    border-bottom: 1px solid rgba(0, 45, 90, .08);
-}
-
-.practice-detail-body {
-    white-space: pre-wrap;
-    line-height: 1.9;
-}
-
-.practice-detail-row:hover td {
-    background: none;
 }
 
 .practice-table thead th {

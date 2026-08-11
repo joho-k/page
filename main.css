@@ -335,8 +335,25 @@ table {
     border-spacing: 0;
     background-color: var(--bg);
     border-radius: 18px;
-    overflow: hidden;
     box-shadow: var(--neu-raised);
+}
+
+/* overflow:hidden で角を落とすと見出しの固定(sticky)が効かなくなるため、
+   角丸は端のセルに持たせる */
+thead th:first-child {
+    border-top-left-radius: 18px;
+}
+
+thead th:last-child {
+    border-top-right-radius: 18px;
+}
+
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 18px;
+}
+
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 18px;
 }
 
 thead th {

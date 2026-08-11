@@ -89,9 +89,10 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
         const contentRow = document.createElement("div");
         contentRow.className = "practice-content-row";
 
+        // 全文を入れておき、閉じている間だけ1行に省略する
         const contentLine = document.createElement("span");
         contentLine.className = "practice-content-line";
-        contentLine.textContent = question.split("\n")[0];
+        contentLine.textContent = question;
 
         const detailButton = document.createElement("button");
         detailButton.type = "button";
@@ -114,27 +115,15 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
 
         tr.append(tdDifficulty, tdTitle, tdContent, tdAddedAt);
 
-        // 全文を出す行（初期は隠す）
-        const detailRow = document.createElement("tr");
-        detailRow.className = "practice-detail-row";
-        detailRow.hidden = true;
-
-        const detailCell = document.createElement("td");
-        detailCell.colSpan = 4;
-        detailCell.className = "practice-detail-body";
-        detailCell.textContent = question;
-        detailRow.append(detailCell);
-
         detailButton.addEventListener("click", () => {
-            const open = detailRow.hidden;
-            detailRow.hidden = !open;
+            const open = contentLine.classList.toggle("is-open");
             detailButton.setAttribute("aria-expanded", String(open));
             detailButton.innerHTML = open
                 ? '閉じる <i class="fa-solid fa-chevron-up"></i>'
                 : '詳細 <i class="fa-solid fa-chevron-down"></i>';
         });
 
-        tbody.append(tr, detailRow);
+        tbody.append(tr);
     }
 }
 
