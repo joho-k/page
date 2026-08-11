@@ -32,15 +32,32 @@
     overflow: auto;
 }
 
+/*
+ * 列幅を固定する。auto だとセルが中身の長さまで広がってしまい、
+ * 内容の「…」省略が効かない（表だけ横に伸びる）。
+ */
 .practice-table {
-    min-width: 760px;
+    table-layout: fixed;
+    width: 100%;
+    min-width: 720px;
+}
+
+.practice-table th:nth-child(1),
+.practice-table td:nth-child(1) {
+    width: 108px;
+}
+
+.practice-table th:nth-child(2),
+.practice-table td:nth-child(2) {
+    width: 26%;
+}
+
+.practice-table th:nth-child(4),
+.practice-table td:nth-child(4) {
+    width: 104px;
 }
 
 /* 内容は1行だけ。はみ出す分は「…」で省略し、全文は同じセルの「詳細」で開く */
-.practice-content {
-    min-width: 360px;
-}
-
 .practice-content-row {
     display: flex;
     align-items: center;

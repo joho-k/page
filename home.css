@@ -286,7 +286,6 @@ body.home .header.is-visible {
     box-shadow: none;
     color: #fff;
     font-size: .88rem;
-    font-weight: 700;
     opacity: .6;
     transition: opacity .2s ease, color .2s ease, border-color .2s ease;
 }
