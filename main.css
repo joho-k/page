@@ -55,6 +55,38 @@ input, button, textarea {
     font-family: inherit;
 }
 
+/*
+ * スクロールバー：既定の白い帯が背景から浮くので、ページの背景色に合わせる。
+ * （html に指定すると継承されるので、中の要素にも効く）
+ */
+html {
+    scrollbar-color: var(--neu-dark) var(--bg);
+    scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neu-dark);
+    border: 3px solid var(--bg);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--bg);
+}
+
 button {
     font-size: 16px;
     cursor: pointer;
