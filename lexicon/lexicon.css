@@ -1,14 +1,50 @@
 .word-list-container {
     display: flex;
     flex-wrap: wrap;
+    gap: 8px;
     margin: 0 auto;
-    background-color: white;
-    border-radius: 24px;
+    background-color: transparent;
+}
+
+/*
+ * カテゴリの見出し（情報とメディア／情報社会の法とセキュリティ など）は濃紺、
+ * その下のページリンクは背景と同色の浮いた面にして、色で役割を分ける。
+ * 見た目は他ページの表（thead＋tbody）と揃えている。
+ */
+.item h4 {
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 16px 16px 0 0;
+    background-color: var(--primary);
+    color: #fff;
+    text-align: left;
+    box-shadow: none;
+}
+
+.item .item-list {
+    margin: 0 0 16px;
+    padding: 8px;
+    border-radius: 0 0 16px 16px;
+    background-color: var(--bg);
+    box-shadow: var(--neu-raised);
+}
+
+.item .item-list li {
+    margin: 6px 0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background-color: var(--bg);
+    box-shadow: var(--neu-raised-sm);
+}
+
+.item .item-list li.coming-soon {
+    box-shadow: var(--neu-pressed);
 }
 
 .item {
     flex: 1 1 350px;
     margin: 5px;
+    align-self: flex-start;
 }
 
 .item-list {

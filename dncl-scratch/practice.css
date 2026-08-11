@@ -1,14 +1,15 @@
 .practice {
     margin: 0 auto 18px;
     padding: 0 10px;
+    max-width: 1100px;
 }
 
 .practice-top {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin: 0 0 12px;
+    background: var(--bg);
+    border-radius: 20px;
+    padding: 16px 18px;
+    margin: 0 0 16px;
+    box-shadow: var(--neu-raised);
 }
 
 .practice-top h3 {
@@ -25,43 +26,26 @@
     gap: 8px;
 }
 
+/* 表そのものの見た目は main.css の共通スタイルに揃える。ここでは器だけ */
 .practice-table-wrap {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
+    border-radius: 18px;
     overflow: auto;
 }
 
 .practice-table {
-    width: 100%;
-    border-collapse: collapse;
     min-width: 720px;
 }
 
 .practice-table thead th {
     position: sticky;
     top: 0;
-    background: #f9fafb;
-    text-align: left;
-    font-weight: 700;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 10px 12px;
-    white-space: nowrap;
-}
-
-.practice-table tbody td {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 10px 12px;
-    vertical-align: top;
-}
-
-.practice-table tbody tr:hover td {
-    background: #fafafa;
+    z-index: 1;
 }
 
 .practice-difficulty {
     font-weight: 700;
     white-space: nowrap;
+    color: var(--primary);
 }
 
 .practice-addedAt {
@@ -76,48 +60,61 @@
 .practice-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    align-items: center;
+    gap: 12px 20px;
     margin-bottom: 16px;
 }
 
-.practice-controls input {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+/* 入力欄はへこませて「書く場所」だと分かるようにする */
+.practice-controls input,
+.practice-controls select {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    box-shadow: var(--neu-pressed);
     font: inherit;
 }
 
 .practice-filter-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 8px;
 }
 
 .practice-filter-button {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
+    padding: 9px 16px;
+    border: none;
     border-radius: 999px;
-    background: white;
+    background: var(--bg);
     color: var(--text);
     cursor: pointer;
     font: inherit;
+    box-shadow: var(--neu-raised-sm);
+    transition: box-shadow .15s ease, background-color .15s ease, color .15s ease;
+}
+
+.practice-filter-button:active {
+    box-shadow: var(--neu-pressed);
 }
 
 .practice-filter-button.active {
     background: var(--primary);
-    border-color: var(--primary);
     color: white;
+    box-shadow: var(--neu-pressed-color);
 }
 
 .practice-new {
     display: inline-block;
     margin-left: 8px;
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: 999px;
     background: var(--accent);
     color: white;
     font-size: 12px;
     font-weight: bold;
+    box-shadow: var(--neu-raised-sm);
 }
 
 .practice-mobile-only {
@@ -132,12 +129,5 @@
 
     .practice-mobile-only {
         display: block;
-    }
-
-    .practice-controls select {
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font: inherit;
     }
 }
