@@ -111,45 +111,135 @@
 
 <body>
     <div class="content">
-        <header>
-            <h1 class="page-title">共通テストプログラミングトレーニング</h1>
+        <header class="protro-hero">
+            <h1 class="page-title">共テプロトレ</h1>
+            <p class="protro-hero-sub">共通テストプログラミングトレーニング</p>
+            <p class="protro-lead">
+                共通テスト「情報I」で使われる言語 <strong>DNCL</strong> を、実際に動かしながら学べる教材です。
+                ブロックで組み立てて実行し、コード表示・ステップ実行・解説を使って「書ける／読める」力を身につけます。
+            </p>
+            <div class="protro-hero-actions">
+                <a class="protro-btn protro-btn-main" href="./practice.html">
+                    <span class="protro-btn-title">練習問題を解く</span>
+                    <span class="protro-btn-note">全<span id="protro-quiz-count">--</span>問／★1のやさしい問題から</span>
+                </a>
+                <a class="protro-btn protro-btn-sub" href="./editor.html">
+                    <span class="protro-btn-title">エディターを開く</span>
+                    <span class="protro-btn-note">自分でプログラムを作って動かす</span>
+                </a>
+            </div>
         </header>
 
         <main>
+            <section class="protro-section">
+                <h2>難易度からえらぶ</h2>
+                <p class="protro-section-lead">はじめての人は ★1 から。1問ずつ解いて、そのまま実行して確かめられます。</p>
+                <ul class="protro-levels">
+                    <li><a href="./practice.html?difficulty=1"><span class="protro-stars">★☆☆☆☆</span><span
+                                class="protro-level-name">はじめの一歩</span><span class="protro-level-count"
+                                data-level-count="1"></span></a></li>
+                    <li><a href="./practice.html?difficulty=2"><span class="protro-stars">★★☆☆☆</span><span
+                                class="protro-level-name">基本をかためる</span><span class="protro-level-count"
+                                data-level-count="2"></span></a></li>
+                    <li><a href="./practice.html?difficulty=3"><span class="protro-stars">★★★☆☆</span><span
+                                class="protro-level-name">共通テスト標準</span><span class="protro-level-count"
+                                data-level-count="3"></span></a></li>
+                    <li><a href="./practice.html?difficulty=4"><span class="protro-stars">★★★★☆</span><span
+                                class="protro-level-name">応用に挑戦</span><span class="protro-level-count"
+                                data-level-count="4"></span></a></li>
+                    <li><a href="./practice.html?difficulty=5"><span class="protro-stars">★★★★★</span><span
+                                class="protro-level-name">難問にチャレンジ</span><span class="protro-level-count"
+                                data-level-count="5"></span></a></li>
+                </ul>
+                <p class="protro-more"><a class="link-button" href="./practice.html">練習問題集をすべて見る</a></p>
+            </section>
 
-            <section class="protro-intro">
-                <p class="protro-lead">
-                    共通テスト「情報I」で使われる言語 <strong>DNCL</strong> を、実際に動かしながら学べる教材です。
-                    ブロックで組み立てて実行し、コード表示・ステップ実行・解説を使って「書ける／読める」力を身につけます。
-                </p>
+            <section class="protro-section">
+                <h2>新しく追加された問題</h2>
+                <ul class="protro-new-list" id="protro-new-list">
+                    <li class="protro-new-empty"><a href="./practice.html">練習問題集を開く</a></li>
+                </ul>
+            </section>
 
-                <div class="protro-links">
-                    <div class="protro-link-card">
-                        <h3>Editor（DNCLビジュアルエディタ）</h4>
-                        <p>
-                            ブロックをドラッグ＆ドロップで組み立てて、すぐ実行できます。ブロック表示とコード表示を切り替えられるので、
-                            「見た目」と「文章（DNCL）」を対応させて理解できます。
-                        </p>
-                        <a class="link-button" href="./editor.html">エディターへ</a>
-                    </div>
+            <section class="protro-section">
+                <h2>3ステップで使えます</h2>
+                <ol class="protro-steps">
+                    <li>
+                        <span class="protro-step-num">1</span>
+                        <span class="protro-step-body"><b>問題をえらぶ</b>練習問題集から、難易度に合った問題を選びます。</span>
+                    </li>
+                    <li>
+                        <span class="protro-step-num">2</span>
+                        <span class="protro-step-body"><b>穴埋めして実行</b>選択肢をブロックにはめて、そのまま実行。答え合わせもその場でできます。</span>
+                    </li>
+                    <li>
+                        <span class="protro-step-num">3</span>
+                        <span class="protro-step-body"><b>ステップ実行で確かめる</b>1行ずつ動かして、変数の中身がどう変わるかを目で見て確認します。</span>
+                    </li>
+                </ol>
+            </section>
 
-                    <div class="protro-link-card">
-                        <h3>練習問題集</h4>
-                        <p>
-                            共通テスト対策として、典型問題を段階的に練習できます。解説やヒントと一緒に取り組めるので、
-                            つまずきやすいポイントを整理しながら学べます。
-                        </p>
-                        <a class="link-button" href="./practice.html">問題集へ</a>
-                    </div>
-                </div>
-
-                <div class="protro-benefits">
-                    <h3>共テプロトレの3つのメリット</h3>
-                    <img src="./intro.png" />
-                </div>
+            <section class="protro-section protro-benefits">
+                <h2>共テプロトレの3つのメリット</h2>
+                <img src="./intro.png" alt="共テプロトレの3つのメリット：ブロックで組み立てられる、その場で実行できる、ステップ実行で動きが見える">
+                <p class="protro-more"><a class="link-button" href="./practice.html">練習問題を解いてみる</a></p>
             </section>
         </main>
     </div>
+
+    <script src="./quiz-data.js"></script>
+    <script>
+        (() => {
+            const quizzes = Object.entries(window.quizData ?? {});
+            if (quizzes.length === 0) return;
+
+            // 全問題数
+            const countEl = document.getElementById("protro-quiz-count");
+            if (countEl) countEl.textContent = String(quizzes.length);
+
+            // 難易度ごとの問題数
+            document.querySelectorAll("[data-level-count]").forEach((el) => {
+                const level = Number(el.dataset.levelCount);
+                const count = quizzes.filter(([, q]) => Number(q.difficulty) === level).length;
+                el.textContent = `${count}問`;
+            });
+
+            // 新しく追加された問題（3件）
+            const list = document.getElementById("protro-new-list");
+            if (!list) return;
+
+            const newest = quizzes
+                .slice()
+                .sort((a, b) => new Date(b[1].addedAt ?? 0) - new Date(a[1].addedAt ?? 0))
+                .slice(0, 3);
+
+            list.innerHTML = "";
+
+            for (const [id, quiz] of newest) {
+                const difficulty = Math.max(1, Math.min(5, Number(quiz.difficulty) || 1));
+
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = `./quiz/${encodeURIComponent(id)}/index.html`;
+
+                const stars = document.createElement("span");
+                stars.className = "protro-stars";
+                stars.textContent = "★".repeat(difficulty) + "☆".repeat(5 - difficulty);
+
+                const title = document.createElement("span");
+                title.className = "protro-new-title";
+                title.textContent = quiz.title ?? "問題";
+
+                const desc = document.createElement("span");
+                desc.className = "protro-new-desc";
+                desc.textContent = String(quiz.question ?? "").split("\n")[0];
+
+                a.append(stars, title, desc);
+                li.append(a);
+                list.append(li);
+            }
+        })();
+    </script>
 </body>
 
 </html>

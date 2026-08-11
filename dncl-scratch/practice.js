@@ -99,7 +99,23 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
     }
 }
 
+// トップページの「難易度からえらぶ」から ?difficulty=N で直接しぼりこめるようにする
+function applyDifficultyFromUrl() {
+    const value = new URLSearchParams(window.location.search).get("difficulty") ?? "";
+    if (!["1", "2", "3", "4", "5"].includes(value)) return;
+
+    practiceDifficultyFilter = value;
+
+    document.querySelectorAll("[data-difficulty]")
+        .forEach((b) => b.classList.toggle("active", (b.dataset.difficulty ?? "") === value));
+
+    const select = document.getElementById("practice-difficulty-select");
+    if (select) select.value = value;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+
+    applyDifficultyFromUrl();
 
     renderPracticeProblems();
 
