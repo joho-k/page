@@ -172,29 +172,104 @@
 
 <body>
     <header class="hero">
-        <h1><img src="img/logo_transparent.png" alt="情報の教室 ― 高校「情報I」・ITパスポート・基本情報技術者試験の無料学習支援サイト"></h1>
-        <p class="hero-lead">高校「情報I」・ITパスポート・基本情報技術者試験の学習を、<strong>教材・用語解説・演習・動画</strong>でまるごとサポートする学習支援サイトです。</p>
-        <div class="hero-actions">
-            <p class="hero-actions-label">人気の共通テスト「情報I」対策 ― 共テプロトレ</p>
-            <div class="hero-actions-buttons">
-                <a class="hero-cta hero-cta-main" href="dncl-scratch/practice.html">
-                    <span class="hero-cta-title">練習問題を解く</span>
-                    <span class="hero-cta-note">練習問題集／★1のやさしい問題から</span>
-                </a>
-                <a class="hero-cta hero-cta-sub" href="dncl-scratch/editor.html">
-                    <span class="hero-cta-title">エディターで動かす</span>
-                    <span class="hero-cta-note">DNCLをブロックで組み立てて実行</span>
-                </a>
+        <div class="hero-head">
+            <h1><img src="img/logo_transparent.png"
+                    alt="情報の教室 ― 高校「情報I」・ITパスポート・基本情報技術者試験の無料学習支援サイト"></h1>
+            <p class="hero-lead">高校「情報I」・ITパスポート・基本情報技術者試験の学習支援サイト（すべて無料・登録不要）</p>
+        </div>
+
+        <!-- コンテンツ紹介スライドショー（自動切り替え／矢印・下部ナビで手動切り替え可） -->
+        <div class="hero-slider" id="hero-slider" aria-roledescription="カルーセル" aria-label="コンテンツ紹介">
+            <div class="slider-viewport">
+                <article class="slide is-active" role="group" aria-roledescription="スライド" aria-label="練習問題集"
+                    data-nav="練習問題集">
+                    <div class="slide-body">
+                        <p class="slide-tag">共テプロトレ</p>
+                        <p class="slide-title">解いて、動かして<br>身につける</p>
+                        <p class="slide-desc">共通テスト「情報I」の典型問題を、★1〜★5の難易度順に。1問ずつ穴埋めで解いて、その場で答え合わせできます。</p>
+                        <a class="slide-cta" href="dncl-scratch/practice.html">練習問題を解く <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="slide-visual"><img src="img/hero/practice.jpg" alt="練習問題集の問題ページの例" width="800"
+                            height="420"></div>
+                </article>
+
+                <article class="slide" role="group" aria-roledescription="スライド" aria-label="DNCLエディター"
+                    data-nav="DNCLエディター">
+                    <div class="slide-body">
+                        <p class="slide-tag">共テプロトレ</p>
+                        <p class="slide-title">プログラムを<br>「見てわかる」に</p>
+                        <p class="slide-desc">ブロックを組み立ててすぐ実行。ステップ実行で、変数の中身がどう変わるかを目で見て確かめられます。</p>
+                        <a class="slide-cta" href="dncl-scratch/editor.html">エディターを開く <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="slide-visual"><img src="img/hero/editor.jpg" alt="DNCLエディターの画面イメージ" loading="lazy"
+                            width="800" height="420"></div>
+                </article>
+
+                <article class="slide" role="group" aria-roledescription="スライド" aria-label="用語の辞典" data-nav="用語の辞典">
+                    <div class="slide-body">
+                        <p class="slide-tag">用語解説</p>
+                        <p class="slide-title">「情報I」の言葉が<br>わかる辞典</p>
+                        <p class="slide-desc">重要語をやさしく、独自の視点で解説。予習・復習・定期テスト対策にそのまま使えます。</p>
+                        <a class="slide-cta" href="lexicon/index.html">用語を調べる <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="slide-visual"><img src="img/hero/lexicon.jpg" alt="用語の辞典の画面イメージ" loading="lazy"
+                            width="800" height="420"></div>
+                </article>
+
+                <article class="slide" role="group" aria-roledescription="スライド" aria-label="試作問題リンク" data-nav="試作問題リンク">
+                    <div class="slide-body">
+                        <p class="slide-tag">問題演習</p>
+                        <p class="slide-title">本番の問題で<br>力だめし</p>
+                        <p class="slide-desc">大学入試センターや各大学の試作問題を一覧化。答えと引用元にもアクセスできます。</p>
+                        <a class="slide-cta" href="sisaku/index.html">試作問題を見る <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="slide-visual"><img src="img/hero/sisaku.jpg" alt="試作問題リンクの画面イメージ" loading="lazy"
+                            width="800" height="420"></div>
+                </article>
+
+                <article class="slide" role="group" aria-roledescription="スライド" aria-label="YouTubeチャンネル"
+                    data-nav="YouTube">
+                    <div class="slide-body">
+                        <p class="slide-tag">動画</p>
+                        <p class="slide-title">映像で直感的に<br>理解する</p>
+                        <p class="slide-desc">単語解説から楽しい企画まで。チャンネル登録者数4,000名を突破しました。</p>
+                        <a class="slide-cta" href="https://www.youtube.com/@joho-no-kyoshitsu" target="_blank"
+                            rel="noopener">動画を見る <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="slide-visual"><img src="img/hero/youtube.jpg" alt="YouTubeチャンネルの動画一覧" loading="lazy"
+                            width="800" height="420"></div>
+                </article>
+
+                <article class="slide" role="group" aria-roledescription="スライド" aria-label="情報I 学習支援AI(β版)"
+                    data-nav="学習支援AI">
+                    <div class="slide-body">
+                        <p class="slide-tag">AI</p>
+                        <p class="slide-title">わからないことを<br>AIに聞く</p>
+                        <p class="slide-desc">単語解説や問題文作成など、あなたの学習をAIがサポート。※Googleアカウントへのログインが必要です。</p>
+                        <a class="slide-cta"
+                            href="https://notebooklm.google.com/notebook/772b6f45-ffec-4400-b404-62c1748983d1?authuser=1&pli=1"
+                            target="_blank" rel="noopener">AIに聞いてみる <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="slide-visual"><img src="img/hero/ai.jpg" alt="情報I 学習支援AIの画面イメージ" loading="lazy"
+                            width="800" height="420"></div>
+                </article>
+            </div>
+
+            <button class="slider-arrow slider-prev" type="button" aria-label="前のコンテンツ"><i
+                    class="fa-solid fa-chevron-left"></i></button>
+            <button class="slider-arrow slider-next" type="button" aria-label="次のコンテンツ"><i
+                    class="fa-solid fa-chevron-right"></i></button>
+
+            <div class="slider-footer">
+                <div class="slider-nav" id="slider-nav"></div>
+                <button class="slider-toggle" id="slider-toggle" type="button" aria-label="自動切り替えを一時停止"><i
+                        class="fa-solid fa-pause"></i></button>
             </div>
         </div>
-        <nav class="hero-links" aria-label="そのほかの学習コンテンツ">
-            <a href="lexicon/index.html">用語の辞典</a>
-            <a href="sisaku/index.html">試作問題リンク</a>
-            <a href="#content-hero">動画・学習支援AI</a>
-            <a href="#faq">よくある質問</a>
-        </nav>
-        <p class="hero-note">すべて無料・会員登録不要</p>
-        <p class="intro">情報の教室は、高校「情報I」や国家試験「ITパスポート」「基本情報技術者試験」などの学習に役立つ解説・教材を提供する学習支援サイトです。DNCL（共通テスト用擬似言語）を実際に動かせる演習ツール、用語解説、試作問題リンク、解説動画などを、すべて無料・会員登録不要で利用できます。</p>
     </header>
 
     <main>
@@ -202,13 +277,12 @@
     <!-- 共テプロトレ（最重要コンテンツ） -->
     <section id="protoro-spotlight" aria-labelledby="protoro-spotlight-title">
         <h2 id="protoro-spotlight-title">いま人気のコンテンツ ― 共テプロトレ</h2>
-        <p class="section-lead">共通テストプログラミングトレーニング（共テプロトレ）は、共通テスト「情報I」の擬似言語 DNCL
-            を、ブロックで組み立てて実際に動かしながら学べる教材です。プログラミングが苦手でも、練習問題から手を動かして始められます。</p>
+        <p class="section-lead">共通テスト「情報I」の擬似言語 DNCL を、動かしながら学べる教材です。</p>
         <div class="spot-grid">
             <article class="spot-card spot-card-main">
                 <p class="spot-badge">いちばん人気</p>
                 <h3 class="spot-title">練習問題集</h3>
-                <p class="spot-desc">共通テスト対策の典型問題を、★1〜★5の難易度順に練習できます。1問ずつ穴埋めで解いて、その場で答え合わせ。</p>
+                <p class="spot-desc">★1〜★5の難易度順に、1問ずつ穴埋めで練習。その場で答え合わせできます。</p>
                 <ul class="spot-points">
                     <li>難易度・キーワードでしぼりこみ</li>
                     <li>解いたプログラムはそのまま実行できる</li>
@@ -219,7 +293,7 @@
             <article class="spot-card">
                 <p class="spot-badge spot-badge-sub">自由に試す</p>
                 <h3 class="spot-title">DNCLエディター</h3>
-                <p class="spot-desc">ブロックをドラッグ＆ドロップで組み立てて、すぐ実行。ブロック表示とコード表示を切り替えて、「見た目」と「DNCL の文章」を対応させて理解できます。</p>
+                <p class="spot-desc">ブロックをドラッグ＆ドロップで組み立てて、すぐ実行。ブロック表示とコード表示を切り替えられます。</p>
                 <ul class="spot-points">
                     <li>ステップ実行で1行ずつ確認</li>
                     <li>変数の中身の変化が見える</li>
@@ -401,6 +475,7 @@
     <!-- 運営者情報・参考リンク -->
     <section class="about" aria-label="運営者情報">
         <h2>運営者情報</h2>
+        <p class="intro">情報の教室は、高校「情報I」や国家試験「ITパスポート」「基本情報技術者試験」などの学習に役立つ解説・教材を提供する学習支援サイトです。DNCL（共通テスト用擬似言語）を実際に動かせる演習ツール、用語解説、試作問題リンク、解説動画などを、すべて無料・会員登録不要で利用できます。</p>
         <div class="author-box">
             <img class="author-avatar" src="img/logo_transparent.png" alt="情報の教室のロゴ">
             <div class="author-detail">
@@ -436,6 +511,111 @@
     </footer>
 </body>
 <script>
+    // ヒーローのコンテンツ紹介スライドショー
+    (() => {
+        const slider = document.getElementById("hero-slider");
+        if (!slider) return;
+
+        const slides = [...slider.querySelectorAll(".slide")];
+        const navWrap = document.getElementById("slider-nav");
+        const toggle = document.getElementById("slider-toggle");
+        if (slides.length === 0) return;
+
+        const INTERVAL = 6000;
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        let current = 0;
+        let timer = null;
+        let stopped = reduceMotion;   // ユーザーが一時停止した／動きを減らす設定
+        let suspended = false;        // ホバー・フォーカス中の一時停止
+
+        // 下部のコンテンツ一覧（01 練習問題集／02 DNCLエディター …）をスライドから生成する
+        const navItems = slides.map((slide, i) => {
+            const item = document.createElement("button");
+            item.type = "button";
+            item.className = "slider-nav-item";
+            item.innerHTML = `<span class="num">${String(i + 1).padStart(2, "0")}</span>`
+                + `<span class="label">${slide.dataset.nav ?? ""}</span>`;
+            item.addEventListener("click", () => {
+                show(i);
+                restart();
+            });
+            navWrap.appendChild(item);
+            return item;
+        });
+
+        function show(next) {
+            current = (next + slides.length) % slides.length;
+
+            slides.forEach((slide, i) => {
+                const active = i === current;
+                slide.classList.toggle("is-active", active);
+                slide.setAttribute("aria-hidden", String(!active));
+            });
+
+            navItems.forEach((item, i) => {
+                item.classList.toggle("is-active", i === current);
+                item.setAttribute("aria-current", String(i === current));
+            });
+        }
+
+        function tick() {
+            if (stopped || suspended || document.hidden) return;
+            show(current + 1);
+        }
+
+        function restart() {
+            clearInterval(timer);
+            if (!stopped) timer = setInterval(tick, INTERVAL);
+        }
+
+        slider.querySelector(".slider-prev")
+            .addEventListener("click", () => { show(current - 1); restart(); });
+
+        slider.querySelector(".slider-next")
+            .addEventListener("click", () => { show(current + 1); restart(); });
+
+        toggle.addEventListener("click", () => {
+            stopped = !stopped;
+            toggle.setAttribute("aria-label", stopped ? "自動切り替えを再開" : "自動切り替えを一時停止");
+            toggle.innerHTML = stopped
+                ? '<i class="fa-solid fa-play"></i>'
+                : '<i class="fa-solid fa-pause"></i>';
+            restart();
+        });
+
+        // スマホ向け：左右スワイプで切り替える
+        let touchStartX = null;
+
+        slider.addEventListener("touchstart", (e) => {
+            touchStartX = e.changedTouches[0].clientX;
+        }, { passive: true });
+
+        slider.addEventListener("touchend", (e) => {
+            if (touchStartX === null) return;
+            const delta = e.changedTouches[0].clientX - touchStartX;
+            touchStartX = null;
+            if (Math.abs(delta) < 40) return;
+            show(delta < 0 ? current + 1 : current - 1);
+            restart();
+        }, { passive: true });
+
+        // マウスやキーボードで操作している間は自動送りを止める
+        slider.addEventListener("mouseenter", () => { suspended = true; });
+        slider.addEventListener("mouseleave", () => { suspended = false; });
+        slider.addEventListener("focusin", () => { suspended = true; });
+        slider.addEventListener("focusout", () => { suspended = false; });
+
+        show(0);
+
+        if (stopped) {
+            toggle.setAttribute("aria-label", "自動切り替えを再開");
+            toggle.innerHTML = '<i class="fa-solid fa-play"></i>';
+        } else {
+            restart();
+        }
+    })();
+
     const newsItems = [
         { date: "2026-05-09", tag: "func", desc: "共テプロトレに練習問題を追加し、典型問題を段階的に練習できるようにしました。" },
         { date: "2026-05-06", tag: "func", desc: "「試作問題リンク」に情報を追加しました。" },
