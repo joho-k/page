@@ -222,9 +222,9 @@ body.home .header.is-visible {
  * 画像を右にずらして、見えている側（右）にタイトルが入るようにする。
  */
 .slide-visual-right img {
-    width: 120%;
+    width: 114%;
     /* ずらす量は、左側の濃いスクリムに切れ目が隠れる範囲に収める */
-    margin-left: 26%;
+    margin-left: 16%;
     object-position: left center;
 }
 
