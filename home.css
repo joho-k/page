@@ -122,7 +122,8 @@ body.home .header.is-visible {
     animation-delay: .18s;
 }
 
-.slide.is-active .slide-visual img {
+.slide.is-active .slide-visual video,
+.slide-visual img {
     animation: slide-in-visual .6s ease both;
 }
 

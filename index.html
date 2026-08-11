@@ -181,7 +181,23 @@
         <!-- コンテンツ紹介スライドショー（自動切り替え／矢印・下部ナビで手動切り替え可） -->
         <div class="hero-slider" id="hero-slider" aria-roledescription="カルーセル" aria-label="コンテンツ紹介">
             <div class="slider-viewport">
-                <article class="slide is-active" role="group" aria-roledescription="スライド" aria-label="練習問題集"
+                <article class="slide is-active" role="group" aria-roledescription="スライド" aria-label="プログラムエディター"
+                    data-nav="プログラムエディター">
+                    <div class="slide-body">
+                        <p class="slide-tag">共テプロトレ</p>
+                        <p class="slide-title">プログラムを<br>「見てわかる」に</p>
+                        <p class="slide-desc">ブロックを組み立ててすぐ実行。ステップ実行で、変数の中身がどう変わるかを目で見て確かめられます。</p>
+                        <a class="slide-cta" href="dncl-scratch/editor.html">エディターを開く <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="slide-visual">
+                        <!-- ステップ実行で値が変数に入っていく様子を流す（音なし・ループ） -->
+                        <video class="slide-video" src="img/hero/editor-step.mp4" poster="img/hero/editor.jpg"
+                            width="1600" height="386" muted loop playsinline preload="none"></video>
+                    </div>
+                </article>
+
+                <article class="slide" role="group" aria-roledescription="スライド" aria-label="練習問題集"
                     data-nav="練習問題集">
                     <div class="slide-body">
                         <p class="slide-tag">共テプロトレ</p>
@@ -192,19 +208,6 @@
                     </div>
                     <div class="slide-visual"><img src="img/hero/practice.jpg" alt="" width="1600"
                             height="387"></div>
-                </article>
-
-                <article class="slide" role="group" aria-roledescription="スライド" aria-label="プログラムエディター"
-                    data-nav="プログラムエディター">
-                    <div class="slide-body">
-                        <p class="slide-tag">共テプロトレ</p>
-                        <p class="slide-title">プログラムを<br>「見てわかる」に</p>
-                        <p class="slide-desc">ブロックを組み立ててすぐ実行。ステップ実行で、変数の中身がどう変わるかを目で見て確かめられます。</p>
-                        <a class="slide-cta" href="dncl-scratch/editor.html">エディターを開く <i
-                                class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <div class="slide-visual"><img src="img/hero/editor.jpg" alt="" loading="lazy"
-                            width="1600" height="387"></div>
                 </article>
 
                 <article class="slide" role="group" aria-roledescription="スライド" aria-label="用語の辞典" data-nav="用語の辞典">
@@ -572,6 +575,20 @@
             return item;
         });
 
+        // 動きを減らす設定のときは動画を再生せず、静止画（poster）のままにする
+        function updateVideos() {
+            slides.forEach((slide, i) => {
+                const video = slide.querySelector("video");
+                if (!video) return;
+
+                if (i === current && !reduceMotion) {
+                    video.play().catch(() => { });
+                } else {
+                    video.pause();
+                }
+            });
+        }
+
         function show(next) {
             current = (next + slides.length) % slides.length;
 
@@ -580,6 +597,8 @@
                 slide.classList.toggle("is-active", active);
                 slide.setAttribute("aria-hidden", String(!active));
             });
+
+            updateVideos();
 
             navItems.forEach((item, i) => {
                 item.classList.toggle("is-active", i === current);
