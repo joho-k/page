@@ -33,7 +33,53 @@
 }
 
 .practice-table {
-    min-width: 720px;
+    min-width: 760px;
+}
+
+/* 内容は1行だけ。はみ出す分は「…」で省略し、全文は「詳細」で開く */
+.practice-content-line {
+    display: block;
+    max-width: 46ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.practice-detail-cell {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.practice-detail-button {
+    padding: 7px 14px;
+    border: none;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--neu-raised-sm);
+    transition: box-shadow .15s ease;
+}
+
+.practice-detail-button[aria-expanded="true"] {
+    box-shadow: var(--neu-pressed);
+}
+
+.practice-detail-row td {
+    padding: 0 14px 14px;
+    border-bottom: 1px solid rgba(0, 45, 90, .08);
+}
+
+.practice-detail-body {
+    white-space: pre-wrap;
+    line-height: 1.9;
+}
+
+.practice-detail-row:hover td {
+    background: none;
 }
 
 .practice-table thead th {
@@ -66,6 +112,13 @@
 }
 
 /* 入力欄はへこませて「書く場所」だと分かるようにする */
+/* 検索ボックスは横に長く取る */
+.practice-controls input {
+    flex: 1 1 340px;
+    min-width: 260px;
+    max-width: 520px;
+}
+
 .practice-controls input,
 .practice-controls select {
     padding: 10px 16px;

@@ -7,14 +7,21 @@
 }
 
 /*
- * カテゴリの見出し（情報とメディア／情報社会の法とセキュリティ など）は濃紺、
- * その下のページリンクは背景と同色の浮いた面にして、色で役割を分ける。
- * 見た目は他ページの表（thead＋tbody）と揃えている。
+ * カテゴリのまとまり全体を1つの浮いた面にする（表の thead + tbody と同じ見え方）。
+ * 見出しと一覧を別々に浮かせると、境目に白い影が出て幅もずれるため、
+ * 影は .item にだけ付けて中は平らにする。
  */
+.item {
+    background-color: var(--bg);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--neu-raised);
+}
+
 .item h4 {
     margin: 0;
     padding: 12px 16px;
-    border-radius: 16px 16px 0 0;
+    border-radius: 0;
     background-color: var(--primary);
     color: #fff;
     text-align: left;
@@ -22,28 +29,40 @@
 }
 
 .item .item-list {
-    margin: 0 0 16px;
-    padding: 8px;
-    border-radius: 0 0 16px 16px;
-    background-color: var(--bg);
-    box-shadow: var(--neu-raised);
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
 }
 
 .item .item-list li {
-    margin: 6px 0;
-    padding: 10px 14px;
-    border-radius: 12px;
-    background-color: var(--bg);
-    box-shadow: var(--neu-raised-sm);
+    display: block;
+    margin: 0;
+    padding: 11px 16px;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(0, 45, 90, .08);
+}
+
+.item .item-list li:last-child {
+    border-bottom: none;
+}
+
+.item .item-list li:hover {
+    background-color: rgba(255, 255, 255, .55);
 }
 
 .item .item-list li.coming-soon {
-    box-shadow: var(--neu-pressed);
+    color: #888;
+    background-color: rgba(0, 45, 90, .03);
 }
 
 .item {
     flex: 1 1 350px;
-    margin: 5px;
+    margin: 8px;
     align-self: flex-start;
 }
 

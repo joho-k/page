@@ -473,10 +473,9 @@
 
 .array2d-cell {
     width: 3ch;
-    background: var(--bg);
-    border: none;
-    box-shadow: var(--neu-pressed-sm);
-    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 6px;
     padding: 3px 6px;
     font-family: "Courier New", monospace;
     color: var(--text);
@@ -560,11 +559,10 @@
 input,
 select {
     width: 66px;
-    background: var(--bg);
+    background: #ffffff;
     color: #29384b;
-    border: none;
-    box-shadow: var(--neu-pressed-sm);
-    border-radius: 9px;
+    border: 1px solid #cfd9e8;
+    border-radius: 7px;
     padding: 3px 6px;
     outline: none;
 }

@@ -46,7 +46,7 @@ function renderPracticeProblems() {
     if (entries.length === 0) {
         const tr = document.createElement("tr");
         const td = document.createElement("td");
-        td.colSpan = 4;
+        td.colSpan = 5;
         td.className = "practice-empty";
         td.textContent = "該当する問題がありません。";
         tr.append(td);
@@ -80,8 +80,16 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
 
         tdTitle.append(a);
 
+        // 内容は1行だけ。全文は「詳細」で開く
+        const question = String(quiz.question ?? "");
+
         const tdContent = document.createElement("td");
-        tdContent.textContent = String(quiz.question ?? "").split("\n")[0];
+        tdContent.className = "practice-content";
+
+        const contentLine = document.createElement("span");
+        contentLine.className = "practice-content-line";
+        contentLine.textContent = question.split("\n")[0];
+        tdContent.append(contentLine);
 
         const tdAddedAt = document.createElement("td");
         tdAddedAt.className = "practice-addedAt";
@@ -93,9 +101,39 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
 
         tdAddedAt.textContent = `${y}/${m}/${d}` ?? "-";
 
-        tr.append(tdDifficulty, tdTitle, tdContent, tdAddedAt);
+        const tdDetail = document.createElement("td");
+        tdDetail.className = "practice-detail-cell";
 
-        tbody.appendChild(tr);
+        const detailButton = document.createElement("button");
+        detailButton.type = "button";
+        detailButton.className = "practice-detail-button";
+        detailButton.setAttribute("aria-expanded", "false");
+        detailButton.innerHTML = '詳細 <i class="fa-solid fa-chevron-down"></i>';
+        tdDetail.append(detailButton);
+
+        tr.append(tdDifficulty, tdTitle, tdContent, tdAddedAt, tdDetail);
+
+        // 全文を出す行（初期は隠す）
+        const detailRow = document.createElement("tr");
+        detailRow.className = "practice-detail-row";
+        detailRow.hidden = true;
+
+        const detailCell = document.createElement("td");
+        detailCell.colSpan = 5;
+        detailCell.className = "practice-detail-body";
+        detailCell.textContent = question;
+        detailRow.append(detailCell);
+
+        detailButton.addEventListener("click", () => {
+            const open = detailRow.hidden;
+            detailRow.hidden = !open;
+            detailButton.setAttribute("aria-expanded", String(open));
+            detailButton.innerHTML = open
+                ? '閉じる <i class="fa-solid fa-chevron-up"></i>'
+                : '詳細 <i class="fa-solid fa-chevron-down"></i>';
+        });
+
+        tbody.append(tr, detailRow);
     }
 }
 
