@@ -121,6 +121,8 @@ async function captureProgram(page, base, id) {
                 min-width: 4.4em !important;
                 font-size: 18px !important;
             }
+            /* 「横スクロール可能です」のヒントはカードに写り込ませない */
+            .scroll-hint-overlay { display: none !important; }
         `;
         document.head.appendChild(style);
 
@@ -153,8 +155,20 @@ async function captureProgram(page, base, id) {
         }
     });
 
-    const buf = await page.locator("#workspace").screenshot({ omitBackground: true });
-    return `data:image/png;base64,${buf.toString("base64")}`;
+    // 既に出ているヒントも消してから撮る
+    await page.evaluate(() => {
+        document.querySelectorAll(".scroll-hint-overlay").forEach((el) => el.remove());
+    });
+
+    const workspace = page.locator("#workspace");
+    const box = await workspace.boundingBox();
+    const buf = await workspace.screenshot({ omitBackground: true });
+
+    return {
+        dataUri: `data:image/png;base64,${buf.toString("base64")}`,
+        // 縦長のプログラムは、カードの右側に置いて読めるようにする
+        ratio: box && box.width ? box.height / box.width : 0,
+    };
 }
 
 function loadChromium() {
@@ -188,7 +202,10 @@ function esc(s) {
         .replace(/"/g, "&quot;");
 }
 
-function cardHtml(quiz, id, logoDataUri, programDataUri) {
+function cardHtml(quiz, id, logoDataUri, program) {
+    const programDataUri = program ? program.dataUri : "";
+    // 縦長のプログラム（q024/q025/q031 など）は、下に置くと小さくなりすぎるので右側に立てる
+    const sideLayout = program ? program.ratio >= 0.62 : false;
     const n = quizNumber(id);
     const t = themeOf(quiz);
     const title = String(quiz.title || "");
@@ -217,7 +234,7 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
 
   /* 左上：難易度バッジ（円は画面外にはみ出す。文字は円の見えている範囲の中央に置く） */
   .badge {
-    position: absolute; top: -60px; left: -50px;
+    position: absolute; z-index: 5; top: -60px; left: -50px;
     width: 320px; height: 320px; border-radius: 50%;
     background: ${t.main};
     box-shadow:
@@ -227,7 +244,7 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
       inset 8px 8px 18px rgba(255,255,255,0.22);
   }
   .badge-text {
-    position: absolute; top: 42px; left: 20px; width: 240px;
+    position: absolute; z-index: 6; top: 42px; left: 20px; width: 240px;
     color: #fff; text-align: center;
   }
   .badge-text .label { font-size: 20px; font-weight: 700; letter-spacing: 4px; }
@@ -236,7 +253,28 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
   .badge-text .no b { font-size: 52px; letter-spacing: 1px; }
 
   /* 右上：ヘッダー。問題文の長さで主役を切り替える */
-  .header { margin: 40px 56px 0 320px; }
+  /* 本文まわり（タイトル＋プログラム）。縦長のプログラムは横並びにする */
+  .main {
+    flex: 1; min-height: 0; display: flex; flex-direction: column;
+  }
+  .main-side {
+    flex-direction: row; align-items: center; gap: 26px; margin-right: 56px;
+  }
+
+  /* タイトルは浮かせたパネルに載せる */
+  .header {
+    margin: 34px 56px 0 320px;
+    padding: 22px 30px 24px;
+    background: ${SITE.bg}; border-radius: 30px;
+    box-shadow: 14px 14px 30px ${t.neuDark}, -12px -12px 26px ${t.neuLight};
+  }
+  .main-side .header {
+    flex: 1 1 auto; margin: 0 0 0 320px;
+  }
+  /* 横並びのときは幅が狭いので、文字を小さめ・行数多めにして切れにくくする */
+  .main-side .header .ttl { font-size: 34px; -webkit-line-clamp: 3; }
+  .main-side .header .q { -webkit-line-clamp: 4; }
+  .main-side .header .qbig { font-size: 30px; -webkit-line-clamp: 4; }
   /* q027形式（問題文が長い）：タイトル大 → 問題文小3行 */
   .header .ttl {
     font-size: ${titleSize}px; font-weight: 900; line-height: 1.25; color: #16202b;
@@ -260,8 +298,12 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
 
   /* 中央：エディタ実画面のプログラム */
   .program {
-    flex: 1; margin: 14px 90px 10px; min-height: 0;
+    position: relative; z-index: 1;
+    flex: 1; margin: 16px 90px 8px; min-height: 0;
     display: flex; align-items: center; justify-content: center;
+  }
+  .main-side .program {
+    flex: 0 0 40%; margin: 0; height: 100%;
   }
   .program img {
     max-width: 100%; max-height: 100%;
@@ -271,21 +313,19 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
 
   /* 下：ブランド帯（何のサイトの何なのかを1行で言い切る） */
   .band {
-    height: 96px; flex: none; background: ${SITE.bg}; color: ${SITE.text};
+    height: 74px; flex: none; background: ${SITE.bg}; color: ${SITE.text};
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 36px 0 42px;
-    margin: 0 34px 30px; border-radius: 30px;
+    padding: 0 30px 0 36px;
+    margin: 0 56px 26px; border-radius: 24px;
     box-shadow:
-      16px 16px 34px ${t.neuDark},
-      -12px -12px 28px ${t.neuLight},
-      inset -4px -4px 10px rgba(0,0,0,0.05),
-      inset 4px 4px 10px rgba(255,255,255,0.7);
+      inset 9px 9px 18px ${t.neuDark},
+      inset -9px -9px 18px ${t.neuLight};
   }
   .band .copy { display: flex; align-items: baseline; gap: 14px; }
-  .band .what { font-size: 27px; font-weight: 800; letter-spacing: 0.5px; }
-  .band .eq { font-size: 30px; font-weight: 900; opacity: 0.45; }
-  .band .brand { font-size: 34px; font-weight: 900; color: ${SITE.accent}; letter-spacing: 1px; }
-  .band img { height: 58px; width: auto; }
+  .band .what { font-size: 23px; font-weight: 800; letter-spacing: 0.5px; }
+  .band .eq { font-size: 25px; font-weight: 900; opacity: 0.45; }
+  .band .brand { font-size: 28px; font-weight: 900; color: ${SITE.accent}; letter-spacing: 1px; }
+  .band img { height: 46px; width: auto; }
 </style></head><body>
   <div class="badge"></div>
   <div class="badge-text">
@@ -293,12 +333,14 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
     <div class="stars">${stars(t.level)}</div>
     <div class="no">第<b>${n}</b>問</div>
   </div>
-  <div class="header">${
-    longQuestion
-      ? `<div class="ttl">${esc(title)}</div>${question ? `<div class="q">${esc(question)}</div>` : ""}`
-      : `<div class="kicker">${esc(title)}</div><div class="qbig">${esc(question || title)}</div>`
-  }</div>
-  <div class="program">${programDataUri ? `<img src="${programDataUri}" alt="">` : ""}</div>
+  <div class="main${sideLayout ? " main-side" : ""}">
+    <div class="header">${
+      longQuestion
+        ? `<div class="ttl">${esc(title)}</div>${question ? `<div class="q">${esc(question)}</div>` : ""}`
+        : `<div class="kicker">${esc(title)}</div><div class="qbig">${esc(question || title)}</div>`
+    }</div>
+    <div class="program">${programDataUri ? `<img src="${programDataUri}" alt="">` : ""}</div>
+  </div>
   <div class="band">
     <div class="copy">
       <span class="what">共通テスト「情報I」プログラミング対策</span>
@@ -340,8 +382,8 @@ async function main() {
 
     for (const id of ids) {
         const quiz = quizData[id];
-        const programDataUri = await captureProgram(editorPage, base, id);
-        await cardPage.setContent(cardHtml(quiz, id, logoDataUri, programDataUri), {
+        const program = await captureProgram(editorPage, base, id);
+        await cardPage.setContent(cardHtml(quiz, id, logoDataUri, program), {
             waitUntil: "networkidle",
         });
         await cardPage.evaluate(() => document.fonts.ready); // Webフォント適用を待つ
