@@ -36,9 +36,39 @@ const DIFFICULTY_THEMES = {
     5: { main: "#7b3fb5", dark: "#5b2c87", bg1: "#f2eafb", bg2: "#e0cdf3" },
 };
 
+/** サイト本体（main.css）と同じ配色。カードの下地はホームページと同じ灰色にする */
+const SITE = {
+    bg: "#EDF1F5",
+    neuDark: "#c0c7cf",
+    neuLight: "#ffffff",
+    primary: "#002D5A",
+    primaryLight: "#55DCFD",
+    accent: "#ab0333",
+    text: "#2b3440",
+};
+
+/** 16進の色を明るく／暗くする（ニューモーフィズムの影の色を作るのに使う） */
+function shade(hex, ratio) {
+    const n = parseInt(hex.slice(1), 16);
+    const to = ratio < 0 ? 0 : 255;
+    const amount = Math.abs(ratio);
+    const mix = (c) => Math.round(c + (to - c) * amount);
+    const r = mix((n >> 16) & 255);
+    const g = mix((n >> 8) & 255);
+    const b = mix(n & 255);
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+}
+
 function themeOf(quiz) {
     const d = Math.min(5, Math.max(1, Number(quiz.difficulty) || 1));
-    return { ...DIFFICULTY_THEMES[d], level: d };
+    const theme = DIFFICULTY_THEMES[d];
+    // 下地・帯・影はサイト共通。難易度で変えるのは難易度バッジ（まる）の色だけ。
+    return {
+        ...theme,
+        level: d,
+        neuDark: SITE.neuDark,
+        neuLight: SITE.neuLight,
+    };
 }
 
 function stars(level) {
@@ -91,6 +121,8 @@ async function captureProgram(page, base, id) {
                 min-width: 4.4em !important;
                 font-size: 18px !important;
             }
+            /* 「横スクロール可能です」のヒントはカードに写り込ませない */
+            .scroll-hint-overlay { display: none !important; }
         `;
         document.head.appendChild(style);
 
@@ -123,8 +155,20 @@ async function captureProgram(page, base, id) {
         }
     });
 
-    const buf = await page.locator("#workspace").screenshot({ omitBackground: true });
-    return `data:image/png;base64,${buf.toString("base64")}`;
+    // 既に出ているヒントも消してから撮る
+    await page.evaluate(() => {
+        document.querySelectorAll(".scroll-hint-overlay").forEach((el) => el.remove());
+    });
+
+    const workspace = page.locator("#workspace");
+    const box = await workspace.boundingBox();
+    const buf = await workspace.screenshot({ omitBackground: true });
+
+    return {
+        dataUri: `data:image/png;base64,${buf.toString("base64")}`,
+        // 縦長のプログラムは、カードの右側に置いて読めるようにする
+        ratio: box && box.width ? box.height / box.width : 0,
+    };
 }
 
 function loadChromium() {
@@ -158,7 +202,10 @@ function esc(s) {
         .replace(/"/g, "&quot;");
 }
 
-function cardHtml(quiz, id, logoDataUri, programDataUri) {
+function cardHtml(quiz, id, logoDataUri, program) {
+    const programDataUri = program ? program.dataUri : "";
+    // 縦長のプログラム（q024/q025/q031 など）は、下に置くと小さくなりすぎるので右側に立てる
+    const sideLayout = program ? program.ratio >= 0.62 : false;
     const n = quizNumber(id);
     const t = themeOf(quiz);
     const title = String(quiz.title || "");
@@ -180,20 +227,24 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
   html, body { width: ${CARD_W}px; height: ${CARD_H}px; }
   body {
     font-family: "M PLUS Rounded 1c", "Hiragino Sans", "Noto Sans JP", sans-serif;
-    background: linear-gradient(135deg, ${t.bg1} 0%, ${t.bg2} 100%);
+    background: ${SITE.bg};
     color: #1b2733; position: relative; overflow: hidden;
     display: flex; flex-direction: column;
   }
 
   /* 左上：難易度バッジ（円は画面外にはみ出す。文字は円の見えている範囲の中央に置く） */
   .badge {
-    position: absolute; top: -60px; left: -50px;
+    position: absolute; z-index: 5; top: -60px; left: -50px;
     width: 320px; height: 320px; border-radius: 50%;
     background: ${t.main};
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    box-shadow:
+      22px 22px 44px ${t.neuDark},
+      -14px -14px 32px ${t.neuLight},
+      inset -8px -8px 18px rgba(0,0,0,0.14),
+      inset 8px 8px 18px rgba(255,255,255,0.22);
   }
   .badge-text {
-    position: absolute; top: 42px; left: 20px; width: 240px;
+    position: absolute; z-index: 6; top: 42px; left: 20px; width: 240px;
     color: #fff; text-align: center;
   }
   .badge-text .label { font-size: 20px; font-weight: 700; letter-spacing: 4px; }
@@ -202,7 +253,28 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
   .badge-text .no b { font-size: 52px; letter-spacing: 1px; }
 
   /* 右上：ヘッダー。問題文の長さで主役を切り替える */
-  .header { margin: 40px 56px 0 320px; }
+  /* 本文まわり（タイトル＋プログラム）。縦長のプログラムは横並びにする */
+  .main {
+    flex: 1; min-height: 0; display: flex; flex-direction: column;
+  }
+  .main-side {
+    flex-direction: row; align-items: center; gap: 26px; margin-right: 56px;
+  }
+
+  /* タイトルは浮かせたパネルに載せる */
+  .header {
+    margin: 34px 56px 0 320px;
+    padding: 22px 30px 24px;
+    background: ${SITE.bg}; border-radius: 30px;
+    box-shadow: 14px 14px 30px ${t.neuDark}, -12px -12px 26px ${t.neuLight};
+  }
+  .main-side .header {
+    flex: 1 1 auto; margin: 0 0 0 320px;
+  }
+  /* 横並びのときは幅が狭いので、文字を小さめ・行数多めにして切れにくくする */
+  .main-side .header .ttl { font-size: 34px; -webkit-line-clamp: 3; }
+  .main-side .header .q { -webkit-line-clamp: 4; }
+  .main-side .header .qbig { font-size: 30px; -webkit-line-clamp: 4; }
   /* q027形式（問題文が長い）：タイトル大 → 問題文小3行 */
   .header .ttl {
     font-size: ${titleSize}px; font-weight: 900; line-height: 1.25; color: #16202b;
@@ -215,7 +287,7 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
   }
   /* 問題文が短い：小さな見出し（タイトル）→ 問題文を大きく主役に */
   .header .kicker {
-    font-size: 22px; font-weight: 800; color: ${t.main}; letter-spacing: 1px;
+    font-size: 22px; font-weight: 800; color: ${SITE.accent}; letter-spacing: 1px;
     display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
   }
   .header .qbig {
@@ -226,26 +298,34 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
 
   /* 中央：エディタ実画面のプログラム */
   .program {
-    flex: 1; margin: 18px 90px 0; min-height: 0;
+    position: relative; z-index: 1;
+    flex: 1; margin: 16px 90px 8px; min-height: 0;
     display: flex; align-items: center; justify-content: center;
+  }
+  .main-side .program {
+    flex: 0 0 40%; margin: 0; height: 100%;
   }
   .program img {
     max-width: 100%; max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 10px 24px rgba(0,0,0,0.16));
+    filter: drop-shadow(14px 14px 22px ${t.neuDark}) drop-shadow(-10px -10px 18px ${t.neuLight});
   }
 
   /* 下：ブランド帯（何のサイトの何なのかを1行で言い切る） */
   .band {
-    height: 96px; flex: none; background: ${t.dark}; color: #fff;
+    height: 74px; flex: none; background: ${SITE.bg}; color: ${SITE.text};
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 40px 0 46px;
+    padding: 0 30px 0 36px;
+    margin: 0 56px 26px; border-radius: 24px;
+    box-shadow:
+      inset 9px 9px 18px ${t.neuDark},
+      inset -9px -9px 18px ${t.neuLight};
   }
   .band .copy { display: flex; align-items: baseline; gap: 14px; }
-  .band .what { font-size: 27px; font-weight: 800; letter-spacing: 0.5px; }
-  .band .eq { font-size: 30px; font-weight: 900; opacity: 0.75; }
-  .band .brand { font-size: 34px; font-weight: 900; color: ${t.bg1}; letter-spacing: 1px; }
-  .band img { height: 58px; width: auto; }
+  .band .what { font-size: 23px; font-weight: 800; letter-spacing: 0.5px; }
+  .band .eq { font-size: 25px; font-weight: 900; opacity: 0.45; }
+  .band .brand { font-size: 28px; font-weight: 900; color: ${SITE.accent}; letter-spacing: 1px; }
+  .band img { height: 46px; width: auto; }
 </style></head><body>
   <div class="badge"></div>
   <div class="badge-text">
@@ -253,12 +333,14 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
     <div class="stars">${stars(t.level)}</div>
     <div class="no">第<b>${n}</b>問</div>
   </div>
-  <div class="header">${
-    longQuestion
-      ? `<div class="ttl">${esc(title)}</div>${question ? `<div class="q">${esc(question)}</div>` : ""}`
-      : `<div class="kicker">${esc(title)}</div><div class="qbig">${esc(question || title)}</div>`
-  }</div>
-  <div class="program">${programDataUri ? `<img src="${programDataUri}" alt="">` : ""}</div>
+  <div class="main${sideLayout ? " main-side" : ""}">
+    <div class="header">${
+      longQuestion
+        ? `<div class="ttl">${esc(title)}</div>${question ? `<div class="q">${esc(question)}</div>` : ""}`
+        : `<div class="kicker">${esc(title)}</div><div class="qbig">${esc(question || title)}</div>`
+    }</div>
+    <div class="program">${programDataUri ? `<img src="${programDataUri}" alt="">` : ""}</div>
+  </div>
   <div class="band">
     <div class="copy">
       <span class="what">共通テスト「情報I」プログラミング対策</span>
@@ -300,8 +382,8 @@ async function main() {
 
     for (const id of ids) {
         const quiz = quizData[id];
-        const programDataUri = await captureProgram(editorPage, base, id);
-        await cardPage.setContent(cardHtml(quiz, id, logoDataUri, programDataUri), {
+        const program = await captureProgram(editorPage, base, id);
+        await cardPage.setContent(cardHtml(quiz, id, logoDataUri, program), {
             waitUntil: "networkidle",
         });
         await cardPage.evaluate(() => document.fonts.ready); // Webフォント適用を待つ
