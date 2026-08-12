@@ -2778,4 +2778,100 @@ window.quizData = {
         ],
         defaultHint: "配列の番号は code[0] から始まるので、下から i 番目は code[7 - i] です（i ＝ 1 なら右はしの code[6] ＝ 7）。重みは keta * omomi でかけます。この番号は gokei ＝ 60 なので下1桁は0。10 - 0 ＝ 10 は2桁になってしまうので、下1桁が0となった場合はチェックディジットを0とします。答えは0です"
     },
+    q038: {
+        title: "必要な箱の数（切り上げ）",
+        addedAt: "2026-08-12",
+        difficulty: 3,
+        question: "たまごが100個あります。1箱に12個ずつ入れるとき、箱は何箱必要でしょうか。まず箱にきっちり入る数（商）を求め、つぎに入りきらない残りの個数（あまり）を求めます。残りが1個でもあるときは、そのあふれた分のために箱をもう1つ足します（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "kosuu",
+                value: "100"
+            },
+            {
+                type: "assign",
+                name: "hitohako",
+                value: "12"
+            },
+            {
+                type: "assign",
+                name: "hako",
+                value: "__BLANK_blank_a__"
+            },
+            {
+                type: "assign",
+                name: "nokori",
+                value: "__BLANK_blank_b__"
+            },
+            {
+                type: "if",
+                condition: "nokori __BLANK_blank_c__ 0",
+                body: [
+                    {
+                        type: "assign",
+                        name: "hako",
+                        value: "hako + 1"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"箱は\" + hako + \"箱必要です\""
+            }
+        ],
+        choices: [
+            { label: "切り捨て(kosuu / hitohako)", value: "切り捨て(kosuu / hitohako)" },
+            { label: "切り上げ(kosuu / hitohako)", value: "切り上げ(kosuu / hitohako)" },
+            { label: "kosuu / hitohako", value: "kosuu / hitohako" },
+            { label: "kosuu % hitohako", value: "kosuu % hitohako" },
+            { label: "hitohako % kosuu", value: "hitohako % kosuu" },
+            { label: ">", value: ">" },
+            { label: ">=", value: ">=" },
+            { label: "==", value: "==" },
+            { label: "<", value: "<" },
+        ],
+        answers: [
+            {
+                values: ["切り捨て(kosuu / hitohako)", "kosuu % hitohako", ">"],
+                correct: true,
+            },
+            {
+                values: ["kosuu / hitohako", "kosuu % hitohako", ">"],
+                correct: false,
+                hint: "100 / 12 ＝ 8.33… と小数になってしまいます。箱の数は整数なので、きっちり入る数は 切り捨て(kosuu / hitohako) ＝ 8箱と求めます",
+            },
+            {
+                values: ["切り上げ(kosuu / hitohako)", "kosuu % hitohako", ">"],
+                correct: false,
+                hint: "切り上げ(100 / 12) ＝ 9 でいったん正しくなりますが、このあと「残りがあれば +1」でもう1箱ふえて10箱になってしまいます。ここは切り捨てで8箱にしておき、あふれた分を +1 で足します",
+            },
+            {
+                values: ["切り捨て(kosuu / hitohako)", "kosuu / hitohako", ">"],
+                correct: false,
+                hint: "残りの個数は「わったあまり」です。kosuu / hitohako は 8.33… なので、たとえば96個のようにきっちり割り切れるときも 8 > 0 となり、いらない1箱がふえてしまいます",
+            },
+            {
+                values: ["切り捨て(kosuu / hitohako)", "hitohako % kosuu", ">"],
+                correct: false,
+                hint: "わる順が逆です。12 % 100 ＝ 12 となり、いつでも0より大きいので必ず1箱ふえてしまいます。残りは「100を12でわったあまり」なので kosuu % hitohako です",
+            },
+            {
+                values: ["切り捨て(kosuu / hitohako)", "kosuu % hitohako", ">="],
+                correct: false,
+                hint: "あまりは0以上なので、>= 0 はいつでも成り立ちます。96個のようにきっちり割り切れて、あまりが0のときまで1箱ふえてしまいます。足すのは「あまりが0より大きいとき」だけです",
+            },
+            {
+                values: ["切り捨て(kosuu / hitohako)", "kosuu % hitohako", "=="],
+                correct: false,
+                hint: "条件が逆になっています。あまりが0のときは全部きっちり入っているので箱を足す必要はありません。足すのは、あまりが残っている（0より大きい）ときです",
+            },
+            {
+                values: ["切り捨て(kosuu / hitohako)", "kosuu % hitohako", "<"],
+                correct: false,
+                hint: "あまりが0より小さくなることはないので、この条件は一度も成り立ちません。8箱のままとなり、あふれた4個の行き場がなくなります",
+            }
+        ],
+        defaultHint: "きっちり入る箱の数は 切り捨て(kosuu / hitohako) ＝ 8箱。入りきらない残りは kosuu % hitohako ＝ 4個。残りが1個でもある（0より大きい）ときだけ、あふれた分の1箱を足すので、答えは9箱です"
+    },
 }
