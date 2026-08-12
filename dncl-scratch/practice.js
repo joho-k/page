@@ -80,8 +80,28 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
 
         tdTitle.append(a);
 
+        // 内容は1行だけ。全文は「詳細」で開く
+        const question = String(quiz.question ?? "");
+
         const tdContent = document.createElement("td");
-        tdContent.textContent = String(quiz.question ?? "").split("\n")[0];
+        tdContent.className = "practice-content";
+
+        const contentRow = document.createElement("div");
+        contentRow.className = "practice-content-row";
+
+        // 全文を入れておき、閉じている間だけ1行に省略する
+        const contentLine = document.createElement("span");
+        contentLine.className = "practice-content-line";
+        contentLine.textContent = question;
+
+        const detailButton = document.createElement("button");
+        detailButton.type = "button";
+        detailButton.className = "practice-detail-button";
+        detailButton.setAttribute("aria-expanded", "false");
+        detailButton.innerHTML = '詳細 <i class="fa-solid fa-chevron-down"></i>';
+
+        contentRow.append(contentLine, detailButton);
+        tdContent.append(contentRow);
 
         const tdAddedAt = document.createElement("td");
         tdAddedAt.className = "practice-addedAt";
@@ -95,11 +115,35 @@ ${isNewQuiz(quiz.addedAt) ? '<span class="practice-new">NEW</span>' : ""}
 
         tr.append(tdDifficulty, tdTitle, tdContent, tdAddedAt);
 
-        tbody.appendChild(tr);
+        detailButton.addEventListener("click", () => {
+            const open = contentLine.classList.toggle("is-open");
+            detailButton.setAttribute("aria-expanded", String(open));
+            detailButton.innerHTML = open
+                ? '閉じる <i class="fa-solid fa-chevron-up"></i>'
+                : '詳細 <i class="fa-solid fa-chevron-down"></i>';
+        });
+
+        tbody.append(tr);
     }
 }
 
+// トップページの「難易度からえらぶ」から ?difficulty=N で直接しぼりこめるようにする
+function applyDifficultyFromUrl() {
+    const value = new URLSearchParams(window.location.search).get("difficulty") ?? "";
+    if (!["1", "2", "3", "4", "5"].includes(value)) return;
+
+    practiceDifficultyFilter = value;
+
+    document.querySelectorAll("[data-difficulty]")
+        .forEach((b) => b.classList.toggle("active", (b.dataset.difficulty ?? "") === value));
+
+    const select = document.getElementById("practice-difficulty-select");
+    if (select) select.value = value;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+
+    applyDifficultyFromUrl();
 
     renderPracticeProblems();
 

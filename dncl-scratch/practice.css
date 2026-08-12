@@ -1,14 +1,15 @@
 .practice {
     margin: 0 auto 18px;
     padding: 0 10px;
+    max-width: 1100px;
 }
 
 .practice-top {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin: 0 0 12px;
+    background: var(--bg);
+    border-radius: 20px;
+    padding: 16px 18px;
+    margin: 0 0 16px;
+    box-shadow: var(--neu-raised);
 }
 
 .practice-top h3 {
@@ -25,43 +26,97 @@
     gap: 8px;
 }
 
+/*
+ * 表の見出しを固定して、中身だけ縦にスクロールさせる。
+ * sticky の基準になるのはこの器なので、高さの上限をここに付ける。
+ */
 .practice-table-wrap {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
+    max-height: min(70vh, 620px);
     overflow: auto;
+    border-radius: 18px;
+    background-color: var(--bg);
+    box-shadow: var(--neu-raised);
 }
 
+/*
+ * 列幅を固定する。auto だとセルが中身の長さまで広がってしまい、
+ * 内容の「…」省略が効かない（表だけ横に伸びる）。
+ */
 .practice-table {
+    table-layout: fixed;
     width: 100%;
-    border-collapse: collapse;
     min-width: 720px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.practice-table th:nth-child(1),
+.practice-table td:nth-child(1) {
+    width: 108px;
+}
+
+.practice-table th:nth-child(2),
+.practice-table td:nth-child(2) {
+    width: 26%;
+}
+
+.practice-table th:nth-child(4),
+.practice-table td:nth-child(4) {
+    width: 104px;
+}
+
+/* 内容は1行だけ。はみ出す分は「…」で省略し、全文は同じセルの「詳細」で開く */
+.practice-content-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.practice-content-line {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 「詳細」を押したら、その場で省略を解いて全文を出す */
+.practice-content-line.is-open {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: pre-wrap;
+    line-height: 1.9;
+}
+
+.practice-detail-button {
+    flex: 0 0 auto;
+    padding: 7px 14px;
+    border: none;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--neu-raised-sm);
+    transition: box-shadow .15s ease;
+}
+
+.practice-detail-button[aria-expanded="true"] {
+    box-shadow: var(--neu-pressed);
 }
 
 .practice-table thead th {
     position: sticky;
     top: 0;
-    background: #f9fafb;
-    text-align: left;
-    font-weight: 700;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 10px 12px;
-    white-space: nowrap;
-}
-
-.practice-table tbody td {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 10px 12px;
-    vertical-align: top;
-}
-
-.practice-table tbody tr:hover td {
-    background: #fafafa;
+    z-index: 1;
 }
 
 .practice-difficulty {
     font-weight: 700;
     white-space: nowrap;
+    color: var(--primary);
 }
 
 .practice-addedAt {
@@ -76,48 +131,68 @@
 .practice-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    align-items: center;
+    gap: 12px 20px;
     margin-bottom: 16px;
 }
 
+/* 入力欄はへこませて「書く場所」だと分かるようにする */
+/* 検索ボックスは横に長く取る */
 .practice-controls input {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    flex: 1 1 340px;
+    min-width: 260px;
+    max-width: 520px;
+}
+
+.practice-controls input,
+.practice-controls select {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    box-shadow: var(--neu-pressed);
     font: inherit;
 }
 
 .practice-filter-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 8px;
 }
 
 .practice-filter-button {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
+    padding: 9px 16px;
+    border: none;
     border-radius: 999px;
-    background: white;
+    background: var(--bg);
     color: var(--text);
     cursor: pointer;
     font: inherit;
+    box-shadow: var(--neu-raised-sm);
+    transition: box-shadow .15s ease, background-color .15s ease, color .15s ease;
+}
+
+.practice-filter-button:active {
+    box-shadow: var(--neu-pressed);
 }
 
 .practice-filter-button.active {
     background: var(--primary);
-    border-color: var(--primary);
     color: white;
+    box-shadow: var(--neu-pressed-color);
 }
 
 .practice-new {
     display: inline-block;
     margin-left: 8px;
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: 999px;
     background: var(--accent);
     color: white;
     font-size: 12px;
     font-weight: bold;
+    box-shadow: var(--neu-raised-sm);
 }
 
 .practice-mobile-only {
@@ -132,12 +207,5 @@
 
     .practice-mobile-only {
         display: block;
-    }
-
-    .practice-controls select {
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font: inherit;
     }
 }
