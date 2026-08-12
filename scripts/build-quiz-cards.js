@@ -36,9 +36,39 @@ const DIFFICULTY_THEMES = {
     5: { main: "#7b3fb5", dark: "#5b2c87", bg1: "#f2eafb", bg2: "#e0cdf3" },
 };
 
+/** サイト本体（main.css）と同じ配色。カードの下地はホームページと同じ灰色にする */
+const SITE = {
+    bg: "#EDF1F5",
+    neuDark: "#c0c7cf",
+    neuLight: "#ffffff",
+    primary: "#002D5A",
+    primaryLight: "#55DCFD",
+    accent: "#ab0333",
+    text: "#2b3440",
+};
+
+/** 16進の色を明るく／暗くする（ニューモーフィズムの影の色を作るのに使う） */
+function shade(hex, ratio) {
+    const n = parseInt(hex.slice(1), 16);
+    const to = ratio < 0 ? 0 : 255;
+    const amount = Math.abs(ratio);
+    const mix = (c) => Math.round(c + (to - c) * amount);
+    const r = mix((n >> 16) & 255);
+    const g = mix((n >> 8) & 255);
+    const b = mix(n & 255);
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+}
+
 function themeOf(quiz) {
     const d = Math.min(5, Math.max(1, Number(quiz.difficulty) || 1));
-    return { ...DIFFICULTY_THEMES[d], level: d };
+    const theme = DIFFICULTY_THEMES[d];
+    // 下地・帯・影はサイト共通。難易度で変えるのは難易度バッジ（まる）の色だけ。
+    return {
+        ...theme,
+        level: d,
+        neuDark: SITE.neuDark,
+        neuLight: SITE.neuLight,
+    };
 }
 
 function stars(level) {
@@ -180,7 +210,7 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
   html, body { width: ${CARD_W}px; height: ${CARD_H}px; }
   body {
     font-family: "M PLUS Rounded 1c", "Hiragino Sans", "Noto Sans JP", sans-serif;
-    background: linear-gradient(135deg, ${t.bg1} 0%, ${t.bg2} 100%);
+    background: ${SITE.bg};
     color: #1b2733; position: relative; overflow: hidden;
     display: flex; flex-direction: column;
   }
@@ -190,7 +220,11 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
     position: absolute; top: -60px; left: -50px;
     width: 320px; height: 320px; border-radius: 50%;
     background: ${t.main};
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    box-shadow:
+      22px 22px 44px ${t.neuDark},
+      -14px -14px 32px ${t.neuLight},
+      inset -8px -8px 18px rgba(0,0,0,0.14),
+      inset 8px 8px 18px rgba(255,255,255,0.22);
   }
   .badge-text {
     position: absolute; top: 42px; left: 20px; width: 240px;
@@ -215,7 +249,7 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
   }
   /* 問題文が短い：小さな見出し（タイトル）→ 問題文を大きく主役に */
   .header .kicker {
-    font-size: 22px; font-weight: 800; color: ${t.main}; letter-spacing: 1px;
+    font-size: 22px; font-weight: 800; color: ${SITE.accent}; letter-spacing: 1px;
     display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
   }
   .header .qbig {
@@ -226,25 +260,31 @@ function cardHtml(quiz, id, logoDataUri, programDataUri) {
 
   /* 中央：エディタ実画面のプログラム */
   .program {
-    flex: 1; margin: 18px 90px 0; min-height: 0;
+    flex: 1; margin: 14px 90px 10px; min-height: 0;
     display: flex; align-items: center; justify-content: center;
   }
   .program img {
     max-width: 100%; max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 10px 24px rgba(0,0,0,0.16));
+    filter: drop-shadow(14px 14px 22px ${t.neuDark}) drop-shadow(-10px -10px 18px ${t.neuLight});
   }
 
   /* 下：ブランド帯（何のサイトの何なのかを1行で言い切る） */
   .band {
-    height: 96px; flex: none; background: ${t.dark}; color: #fff;
+    height: 96px; flex: none; background: ${SITE.bg}; color: ${SITE.text};
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 40px 0 46px;
+    padding: 0 36px 0 42px;
+    margin: 0 34px 30px; border-radius: 30px;
+    box-shadow:
+      16px 16px 34px ${t.neuDark},
+      -12px -12px 28px ${t.neuLight},
+      inset -4px -4px 10px rgba(0,0,0,0.05),
+      inset 4px 4px 10px rgba(255,255,255,0.7);
   }
   .band .copy { display: flex; align-items: baseline; gap: 14px; }
   .band .what { font-size: 27px; font-weight: 800; letter-spacing: 0.5px; }
-  .band .eq { font-size: 30px; font-weight: 900; opacity: 0.75; }
-  .band .brand { font-size: 34px; font-weight: 900; color: ${t.bg1}; letter-spacing: 1px; }
+  .band .eq { font-size: 30px; font-weight: 900; opacity: 0.45; }
+  .band .brand { font-size: 34px; font-weight: 900; color: ${SITE.accent}; letter-spacing: 1px; }
   .band img { height: 58px; width: auto; }
 </style></head><body>
   <div class="badge"></div>
