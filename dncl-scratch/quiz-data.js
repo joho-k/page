@@ -2778,6 +2778,67 @@ window.quizData = {
         ],
         defaultHint: "配列の番号は code[0] から始まるので、下から i 番目は code[7 - i] です（i ＝ 1 なら右はしの code[6] ＝ 7）。重みは keta * omomi でかけます。この番号は gokei ＝ 60 なので下1桁は0。10 - 0 ＝ 10 は2桁になってしまうので、下1桁が0となった場合はチェックディジットを0とします。答えは0です"
     },
+    q038: {
+        title: "あめを分けたあまり",
+        addedAt: "2026-08-10",
+        difficulty: 1,
+        question: "あめが20個あります。6人で同じ数ずつ分けると、何個あまるかを表示するようにしよう。a % b と書くと「a を b でわったあまり」が計算できます",
+        ast: [
+            {
+                type: "assign",
+                name: "ame",
+                value: "20"
+            },
+            {
+                type: "assign",
+                name: "ninzu",
+                value: "6"
+            },
+            {
+                type: "assign",
+                name: "amari",
+                value: "ame __BLANK_blank_a__ ninzu"
+            },
+            {
+                type: "print",
+                value: "\"あまりは\" + amari + \"個です\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: "*", value: "*" },
+            { label: "/", value: "/" },
+            { label: "%", value: "%" },
+        ],
+        answers: [
+            {
+                values: ["%"],
+                correct: true,
+            },
+            {
+                values: ["/"],
+                correct: false,
+                hint: "わり算だと 20 / 6 ＝ 3.33… となり、これは「1人分がおよそ何個か」を表す数です。ほしいのは分け終わったあとに残る個数なので、あまりを求める % を使います",
+            },
+            {
+                values: ["-"],
+                correct: false,
+                hint: "ひき算だと 20 - 6 ＝ 14。これは1人に1個ずつ配っただけの残りで、6個ずつ配れるかぎり配ったあとの残りではありません",
+            },
+            {
+                values: ["*"],
+                correct: false,
+                hint: "かけ算だと 20 * 6 ＝ 120 となり、あめが増えてしまいます。分けたあとに残る数はもとの20個より少ないはずです",
+            },
+            {
+                values: ["+"],
+                correct: false,
+                hint: "足し算だと 20 + 6 ＝ 26。個数と人数という種類のちがう数を足しても、あまりの個数にはなりません",
+            }
+        ],
+        defaultHint: "20個を6人に同じ数ずつ配ると、1人3個ずつで18個。配りきれずに残るのがあまりです。あまりを求める記号は % だよ"
+    },
     q039: {
         title: "点数を10点きざみにする",
         addedAt: "2026-08-11",
