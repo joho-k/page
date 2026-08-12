@@ -2910,4 +2910,92 @@ window.quizData = {
         ],
         defaultHint: "10点きざみにするコツは「10でわる → 切り捨てる → 10をかける」。87 / 10 ＝ 8.7、切り捨てて8、8 * 10 ＝ 80 で80点になります"
     },
+    q040: {
+        title: "80点以上は何人？（配列）",
+        addedAt: "2026-08-12",
+        difficulty: 3,
+        question: "6人のテストの点数を配列 ten（＝[72,85,80,90,58,88]）に入れました。左から ten[0], ten[1], … , ten[5] の6個です。80点以上の人が何人いるかを数えて表示するようにしよう。配列の番号は0から始まること、「以上」は80そのものもふくむことに気をつけよう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "ten",
+                value: "[72,85,80,90,58,88]"
+            },
+            {
+                type: "assign",
+                name: "nin",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "__BLANK_blank_a__",
+                step: "1",
+                body: [
+                    {
+                        type: "if",
+                        condition: "ten[i] __BLANK_blank_b__ 80",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "nin",
+                                value: "nin + 1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"80点以上は\" + nin + \"人です\""
+            }
+        ],
+        choices: [
+            { label: "4", value: "4" },
+            { label: "5", value: "5" },
+            { label: "6", value: "6" },
+            { label: ">=", value: ">=" },
+            { label: ">", value: ">" },
+            { label: "<=", value: "<=" },
+            { label: "<", value: "<" }
+        ],
+        answers: [
+            {
+                values: ["5", ">="],
+                correct: true
+            },
+            {
+                values: ["6", ">="],
+                correct: false,
+                hint: "配列 ten は6個ですが、番号は ten[0] から ten[5] までです。6まで繰り返すと ten[6] を見にいってしまい、配列の外を読むことになります。個数が6なら、最後の番号は6-1で5です"
+            },
+            {
+                values: ["4", ">="],
+                correct: false,
+                hint: "4までだと ten[5]（＝88点）を見ないまま終わってしまい、1人数え落とします。最後の番号は5です"
+            },
+            {
+                values: ["5", ">"],
+                correct: false,
+                hint: "> だと「80より大きい」になり、ちょうど80点の ten[2] が数に入りません。「80点以上」は80そのものもふくむので >= を使います"
+            },
+            {
+                values: ["6", ">"],
+                correct: false,
+                hint: "2か所とも違います。番号は ten[0]〜ten[5] なので5まで、「80点以上」は80をふくむので >= です"
+            },
+            {
+                values: ["5", "<="],
+                correct: false,
+                hint: "<= だと「80点以下」の人を数えてしまいます。数えたいのは80点以上の人なので >= です"
+            },
+            {
+                values: ["5", "<"],
+                correct: false,
+                hint: "< だと「80点より低い」人を数えることになります。向きが逆です。80点以上を数えるのは >= です"
+            }
+        ],
+        defaultHint: "配列は ten[0] から始まり、6個なら最後は ten[5] です。i を0から5まで動かせば全員を1回ずつ調べられます。「80点以上」は80もふくむので >= を使おう"
+    },
 }

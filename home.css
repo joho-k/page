@@ -530,9 +530,15 @@ body.home .header.is-visible {
 }
 
 @media (max-width: 768px) {
+    /* スマホはロゴとリード文をスライドに重ねず、上に積む（文字が重なるため） */
+    .hero-head {
+        position: static;
+        padding: 0 1.1rem 1rem;
+    }
+
     /* スマホは背景をより濃くして文字を読みやすくする */
     .slide {
-        min-height: 340px;
+        min-height: 300px;
     }
 
     .slide-visual img,
@@ -548,6 +554,7 @@ body.home .header.is-visible {
     .slide-body {
         align-items: center;
         text-align: center;
+        /* 重ねるのをやめたので、ロゴぶんの余白は不要 */
         padding: 1.6rem 1.2rem 1.8rem;
     }
 

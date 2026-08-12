@@ -572,11 +572,17 @@ function animateAssignmentCard(container) {
     const slotCenterX = tRect.left + tRect.width / 2 - cRect.left;
     const slotCenterY = (vRect.top - cRect.top) + dy + vRect.height / 2;
 
-    // 同じ変数の上書き代入（a = b 以外）：元の値を最初から箱の中に表示しておき、
+    // 同じ変数の上書き代入：元の値を最初から箱の中に表示しておき、
     // 新しい値が入ってくるのに合わせて「上書き」と出して元の値を消す。
+    // a = b のように値がチップで飛んでくる場合も同じように見せる
+    // （配列アクセス a[i] のチップだけは、ラベルの入れかわりと重なるので出さない）。
     const card = container.querySelector(".step-card");
     const prevText = card?.dataset.prevValue;
-    if (!isChip && prevText !== undefined && prevText !== "") {
+    if (!isArrayChip && prevText !== undefined && prevText !== "") {
+        // チップは箱に着くのが 0.45、スロットに値が残るのが 0.52〜。
+        // それに合わせて、元の値は少し遅らせて消す。
+        const prevHoldUntil = isChip ? 0.44 : 0.4;
+        const prevGoneAt = isChip ? 0.52 : 0.55;
         // 元の値（最初から表示）
         const prevEl = document.createElement("span");
         prevEl.className = "calc-token calc-result";
@@ -609,8 +615,8 @@ function animateAssignmentCard(container) {
         // 元の値：表示 → 新しい値が入るところで消える → 次のループ用に戻す
         prevEl.animate([
             { opacity: 1, offset: 0 },
-            { opacity: 1, offset: 0.4 },
-            { opacity: 0, offset: 0.55 },
+            { opacity: 1, offset: prevHoldUntil },
+            { opacity: 0, offset: prevGoneAt },
             { opacity: 0, offset: 0.92 },
             { opacity: 1, offset: 1 }
         ], { duration: dur, iterations: Infinity });
@@ -618,8 +624,8 @@ function animateAssignmentCard(container) {
         // 「今までの値」：最初から表示 → 上書きの直前に消える → 次のループ用に戻す
         prevLabelEl.animate([
             { opacity: 1, offset: 0 },
-            { opacity: 1, offset: 0.4 },
-            { opacity: 0, offset: 0.5 },
+            { opacity: 1, offset: prevHoldUntil },
+            { opacity: 0, offset: prevGoneAt - 0.02 },
             { opacity: 0, offset: 0.92 },
             { opacity: 1, offset: 1 }
         ], { duration: dur, iterations: Infinity });

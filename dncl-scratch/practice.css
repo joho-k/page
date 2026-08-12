@@ -208,4 +208,67 @@
     .practice-mobile-only {
         display: block;
     }
+
+    /*
+     * スマホは横スクロールさせず、画面に収める。
+     * 内容と追加日は隠し、内容は「詳細」を押したときだけ全文を出す。
+     */
+    .practice-table {
+        min-width: 0;
+    }
+
+    .practice-table th:nth-child(1),
+    .practice-table td:nth-child(1) {
+        width: 80px;
+    }
+
+    .practice-table th:nth-child(2),
+    .practice-table td:nth-child(2) {
+        width: auto;
+    }
+
+    .practice-table th:nth-child(4),
+    .practice-table td:nth-child(4) {
+        display: none;
+    }
+
+    .practice-table th,
+    .practice-table td {
+        padding: 10px 8px;
+    }
+
+    .practice-content {
+        width: 86px;
+    }
+
+    .practice-content-line {
+        display: none;
+    }
+
+    .practice-content-line.is-open {
+        display: block;
+        padding-top: 0;
+    }
+
+    /* 全文を開いたときは、その行だけ横いっぱいに使う */
+    tr:has(.practice-content-line.is-open) td:nth-child(1),
+    tr:has(.practice-content-line.is-open) td:nth-child(2) {
+        vertical-align: top;
+    }
+
+    .practice-content-row {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+
+    .practice-detail-button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .practice-difficulty {
+        font-size: 13px;
+        letter-spacing: -1px;
+    }
 }
