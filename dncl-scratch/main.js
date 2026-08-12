@@ -6,7 +6,7 @@ function run() {
     stepHistory = [];
     changedVars = new Set();
     whileIterationCounts = new Map();
-    currentExplanation = "一括実行が終わりました。ステップ開始を押すと、1 行ずつ説明を見ながら進められます。";
+    currentExplanation = "一括実行が終わりました。ステップ実行を押すと、1 行ずつ説明を見ながら進められます。";
     currentExplanationHtml = null;
     highlightedArrayAccesses = new Set();
     highlightedVars = new Set();

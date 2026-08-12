@@ -1,65 +1,293 @@
-.protro-intro {
+.protro-hero,
+.protro-section {
     margin: 0 auto 18px;
     padding: 0 10px;
     max-width: 1100px;
 }
 
-.protro-lead {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin: 0 0 12px;
+/* サイト全体は content-box のため、高さ・幅を指定する箇所だけ border-box にする */
+.protro-hero,
+.protro-section,
+.protro-hero *,
+.protro-section * {
+    box-sizing: border-box;
 }
 
-.protro-links {
+/* ヒーロー（タイトル＋リード＋主役ボタン） */
+.protro-hero-sub {
+    margin: -10px 0 12px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.protro-lead {
+    background: var(--bg);
+    border-radius: 20px;
+    padding: 18px 20px;
+    margin: 0 0 16px;
+    line-height: 1.9;
+    box-shadow: var(--neu-pressed);
+}
+
+.protro-hero-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin-bottom: 12px;
 }
 
-.protro-link-card {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 10px 12px;
+.protro-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 78px;
+    padding: 14px 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: var(--neu-raised);
+    transition: transform .15s ease, background-color .15s ease, box-shadow .15s ease;
 }
 
-.protro-link-card h4 {
-    margin: 0 0 6px;
+.protro-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--neu-raised-lg);
 }
 
-.protro-link-card p {
-    margin: 0 0 10px;
+.protro-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--neu-pressed-color);
 }
 
-.protro-benefits {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 10px 12px;
+.protro-btn-main {
+    background: var(--accent);
+    color: #fff;
 }
 
-.protro-benefits h4 {
-    margin: 0 0 8px;
+.protro-btn-main:hover {
+    background: #e64a19;
 }
 
-.protro-benefits ul {
+.protro-btn-sub {
+    background: var(--bg);
+    color: var(--primary);
+}
+
+.protro-btn-sub:hover {
+    background: var(--bg);
+}
+
+.protro-btn-sub:active {
+    box-shadow: var(--neu-pressed);
+}
+
+.protro-btn-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.protro-btn-note {
+    font-size: .8rem;
+    line-height: 1.4;
+    opacity: .9;
+}
+
+.protro-section-lead {
+    margin: 0 0 12px;
+    text-align: center;
+}
+
+/* 難易度からえらぶ */
+.protro-levels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+    gap: 10px;
+}
+
+.protro-levels li {
+    display: block;
     margin: 0;
-    padding-left: 1.2em;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 12px;
 }
 
-.protro-benefits li {
+.protro-levels a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    padding: 16px 12px;
+    background: var(--bg);
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: var(--neu-raised-sm);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.protro-levels a:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--neu-raised);
+}
+
+.protro-levels a:active {
+    transform: translateY(0);
+    box-shadow: var(--neu-pressed);
+}
+
+.protro-stars {
+    color: var(--primary);
+    font-size: 1.05rem;
+    letter-spacing: .1em;
+}
+
+.protro-level-name {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.protro-level-count {
+    font-size: .85rem;
+    color: var(--text);
+}
+
+.protro-more {
+    margin: 14px 0 0;
+    text-align: center;
+}
+
+/* 新しく追加された問題 */
+.protro-new-list li {
+    display: block;
     margin: 0 0 10px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
 }
 
+.protro-new-list a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 4px 14px;
+    padding: 14px 18px;
+    background: var(--bg);
+    border-radius: 18px;
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: var(--neu-raised-sm);
+    transition: box-shadow .15s ease;
+}
+
+.protro-new-list a:hover {
+    box-shadow: var(--neu-raised);
+}
+
+.protro-new-list a:active {
+    box-shadow: var(--neu-pressed);
+}
+
+.protro-new-title {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.protro-new-desc {
+    grid-column: 2;
+    font-size: .9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 3ステップ */
+.protro-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.protro-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0;
+    padding: 18px 20px;
+    background: var(--bg);
+    border-radius: 20px;
+    box-shadow: var(--neu-raised-sm);
+}
+
+.protro-step-num {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--neu-raised-sm);
+}
+
+.protro-step-body {
+    line-height: 1.8;
+}
+
+.protro-step-body b {
+    display: block;
+    color: var(--primary);
+}
+
+/* メリット画像 */
 .protro-benefits img {
     width: 100%;
+    background: var(--bg);
+    border-radius: 20px;
+    box-shadow: var(--neu-raised);
+}
+
+/* 見出しバナー・リンクボタンも浮かせる（塗りは既存のまま） */
+.protro-hero .page-title,
+.protro-section h2 {
+    box-shadow: var(--neu-raised);
+}
+
+.protro-section .link-button {
+    padding: 12px 26px;
+    border-radius: 999px;
+    box-shadow: var(--neu-raised-sm);
+    transition: background-color .15s ease, box-shadow .15s ease;
+}
+
+.protro-section .link-button:active {
+    box-shadow: var(--neu-pressed-color);
 }
 
 @media (max-width: 768px) {
-    .protro-links {
+
+    /* 影が画面端で切れないように余白を足す */
+    .protro-hero,
+    .protro-section {
+        padding: 0 14px;
+    }
+
+    .protro-hero-actions {
         grid-template-columns: 1fr;
+    }
+
+    .protro-new-desc {
+        white-space: normal;
     }
 }
