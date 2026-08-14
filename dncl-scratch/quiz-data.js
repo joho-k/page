@@ -2998,4 +2998,104 @@ window.quizData = {
         ],
         defaultHint: "配列は ten[0] から始まり、6個なら最後は ten[5] です。i を0から5まで動かせば全員を1回ずつ調べられます。「80点以上」は80もふくむので >= を使おう"
     },
+    q042: {
+        title: "小さい順に並べかえる（となりと交換）",
+        addedAt: "2026-08-14",
+        difficulty: 5,
+        question: "配列 data（＝[5,3,8,1]）を小さい順（1,3,5,8）に並べかえよう。となりどうし data[j] と data[j + 1] をくらべて、順番が逆なら2つを入れかえます。入れかえるときは、先に片方の値を temp によけておいてから移すのがコツです。よけずに上書きすると値が消えてしまうことに気をつけよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "data",
+                value: "[5,3,8,1]"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "2",
+                step: "1",
+                body: [
+                    {
+                        type: "for",
+                        varName: "j",
+                        start: "0",
+                        end: "2 - i",
+                        step: "1",
+                        body: [
+                            {
+                                type: "if",
+                                condition: "data[j] __BLANK_blank_a__ data[j + 1]",
+                                body: [
+                                    {
+                                        type: "assign",
+                                        name: "temp",
+                                        value: "data[j]"
+                                    },
+                                    {
+                                        type: "assign",
+                                        name: "data[j]",
+                                        value: "__BLANK_blank_b__"
+                                    },
+                                    {
+                                        type: "assign",
+                                        name: "data[j + 1]",
+                                        value: "__BLANK_blank_c__"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "data"
+            }
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: "<", value: "<" },
+            { label: "temp", value: "temp" },
+            { label: "data[j]", value: "data[j]" },
+            { label: "data[j + 1]", value: "data[j + 1]" }
+        ],
+        answers: [
+            {
+                values: [">", "data[j + 1]", "temp"],
+                correct: true
+            },
+            {
+                values: [">", "data[j + 1]", "data[j]"],
+                correct: false,
+                hint: "よけておいた temp を使わないのがおしい点です。data[j] に data[j + 1] を入れた時点で、data[j] は新しい値に変わっています。そのあと data[j + 1] に data[j] を入れると、同じ値が2つ並んでしまいます（[5,3,8,1] の最初で [3,3,8,1] になる）。もどす先には temp を使います"
+            },
+            {
+                values: [">", "temp", "data[j + 1]"],
+                correct: false,
+                hint: "temp には data[j] と同じ値が入っているので、data[j] に temp を入れても何も変わりません。data[j + 1] に data[j + 1] を入れるのも同じです。つまり1回も入れかわらず、[5,3,8,1] のまま出てきます。左には相手の値、右には temp をいれましょう"
+            },
+            {
+                values: [">", "data[j]", "temp"],
+                correct: false,
+                hint: "data[j] に data[j] を入れても値は変わりません。そのあと data[j + 1] に temp（＝大きいほうの値）が入るので、大きいほうが2つに増えて小さいほうが消えます（[5,3,8,1] の最初で [5,5,8,1]）。左には data[j + 1] を入れます"
+            },
+            {
+                values: [">", "temp", "temp"],
+                correct: false,
+                hint: "どちらにも temp を入れると、となり合う2つが同じ値（大きいほう）になってしまいます（[5,3,8,1] の最初で [5,5,8,1]）。交換は「相手の値を自分に」「自分の値（temp）を相手に」の2手です"
+            },
+            {
+                values: ["<", "data[j + 1]", "temp"],
+                correct: false,
+                hint: "< だと「左が右より小さいとき」に入れかえるので、大きい順（8,5,3,1）に並んでしまいます。小さい順にしたいので、左のほうが大きいとき＝ > のときに入れかえます"
+            },
+            {
+                values: ["<", "data[j + 1]", "data[j]"],
+                correct: false,
+                hint: "2か所ちがいます。小さい順にするなら比べるのは >、もどす先は temp です。temp を使わないと、上書きしたあとの値を移すことになり同じ値が2つ並びます"
+            }
+        ],
+        defaultHint: "2つの値の交換は3手です。①temp に data[j] をよける ②data[j] に data[j + 1] を入れる ③data[j + 1] に temp をもどす。比べるのは、左が右より大きいとき（>）だけ入れかえれば小さい順になります"
+    },
 }
