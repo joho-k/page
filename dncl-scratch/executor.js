@@ -320,6 +320,10 @@ function animateStepCard(container) {
         animateLoopCard(container, card);
         return;
     }
+    if (card && card.classList.contains("step-card-cond-multi")) {
+        animateMultiConditionCard(container, card);
+        return;
+    }
     if (card && card.classList.contains("step-card-cond")) {
         animateConditionCard(container, card);
         return;
@@ -409,6 +413,52 @@ function animateConditionCard(container, card) {
             { transform: "scale(1.3)", offset: 0.88 },
             { transform: "scale(1.15)", offset: 0.93 },
             { transform: "scale(1.15)", offset: 0.97 },
+            { transform: "scale(1)", offset: 1 }
+        ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+    }
+}
+
+// かつ／または の条件チェックのアニメーション：条件を1つずつ順にズームして
+// それぞれの真偽を見せ、最後に「かつ／または」のきまりと全体の結果を強調する。
+function animateMultiConditionCard(container, card) {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof Element.prototype.animate !== "function") return;
+
+    const rows = Array.from(card.querySelectorAll(".calc-row"));
+    const partRows = rows.filter((row) => row.querySelector(".cond-part"));
+    if (partRows.length === 0) return;
+
+    const D = COND_ANIM_DURATION;
+    const zoom = (el, s, e) => {
+        if (!el) return;
+        el.animate([
+            { transform: "scale(1)", offset: 0 },
+            { transform: "scale(1)", offset: s },
+            { transform: "scale(1.18)", offset: (s + e) / 2 },
+            { transform: "scale(1)", offset: e },
+            { transform: "scale(1)", offset: 1 }
+        ], { duration: D, easing: "ease-in-out", iterations: Infinity });
+    };
+
+    // 条件の数で時間を分け合う（最後の 0.25 は「きまり」と結果のぶん）
+    const span = 0.72 / partRows.length;
+    partRows.forEach((row, i) => {
+        const start = 0.04 + span * i;
+        zoom(row, start, start + span * 0.8);
+    });
+
+    rows
+        .filter((row) => row.querySelector(".calc-logic-op"))
+        .forEach((row) => zoom(row, 0.78, 0.88));
+
+    const badgeEl = card.querySelector(".step-card-caption .result-badge");
+    if (badgeEl) {
+        badgeEl.style.display = "inline-block";
+        badgeEl.animate([
+            { transform: "scale(1)", offset: 0 },
+            { transform: "scale(1)", offset: 0.86 },
+            { transform: "scale(1.3)", offset: 0.92 },
+            { transform: "scale(1.15)", offset: 0.96 },
             { transform: "scale(1)", offset: 1 }
         ], { duration: D, easing: "ease-in-out", iterations: Infinity });
     }
@@ -889,8 +939,56 @@ function formatBoolValue(value) {
     return value ? "真(true)" : "偽(false)";
 }
 
+// 「かつ」「または」で結ばれた条件を、いちばん外側で分ける。
+// （x > 0 かつ x < 10 → { op: "かつ", parts: ["x > 0", "x < 10"] }）
+// 「または」の方が結びつきが弱いので先に切る。
+function splitLogicalCondition(expr) {
+    const raw = String(expr ?? "").trim();
+    for (const op of ["または", "かつ"]) {
+        const parts = splitTopLevelByWord(raw, op);
+        if (parts) return { op, parts };
+    }
+    return null;
+}
+
+// 文字列やカッコ・添字の中は無視して、いちばん外側の word で区切る。
+// 区切れないとき（1つしかない・空のかたまりができる）は null を返す。
+function splitTopLevelByWord(expr, word) {
+    const parts = [];
+    let bracketDepth = 0;
+    let parenDepth = 0;
+    let quote = null;
+    let start = 0;
+
+    for (let i = 0; i < expr.length; i += 1) {
+        const ch = expr[i];
+
+        if (quote) {
+            if (ch === quote) quote = null;
+            continue;
+        }
+        if (ch === '"') { quote = '"'; continue; }
+        if (ch === "“") { quote = "”"; continue; }
+
+        if (ch === "[") bracketDepth += 1;
+        else if (ch === "]") bracketDepth -= 1;
+        else if (ch === "(") parenDepth += 1;
+        else if (ch === ")") parenDepth -= 1;
+        else if (bracketDepth === 0 && parenDepth === 0 && expr.startsWith(word, i)) {
+            parts.push(expr.slice(start, i).trim());
+            i += word.length - 1;
+            start = i + 1;
+        }
+    }
+
+    if (parts.length === 0) return null;
+    parts.push(expr.slice(start).trim());
+    return parts.every((p) => p !== "") ? parts : null;
+}
+
 // 比較式（amari == 0 など）を左辺・演算子・右辺に分解する
 function parseComparison(expr) {
+    if (splitLogicalCondition(expr)) return null; // かつ／または は比較式ではない
     const comparisonOps = ["==", "!=", "<=", ">=", "<", ">"];
     const tokens = tokenize(expr.trim());
     let bracketDepth = 0;
@@ -927,8 +1025,26 @@ function comparisonPhrase(leftDesc, right, op) {
     }
 }
 
+// 「かつ」「または」のきまりを、ことばで説明する
+function logicalOperatorNote(op) {
+    return op === "かつ"
+        ? "かつ は、両方とも 真(true) のときだけ 真(true) になります。"
+        : "または は、どちらか一方でも 真(true) なら 真(true) になります。";
+}
+
 function buildConditionText(condition, conditionValue, scope) {
     const resultText = formatBoolValue(conditionValue);
+    const logic = splitLogicalCondition(condition);
+
+    if (logic) {
+        const partTexts = logic.parts
+            .map((part) => `${part} は ${formatBoolValue(safeEvalWithScope(part, scope))}`)
+            .join("、");
+        return `条件 ${condition} は、今は ${resultText} です。`
+            + `${logicalOperatorNote(logic.op)}`
+            + `いまは ${partTexts} なので、${resultText} です。`;
+    }
+
     const cmp = parseComparison(condition);
 
     if (cmp) {
@@ -977,12 +1093,44 @@ function conditionPhraseParts(cmp) {
     }
 }
 
+// ひとつぶんの条件（x > 0 など）を、チップの行にする
+function conditionPartRowHtml(part, scope) {
+    const cmp = parseComparison(part);
+    if (!cmp) return exprToTokensHtml(part);
+    return `${operandChip(cmp.left, scope)}${calcOp(cmp.op)}${operandChip(cmp.right, scope)}`;
+}
+
 function buildConditionCardHtml(condition, conditionValue, scope) {
-    const cmp = parseComparison(condition);
     const badgeClass = conditionValue ? "bool-true" : "bool-false";
     const badge = conditionValue ? "✓ 真（true）" : "✗ 偽（false）";
 
     const dataset = { "cond-result": conditionValue ? "true" : "false" };
+
+    // かつ／または は、条件を1つずつ上下に並べて、それぞれの真偽を見せる
+    const logic = splitLogicalCondition(condition);
+    if (logic) {
+        const rows = [];
+        logic.parts.forEach((part, i) => {
+            if (i > 0) rows.push(`<span class="calc-logic-op">${escapeHtml(logic.op)}</span>`);
+            const partValue = safeEvalWithScope(part, scope);
+            const partClass = partValue ? "bool-true" : "bool-false";
+            rows.push(
+                `<span class="cond-part">${conditionPartRowHtml(part, scope)}</span>`
+                + `<span class="result-badge cond-part-result ${partClass}">${partValue ? "真" : "偽"}</span>`
+            );
+        });
+
+        return buildStepCard({
+            title: "条件をチェック",
+            cardClass: "step-card-cond step-card-cond-multi",
+            rows,
+            badge,
+            badgeClass,
+            dataset: { ...dataset, "cond-logic": logic.op, "cond-logic-note": logicalOperatorNote(logic.op) }
+        });
+    }
+
+    const cmp = parseComparison(condition);
 
     if (cmp) {
         // 各オペランドを concat-chip（ラベル＝式・値）で見せる
@@ -1596,7 +1744,7 @@ function buildForDetails(node, current, end, step, isLast, start) {
 // ----------------
 function tokenize(expr) {
     const tokens = [];
-    const regex = /\s*("(?:[^"\\]|\\.)*"|“[^”]*”|乱数|切り捨て|切り上げ|四捨五入|[0-9]+(?:\.[0-9]+)?|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
+    const regex = /\s*("(?:[^"\\]|\\.)*"|“[^”]*”|乱数|切り捨て|切り上げ|四捨五入|かつ|または|[0-9]+(?:\.[0-9]+)?|==|!=|<=|>=|[\[\],+\-*/%()<>]|[a-zA-Z_]\w*)\s*/g;
     let match;
     while ((match = regex.exec(expr)) !== null) {
         tokens.push(match[1]);
@@ -1638,7 +1786,7 @@ function parseExpression(tokens) {
         // 切り捨て/切り上げ/四捨五入
         if (["切り捨て", "切り上げ", "四捨五入"].includes(t)) {
             if (consume() !== "(") throw new Error(`${t}のカッコ不足`);
-            const value = comparison();
+            const value = logic();
             if (consume() !== ")") throw new Error(`${t}のカッコ不足`);
 
             if (t === "切り捨て") return Math.floor(value);
@@ -1661,7 +1809,7 @@ function parseExpression(tokens) {
             while (true) {
 
                 // ★ 再帰（ネスト対応）
-                arr.push(comparison());
+                arr.push(logic());
 
                 if (peek() === ",") {
                     consume();
@@ -1696,7 +1844,7 @@ function parseExpression(tokens) {
             while (peek() === "[") {
                 consume();
 
-                const index = comparison();
+                const index = logic();
 
                 if (consume() !== "]") {
                     throw new Error("]不足");
@@ -1716,7 +1864,7 @@ function parseExpression(tokens) {
 
         // ()
         if (t === "(") {
-            const v = comparison();
+            const v = logic();
             if (consume() !== ")") throw new Error("カッコ不一致");
             return v;
         }
@@ -1763,7 +1911,29 @@ function parseExpression(tokens) {
         return v;
     }
 
-    return comparison();
+    // かつ（AND）。比較よりも結びつきが弱く、「または」よりは強い
+    function andExpr() {
+        let v = comparison();
+        while (peek() === "かつ") {
+            consume();
+            const r = comparison();
+            v = Boolean(v) && Boolean(r);
+        }
+        return v;
+    }
+
+    // または（OR）。いちばん結びつきが弱いので、式全体の入口はここ
+    function logic() {
+        let v = andExpr();
+        while (peek() === "または") {
+            consume();
+            const r = andExpr();
+            v = Boolean(v) || Boolean(r);
+        }
+        return v;
+    }
+
+    return logic();
 }
 
 function safeEval(expr) {

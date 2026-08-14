@@ -569,6 +569,43 @@
     padding: 6px;
 }
 
+/* 条件（かつ・または でいくつでも並べられる） */
+.condition-group {
+    display: inline;
+}
+
+.condition-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.condition-row+.condition-row {
+    margin-left: 6px;
+}
+
+.condition-join {
+    width: auto;
+    min-width: 74px;
+    font-weight: 700;
+    color: #6b4fae;
+}
+
+.condition-remove {
+    border: none;
+    background: none;
+    color: inherit;
+    opacity: 0.55;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    padding: 0 2px;
+}
+
+.condition-remove:hover {
+    opacity: 1;
+}
+
 /* 入力 */
 input,
 select {
@@ -978,6 +1015,29 @@ pre {
     background: #fbe0e0;
     color: #9a2727;
     box-shadow: 0 0 0 2px rgba(200, 60, 60, 0.30);
+}
+
+/* かつ／または の条件チェック：条件を1つずつ縦に並べて見せる */
+.calc-logic-op {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 800;
+    color: #6b4fae;
+    background: #efe9fb;
+    border-radius: 999px;
+    padding: 2px 14px;
+}
+
+.step-card-cond-multi .cond-part {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.result-badge.cond-part-result {
+    font-size: 13px;
+    padding: 3px 10px;
+    margin-left: 8px;
 }
 
 /* 条件チェックの言葉での説明（例：「amari と 0 が 等しければ」） */
