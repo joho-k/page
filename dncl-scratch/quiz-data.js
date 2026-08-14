@@ -2998,6 +2998,121 @@ window.quizData = {
         ],
         defaultHint: "配列は ten[0] から始まり、6個なら最後は ten[5] です。i を0から5まで動かせば全員を1回ずつ調べられます。「80点以上」は80もふくむので >= を使おう"
     },
+    q041: {
+        title: "さがす数は左から何番目？（線形探索）",
+        addedAt: "2026-08-13",
+        difficulty: 4,
+        question: "配列 data（＝[12,7,25,9,30,18]）の中から sagasu（＝25）と同じ数をさがし、それが左から何番目にあるかを表示しよう。basho は「まだ見つかっていない」というしるしとして0から始めます。配列の番号は data[0] から始まりますが、答えたいのは人が数える「左から何番目」（1から数える）であることに気をつけよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "data",
+                value: "[12,7,25,9,30,18]"
+            },
+            {
+                type: "assign",
+                name: "sagasu",
+                value: "25"
+            },
+            {
+                type: "assign",
+                name: "basho",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "5",
+                step: "1",
+                body: [
+                    {
+                        type: "if",
+                        condition: "data[i] __BLANK_blank_a__ sagasu",
+                        body: [
+                            {
+                                type: "assign",
+                                name: "basho",
+                                value: "__BLANK_blank_b__"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "ifelse",
+                condition: "basho __BLANK_blank_c__ 0",
+                ifBody: [
+                    {
+                        type: "print",
+                        value: "\"見つかりませんでした\""
+                    }
+                ],
+                elseBody: [
+                    {
+                        type: "print",
+                        value: "\"左から\" + basho + \"番目にあります\""
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "==", value: "==" },
+            { label: "!=", value: "!=" },
+            { label: ">=", value: ">=" },
+            { label: ">", value: ">" },
+            { label: "i", value: "i" },
+            { label: "i + 1", value: "i + 1" },
+            { label: "data[i]", value: "data[i]" }
+        ],
+        answers: [
+            {
+                values: ["==", "i + 1", "=="],
+                correct: true
+            },
+            {
+                values: ["==", "i", "=="],
+                correct: false,
+                hint: "i は配列の番号なので、25 が見つかるのは i が2のときです。でも人が数える「左から何番目」は3番目。番号に1をたして i + 1 にします。さらに i のままだと、data[0] で見つかったときに basho が0のままになり、「見つからなかった」と区別できなくなります"
+            },
+            {
+                values: ["==", "data[i]", "=="],
+                correct: false,
+                hint: "data[i] は見つかった「値」そのもの（25）です。basho に25が入ってしまい、「25番目」と表示されます。ほしいのは値ではなく場所なので i + 1 です"
+            },
+            {
+                values: ["!=", "i + 1", "=="],
+                correct: false,
+                hint: "!= は「ちがうとき」です。これだと sagasu とちがう数のたびに basho が書きかわり、最後に見た18の位置（6番目）が残ってしまいます。同じ数かどうかを調べるのは == です"
+            },
+            {
+                values: [">=", "i + 1", "=="],
+                correct: false,
+                hint: ">= だと25以上の数（25と30）が両方あてはまり、あとから来た30の位置（5番目）で上書きされます。ちょうど同じ数だけを見つけたいので == を使います"
+            },
+            {
+                values: [">", "i + 1", "=="],
+                correct: false,
+                hint: "> だと「25より大きい数」をさがすことになり、さがしている25そのものが当てはまりません。25と等しいかを調べる == にしましょう"
+            },
+            {
+                values: ["==", "i + 1", "!="],
+                correct: false,
+                hint: "basho != 0 は「見つかった」ときに成り立ちます。でも最初の枝は「見つかりませんでした」を表示する側なので、表示が逆になります。0のままかどうかを調べる == を使います"
+            },
+            {
+                values: ["==", "i + 1", ">"],
+                correct: false,
+                hint: "basho > 0 も「見つかった」という意味なので、こちらも「見つかりませんでした」と「左から○番目」が逆に出てしまいます。0のままかどうかは == 0 で調べます"
+            },
+            {
+                values: ["==", "i", "!="],
+                correct: false,
+                hint: "2か所ちがいます。basho には「何番目」を入れたいので i + 1、最後の判定は0のままかどうかを見る == です"
+            }
+        ],
+        defaultHint: "配列の番号 i は0から始まるので、「左から何番目」にするには i + 1 とします。0は「まだ見つかっていない」しるしなので、最後は basho == 0 かどうかで見つかったかを判定しよう"
+    },
     q042: {
         title: "小さい順に並べかえる（となりと交換）",
         addedAt: "2026-08-14",
