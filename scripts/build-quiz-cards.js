@@ -202,6 +202,32 @@ function esc(s) {
         .replace(/"/g, "&quot;");
 }
 
+// タイトルの見た目の長さ（フォントサイズ1pxあたりの横幅）。全角=1、半角=0.55 で見積もる
+function titleEm(s) {
+    let em = 0;
+    for (const ch of String(s)) em += /[\x20-\x7e｡-ﾟ]/.test(ch) ? 0.55 : 1;
+    return em;
+}
+
+// タイトルは必ず1行に収める。入る大きさまでフォントを縮め、
+// 最小サイズでも入らないときだけ末尾を「…」で切る。
+function fitTitle(title, availPx, maxSize, minSize) {
+    const em = titleEm(title);
+    const fitted = Math.floor((availPx * 0.99) / Math.max(em, 1));
+    if (fitted >= minSize) return { text: title, size: Math.min(maxSize, fitted) };
+
+    const budget = (availPx * 0.99) / minSize - 1; // 「…」の分を1em引く
+    let used = 0;
+    let text = "";
+    for (const ch of String(title)) {
+        const w = /[\x20-\x7e｡-ﾟ]/.test(ch) ? 0.55 : 1;
+        if (used + w > budget) break;
+        used += w;
+        text += ch;
+    }
+    return { text: text + "…", size: minSize };
+}
+
 function cardHtml(quiz, id, logoDataUri, program) {
     const programDataUri = program ? program.dataUri : "";
     // 縦長のプログラム（q024/q025/q031 など）は、下に置くと小さくなりすぎるので右側に立てる
@@ -210,12 +236,19 @@ function cardHtml(quiz, id, logoDataUri, program) {
     const t = themeOf(quiz);
     const title = String(quiz.title || "");
     const question = String(quiz.question || "");
-    const tlen = title.length;
     const qlen = question.length;
     // 問題文が長い問題は「q027形式」= タイトルを大きく／問題文は下に小さく3行。
     // 問題文が短い問題は問題文自体を主役にして大きく見せる（タイトルは小さな見出し）。
     const longQuestion = qlen > 45;
-    const titleSize = tlen > 18 ? 36 : tlen > 12 ? 44 : 52; // q027形式のタイトル
+    // タイトルを載せるパネルの中身の幅（CSSのmargin/paddingから逆算）。
+    // 通常: 1200 - 320(バッジよけ) - 56(右余白) - 60(padding) = 764
+    // 横並び: 1200 - 56 - 320 - 40%(457.6) - 26(gap) - 60(padding) ≒ 280
+    const titleAvail = sideLayout ? 280 : 764;
+    const fit = fitTitle(title, titleAvail, sideLayout ? 34 : 52, 22);
+    const titleSize = fit.size; // q027形式のタイトル（必ず1行に収まるサイズ）
+    const titleText = fit.text;
+    // 問題文が主役のときの小見出し（こちらも1行）
+    const kickerFit = fitTitle(title, titleAvail, 22, 15);
     const qHeroSize = qlen > 35 ? 30 : qlen > 22 ? 36 : 42; // 短い問題文を主役に出すサイズ
 
     return `<!doctype html><html lang="ja"><head><meta charset="utf-8">
@@ -271,14 +304,14 @@ function cardHtml(quiz, id, logoDataUri, program) {
   .main-side .header {
     flex: 1 1 auto; margin: 0 0 0 320px;
   }
-  /* 横並びのときは幅が狭いので、文字を小さめ・行数多めにして切れにくくする */
-  .main-side .header .ttl { font-size: 34px; -webkit-line-clamp: 3; }
+  /* 横並びのときは幅が狭いので、行数多めにして切れにくくする（タイトルの大きさは fitTitle が決める） */
   .main-side .header .q { -webkit-line-clamp: 4; }
   .main-side .header .qbig { font-size: 30px; -webkit-line-clamp: 4; }
   /* q027形式（問題文が長い）：タイトル大 → 問題文小3行 */
+  /* タイトルは必ず1行（fitTitle が幅に収まるフォントサイズを計算している） */
   .header .ttl {
     font-size: ${titleSize}px; font-weight: 900; line-height: 1.25; color: #16202b;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .header .q {
     margin-top: 12px;
@@ -287,8 +320,8 @@ function cardHtml(quiz, id, logoDataUri, program) {
   }
   /* 問題文が短い：小さな見出し（タイトル）→ 問題文を大きく主役に */
   .header .kicker {
-    font-size: 22px; font-weight: 800; color: ${SITE.accent}; letter-spacing: 1px;
-    display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+    font-size: ${kickerFit.size}px; font-weight: 800; color: ${SITE.accent}; letter-spacing: 1px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .header .qbig {
     margin-top: 10px;
@@ -336,8 +369,8 @@ function cardHtml(quiz, id, logoDataUri, program) {
   <div class="main${sideLayout ? " main-side" : ""}">
     <div class="header">${
       longQuestion
-        ? `<div class="ttl">${esc(title)}</div>${question ? `<div class="q">${esc(question)}</div>` : ""}`
-        : `<div class="kicker">${esc(title)}</div><div class="qbig">${esc(question || title)}</div>`
+        ? `<div class="ttl">${esc(titleText)}</div>${question ? `<div class="q">${esc(question)}</div>` : ""}`
+        : `<div class="kicker">${esc(kickerFit.text)}</div><div class="qbig">${esc(question || title)}</div>`
     }</div>
     <div class="program">${programDataUri ? `<img src="${programDataUri}" alt="">` : ""}</div>
   </div>

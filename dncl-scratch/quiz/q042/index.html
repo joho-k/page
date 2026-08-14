@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第42問 小さい順に並べかえる（となりと交換）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="配列 data（＝[5,3,8,1]）を小さい順（1,3,5,8）に並べかえよう。となりどうし data[j] と data[j + 1] をくらべて、順番が逆なら2つを入れかえます。入れかえるときは、先に片方の値を temp によけておいてから移すのがコツです。よけずに上書きすると値が消えてしまうことに気をつけよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,小さい順に並べかえる（となりと交換）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q042/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第42問 小さい順に並べかえる（となりと交換）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="配列 data（＝[5,3,8,1]）を小さい順（1,3,5,8）に並べかえよう。となりどうし data[j] と data[j + 1] をくらべて、順番が逆なら2つを入れかえます。入れかえるときは、先に片方の値を temp によけておいてから移すのがコツです。よけずに上書きすると値が消えてしまうことに気をつけよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q042/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q042.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第42問 小さい順に並べかえる（となりと交換）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="配列 data（＝[5,3,8,1]）を小さい順（1,3,5,8）に並べかえよう。となりどうし data[j] と data[j + 1] をくらべて、順番が逆なら2つを入れかえます。入れかえるときは、先に片方の値を temp によけておいてから移すのがコツです。よけずに上書きすると値が消えてしまうことに気をつけよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q042.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q042/index.html#quiz",
+      "name": "第42問 小さい順に並べかえる（となりと交換）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q042/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "配列 data（＝[5,3,8,1]）を小さい順（1,3,5,8）に並べかえよう。となりどうし data[j] と data[j + 1] をくらべて、順番が逆なら2つを入れかえます。入れかえるときは、先に片方の値を temp によけておいてから移すのがコツです。よけずに上書きすると値が消えてしまうことに気をつけよう（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "> , data[j + 1] , temp"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": "temp"
+          },
+          {
+            "@type": "Answer",
+            "text": "data[j]"
+          },
+          {
+            "@type": "Answer",
+            "text": "data[j + 1]"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第42問 小さい順に並べかえる（となりと交換）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q042/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q042";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第42問 小さい順に並べかえる（となりと交換）</h1>
+            <p>配列 data（＝[5,3,8,1]）を小さい順（1,3,5,8）に並べかえよう。となりどうし data[j] と data[j + 1] をくらべて、順番が逆なら2つを入れかえます。入れかえるときは、先に片方の値を temp によけておいてから移すのがコツです。よけずに上書きすると値が消えてしまうことに気をつけよう（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★★（5／難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>data = [5,3,8,1]
+i を 0 から 2 まで 1 ずつ増やしながら繰り返す:
+  j を 0 から 2 - i まで 1 ずつ増やしながら繰り返す:
+    もし data[j] ［A］ data[j + 1] ならば:
+      temp = data[j]
+      data[j] = ［B］
+      data[j + 1] = ［C］
+表示する(data)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>&gt;</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>temp</code></li>
+                <li><code>data[j]</code></li>
+                <li><code>data[j + 1]</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>2つの値の交換は3手です。①temp に data[j] をよける ②data[j] に data[j + 1] を入れる ③data[j + 1] に temp をもどす。比べるのは、左が右より大きいとき（&gt;）だけ入れかえれば小さい順になります</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>&gt;</code></li>
+            <li>空欄 ［B］ … <code>data[j + 1]</code></li>
+            <li>空欄 ［C］ … <code>temp</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>&gt;</code>　［B］<code>data[j + 1]</code>　［C］<code>data[j]</code> … よけておいた temp を使わないのがおしい点です。data[j] に data[j + 1] を入れた時点で、data[j] は新しい値に変わっています。そのあと data[j + 1] に data[j] を入れると、同じ値が2つ並んでしまいます（[5,3,8,1] の最初で [3,3,8,1] になる）。もどす先には temp を使います</li>
+            <li>［A］<code>&gt;</code>　［B］<code>temp</code>　［C］<code>data[j + 1]</code> … temp には data[j] と同じ値が入っているので、data[j] に temp を入れても何も変わりません。data[j + 1] に data[j + 1] を入れるのも同じです。つまり1回も入れかわらず、[5,3,8,1] のまま出てきます。左には相手の値、右には temp をいれましょう</li>
+            <li>［A］<code>&gt;</code>　［B］<code>data[j]</code>　［C］<code>temp</code> … data[j] に data[j] を入れても値は変わりません。そのあと data[j + 1] に temp（＝大きいほうの値）が入るので、大きいほうが2つに増えて小さいほうが消えます（[5,3,8,1] の最初で [5,5,8,1]）。左には data[j + 1] を入れます</li>
+            <li>［A］<code>&gt;</code>　［B］<code>temp</code>　［C］<code>temp</code> … どちらにも temp を入れると、となり合う2つが同じ値（大きいほう）になってしまいます（[5,3,8,1] の最初で [5,5,8,1]）。交換は「相手の値を自分に」「自分の値（temp）を相手に」の2手です</li>
+            <li>［A］<code>&lt;</code>　［B］<code>data[j + 1]</code>　［C］<code>temp</code> … &lt; だと「左が右より小さいとき」に入れかえるので、大きい順（8,5,3,1）に並んでしまいます。小さい順にしたいので、左のほうが大きいとき＝ &gt; のときに入れかえます</li>
+            <li>［A］<code>&lt;</code>　［B］<code>data[j + 1]</code>　［C］<code>data[j]</code> … 2か所ちがいます。小さい順にするなら比べるのは &gt;、もどす先は temp です。temp を使わないと、上書きしたあとの値を移すことになり同じ値が2つ並びます</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q041/index.html">第41問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
