@@ -119,6 +119,110 @@ function setActivePaletteButton(button) {
     }
 }
 
+// 「条件」ボタンを押したときに出す選択肢（条件まわりの4種類）
+const PALETTE_MENUS = {
+    condition: [
+        { type: "if", label: "条件" },
+        { type: "ifmulti", label: "複数条件" },
+        { type: "ifelse", label: "もし＋そうでなければ" },
+        { type: "ifelsemulti", label: "複数条件＋そうでなければ" }
+    ]
+};
+
+let paletteMenuButton = null;
+
+function paletteEnsureMenu() {
+    let menu = document.getElementById("palette-block-menu");
+    if (menu) return menu;
+
+    menu = document.createElement("div");
+    menu.id = "palette-block-menu";
+    menu.className = "palette-block-menu";
+    menu.hidden = true;
+    document.body.append(menu);
+
+    // 画面の外を押したら閉じる
+    document.addEventListener("click", (event) => {
+        if (event.target.closest?.("#palette-block-menu")) return;
+        if (event.target.closest?.(".palette-block-button[data-block-menu]")) return;
+        paletteCloseMenu();
+    });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") paletteCloseMenu();
+    });
+    window.addEventListener("resize", paletteCloseMenu);
+    window.addEventListener("scroll", paletteCloseMenu, true);
+
+    return menu;
+}
+
+function paletteCloseMenu() {
+    const menu = document.getElementById("palette-block-menu");
+    if (!menu || menu.hidden) return;
+    menu.hidden = true;
+    paletteMenuButton?.setAttribute("aria-expanded", "false");
+    paletteMenuButton = null;
+
+    const preview = document.getElementById("palette-preview");
+    if (preview) preview.style.paddingLeft = "";
+}
+
+// 選択肢が説明パネルに重なってしまうので、開いているあいだは説明を右へよける
+function paletteShiftPreviewForMenu(menu) {
+    const preview = document.getElementById("palette-preview");
+    if (!preview || preview.classList.contains("palette-preview-hidden")) return;
+
+    const m = menu.getBoundingClientRect();
+    const p = preview.getBoundingClientRect();
+    const overlaps = m.bottom > p.top && m.top < p.bottom && m.right > p.left;
+    preview.style.paddingLeft = overlaps ? `${Math.round(m.right - p.left + 12)}px` : "";
+}
+
+function paletteOpenMenu(button) {
+    const items = PALETTE_MENUS[button.dataset.blockMenu];
+    if (!items) return;
+
+    const menu = paletteEnsureMenu();
+    menu.innerHTML = "";
+
+    items.forEach((item) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "palette-menu-item";
+        btn.textContent = item.label;
+        // どのブロックが出るのかを、選ぶ前に説明で見せる
+        btn.addEventListener("mouseenter", () => renderPalettePreview(item.type));
+        btn.addEventListener("focus", () => renderPalettePreview(item.type));
+        btn.addEventListener("click", (event) => {
+            event.preventDefault();
+            addBlock(item.type);
+            renderPalettePreview(item.type);
+            paletteCloseMenu();
+        });
+        menu.append(btn);
+    });
+
+    menu.hidden = false;
+    const r = button.getBoundingClientRect();
+    const margin = 8;
+    const left = Math.min(r.left, document.documentElement.clientWidth - margin - menu.offsetWidth);
+    menu.style.left = `${Math.max(margin, left)}px`;
+    menu.style.top = `${r.bottom + 6}px`;
+
+    paletteMenuButton = button;
+    button.setAttribute("aria-expanded", "true");
+    paletteShiftPreviewForMenu(menu);
+}
+
+function paletteToggleMenu(button) {
+    const menu = document.getElementById("palette-block-menu");
+    if (menu && !menu.hidden && paletteMenuButton === button) {
+        paletteCloseMenu();
+        return;
+    }
+    paletteOpenMenu(button);
+}
+
 function setupPaletteButtons() {
     const buttons = document.querySelectorAll(".palette-block-button");
 
@@ -136,6 +240,13 @@ function setupPaletteButtons() {
 
         button.addEventListener("click", (event) => {
             event.preventDefault();
+
+            // 選択肢を持つボタン（条件）は、ブロックを足す前に選択肢を出す
+            if (button.dataset.blockMenu) {
+                setActivePaletteButton(button);
+                paletteToggleMenu(button);
+                return;
+            }
 
             if (isTouchLikeDevice()) {
                 if (activePaletteButton !== button) {
