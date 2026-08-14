@@ -30,6 +30,11 @@ const BLOCK_PREVIEWS = {
         code: `もし x > 0 ならば:\n  表示する("正")\nそうでなければ:\n  表示する("負か0")`,
         text: "条件によって2通りの処理を使い分けます。"
     },
+    ifelsemulti: {
+        title: "複数条件＋そうでなければ",
+        code: `もし x > 0 かつ x < 10 ならば:\n  表示する("1けた")\nそうでなければ:\n  表示する("それ以外")`,
+        text: "条件を2つ並べて、2通りの処理を使い分けます。「かつ」は両方とも正しいとき、「または」はどちらかが正しいときに「ならば」の側を実行します。"
+    },
     for: {
         title: "繰り返し",
         code: `i を 1 から 5 まで 1 ずつ増やしながら繰り返す:\n  表示する(i)`,
@@ -266,6 +271,7 @@ function addBlock(type) {
     if (type === "if") el = createIfBlock();
     if (type === "ifmulti") el = createIfBlock(2);
     if (type === "ifelse") el = createIfElseBlock();
+    if (type === "ifelsemulti") el = createIfElseBlock(2);
     if (type === "for") el = createForBlock();
     if (type === "while") el = createWhileBlock();
     if (type === "array") el = createArrayBlock();
