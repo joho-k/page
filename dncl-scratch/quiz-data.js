@@ -3213,4 +3213,83 @@ window.quizData = {
         ],
         defaultHint: "2つの値の交換は3手です。①temp に data[j] をよける ②data[j] に data[j + 1] を入れる ③data[j + 1] に temp をもどす。比べるのは、左が右より大きいとき（>）だけ入れかえれば小さい順になります"
     },
+    q044: {
+        title: "半分にしぼると何回でたどりつく？",
+        addedAt: "2026-08-16",
+        difficulty: 3,
+        question: "1000ページの辞書から目当ての言葉をさがすとき、まん中を開いて「前半と後半のどちらにあるか」を決め、のこりを半分にしぼっていきます。のこり nokori が1ページになるまでに何回しぼればよいか、kaisu で数えて表示しよう。ページ数に小数はないので、半分にするときは小数を切り捨てます（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "nokori",
+                value: "1000"
+            },
+            {
+                type: "assign",
+                name: "kaisu",
+                value: "0"
+            },
+            {
+                type: "while",
+                condition: "nokori __BLANK_blank_a__ 1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "nokori",
+                        value: "__BLANK_blank_b__"
+                    },
+                    {
+                        type: "assign",
+                        name: "kaisu",
+                        value: "__BLANK_blank_c__"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"のこりは\" + nokori + \"ページ、しぼった回数は\" + kaisu + \"回です\""
+            }
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: ">=", value: ">=" },
+            { label: "切り捨て(nokori / 2)", value: "切り捨て(nokori / 2)" },
+            { label: "nokori / 2", value: "nokori / 2" },
+            { label: "切り捨て(nokori / 3)", value: "切り捨て(nokori / 3)" },
+            { label: "kaisu + 1", value: "kaisu + 1" },
+            { label: "kaisu * 2", value: "kaisu * 2" },
+        ],
+        answers: [
+            {
+                values: [">", "切り捨て(nokori / 2)", "kaisu + 1"],
+                correct: true,
+            },
+            {
+                values: [">=", "切り捨て(nokori / 2)", "kaisu + 1"],
+                correct: false,
+                hint: "止めたいのは「のこりが1ページになったとき」です。>= だと nokori が1のときにもう1回しぼってしまい、切り捨て(1 / 2) ＝ 0 で「のこり0ページ」になり、回数も9回ではなく10回と出てしまいます。1ページより多いあいだだけ続けたいので > を使います",
+            },
+            {
+                values: [">", "nokori / 2", "kaisu + 1"],
+                correct: false,
+                hint: "切り捨てがないので 125 / 2 ＝ 62.5 のように小数が出てしまい、最後は「のこりは0.9765625ページ」というありえない表示になります。ページは整数なので 切り捨て(nokori / 2) で小数を落としましょう",
+            },
+            {
+                values: [">", "切り捨て(nokori / 3)", "kaisu + 1"],
+                correct: false,
+                hint: "まん中を1か所開いて「前か後ろか」を決めるので、のこりは3分の1ではなく2分の1になります。/ 3 だと 1000→333→111→37→12→4→1 の6回と、実際より少なく数えてしまいます",
+            },
+            {
+                values: [">", "切り捨て(nokori / 2)", "kaisu * 2"],
+                correct: false,
+                hint: "kaisu は0から始まるので、2倍しても 0 * 2 ＝ 0 のままです。何回しぼったかは1回ずつ数えたいので kaisu + 1 を使いましょう",
+            },
+            {
+                values: [">=", "nokori / 2", "kaisu + 1"],
+                correct: false,
+                hint: "2か所ちがいます。くらべるのは > （1ページより多いあいだだけ続ける）、しぼり方は 切り捨て(nokori / 2)（小数を落として半分）です",
+            }
+        ],
+        defaultHint: "半分にしぼる作業は「のこりが1ページより多いあいだ（nokori > 1）」だけくり返します。1回しぼるごとに nokori は 切り捨て(nokori / 2)、kaisu は kaisu + 1 です。1000ページでもたった9回でたどりつけます（1回ごとに半分になるので、2を9回かけると約1000になるからです）"
+    },
 }
