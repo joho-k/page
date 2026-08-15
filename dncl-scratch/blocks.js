@@ -16,14 +16,24 @@ const BLOCK_PREVIEWS = {
         text: "変数や計算結果を出力します。"
     },
     if: {
-        title: "もし",
+        title: "条件",
         code: `もし x > 0 ならば:\n  表示する(x)`,
         text: "条件が正しいときだけ中の処理を実行します。"
+    },
+    ifmulti: {
+        title: "複数条件（かつ・または）",
+        code: `もし x > 0 かつ x < 10 ならば:\n  表示する(x)`,
+        text: "条件を2つ並べます。「かつ」は両方とも正しいとき、「または」はどちらかが正しいときに中の処理を実行します。「かつ／または」は選び直せます。"
     },
     ifelse: {
         title: "もし＋そうでなければ",
         code: `もし x > 0 ならば:\n  表示する("正")\nそうでなければ:\n  表示する("負か0")`,
         text: "条件によって2通りの処理を使い分けます。"
+    },
+    ifelsemulti: {
+        title: "複数条件＋そうでなければ",
+        code: `もし x > 0 かつ x < 10 ならば:\n  表示する("1けた")\nそうでなければ:\n  表示する("それ以外")`,
+        text: "条件を2つ並べて、2通りの処理を使い分けます。「かつ」は両方とも正しいとき、「または」はどちらかが正しいときに「ならば」の側を実行します。"
     },
     for: {
         title: "繰り返し",
@@ -109,6 +119,110 @@ function setActivePaletteButton(button) {
     }
 }
 
+// 「条件」ボタンを押したときに出す選択肢（条件まわりの4種類）
+const PALETTE_MENUS = {
+    condition: [
+        { type: "if", label: "条件" },
+        { type: "ifmulti", label: "複数条件" },
+        { type: "ifelse", label: "もし＋そうでなければ" },
+        { type: "ifelsemulti", label: "複数条件＋そうでなければ" }
+    ]
+};
+
+let paletteMenuButton = null;
+
+function paletteEnsureMenu() {
+    let menu = document.getElementById("palette-block-menu");
+    if (menu) return menu;
+
+    menu = document.createElement("div");
+    menu.id = "palette-block-menu";
+    menu.className = "palette-block-menu";
+    menu.hidden = true;
+    document.body.append(menu);
+
+    // 画面の外を押したら閉じる
+    document.addEventListener("click", (event) => {
+        if (event.target.closest?.("#palette-block-menu")) return;
+        if (event.target.closest?.(".palette-block-button[data-block-menu]")) return;
+        paletteCloseMenu();
+    });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") paletteCloseMenu();
+    });
+    window.addEventListener("resize", paletteCloseMenu);
+    window.addEventListener("scroll", paletteCloseMenu, true);
+
+    return menu;
+}
+
+function paletteCloseMenu() {
+    const menu = document.getElementById("palette-block-menu");
+    if (!menu || menu.hidden) return;
+    menu.hidden = true;
+    paletteMenuButton?.setAttribute("aria-expanded", "false");
+    paletteMenuButton = null;
+
+    const preview = document.getElementById("palette-preview");
+    if (preview) preview.style.paddingLeft = "";
+}
+
+// 選択肢が説明パネルに重なってしまうので、開いているあいだは説明を右へよける
+function paletteShiftPreviewForMenu(menu) {
+    const preview = document.getElementById("palette-preview");
+    if (!preview || preview.classList.contains("palette-preview-hidden")) return;
+
+    const m = menu.getBoundingClientRect();
+    const p = preview.getBoundingClientRect();
+    const overlaps = m.bottom > p.top && m.top < p.bottom && m.right > p.left;
+    preview.style.paddingLeft = overlaps ? `${Math.round(m.right - p.left + 12)}px` : "";
+}
+
+function paletteOpenMenu(button) {
+    const items = PALETTE_MENUS[button.dataset.blockMenu];
+    if (!items) return;
+
+    const menu = paletteEnsureMenu();
+    menu.innerHTML = "";
+
+    items.forEach((item) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "palette-menu-item";
+        btn.textContent = item.label;
+        // どのブロックが出るのかを、選ぶ前に説明で見せる
+        btn.addEventListener("mouseenter", () => renderPalettePreview(item.type));
+        btn.addEventListener("focus", () => renderPalettePreview(item.type));
+        btn.addEventListener("click", (event) => {
+            event.preventDefault();
+            addBlock(item.type);
+            renderPalettePreview(item.type);
+            paletteCloseMenu();
+        });
+        menu.append(btn);
+    });
+
+    menu.hidden = false;
+    const r = button.getBoundingClientRect();
+    const margin = 8;
+    const left = Math.min(r.left, document.documentElement.clientWidth - margin - menu.offsetWidth);
+    menu.style.left = `${Math.max(margin, left)}px`;
+    menu.style.top = `${r.bottom + 6}px`;
+
+    paletteMenuButton = button;
+    button.setAttribute("aria-expanded", "true");
+    paletteShiftPreviewForMenu(menu);
+}
+
+function paletteToggleMenu(button) {
+    const menu = document.getElementById("palette-block-menu");
+    if (menu && !menu.hidden && paletteMenuButton === button) {
+        paletteCloseMenu();
+        return;
+    }
+    paletteOpenMenu(button);
+}
+
 function setupPaletteButtons() {
     const buttons = document.querySelectorAll(".palette-block-button");
 
@@ -126,6 +240,13 @@ function setupPaletteButtons() {
 
         button.addEventListener("click", (event) => {
             event.preventDefault();
+
+            // 選択肢を持つボタン（条件）は、ブロックを足す前に選択肢を出す
+            if (button.dataset.blockMenu) {
+                setActivePaletteButton(button);
+                paletteToggleMenu(button);
+                return;
+            }
 
             if (isTouchLikeDevice()) {
                 if (activePaletteButton !== button) {
@@ -259,7 +380,9 @@ function addBlock(type) {
     if (type === "assign") el = createAssignBlock();
     if (type === "print") el = createPrintBlock();
     if (type === "if") el = createIfBlock();
+    if (type === "ifmulti") el = createIfBlock(2);
     if (type === "ifelse") el = createIfElseBlock();
+    if (type === "ifelsemulti") el = createIfElseBlock(2);
     if (type === "for") el = createForBlock();
     if (type === "while") el = createWhileBlock();
     if (type === "array") el = createArrayBlock();
@@ -301,61 +424,91 @@ function setArray1DValues(arrayBlock, values) {
     });
 }
 
-function setConditionValue(block, left, op, right) {
-    const leftInput = block.querySelector(".condition-left");
-    const opSelect = block.querySelector(".condition-op");
-    const rightInput = block.querySelector(".condition-right");
+// select を空欄（クイズの穴）にする。埋めるための選択肢は blankOptionsHtml で渡す。
+function setSelectMaybeBlank(select, raw, blankOptionsHtml) {
+    const blankId = parseBlankToken(raw);
 
-    if (!leftInput || !opSelect || !rightInput) return;
-
-    setInputMaybeBlank(leftInput, left);
-
-    // quiz blank support for operator select
-    const blankId = parseBlankToken(op);
     if (blankId !== null) {
-        opSelect.dataset.blankIndex = String(blankId);
-        opSelect.classList.add("quiz-blank");
+        select.dataset.blankIndex = String(blankId);
+        select.classList.add("quiz-blank");
 
         // preserve original options so we can restore later
-        if (!opSelect.dataset.originalOptions) {
-            opSelect.dataset.originalOptions = opSelect.innerHTML;
+        if (!select.dataset.originalOptions) {
+            select.dataset.originalOptions = select.innerHTML;
         }
 
         // allow "empty" selection that will be filled by quiz choice buttons
-        opSelect.innerHTML = `
-            <option value=""></option>
-            <option value="==">==</option>
-            <option value="!=">!=</option>
-            <option value="<=">&lt;=</option>
-            <option value=">=">&gt;=</option>
-            <option value="<">&lt;</option>
-            <option value=">">&gt;</option>
-        `;
-        opSelect.value = "";
+        select.innerHTML = `<option value=""></option>${blankOptionsHtml}`;
+        select.value = "";
     } else {
         // restore original options if they were replaced for blanks
-        if (opSelect.dataset.originalOptions) {
-            opSelect.innerHTML = opSelect.dataset.originalOptions;
-            delete opSelect.dataset.originalOptions;
+        if (select.dataset.originalOptions) {
+            select.innerHTML = select.dataset.originalOptions;
+            delete select.dataset.originalOptions;
         }
-        delete opSelect.dataset.blankIndex;
-        opSelect.classList.remove("quiz-blank");
-        opSelect.value = op;
+        delete select.dataset.blankIndex;
+        select.classList.remove("quiz-blank");
+        select.value = raw;
     }
 
-    opSelect.dispatchEvent(new Event("change"));
-    setInputMaybeBlank(rightInput, right);
+    select.dispatchEvent(new Event("change"));
+}
+
+// 条件ブロックに条件を入れる。rows は [{ join, left, op, right }] の配列
+// （join は2つ目以降の「かつ／または」。1つ目は無し）。
+function setConditionRows(block, rows) {
+    const group = block.querySelector(".condition-group");
+    if (!group || !rows || rows.length === 0) return;
+
+    while (group.querySelectorAll(".condition-row").length < rows.length) {
+        addConditionRow(block);
+    }
+    Array.from(group.querySelectorAll(".condition-row"))
+        .slice(rows.length)
+        .forEach((row) => row.remove());
+
+    group.querySelectorAll(".condition-row").forEach((row, i) => {
+        const spec = rows[i];
+        const leftInput = row.querySelector(".condition-left");
+        const opSelect = row.querySelector(".condition-op");
+        const rightInput = row.querySelector(".condition-right");
+        const joinSelect = row.querySelector(".condition-join");
+
+        if (!leftInput || !opSelect || !rightInput) return;
+
+        if (joinSelect) {
+            setSelectMaybeBlank(joinSelect, spec.join || "かつ", CONDITION_JOIN_OPTIONS_HTML);
+        }
+
+        setInputMaybeBlank(leftInput, spec.left);
+        setSelectMaybeBlank(opSelect, spec.op, CONDITION_OP_OPTIONS_HTML);
+        setInputMaybeBlank(rightInput, spec.right);
+    });
+
+    setupConditionGroup(block);
+}
+
+// 互換用（条件1つだけを入れる）
+function setConditionValue(block, left, op, right) {
+    setConditionRows(block, [{ left, op, right }]);
 }
 
 function readConditionValue(node) {
-    const leftInput = node.querySelector(".condition-left");
-    const opSelect = node.querySelector(".condition-op");
-    const rightInput = node.querySelector(".condition-right");
+    const group = node.querySelector(".condition-group");
+    const rows = group ? Array.from(group.querySelectorAll(".condition-row")) : [];
 
-    if (leftInput && opSelect && rightInput) {
-        const left = leftInput.value.trim() || "0";
-        const right = rightInput.value.trim() || "0";
-        return `${left} ${opSelect.value} ${right}`;
+    if (rows.length > 0) {
+        return rows
+            .map((row, i) => {
+                const left = row.querySelector(".condition-left")?.value.trim() || "0";
+                const op = row.querySelector(".condition-op")?.value ?? "";
+                const right = row.querySelector(".condition-right")?.value.trim() || "0";
+                // 空欄（クイズ）のときは空のまま返す。勝手に「かつ」で埋めない。
+                const joinSelect = row.querySelector(".condition-join");
+                const join = i === 0 ? "" : `${joinSelect ? joinSelect.value : "かつ"} `;
+                return `${join}${left} ${op} ${right}`;
+            })
+            .join(" ");
     }
 
     return node.querySelector("input").value;
@@ -837,7 +990,89 @@ function createPrintBlock() {
     return div;
 }
 
-function createIfBlock() {
+// 条件（x > 0）の入力欄。2つ目からは先頭に「かつ／または」を選ぶ欄が付く。
+const CONDITION_OP_OPTIONS_HTML = `
+      <option value=">">&gt;</option>
+      <option value=">=">&gt;=</option>
+      <option value="<">&lt;</option>
+      <option value="<=">&lt;=</option>
+      <option value="==">==</option>
+      <option value="!=">!=</option>
+`;
+
+const CONDITION_JOIN_OPTIONS_HTML = `
+      <option value="かつ">かつ</option>
+      <option value="または">または</option>
+`;
+
+function conditionRowHtml(withJoin) {
+    // 2つ目は「x > 0 かつ x < 10」のように、はんいを表す形を初期値にする
+    const op = withJoin ? "<" : ">";
+    const right = withJoin ? "10" : "0";
+    return `
+    <span class="condition-row">
+      ${withJoin ? `<select class="condition-join">${CONDITION_JOIN_OPTIONS_HTML}</select>` : ""}
+      <input class="condition-left" value="x">
+      <select class="condition-op" data-default="${op}">${CONDITION_OP_OPTIONS_HTML}</select>
+      <input class="condition-right" value="${right}">
+      ${withJoin ? `<button type="button" class="condition-remove" title="この条件を消す">×</button>` : ""}
+    </span>`;
+}
+
+function conditionGroupHtml(conditionCount = 1) {
+    const rows = [];
+    for (let i = 0; i < Math.max(1, conditionCount); i += 1) rows.push(conditionRowHtml(i > 0));
+    return `<span class="condition-group">${rows.join("")}</span>`;
+}
+
+// 条件欄（select の変更・「×」での削除）を動かせるようにする
+function setupConditionGroup(block) {
+    const group = block.querySelector(".condition-group");
+    if (!group) return;
+
+    // 初期値の指定がある比較記号を選んでおく（HTMLの selected 属性より扱いやすい）
+    group.querySelectorAll("select[data-default]").forEach((select) => {
+        select.value = select.dataset.default;
+        delete select.dataset.default;
+    });
+
+    group.querySelectorAll("select").forEach((select) => {
+        if (select.dataset.conditionBound) return;
+        select.dataset.conditionBound = "1";
+        select.addEventListener("change", updateCode);
+    });
+
+    group.querySelectorAll(".condition-remove").forEach((button) => {
+        if (button.dataset.conditionBound) return;
+        button.dataset.conditionBound = "1";
+        button.addEventListener("click", (event) => {
+            event.stopPropagation();
+            button.closest(".condition-row")?.remove();
+            updateCode();
+        });
+    });
+
+    group.querySelectorAll("input").forEach(autoResizeInput);
+}
+
+// 条件を1つ増やす（「かつ／または」でつなぐ）
+function addConditionRow(block, join = "かつ") {
+    const group = block.querySelector(".condition-group");
+    if (!group) return null;
+
+    const wrapper = document.createElement("span");
+    wrapper.innerHTML = conditionRowHtml(true);
+    const row = wrapper.firstElementChild;
+    group.appendChild(row);
+
+    const joinSelect = row.querySelector(".condition-join");
+    if (joinSelect) joinSelect.value = join;
+
+    setupConditionGroup(block);
+    return row;
+}
+
+function createIfBlock(conditionCount = 1) {
     const div = document.createElement("div");
     div.className = "block if";
     div.dataset.type = "if";
@@ -845,16 +1080,7 @@ function createIfBlock() {
 
     div.innerHTML = `
     もし
-    <input class="condition-left" value="x">
-    <select class="condition-op">
-      <option value=">">&gt;</option>
-      <option value=">=">&gt;=</option>
-      <option value="<">&lt;</option>
-      <option value="<=">&lt;=</option>
-      <option value="==">==</option>
-      <option value="!=">!=</option>
-    </select>
-    <input class="condition-right" value="0">
+    ${conditionGroupHtml(conditionCount)}
     ならば:
     <div class="children dropzone"></div>
   `;
@@ -862,7 +1088,7 @@ function createIfBlock() {
     const child = div.querySelector(".children");
 
     div.querySelectorAll("input").forEach(autoResizeInput);
-    div.querySelector("select").addEventListener("change", updateCode);
+    setupConditionGroup(div);
     enableDrop(child);
 
     updatePlaceholder(child);
@@ -870,7 +1096,7 @@ function createIfBlock() {
     return div;
 }
 
-function createIfElseBlock() {
+function createIfElseBlock(conditionCount = 1) {
     const div = document.createElement("div");
     div.className = "block ifelse";
     div.dataset.type = "ifelse";
@@ -878,16 +1104,7 @@ function createIfElseBlock() {
 
     div.innerHTML = `
     もし
-    <input class="condition-left" value="x">
-    <select class="condition-op">
-      <option value=">">&gt;</option>
-      <option value=">=">&gt;=</option>
-      <option value="<">&lt;</option>
-      <option value="<=">&lt;=</option>
-      <option value="==">==</option>
-      <option value="!=">!=</option>
-    </select>
-    <input class="condition-right" value="0">
+    ${conditionGroupHtml(conditionCount)}
     ならば:
     <div class="children dropzone if-body"></div>
 
@@ -901,7 +1118,7 @@ function createIfElseBlock() {
     const elseBody = div.querySelector(".else-body");
 
     div.querySelectorAll("input").forEach(autoResizeInput);
-    div.querySelector("select").addEventListener("change", updateCode);
+    setupConditionGroup(div);
 
     enableDrop(ifBody);
     enableDrop(elseBody);
@@ -938,23 +1155,14 @@ function createForBlock() {
     return div;
 }
 
-function createWhileBlock() {
+function createWhileBlock(conditionCount = 1) {
     const div = document.createElement("div");
     div.className = "block while";
     div.dataset.type = "while";
     assignBlockId(div);
 
     div.innerHTML = `
-    <input class="condition-left" value="x">
-    <select class="condition-op">
-      <option value=">">&gt;</option>
-      <option value=">=">&gt;=</option>
-      <option value="<">&lt;</option>
-      <option value="<=">&lt;=</option>
-      <option value="==">==</option>
-      <option value="!=">!=</option>
-    </select>
-    <input class="condition-right" value="0">
+    ${conditionGroupHtml(conditionCount)}
     の間繰り返す:
     <div class="children dropzone"></div>
   `;
@@ -962,7 +1170,7 @@ function createWhileBlock() {
     const child = div.querySelector(".children");
 
     div.querySelectorAll("input").forEach(autoResizeInput);
-    div.querySelector("select").addEventListener("change", updateCode);
+    setupConditionGroup(div);
     enableDrop(child);
     updatePlaceholder(child);
 
@@ -1363,10 +1571,13 @@ function decodeProgramAst(encoded) {
     return Array.isArray(ast) ? ast : [];
 }
 
-function parseConditionExpr(condition) {
-    const raw = String(condition ?? "").trim();
+const CONDITION_BLANK_RE = /__BLANK(?::|_)?.+?__/;
+
+// 1つぶんの条件（x > 0 / a __BLANK_x__ b）を左・演算子・右に分ける
+function parseSingleConditionExpr(raw) {
+    const s = String(raw ?? "").trim();
     // quiz blank operator support: "a __BLANK_x__ b"
-    const blankMatch = raw.match(/^(.+?)\s+(__BLANK.+?__)\s+(.+)$/);
+    const blankMatch = s.match(/^(.+?)\s+(__BLANK.+?__)\s+(.+)$/);
     if (blankMatch) {
         return {
             left: blankMatch[1].trim(),
@@ -1376,14 +1587,91 @@ function parseConditionExpr(condition) {
     }
     const ops = ["==", "!=", "<=", ">=", "<", ">"];
     for (const op of ops) {
-        const idx = raw.indexOf(op);
+        const idx = s.indexOf(op);
         if (idx === -1) continue;
-        const left = raw.slice(0, idx).trim();
-        const right = raw.slice(idx + op.length).trim();
+        const left = s.slice(0, idx).trim();
+        const right = s.slice(idx + op.length).trim();
         if (!left || !right) break;
         return { left, op, right };
     }
     return null;
+}
+
+// 「かつ／または」（またはそこが空欄になっているクイズ）で、条件を区切る。
+// 文字列・カッコ・添字の中は数えない。区切りが無ければ null。
+function splitConditionSegments(raw) {
+    const segments = [];
+    const joins = [];
+    let bracketDepth = 0;
+    let parenDepth = 0;
+    let quote = null;
+    let start = 0;
+
+    for (let i = 0; i < raw.length; i += 1) {
+        const ch = raw[i];
+
+        if (quote) {
+            if (ch === quote) quote = null;
+            continue;
+        }
+        if (ch === '"') { quote = '"'; continue; }
+        if (ch === "“") { quote = "”"; continue; }
+
+        if (ch === "[") { bracketDepth += 1; continue; }
+        if (ch === "]") { bracketDepth -= 1; continue; }
+        if (ch === "(") { parenDepth += 1; continue; }
+        if (ch === ")") { parenDepth -= 1; continue; }
+        if (bracketDepth !== 0 || parenDepth !== 0) continue;
+
+        let word = null;
+        if (raw.startsWith("かつ", i)) word = "かつ";
+        else if (raw.startsWith("または", i)) word = "または";
+        else {
+            // 「かつ／または」そのものが空欄になっている問題にも対応する。
+            // ただし空欄が比較の演算子（a __BLANK__ b）のときは区切らない。
+            const rest = raw.slice(i);
+            const m = rest.match(CONDITION_BLANK_RE);
+            if (m && m.index === 0) {
+                const before = raw.slice(start, i);
+                const after = raw.slice(i + m[0].length);
+                if (hasComparisonOp(before) && hasComparisonOp(after)) word = m[0];
+            }
+        }
+
+        if (!word) continue;
+
+        segments.push(raw.slice(start, i).trim());
+        joins.push(word);
+        i += word.length - 1;
+        start = i + 1;
+    }
+
+    if (segments.length === 0) return null;
+    segments.push(raw.slice(start).trim());
+    if (segments.some((s) => s === "")) return null;
+
+    return segments.map((expr, i) => ({ expr, join: i === 0 ? "" : joins[i - 1] }));
+}
+
+function hasComparisonOp(text) {
+    return ["==", "!=", "<=", ">=", "<", ">"].some((op) => String(text).includes(op));
+}
+
+// 条件式を、ブロックの条件欄（1つ以上）の形にする
+function parseConditionExpr(condition) {
+    const raw = String(condition ?? "").trim();
+    const segments = splitConditionSegments(raw);
+
+    if (segments) {
+        const rows = segments.map((seg) => {
+            const parsed = parseSingleConditionExpr(seg.expr);
+            return parsed ? { ...parsed, join: seg.join } : null;
+        });
+        return rows.every(Boolean) ? rows : null;
+    }
+
+    const single = parseSingleConditionExpr(raw);
+    return single ? [single] : null;
 }
 
 function parseBlankToken(raw) {
@@ -1547,8 +1835,8 @@ function loadProgramFromAst(ast) {
 
             if (node.type === "if") {
                 const b = createIfBlock();
-                const parts = parseConditionExpr(node.condition);
-                if (parts) setConditionValue(b, parts.left, parts.op, parts.right);
+                const rows = parseConditionExpr(node.condition);
+                if (rows) setConditionRows(b, rows);
                 else setInputValue(b.querySelector("input"), node.condition ?? "0");
                 appendNodes(node.body, b.querySelector(".children"));
                 container.appendChild(b);
@@ -1557,8 +1845,8 @@ function loadProgramFromAst(ast) {
 
             if (node.type === "ifelse") {
                 const b = createIfElseBlock();
-                const parts = parseConditionExpr(node.condition);
-                if (parts) setConditionValue(b, parts.left, parts.op, parts.right);
+                const rows = parseConditionExpr(node.condition);
+                if (rows) setConditionRows(b, rows);
                 else setInputValue(b.querySelector("input"), node.condition ?? "0");
                 appendNodes(node.ifBody, b.querySelector(".if-body"));
                 appendNodes(node.elseBody, b.querySelector(".else-body"));
@@ -1580,8 +1868,8 @@ function loadProgramFromAst(ast) {
 
             if (node.type === "while") {
                 const b = createWhileBlock();
-                const parts = parseConditionExpr(node.condition);
-                if (parts) setConditionValue(b, parts.left, parts.op, parts.right);
+                const rows = parseConditionExpr(node.condition);
+                if (rows) setConditionRows(b, rows);
                 else setInputValue(b.querySelector("input"), node.condition ?? "0");
                 appendNodes(node.body, b.querySelector(".children"));
                 container.appendChild(b);

@@ -491,6 +491,103 @@ const TESTS = [
         expected: "値:\n20\n"
     },
 
+    // ----------------
+    // かつ / または
+    // ----------------
+    {
+        name: "かつ（両方とも真）",
+        ast: [
+            { type: "assign", name: "x", value: "5" },
+            {
+                type: "if",
+                condition: "x > 0 かつ x < 10",
+                body: [{ type: "print", value: '"はんい内"' }]
+            }
+        ],
+        expected: "はんい内\n"
+    },
+
+    {
+        name: "かつ（片方が偽なら実行しない）",
+        ast: [
+            { type: "assign", name: "x", value: "15" },
+            {
+                type: "ifelse",
+                condition: "x > 0 かつ x < 10",
+                ifBody: [{ type: "print", value: '"はんい内"' }],
+                elseBody: [{ type: "print", value: '"はんい外"' }]
+            }
+        ],
+        expected: "はんい外\n"
+    },
+
+    {
+        name: "または（片方が真なら実行する）",
+        ast: [
+            { type: "assign", name: "ten", value: "45" },
+            {
+                type: "ifelse",
+                condition: "ten >= 80 または ten <= 50",
+                ifBody: [{ type: "print", value: '"よびだし"' }],
+                elseBody: [{ type: "print", value: '"ふつう"' }]
+            }
+        ],
+        expected: "よびだし\n"
+    },
+
+    {
+        name: "かつ は または より先に計算する",
+        ast: [
+            { type: "assign", name: "x", value: "0" },
+            {
+                type: "ifelse",
+                // 1 == 1（真） または 1 == 2 かつ 1 == 3（偽） → 真
+                condition: "1 == 1 または 1 == 2 かつ 1 == 3",
+                ifBody: [{ type: "print", value: '"真"' }],
+                elseBody: [{ type: "print", value: '"偽"' }]
+            }
+        ],
+        expected: "真\n"
+    },
+
+    {
+        name: "かつ（配列と繰り返しの組み合わせ）",
+        ast: [
+            { type: "assign", name: "ten", value: "[55, 82, 91, 70]" },
+            { type: "assign", name: "kazu", value: "0" },
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "3",
+                step: "1",
+                body: [
+                    {
+                        type: "if",
+                        condition: "ten[i] >= 80 かつ ten[i] <= 90",
+                        body: [{ type: "assign", name: "kazu", value: "kazu + 1" }]
+                    }
+                ]
+            },
+            { type: "print", value: "kazu" }
+        ],
+        expected: "1\n"
+    },
+
+    {
+        name: "かつ（条件繰り返し）",
+        ast: [
+            { type: "assign", name: "x", value: "0" },
+            {
+                type: "while",
+                condition: "x < 5 かつ x != 3",
+                body: [{ type: "assign", name: "x", value: "x + 1" }]
+            },
+            { type: "print", value: "x" }
+        ],
+        expected: "3\n"
+    },
+
     {
         name: "文字列（if条件に影響しない）",
         ast: [
