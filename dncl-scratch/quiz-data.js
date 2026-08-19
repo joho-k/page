@@ -3213,4 +3213,94 @@ window.quizData = {
         ],
         defaultHint: "2つの値の交換は3手です。①temp に data[j] をよける ②data[j] に data[j + 1] を入れる ③data[j + 1] に temp をもどす。比べるのは、左が右より大きいとき（>）だけ入れかえれば小さい順になります"
     },
+    q043: {
+        title: "おつりの硬貨の枚数",
+        addedAt: "2026-08-19",
+        difficulty: 3,
+        question: "780円のおつりを、500円玉・100円玉・10円玉を使って、できるだけ少ない枚数でわたします。それぞれ何枚になるかを表示しよう。大きい硬貨から順に「わった商（小数は切り捨て）がその硬貨の枚数」「わったあまりが次に回す残り」になります（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "tsuri",
+                value: "780"
+            },
+            {
+                type: "assign",
+                name: "go",
+                value: "__BLANK_blank_a__"
+            },
+            {
+                type: "assign",
+                name: "nokori",
+                value: "__BLANK_blank_b__"
+            },
+            {
+                type: "assign",
+                name: "hyaku",
+                value: "切り捨て(nokori / 100)"
+            },
+            {
+                type: "assign",
+                name: "hasuu",
+                value: "nokori % 100"
+            },
+            {
+                type: "assign",
+                name: "juu",
+                value: "__BLANK_blank_c__"
+            },
+            {
+                type: "print",
+                value: "\"500円玉が\" + go + \"枚\""
+            },
+            {
+                type: "print",
+                value: "\"100円玉が\" + hyaku + \"枚\""
+            },
+            {
+                type: "print",
+                value: "\"10円玉が\" + juu + \"枚\""
+            }
+        ],
+        choices: [
+            { label: "切り捨て(tsuri / 500)", value: "切り捨て(tsuri / 500)" },
+            { label: "切り捨て(tsuri / 100)", value: "切り捨て(tsuri / 100)" },
+            { label: "tsuri % 500", value: "tsuri % 500" },
+            { label: "切り捨て(nokori / 10)", value: "切り捨て(nokori / 10)" },
+            { label: "切り捨て(hasuu / 10)", value: "切り捨て(hasuu / 10)" },
+            { label: "hasuu % 10", value: "hasuu % 10" },
+        ],
+        answers: [
+            {
+                values: ["切り捨て(tsuri / 500)", "tsuri % 500", "切り捨て(hasuu / 10)"],
+                correct: true,
+            },
+            {
+                values: ["tsuri % 500", "切り捨て(tsuri / 500)", "切り捨て(hasuu / 10)"],
+                correct: false,
+                hint: "商とあまりが逆になっています。780 % 500 ＝ 280 は「500円玉をわたしたあとの残り」なので枚数にはなりません。枚数は 切り捨て(780 / 500) ＝ 1 枚のほうです",
+            },
+            {
+                values: ["切り捨て(tsuri / 500)", "tsuri % 500", "hasuu % 10"],
+                correct: false,
+                hint: "10円玉の枚数も「わった商」です。hasuu ＝ 80 なので 80 % 10 ＝ 0 となり0枚になってしまいます。切り捨て(80 / 10) ＝ 8 枚が正しい枚数です",
+            },
+            {
+                values: ["切り捨て(tsuri / 100)", "tsuri % 500", "切り捨て(hasuu / 10)"],
+                correct: false,
+                hint: "1つ目は500円玉の枚数です。切り捨て(780 / 100) ＝ 7 だと100円玉が7枚という意味になります。500でわって 切り捨て(780 / 500) ＝ 1 枚としましょう",
+            },
+            {
+                values: ["切り捨て(tsuri / 500)", "切り捨て(tsuri / 100)", "切り捨て(hasuu / 10)"],
+                correct: false,
+                hint: "2つ目は「500円玉をわたしたあとの残り」です。切り捨て(780 / 100) ＝ 7 は金額ではありません。残りは 780 % 500 ＝ 280 円と、あまりで求めます",
+            },
+            {
+                values: ["切り捨て(tsuri / 500)", "tsuri % 500", "切り捨て(nokori / 10)"],
+                correct: false,
+                hint: "nokori ＝ 280 は100円玉をわたす前の金額なので、切り捨て(280 / 10) ＝ 28 枚になってしまいます。100円玉の分をひいたあとの hasuu ＝ 80 を10でわりましょう",
+            }
+        ],
+        defaultHint: "大きい硬貨から順に「切り捨て(金額 / 硬貨の額) ＝ 枚数」「金額 % 硬貨の額 ＝ 次に回す残り」の2本立てです。780円なら 切り捨て(780 / 500) ＝ 1枚、残り 780 % 500 ＝ 280円、と進みます"
+    },
 }

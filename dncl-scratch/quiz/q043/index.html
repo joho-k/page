@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第43問 おつりの硬貨の枚数｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="780円のおつりを、500円玉・100円玉・10円玉を使って、できるだけ少ない枚数でわたします。それぞれ何枚になるかを表示しよう。大きい硬貨から順に「わった商（小数は切り捨て）がその硬貨の枚数」「わったあまりが次に回す残り」になります（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,おつりの硬貨の枚数">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q043/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第43問 おつりの硬貨の枚数｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="780円のおつりを、500円玉・100円玉・10円玉を使って、できるだけ少ない枚数でわたします。それぞれ何枚になるかを表示しよう。大きい硬貨から順に「わった商（小数は切り捨て）がその硬貨の枚数」「わったあまりが次に回す残り」になります（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q043/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q043.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第43問 おつりの硬貨の枚数｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="780円のおつりを、500円玉・100円玉・10円玉を使って、できるだけ少ない枚数でわたします。それぞれ何枚になるかを表示しよう。大きい硬貨から順に「わった商（小数は切り捨て）がその硬貨の枚数」「わったあまりが次に回す残り」になります（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q043.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q043/index.html#quiz",
+      "name": "第43問 おつりの硬貨の枚数",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q043/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "780円のおつりを、500円玉・100円玉・10円玉を使って、できるだけ少ない枚数でわたします。それぞれ何枚になるかを表示しよう。大きい硬貨から順に「わった商（小数は切り捨て）がその硬貨の枚数」「わったあまりが次に回す残り」になります（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "切り捨て(tsuri / 500) , tsuri % 500 , 切り捨て(hasuu / 10)"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "切り捨て(tsuri / 500)"
+          },
+          {
+            "@type": "Answer",
+            "text": "切り捨て(tsuri / 100)"
+          },
+          {
+            "@type": "Answer",
+            "text": "tsuri % 500"
+          },
+          {
+            "@type": "Answer",
+            "text": "切り捨て(nokori / 10)"
+          },
+          {
+            "@type": "Answer",
+            "text": "切り捨て(hasuu / 10)"
+          },
+          {
+            "@type": "Answer",
+            "text": "hasuu % 10"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "練習問題集",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "第43問 おつりの硬貨の枚数",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q043/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q043";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第43問 おつりの硬貨の枚数</h1>
+            <p>780円のおつりを、500円玉・100円玉・10円玉を使って、できるだけ少ない枚数でわたします。それぞれ何枚になるかを表示しよう。大きい硬貨から順に「わった商（小数は切り捨て）がその硬貨の枚数」「わったあまりが次に回す残り」になります（3か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>tsuri = 780
+go = ［A］
+nokori = ［B］
+hyaku = 切り捨て(nokori / 100)
+hasuu = nokori % 100
+juu = ［C］
+表示する(&quot;500円玉が&quot; + go + &quot;枚&quot;)
+表示する(&quot;100円玉が&quot; + hyaku + &quot;枚&quot;)
+表示する(&quot;10円玉が&quot; + juu + &quot;枚&quot;)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>切り捨て(tsuri / 500)</code></li>
+                <li><code>切り捨て(tsuri / 100)</code></li>
+                <li><code>tsuri % 500</code></li>
+                <li><code>切り捨て(nokori / 10)</code></li>
+                <li><code>切り捨て(hasuu / 10)</code></li>
+                <li><code>hasuu % 10</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>大きい硬貨から順に「切り捨て(金額 / 硬貨の額) ＝ 枚数」「金額 % 硬貨の額 ＝ 次に回す残り」の2本立てです。780円なら 切り捨て(780 / 500) ＝ 1枚、残り 780 % 500 ＝ 280円、と進みます</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>切り捨て(tsuri / 500)</code></li>
+            <li>空欄 ［B］ … <code>tsuri % 500</code></li>
+            <li>空欄 ［C］ … <code>切り捨て(hasuu / 10)</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>tsuri % 500</code>　［B］<code>切り捨て(tsuri / 500)</code>　［C］<code>切り捨て(hasuu / 10)</code> … 商とあまりが逆になっています。780 % 500 ＝ 280 は「500円玉をわたしたあとの残り」なので枚数にはなりません。枚数は 切り捨て(780 / 500) ＝ 1 枚のほうです</li>
+            <li>［A］<code>切り捨て(tsuri / 500)</code>　［B］<code>tsuri % 500</code>　［C］<code>hasuu % 10</code> … 10円玉の枚数も「わった商」です。hasuu ＝ 80 なので 80 % 10 ＝ 0 となり0枚になってしまいます。切り捨て(80 / 10) ＝ 8 枚が正しい枚数です</li>
+            <li>［A］<code>切り捨て(tsuri / 100)</code>　［B］<code>tsuri % 500</code>　［C］<code>切り捨て(hasuu / 10)</code> … 1つ目は500円玉の枚数です。切り捨て(780 / 100) ＝ 7 だと100円玉が7枚という意味になります。500でわって 切り捨て(780 / 500) ＝ 1 枚としましょう</li>
+            <li>［A］<code>切り捨て(tsuri / 500)</code>　［B］<code>切り捨て(tsuri / 100)</code>　［C］<code>切り捨て(hasuu / 10)</code> … 2つ目は「500円玉をわたしたあとの残り」です。切り捨て(780 / 100) ＝ 7 は金額ではありません。残りは 780 % 500 ＝ 280 円と、あまりで求めます</li>
+            <li>［A］<code>切り捨て(tsuri / 500)</code>　［B］<code>tsuri % 500</code>　［C］<code>切り捨て(nokori / 10)</code> … nokori ＝ 280 は100円玉をわたす前の金額なので、切り捨て(280 / 10) ＝ 28 枚になってしまいます。100円玉の分をひいたあとの hasuu ＝ 80 を10でわりましょう</li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q042/index.html">第42問へ</a></li>
+                
+                <li><a href="../../practice.html">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
