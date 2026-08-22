@@ -7,7 +7,7 @@
 
     <title>第37問 バーコードのチェックディジット｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
     <meta name="description" content="商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号を1桁ずつ入れた配列 code（＝[4,9,1,2,3,4,7]）があり、左から code[0], code[1], … , code[6] の7個です。下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍し、合計 gokei を出します。その合計の下1桁 amari を10からひいたものがチェックディジットです。ただし、下1桁が0となった場合は、チェックディジットは0となります（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
-    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,バーコードのチェックディジット">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,バーコードのチェックディジット">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q037/index.html">
 
@@ -37,7 +37,7 @@
       "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q037/index.html",
       "educationalLevel": "高等学校",
       "learningResourceType": "演習問題",
-      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
       "inLanguage": "ja",
       "isAccessibleForFree": true,
       "about": {
@@ -106,12 +106,6 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "練習問題集",
-          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
           "name": "第37問 バーコードのチェックディジット",
           "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q037/index.html"
         }
@@ -134,7 +128,7 @@
         <article>
             <h1>第37問 バーコードのチェックディジット</h1>
             <p>商品のバーコードの末尾にある「チェックディジット」は、読みまちがいを見つけるための1桁の数字です。7桁の番号を1桁ずつ入れた配列 code（＝[4,9,1,2,3,4,7]）があり、左から code[0], code[1], … , code[6] の7個です。下の桁（一の位）を1番目として、奇数番目の数字を3倍、偶数番目の数字を1倍し、合計 gokei を出します。その合計の下1桁 amari を10からひいたものがチェックディジットです。ただし、下1桁が0となった場合は、チェックディジットは0となります（3か所の穴をうめよう）</p>
-            <p>難易度：★★★★★（5／難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+            <p>難易度：★★★★★（5／難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
 
             <h2>プログラム</h2>
             <pre><code>code = [4,9,1,2,3,4,7]
@@ -189,11 +183,20 @@ amari = gokei % 10
             <li>［A］<code>-</code>　［B］<code>*</code>　［C］<code>10</code> … amari は合計の下1桁なので0〜9にしかならず、10 になることはありません。これでは一度も使われない分岐です。2桁になってしまうのは下1桁が0のときなので、amari == 0 とします</li>
             </ul>
 
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
             <h2>ほかの問題</h2>
             <ul>
                 <li><a href="../q036/index.html">第36問へ</a></li>
                 <li><a href="../q038/index.html">第38問へ</a></li>
-                <li><a href="../../practice.html">問題一覧</a></li>
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
             </ul>
         </article>
     </noscript>

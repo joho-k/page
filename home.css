@@ -374,7 +374,7 @@ body.home .header.is-visible {
 }
 
 /* 見出しバナーも浮かせる（塗りは既存の濃紺のまま） */
-#protoro-spotlight h2,
+#protore-spotlight h2,
 #content-hero h2,
 #tutoring h2,
 .news h2,
@@ -391,7 +391,7 @@ body.home .header.is-visible {
 }
 
 /* 共テプロトレ特集 */
-#protoro-spotlight {
+#protore-spotlight {
     max-width: 1100px;
     margin: 0 auto;
     padding: clamp(18px, 3vw, 36px) 0 0;
@@ -401,6 +401,11 @@ body.home .header.is-visible {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+}
+
+/* 入り口が1つのときは横いっぱいに使う */
+.spot-grid-single {
+    grid-template-columns: 1fr;
 }
 
 .spot-card {
@@ -587,7 +592,7 @@ body.home .header.is-visible {
     }
 
     /* 影が画面端で切れないように余白を足す */
-    #protoro-spotlight,
+    #protore-spotlight,
     #content-hero,
     #tutoring {
         padding-left: 10px;
