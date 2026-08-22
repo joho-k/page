@@ -443,15 +443,7 @@ URL: https://joho-kyoshitsu.com/dncl/question.html
 
 URL: https://joho-kyoshitsu.com/dncl-scratch/index.html
 
-共通テストプログラミングトレーニング 通称「共テプロトレ」は情報Iに対応した、実際にプログラムを動かしながら学べる教材です。プログラミング初学者にもおすすめ！
-
----
-
-### 共テプロトレ 練習問題集
-
-URL: https://joho-kyoshitsu.com/dncl-scratch/practice.html
-
-共通テスト「情報I」対策：DNCLの典型問題を段階的に練習できる問題集ページです。
+高校「情報I」のプログラミングを、解説動画で理解して、その場で動かして練習できる教材です。変数と代入・条件分岐・繰り返し・配列の単元別に解説動画と要点があり、同じページの練習問題集（DNCLの穴埋め問題）を単元・難易度でしぼりこんで解けます。単元でしぼりこんだ状態は https://joho-kyoshitsu.com/dncl-scratch/index.html?topic=loop#problems のようなURLで直接開けます（topic は variable／branch／loop／array）。プログラミング初学者にもおすすめ！
 
 ---
 

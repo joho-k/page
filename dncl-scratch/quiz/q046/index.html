@@ -7,7 +7,7 @@
 
     <title>第46問 通信のエラーを見つける（パリティチェック）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
     <meta name="description" content="届いた8ビットのデータ bit（＝[1,0,1,1,0,1,0,1]）は、はじめの7ビットが本当のデータで、最後の bit[7] は「パリティビット」です。偶数パリティでは、はじめの7ビットにふくまれる1の個数が偶数なら0、奇数なら1をパリティビットにします。7ビットから正しいパリティビットを計算し、届いた bit[7] と同じかどうかで「正常」か「エラー」かを表示しよう。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
-    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,通信のエラーを見つける（パリティチェック）">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,通信のエラーを見つける（パリティチェック）">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q046/index.html">
 
@@ -37,7 +37,7 @@
       "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q046/index.html",
       "educationalLevel": "高等学校",
       "learningResourceType": "演習問題",
-      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
       "inLanguage": "ja",
       "isAccessibleForFree": true,
       "about": {
@@ -106,12 +106,6 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "練習問題集",
-          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
           "name": "第46問 通信のエラーを見つける（パリティチェック）",
           "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q046/index.html"
         }
@@ -134,7 +128,7 @@
         <article>
             <h1>第46問 通信のエラーを見つける（パリティチェック）</h1>
             <p>届いた8ビットのデータ bit（＝[1,0,1,1,0,1,0,1]）は、はじめの7ビットが本当のデータで、最後の bit[7] は「パリティビット」です。偶数パリティでは、はじめの7ビットにふくまれる1の個数が偶数なら0、奇数なら1をパリティビットにします。7ビットから正しいパリティビットを計算し、届いた bit[7] と同じかどうかで「正常」か「エラー」かを表示しよう。あてはまる記号を選ぼう（3か所の穴をうめよう）</p>
-            <p>難易度：★★★★☆（4／やや難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+            <p>難易度：★★★★☆（4／やや難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
 
             <h2>プログラム</h2>
             <pre><code>bit = [1,0,1,1,0,1,0,1]
@@ -182,11 +176,20 @@ parity = kosuu ［C］ 2
             <li>［A］<code>!=</code>　［B］<code>+</code>　［C］<code>/</code> … 2か所ちがいます。数えたいのは1の個数なので ==、偶数か奇数かは2でわったあまりを見る % で調べます</li>
             </ul>
 
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
             <h2>ほかの問題</h2>
             <ul>
                 <li><a href="../q045/index.html">第45問へ</a></li>
                 
-                <li><a href="../../practice.html">問題一覧</a></li>
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
             </ul>
         </article>
     </noscript>

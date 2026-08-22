@@ -1769,3 +1769,67 @@ pre {
         grid-template-columns: 1fr;
     }
 }
+/*
+ * 問題ページ（quiz/qNNN/）の「この問題の単元」バー。
+ * 検索から問題ページに直接来た人を、単元の解説動画と一覧に戻すための導線。
+ */
+.quiz-topic-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    max-width: 1400px;
+    margin: 0 auto 12px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: var(--bg);
+    box-shadow: var(--neu-raised-sm);
+}
+
+.quiz-topic-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6b7280;
+}
+
+.quiz-topic-chip,
+.quiz-topic-video {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: var(--neu-raised-sm);
+}
+
+.quiz-topic-chip:active,
+.quiz-topic-video:active {
+    box-shadow: var(--neu-pressed);
+}
+
+.quiz-topic-video {
+    margin-left: auto;
+    background: var(--primary);
+    color: #fff;
+}
+
+/* 動画が2本並ぶときは、間をあけずに右側にまとめる */
+.quiz-topic-video + .quiz-topic-video {
+    margin-left: 0;
+}
+
+.quiz-topic-video:active {
+    box-shadow: var(--neu-pressed-color);
+}
+
+@media (max-width: 768px) {
+    .quiz-topic-bar {
+        border-radius: 18px;
+    }
+
+    .quiz-topic-video {
+        margin-left: 0;
+    }
+}

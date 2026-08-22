@@ -95,6 +95,62 @@
             document.dispatchEvent(new Event("DOMContentLoaded", { bubbles: true }));
         }
         if (state === "complete") window.dispatchEvent(new Event("load"));
+
+        // 6) この問題がどの単元かと、その単元の解説動画を出す。
+        //    検索から問題ページに直接来た人を、単元の解説と一覧に戻せるようにする。
+        insertTopicBar();
+    }
+
+    /** 「この問題の単元」バーをヘッダーの下に差し込む。 */
+    function insertTopicBar() {
+        const quiz = (window.quizData || {})[window.QUIZ_ID];
+        const topics = window.dnclTopics;
+        if (!quiz || !topics) return;
+
+        const header = document.querySelector(".content > header");
+        if (!header) return;
+
+        const topicIds = topics.topicIdsOf(quiz, window.QUIZ_ID);
+        if (!topicIds.length) return;
+
+        const bar = document.createElement("div");
+        bar.className = "quiz-topic-bar";
+
+        const label = document.createElement("span");
+        label.className = "quiz-topic-label";
+        label.textContent = "この問題の単元";
+        bar.append(label);
+
+        topicIds.forEach((topicId) => {
+            const topic = topics.topicById(topicId);
+            if (!topic) return;
+
+            const link = document.createElement("a");
+            link.className = "quiz-topic-chip";
+            link.href = `${BASE}index.html?topic=${encodeURIComponent(topicId)}#problems`;
+            link.textContent = topic.name;
+            bar.append(link);
+        });
+
+        topics.videosOf(quiz, window.QUIZ_ID).forEach((topic) => {
+            const link = document.createElement("a");
+            link.className = "quiz-topic-video";
+            link.href = `https://youtu.be/${topic.video}?utm_source=joho-kyoshitsu&utm_medium=quiz`;
+            link.target = "_blank";
+            link.rel = "noopener";
+            link.innerHTML = `<i class="fa-solid fa-play"></i> ${topic.videoLabel} の解説動画`;
+
+            // サイトから動画へどれだけ出ていったかを見るため
+            link.addEventListener("click", () => {
+                if (typeof gtag === "function") {
+                    gtag("event", "video_click", { video_id: topic.video, video_title: topic.videoLabel });
+                }
+            });
+
+            bar.append(link);
+        });
+
+        header.insertAdjacentElement("afterend", bar);
     }
 
     build().catch((err) => {

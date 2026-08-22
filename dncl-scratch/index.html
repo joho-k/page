@@ -6,20 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>共テプロトレ(共通テストプログラミングトレーニング) | 情報の教室</title>
-    <meta name="description" content="共通テストプログラミングトレーニング 通称「共テプロトレ」は情報Iに対応した、実際にプログラムを動かしながら学べる教材です。共通テストのプログラム表記（DNCL）にそのまま対応。プログラミング初学者にもおすすめ！">
-    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,ビジュアルプログラミング">
+    <title>情報I プログラミングの解き方｜動画と演習で学ぶ 共テプロトレ | 情報の教室</title>
+    <meta name="description"
+        content="高校「情報I（情報1）」のプログラミングを、解説動画で理解して、その場で動かして練習できます。変数と代入・条件分岐・繰り返し・配列を単元別に、共通テストのプログラム表記（DNCL）で演習。無料・登録不要。">
+    <meta name="keywords" content="情報I プログラミング,情報1 プログラミング,高校 情報 プログラミング,共通テスト,DNCL,プログラミング学習">
 
     <!-- オープングラフ -->
-    <meta property="og:title" content="共テプロトレ(共通テストプログラミングトレーニング) | 情報の教室">
-    <meta property="og:description" content="高校「情報I」や情報処理技術者試験に役立つ教材や情報をまとめた解説サイトです。">
+    <meta property="og:title" content="情報I プログラミングの解き方｜動画と演習で学ぶ 共テプロトレ | 情報の教室">
+    <meta property="og:description" content="高校「情報I」のプログラミングを、解説動画で理解して、その場で動かして練習。変数と代入・条件分岐・繰り返し・配列を単元別に演習できます。">
     <meta property="og:image" content="https://joho-kyoshitsu.com/img/logo_transparent.png">
     <!-- オープングラフおわり -->
 
     <!-- Twitterカード -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="情報の教室">
-    <meta name="twitter:description" content="高校「情報I」と国家資格の試験対策に使える学習サイト。">
+    <meta name="twitter:title" content="情報I プログラミングの解き方｜共テプロトレ">
+    <meta name="twitter:description" content="高校「情報I」のプログラミングを、解説動画で理解して、その場で動かして練習できます。">
     <meta name="twitter:image" content="https://joho-kyoshitsu.com/img/logo_transparent.png">
     <!-- Twitterカード終わり -->
 
@@ -43,6 +44,9 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
 
+    <!-- 動画のサムネイルは YouTube から直接読む -->
+    <link rel="preconnect" href="https://i.ytimg.com">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHYWTV27F"></script>
 
@@ -61,14 +65,17 @@
 
     <!-- 共通部分ここまで -->
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="practice.css">
+    <script src="./quiz-data.js"></script>
+    <script src="./topics.js"></script>
+    <script src="./practice.js" defer></script>
+    <script src="./protore.js" defer></script>
     <!-- seo-aio -->
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/index.html">
     <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/index.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="情報の教室">
-    <meta property="og:image" content="https://joho-kyoshitsu.com/img/logo_transparent.png">
     <meta property="og:locale" content="ja_JP">
     <script type="application/ld+json">
 {
@@ -79,12 +86,24 @@
       "@id": "https://joho-kyoshitsu.com/dncl-scratch/index.html#resource",
       "name": "共テプロトレ（共通テストプログラミングトレーニング）",
       "url": "https://joho-kyoshitsu.com/dncl-scratch/index.html",
-      "description": "共通テスト「情報I」のプログラム表記（DNCL）に対応し、ブロックを並べてプログラムを動かしながら学べる教材。",
+      "description": "高校「情報I」のプログラミングを、解説動画で理解して、その場で動かして練習できる教材。変数と代入・条件分岐・繰り返し・配列を単元別に、共通テストのプログラム表記（DNCL）で演習できる。",
       "educationalLevel": "高等学校",
       "learningResourceType": "インタラクティブ教材",
-      "teaches": "プログラミング, DNCL, 共通テスト 情報I",
+      "teaches": "プログラミング, 変数と代入, 条件分岐, 繰り返し, 配列, DNCL, 共通テスト 情報I",
       "inLanguage": "ja",
       "isAccessibleForFree": true
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/index.html#topics",
+      "name": "情報I プログラミングの単元",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "変数と代入" },
+        { "@type": "ListItem", "position": 2, "name": "条件分岐" },
+        { "@type": "ListItem", "position": 3, "name": "繰り返し" },
+        { "@type": "ListItem", "position": 4, "name": "配列" },
+        { "@type": "ListItem", "position": 5, "name": "関数" }
+      ]
     },
     {
       "@type": "BreadcrumbList",
@@ -112,53 +131,173 @@
 <body>
     <div class="content">
         <header class="protro-hero">
-            <h1 class="page-title">共テプロトレ</h1>
-            <p class="protro-hero-sub">共通テストプログラミングトレーニング</p>
+            <h1 class="page-title">情報I プログラミングの解き方</h1>
+            <p class="protro-hero-sub">共テプロトレ（共通テストプログラミングトレーニング）</p>
             <p class="protro-lead">
-                共通テスト「情報I」で出る<strong>プログラム</strong>を、実際に動かしながら学べる教材です。
-                ブロックで組み立てて実行し、コード表示・ステップ実行・解説を使って「書ける／読める」力を身につけます。
+                高校「情報I」のプログラミングを、<strong>解説動画で理解して、その場で動かして練習</strong>できます。
+                変数と代入・条件分岐・繰り返し・配列を単元別に、共通テストのプログラム表記（DNCL）でそのまま演習。
             </p>
             <div class="protro-hero-actions">
-                <a class="protro-btn protro-btn-main" href="./practice.html">
-                    <span class="protro-btn-title">練習問題を解く</span>
+                <a class="protro-btn protro-btn-main" href="#videos">
+                    <span class="protro-btn-title">動画で理解する</span>
+                    <span class="protro-btn-note">まずは1本。単元別の解説もあります</span>
+                </a>
+                <a class="protro-btn protro-btn-sub" href="#problems">
+                    <span class="protro-btn-title">問題を解く</span>
                     <span class="protro-btn-note">全<span id="protro-quiz-count">--</span>問／★1のやさしい問題から</span>
                 </a>
-                <a class="protro-btn protro-btn-sub" href="./editor.html">
-                    <span class="protro-btn-title">エディターを開く</span>
-                    <span class="protro-btn-note">自分でプログラムを作って動かす</span>
-                </a>
             </div>
+            <p class="protro-hero-note">無料・登録不要。スマホでもそのまま動きます。</p>
         </header>
 
         <main>
-            <section class="protro-section">
-                <h2>難易度からえらぶ</h2>
-                <p class="protro-section-lead">はじめての人は ★1 から。1問ずつ解いて、そのまま実行して確かめられます。</p>
-                <ul class="protro-levels">
-                    <li><a href="./practice.html?difficulty=1"><span class="protro-stars">★☆☆☆☆</span><span
-                                class="protro-level-name">はじめの一歩</span><span class="protro-level-count"
-                                data-level-count="1"></span></a></li>
-                    <li><a href="./practice.html?difficulty=2"><span class="protro-stars">★★☆☆☆</span><span
-                                class="protro-level-name">基本をかためる</span><span class="protro-level-count"
-                                data-level-count="2"></span></a></li>
-                    <li><a href="./practice.html?difficulty=3"><span class="protro-stars">★★★☆☆</span><span
-                                class="protro-level-name">共通テスト標準</span><span class="protro-level-count"
-                                data-level-count="3"></span></a></li>
-                    <li><a href="./practice.html?difficulty=4"><span class="protro-stars">★★★★☆</span><span
-                                class="protro-level-name">応用に挑戦</span><span class="protro-level-count"
-                                data-level-count="4"></span></a></li>
-                    <li><a href="./practice.html?difficulty=5"><span class="protro-stars">★★★★★</span><span
-                                class="protro-level-name">難問にチャレンジ</span><span class="protro-level-count"
-                                data-level-count="5"></span></a></li>
+            <section class="protro-section" id="videos">
+                <h2>情報I プログラミングを動画で理解する</h2>
+                <p class="protro-section-lead">
+                    「授業で急にプログラムが出てきて、何をしているのか分からない」という人は、まずこの1本から。
+                    変数・演算子・条件分岐・繰り返しまで、ひととおり見わたせます。
+                </p>
+
+                <div class="video-main">
+                    <button type="button" class="video-facade video-facade-lg" data-video="pUBZsC8p9b0"
+                        data-label="これだけでマスター">
+                        <span class="video-thumb">
+                            <img src="https://i.ytimg.com/vi/pUBZsC8p9b0/maxresdefault.jpg"
+                                onerror="this.src='https://i.ytimg.com/vi/pUBZsC8p9b0/hqdefault.jpg'" loading="lazy"
+                                alt="高校情報Iのプログラミングは、これだけでマスター">
+                            <span class="video-play" aria-hidden="true"></span>
+                        </span>
+                        <span class="video-facade-caption">
+                            <span class="video-facade-title">高校情報Iのプログラミングは、これだけでマスター</span>
+                            <span class="video-facade-note">19分41秒／プログラミングの基本をまとめて解説</span>
+                        </span>
+                    </button>
+                </div>
+
+                <h3 class="protro-subhead">単元別にくわしく（シリーズ）</h3>
+                <ul class="video-list">
+                    <li>
+                        <button type="button" class="video-facade" data-video="hFkzjGTo498" data-label="第1回 変数と代入">
+                            <span class="video-thumb">
+                                <img src="https://i.ytimg.com/vi/hFkzjGTo498/maxresdefault.jpg"
+                                    onerror="this.src='https://i.ytimg.com/vi/hFkzjGTo498/hqdefault.jpg'" loading="lazy"
+                                    alt="第1回 変数と代入">
+                                <span class="video-play" aria-hidden="true"></span>
+                            </span>
+                            <span class="video-facade-caption">
+                                <span class="video-facade-title">第1回 変数と代入</span>
+                            </span>
+                        </button>
+                        <a class="video-quiz-link" href="?topic=variable#problems">変数と代入の問題を解く <span
+                                data-topic-count="variable"></span></a>
+                    </li>
+                    <li>
+                        <button type="button" class="video-facade" data-video="I7Da9CiT0LQ" data-label="第2回 条件分岐">
+                            <span class="video-thumb">
+                                <img src="https://i.ytimg.com/vi/I7Da9CiT0LQ/maxresdefault.jpg"
+                                    onerror="this.src='https://i.ytimg.com/vi/I7Da9CiT0LQ/hqdefault.jpg'" loading="lazy"
+                                    alt="第2回 条件分岐">
+                                <span class="video-play" aria-hidden="true"></span>
+                            </span>
+                            <span class="video-facade-caption">
+                                <span class="video-facade-title">第2回 条件分岐</span>
+                            </span>
+                        </button>
+                        <a class="video-quiz-link" href="?topic=branch#problems">条件分岐の問題を解く <span
+                                data-topic-count="branch"></span></a>
+                    </li>
+                    <li>
+                        <button type="button" class="video-facade" data-video="Lo0sNwFWQ3g" data-label="第3回 繰り返し">
+                            <span class="video-thumb">
+                                <img src="https://i.ytimg.com/vi/Lo0sNwFWQ3g/maxresdefault.jpg"
+                                    onerror="this.src='https://i.ytimg.com/vi/Lo0sNwFWQ3g/hqdefault.jpg'" loading="lazy"
+                                    alt="第3回 繰り返し">
+                                <span class="video-play" aria-hidden="true"></span>
+                            </span>
+                            <span class="video-facade-caption">
+                                <span class="video-facade-title">第3回 繰り返し</span>
+                            </span>
+                        </button>
+                        <a class="video-quiz-link" href="?topic=loop#problems">繰り返しの問題を解く <span
+                                data-topic-count="loop"></span></a>
+                    </li>
                 </ul>
-                <p class="protro-more"><a class="link-button" href="./practice.html">練習問題集をすべて見る</a></p>
+                <p class="protro-more">
+                    <a class="link-button" href="https://www.youtube.com/@joho-no-kyoshitsu" target="_blank"
+                        rel="noopener">
+                        <i class="fa-brands fa-youtube"></i> チャンネルで続きを見る
+                    </a>
+                </p>
             </section>
 
-            <section class="protro-section">
-                <h2>新しく追加された問題</h2>
-                <ul class="protro-new-list" id="protro-new-list">
-                    <li class="protro-new-empty"><a href="./practice.html">練習問題集を開く</a></li>
-                </ul>
+            <section class="protro-section" id="topics">
+                <h2>単元別の解き方</h2>
+                <p class="protro-section-lead">
+                    情報Iのプログラミングは、この5つが分かればほとんど読めます。
+                    要点を見てから、同じ単元の問題をそのまま解いてみてください。
+                </p>
+                <ul class="topic-cards" id="topic-cards"></ul>
+            </section>
+
+            <section class="protro-section" id="problems">
+                <h2>練習問題を解く（全<span data-quiz-count></span>問）</h2>
+                <p class="protro-section-lead">
+                    穴埋めをブロックにはめて、そのまま実行。ステップ実行で、変数の中身がどう変わるかを1行ずつ確かめられます。
+                </p>
+
+                <div class="topic-tabs" id="topic-tabs" role="tablist" aria-label="単元でしぼりこむ"></div>
+
+                <div class="practice-controls">
+                    <input type="text" id="practice-search" placeholder="問題名・内容で検索">
+                    <div class="practice-filter-buttons practice-pc-only" id="practice-difficulty-buttons">
+                        <button type="button" class="practice-filter-button active" data-difficulty="">難易度すべて</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="1">★1</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="2">★2</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="3">★3</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="4">★4</button>
+                        <button type="button" class="practice-filter-button" data-difficulty="5">★5</button>
+                    </div>
+
+                    <select id="practice-difficulty-select" class="practice-mobile-only">
+                        <option value="">難易度すべて</option>
+                        <option value="1">★1</option>
+                        <option value="2">★2</option>
+                        <option value="3">★3</option>
+                        <option value="4">★4</option>
+                        <option value="5">★5</option>
+                    </select>
+
+                    <div class="practice-filter-buttons practice-pc-only" id="practice-sort-buttons">
+                        <button type="button" class="practice-filter-button active" data-sort="newest">新しい順</button>
+                        <button type="button" class="practice-filter-button" data-sort="id">問題番号順</button>
+                    </div>
+
+                    <select id="practice-sort-select" class="practice-mobile-only">
+                        <option value="newest">新しい順</option>
+                        <option value="id">問題番号順</option>
+                    </select>
+                </div>
+
+                <p class="practice-result-note" id="practice-result-note" aria-live="polite"></p>
+
+                <div class="practice-table-wrap">
+                    <table class="practice-table" aria-label="練習問題一覧">
+                        <thead>
+                            <tr>
+                                <th scope="col">難易度</th>
+                                <th scope="col">タイトル</th>
+                                <th scope="col">内容</th>
+                                <th scope="col">追加日</th>
+                            </tr>
+                        </thead>
+                        <tbody id="practice-tbody"></tbody>
+                    </table>
+                </div>
+
+                <p class="protro-more">
+                    <a class="link-button" href="./editor.html"><i class="fa-solid fa-pen-to-square"></i>
+                        自分でプログラムを作ってみる（エディター）</a>
+                </p>
             </section>
 
             <section class="protro-section">
@@ -166,11 +305,11 @@
                 <ol class="protro-steps">
                     <li>
                         <span class="protro-step-num">1</span>
-                        <span class="protro-step-body"><b>問題をえらぶ</b>練習問題集から、難易度に合った問題を選びます。</span>
+                        <span class="protro-step-body"><b>動画で単元を理解する</b>変数と代入、条件分岐、繰り返し。分からない単元の動画を1本見ます。</span>
                     </li>
                     <li>
                         <span class="protro-step-num">2</span>
-                        <span class="protro-step-body"><b>穴埋めして実行</b>選択肢をブロックにはめて、そのまま実行。答え合わせもその場でできます。</span>
+                        <span class="protro-step-body"><b>同じ単元の問題を解く</b>選択肢をブロックにはめて、そのまま実行。答え合わせもその場でできます。</span>
                     </li>
                     <li>
                         <span class="protro-step-num">3</span>
@@ -182,64 +321,9 @@
             <section class="protro-section protro-benefits">
                 <h2>共テプロトレの3つのメリット</h2>
                 <img src="./intro.png" alt="共テプロトレの3つのメリット：ブロックで組み立てられる、その場で実行できる、ステップ実行で動きが見える">
-                <p class="protro-more"><a class="link-button" href="./practice.html">練習問題を解いてみる</a></p>
             </section>
         </main>
     </div>
-
-    <script src="./quiz-data.js"></script>
-    <script>
-        (() => {
-            const quizzes = Object.entries(window.quizData ?? {});
-            if (quizzes.length === 0) return;
-
-            // 全問題数
-            const countEl = document.getElementById("protro-quiz-count");
-            if (countEl) countEl.textContent = String(quizzes.length);
-
-            // 難易度ごとの問題数
-            document.querySelectorAll("[data-level-count]").forEach((el) => {
-                const level = Number(el.dataset.levelCount);
-                const count = quizzes.filter(([, q]) => Number(q.difficulty) === level).length;
-                el.textContent = `${count}問`;
-            });
-
-            // 新しく追加された問題（3件）
-            const list = document.getElementById("protro-new-list");
-            if (!list) return;
-
-            const newest = quizzes
-                .slice()
-                .sort((a, b) => new Date(b[1].addedAt ?? 0) - new Date(a[1].addedAt ?? 0))
-                .slice(0, 3);
-
-            list.innerHTML = "";
-
-            for (const [id, quiz] of newest) {
-                const difficulty = Math.max(1, Math.min(5, Number(quiz.difficulty) || 1));
-
-                const li = document.createElement("li");
-                const a = document.createElement("a");
-                a.href = `./quiz/${encodeURIComponent(id)}/index.html`;
-
-                const stars = document.createElement("span");
-                stars.className = "protro-stars";
-                stars.textContent = "★".repeat(difficulty) + "☆".repeat(5 - difficulty);
-
-                const title = document.createElement("span");
-                title.className = "protro-new-title";
-                title.textContent = quiz.title ?? "問題";
-
-                const desc = document.createElement("span");
-                desc.className = "protro-new-desc";
-                desc.textContent = String(quiz.question ?? "").split("\n")[0];
-
-                a.append(stars, title, desc);
-                li.append(a);
-                list.append(li);
-            }
-        })();
-    </script>
 </body>
 
 </html>
