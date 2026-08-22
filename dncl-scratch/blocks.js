@@ -2418,14 +2418,14 @@ function quizShareOnX(info) {
     );
 }
 
-// 問題一覧（practice.html）へ移動する。state=noheader を引き継ぐ。
+// 問題一覧（index.html の「練習問題を解く」）へ移動する。state=noheader を引き継ぐ。
 // 問題ごとの静的ページ（quiz/qNNN/）は階層が深いので DNCL_BASE を前に付ける。
 function quizGoToList() {
     const params = new URLSearchParams(location.search);
     const base = window.DNCL_BASE || "";
     const target = params.get("state") === "noheader"
-        ? `${base}practice.html?state=noheader`
-        : `${base}practice.html`;
+        ? `${base}index.html?state=noheader#problems`
+        : `${base}index.html#problems`;
     location.href = target;
 }
 
