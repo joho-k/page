@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第47問 同じ数が続いたら短くする（ランレングス圧縮）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="白黒画像の1行ぶんのデータ data（＝[1,1,1,1,1,1,0,0,0,1,1,0]、1が黒・0が白）を、ランレングス圧縮でまとめよう。ランレングス圧縮は「同じ数が何個続いたか」を数えて「1が6個」「0が3個」…と短く表す方法です。前の数を ima、続いた個数を kosuu にとっておき、前と同じ数ならふやし、ちがう数になったらそこまでの組を表示して数え直します。最後に、圧縮後がいくつの数で表せるかも計算します。1組は「1が6個」のように「どの数か」「何個か」の2つの数で表すので、圧縮後の数の個数は組の数 kumi から求められます。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,同じ数が続いたら短くする（ランレングス圧縮）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q047/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第47問 同じ数が続いたら短くする（ランレングス圧縮）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="白黒画像の1行ぶんのデータ data（＝[1,1,1,1,1,1,0,0,0,1,1,0]、1が黒・0が白）を、ランレングス圧縮でまとめよう。ランレングス圧縮は「同じ数が何個続いたか」を数えて「1が6個」「0が3個」…と短く表す方法です。前の数を ima、続いた個数を kosuu にとっておき、前と同じ数ならふやし、ちがう数になったらそこまでの組を表示して数え直します。最後に、圧縮後がいくつの数で表せるかも計算します。1組は「1が6個」のように「どの数か」「何個か」の2つの数で表すので、圧縮後の数の個数は組の数 kumi から求められます。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q047/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q047.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第47問 同じ数が続いたら短くする（ランレングス圧縮）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="白黒画像の1行ぶんのデータ data（＝[1,1,1,1,1,1,0,0,0,1,1,0]、1が黒・0が白）を、ランレングス圧縮でまとめよう。ランレングス圧縮は「同じ数が何個続いたか」を数えて「1が6個」「0が3個」…と短く表す方法です。前の数を ima、続いた個数を kosuu にとっておき、前と同じ数ならふやし、ちがう数になったらそこまでの組を表示して数え直します。最後に、圧縮後がいくつの数で表せるかも計算します。1組は「1が6個」のように「どの数か」「何個か」の2つの数で表すので、圧縮後の数の個数は組の数 kumi から求められます。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q047.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q047/index.html#quiz",
+      "name": "第47問 同じ数が続いたら短くする（ランレングス圧縮）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q047/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "白黒画像の1行ぶんのデータ data（＝[1,1,1,1,1,1,0,0,0,1,1,0]、1が黒・0が白）を、ランレングス圧縮でまとめよう。ランレングス圧縮は「同じ数が何個続いたか」を数えて「1が6個」「0が3個」…と短く表す方法です。前の数を ima、続いた個数を kosuu にとっておき、前と同じ数ならふやし、ちがう数になったらそこまでの組を表示して数え直します。最後に、圧縮後がいくつの数で表せるかも計算します。1組は「1が6個」のように「どの数か」「何個か」の2つの数で表すので、圧縮後の数の個数は組の数 kumi から求められます。あてはまる記号を選ぼう（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "== , + , *"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "=="
+          },
+          {
+            "@type": "Answer",
+            "text": "!="
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第47問 同じ数が続いたら短くする（ランレングス圧縮）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q047/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q047";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第47問 同じ数が続いたら短くする（ランレングス圧縮）</h1>
+            <p>白黒画像の1行ぶんのデータ data（＝[1,1,1,1,1,1,0,0,0,1,1,0]、1が黒・0が白）を、ランレングス圧縮でまとめよう。ランレングス圧縮は「同じ数が何個続いたか」を数えて「1が6個」「0が3個」…と短く表す方法です。前の数を ima、続いた個数を kosuu にとっておき、前と同じ数ならふやし、ちがう数になったらそこまでの組を表示して数え直します。最後に、圧縮後がいくつの数で表せるかも計算します。1組は「1が6個」のように「どの数か」「何個か」の2つの数で表すので、圧縮後の数の個数は組の数 kumi から求められます。あてはまる記号を選ぼう（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★★（5／難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>data = [1,1,1,1,1,1,0,0,0,1,1,0]
+ima = data[0]
+kosuu = 1
+kumi = 0
+i を 1 から 11 まで 1 ずつ増やしながら繰り返す:
+  もし data[i] ［A］ ima ならば:
+    kosuu = kosuu ［B］ 1
+  そうでなければ:
+    表示する(ima + &quot;が&quot; + kosuu + &quot;個&quot;)
+    kumi = kumi + 1
+    ima = data[i]
+    kosuu = 1
+表示する(ima + &quot;が&quot; + kosuu + &quot;個&quot;)
+kumi = kumi + 1
+atokazu = kumi ［C］ 2
+表示する(&quot;組の数は&quot; + kumi + &quot;組です&quot;)
+表示する(&quot;もとの12個の数が、圧縮後は&quot; + atokazu + &quot;個の数になりました&quot;)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>==</code></li>
+                <li><code>!=</code></li>
+                <li><code>&gt;</code></li>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>コツは「直前の数 ima」と「続いた個数 kosuu」をとっておくことです。data[i] == ima なら kosuu + 1 で個数をふやし、ちがえばそこまでの組を表示して数え直します。このデータは 1が6個・0が3個・1が2個・0が1個 の4組になります。1組は「どの数か」「何個か」の2つの数で表すので、圧縮後は 4 * 2 ＝ 8個の数となり、もとの12個より短くなります</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>==</code></li>
+            <li>空欄 ［B］ … <code>+</code></li>
+            <li>空欄 ［C］ … <code>*</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>!=</code>　［B］<code>+</code>　［C］<code>*</code> … != は「前とちがうとき」なので、まとめる側とやり直す側が入れかわります。data[1] は前と同じ1なので、いきなり「1が1個」と表示して数え直しになり、6個続いた1が1個ずつばらばらに出てしまいます。続きをまとめたいので、前と同じかどうかを見る == を使います</li>
+            <li>［A］<code>&gt;</code>　［B］<code>+</code>　［C］<code>*</code> … &gt; は大小をくらべる記号です。0と1しかないデータでは 1 &gt; 1 も 0 &gt; 0 も成り立たないので、同じ数が続いていても毎回ちがう組としてやり直してしまいます。「前と同じ数か」を調べるのは == です</li>
+            <li>［A］<code>==</code>　［B］<code>-</code>　［C］<code>*</code> … - だと同じ数が続くたびに kosuu が1ずつ減ります。1が6個続いたところで kosuu は -4 になり、「1が-4個」とマイナスの個数が表示されてしまいます。個数を数えるのは + です</li>
+            <li>［A］<code>==</code>　［B］<code>*</code>　［C］<code>*</code> … kosuu * 1 は何回やっても 1 のままです。1が6個続いても「1が1個」と表示され、まったく数えられていません。1ずつふやす + にしましょう</li>
+            <li>［A］<code>==</code>　［B］<code>+</code>　［C］<code>+</code> … 1つの組は「どの数か」と「何個か」の2つの数で表します。組は4つなので圧縮後は8個の数ですが、+ だと 4 + 2 ＝ 6 個となり合いません。1組につき2つ分なので、かけ算の * です</li>
+            <li>［A］<code>==</code>　［B］<code>+</code>　［C］<code>/</code> … / だと 4 / 2 ＝ 2 個となり、4つの組を2つの数で表せることになってしまいます。1組は数と個数の2つ組なので、組の数に2をかけて 4 * 2 ＝ 8 個と求めます</li>
+            <li>［A］<code>!=</code>　［B］<code>+</code>　［C］<code>/</code> … 2か所ちがいます。まとめられるのは「前と同じ数」のときなので ==、圧縮後の数の個数は1組あたり2つ分で 組の数 * 2 です</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q045/index.html">第45問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
