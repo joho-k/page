@@ -20,6 +20,7 @@ const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
 const QUIZ_DATA = path.join(ROOT, "dncl-scratch", "quiz-data.js");
+const TOPICS_JS = path.join(ROOT, "dncl-scratch", "topics.js");
 const OUT_DIR = path.join(ROOT, "dncl-scratch", "quiz");
 const SITEMAP = path.join(ROOT, "sitemap.xml");
 const LLMS = path.join(ROOT, "llms.txt");
@@ -31,6 +32,19 @@ function loadQuizData() {
     const win = {};
     new Function("window", fs.readFileSync(QUIZ_DATA, "utf8"))(win);
     return win.quizData || {};
+}
+
+// 単元（変数と代入／条件分岐／繰り返し／配列）の判定は、ページ側と同じ topics.js を使う。
+function loadTopics() {
+    const win = {};
+    new Function("window", fs.readFileSync(TOPICS_JS, "utf8"))(win);
+    return win.dnclTopics;
+}
+
+const topics = loadTopics();
+
+function topicsOf(quiz, id) {
+    return topics.topicIdsOf(quiz, id).map((t) => topics.topicById(t)).filter(Boolean);
 }
 
 function quizNumber(id) {
@@ -131,6 +145,8 @@ function noscriptHtml(quiz, id, prev, next) {
     const correct = (quiz.answers || []).find((a) => a.correct);
     const diff = Number(quiz.difficulty) || 1;
     const blankNames = keys.map((_k, i) => `［${String.fromCharCode(65 + i)}］`);
+    const topicList = topicsOf(quiz, id);
+    const videoList = topicList.filter((t) => t.video);
 
     const answerHtml = correct
         ? correct.values
@@ -158,7 +174,7 @@ function noscriptHtml(quiz, id, prev, next) {
         <article>
             <h1>第${n}問 ${esc(quiz.title || id)}</h1>
             <p>${esc(quiz.question)}</p>
-            <p>難易度：${stars(diff)}（${diff}／${DIFFICULTY_LABEL[diff] || ""}）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+            <p>難易度：${stars(diff)}（${diff}／${DIFFICULTY_LABEL[diff] || ""}）。単元：${topicList.map((t) => esc(t.name)).join("・")}。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
 
             <h2>プログラム</h2>
             <pre><code>${esc(code)}</code></pre>
@@ -178,11 +194,25 @@ function noscriptHtml(quiz, id, prev, next) {
             </ul>
             ${wrongHtml ? `<h2>よくある間違い</h2>\n            <ul>\n            ${wrongHtml}\n            </ul>` : ""}
 
+            ${
+                videoList.length
+                    ? `<h2>この単元の解説動画</h2>\n            <ul>\n                ${videoList
+                          .map((t) => `<li><a href="https://youtu.be/${t.video}">${esc(t.videoLabel)}</a></li>`)
+                          .join("\n                ")}\n            </ul>`
+                    : ""
+            }
+
             <h2>ほかの問題</h2>
             <ul>
                 ${prev ? `<li><a href="../${prev}/index.html">第${quizNumber(prev)}問へ</a></li>` : ""}
                 ${next ? `<li><a href="../${next}/index.html">第${quizNumber(next)}問へ</a></li>` : ""}
-                <li><a href="../../practice.html">問題一覧</a></li>
+                ${topicList
+                    .map(
+                        (t) =>
+                            `<li><a href="../../index.html?topic=${t.id}#problems">${esc(t.name)}の問題をすべて見る</a></li>`
+                    )
+                    .join("\n                ")}
+                <li><a href="../../index.html#problems">問題一覧</a></li>
             </ul>
         </article>
     </noscript>`;
@@ -204,7 +234,9 @@ function jsonLd(quiz, id) {
                 url: pageUrl,
                 educationalLevel: "高等学校",
                 learningResourceType: "演習問題",
-                teaches: "プログラミング, DNCL, アルゴリズム",
+                teaches: ["プログラミング", "DNCL", "アルゴリズム"]
+                    .concat(topicsOf(quiz, id).map((t) => t.name))
+                    .join(", "),
                 inLanguage: "ja",
                 isAccessibleForFree: true,
                 about: { "@type": "Thing", name: "DNCL（共通テスト用プログラム表記）" },
@@ -236,13 +268,7 @@ function jsonLd(quiz, id) {
                         name: "共テプロトレ",
                         item: `${SITE}/dncl-scratch/index.html`,
                     },
-                    {
-                        "@type": "ListItem",
-                        position: 3,
-                        name: "練習問題集",
-                        item: `${SITE}/dncl-scratch/practice.html`,
-                    },
-                    { "@type": "ListItem", position: 4, name: `第${n}問 ${quiz.title || id}`, item: pageUrl },
+                    { "@type": "ListItem", position: 3, name: `第${n}問 ${quiz.title || id}`, item: pageUrl },
                 ],
             },
         ],
@@ -267,7 +293,7 @@ function quizPageHtml(quiz, id, prev, next) {
 
     <title>${esc(title)}</title>
     <meta name="description" content="${esc(desc)}">
-    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,${esc(quiz.title || "")}">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,${topicsOf(quiz, id).map((t) => esc(t.name)).join(",")},${esc(quiz.title || "")}">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="${pageUrl}">
 
@@ -343,7 +369,8 @@ function updateLlmsTxt(ids, quizData) {
         ...ids.map((id) => {
             const q = quizData[id];
             const n = quizNumber(id);
-            return `- [第${n}問 ${q.title || id}](${SITE}/dncl-scratch/quiz/${id}/index.html): ${q.question}（難易度${Number(q.difficulty) || 1}）`;
+            const names = topicsOf(q, id).map((t) => t.name).join("・");
+            return `- [第${n}問 ${q.title || id}](${SITE}/dncl-scratch/quiz/${id}/index.html): ${q.question}（難易度${Number(q.difficulty) || 1}／単元：${names}）`;
         }),
         "",
     ].join("\n");

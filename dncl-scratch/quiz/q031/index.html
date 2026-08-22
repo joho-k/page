@@ -7,7 +7,7 @@
 
     <title>第31問 うるう年の判定｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
     <meta name="description" content="うるう年は「4の倍数の年はうるう年。ただし100の倍数の年は平年。ただし400の倍数の年はうるう年」というルールで決まります。year（＝1900）について、うるう年なら uruu を1、平年なら0に書きかえながら判定するプログラムです。上から順に3つの条件で uruu を上書きしていくので、入れる式の順番がとても大事です（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
-    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,うるう年の判定">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,うるう年の判定">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q031/index.html">
 
@@ -37,7 +37,7 @@
       "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q031/index.html",
       "educationalLevel": "高等学校",
       "learningResourceType": "演習問題",
-      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐",
       "inLanguage": "ja",
       "isAccessibleForFree": true,
       "about": {
@@ -98,12 +98,6 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "練習問題集",
-          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
           "name": "第31問 うるう年の判定",
           "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q031/index.html"
         }
@@ -126,7 +120,7 @@
         <article>
             <h1>第31問 うるう年の判定</h1>
             <p>うるう年は「4の倍数の年はうるう年。ただし100の倍数の年は平年。ただし400の倍数の年はうるう年」というルールで決まります。year（＝1900）について、うるう年なら uruu を1、平年なら0に書きかえながら判定するプログラムです。上から順に3つの条件で uruu を上書きしていくので、入れる式の順番がとても大事です（3か所の穴をうめよう）</p>
-            <p>難易度：★★★★☆（4／やや難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+            <p>難易度：★★★★☆（4／やや難しい）。単元：条件分岐。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
 
             <h2>プログラム</h2>
             <pre><code>year = 1900
@@ -173,11 +167,17 @@ uruu = 0
             <li>［A］<code>year % 4</code>　［B］<code>year % 4</code>　［C］<code>year % 400</code> … 同じ条件を2回書くと、4の倍数の年をうるう年にしてすぐ平年にもどしてしまいます。2つ目には「100の倍数なら平年」の year % 100 を入れます</li>
             </ul>
 
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+            </ul>
+
             <h2>ほかの問題</h2>
             <ul>
                 <li><a href="../q030/index.html">第30問へ</a></li>
                 <li><a href="../q032/index.html">第32問へ</a></li>
-                <li><a href="../../practice.html">問題一覧</a></li>
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
             </ul>
         </article>
     </noscript>
