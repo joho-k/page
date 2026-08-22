@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第49問 パケットは何個必要？（切り上げ）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="インターネットでは、データを「パケット」という小さなかたまりに分けて送ります。8000バイトのデータを、1個に1500バイトまで入るパケットで送るとき、パケットは何個必要かを表示しよう。まず、いっぱいまで詰めたパケットが何個できるかを wari で計算して切り捨て、そこに入りきらずに残るデータ（あまり）を求めます。残りが少しでもあるなら、そのぶんをのせるパケットがもう1個いります。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,パケットは何個必要？（切り上げ）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第49問 パケットは何個必要？（切り上げ）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="インターネットでは、データを「パケット」という小さなかたまりに分けて送ります。8000バイトのデータを、1個に1500バイトまで入るパケットで送るとき、パケットは何個必要かを表示しよう。まず、いっぱいまで詰めたパケットが何個できるかを wari で計算して切り捨て、そこに入りきらずに残るデータ（あまり）を求めます。残りが少しでもあるなら、そのぶんをのせるパケットがもう1個いります。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q049.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第49問 パケットは何個必要？（切り上げ）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="インターネットでは、データを「パケット」という小さなかたまりに分けて送ります。8000バイトのデータを、1個に1500バイトまで入るパケットで送るとき、パケットは何個必要かを表示しよう。まず、いっぱいまで詰めたパケットが何個できるかを wari で計算して切り捨て、そこに入りきらずに残るデータ（あまり）を求めます。残りが少しでもあるなら、そのぶんをのせるパケットがもう1個いります。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q049.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html#quiz",
+      "name": "第49問 パケットは何個必要？（切り上げ）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "インターネットでは、データを「パケット」という小さなかたまりに分けて送ります。8000バイトのデータを、1個に1500バイトまで入るパケットで送るとき、パケットは何個必要かを表示しよう。まず、いっぱいまで詰めたパケットが何個できるかを wari で計算して切り捨て、そこに入りきらずに残るデータ（あまり）を求めます。残りが少しでもあるなら、そのぶんをのせるパケットがもう1個いります。あてはまる記号を選ぼう（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "/ , % , =="
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          },
+          {
+            "@type": "Answer",
+            "text": "=="
+          },
+          {
+            "@type": "Answer",
+            "text": "!="
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第49問 パケットは何個必要？（切り上げ）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q049";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第49問 パケットは何個必要？（切り上げ）</h1>
+            <p>インターネットでは、データを「パケット」という小さなかたまりに分けて送ります。8000バイトのデータを、1個に1500バイトまで入るパケットで送るとき、パケットは何個必要かを表示しよう。まず、いっぱいまで詰めたパケットが何個できるかを wari で計算して切り捨て、そこに入りきらずに残るデータ（あまり）を求めます。残りが少しでもあるなら、そのぶんをのせるパケットがもう1個いります。あてはまる記号を選ぼう（3か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：条件分岐。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>data = 8000
+size = 1500
+wari = data ［A］ size
+manpai = 切り捨て(wari)
+amari = data ［B］ size
+もし amari ［C］ 0 ならば:
+  kosuu = manpai
+そうでなければ:
+  kosuu = manpai + 1
+表示する(&quot;いっぱいのパケットは&quot; + manpai + &quot;個&quot;)
+表示する(&quot;入りきらない残りは&quot; + amari + &quot;バイト&quot;)
+表示する(&quot;必要なパケットは&quot; + kosuu + &quot;個&quot;)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+                <li><code>%</code></li>
+                <li><code>==</code></li>
+                <li><code>!=</code></li>
+                <li><code>&gt;</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>「何個に分ける？」は切り上げの計算です。8000 / 1500 ＝ 5.33… を切り捨てた 5 個と、あまり 8000 % 1500 ＝ 500 バイトを別々に求め、あまりが0でなければ 5 に1をたします。8000バイトなら 5 + 1 ＝ 6 個です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>/</code></li>
+            <li>空欄 ［B］ … <code>%</code></li>
+            <li>空欄 ［C］ … <code>==</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>%</code>　［B］<code>%</code>　［C］<code>==</code> … 1つ目の wari は「いっぱいまで詰めたパケットが何個ぶんか」なので、わり算です。% だと 8000 % 1500 ＝ 500 とあまりのほうが出てしまい、切り捨てても500個のままです。8000 / 1500 ＝ 5.33… を切り捨てて 5 個と求めましょう</li>
+            <li>［A］<code>/</code>　［B］<code>/</code>　［C］<code>==</code> … 2つ目は「入りきらずに残るデータ」です。/ だと 8000 / 1500 ＝ 5.33… となり、残りが5.33バイトという意味の分からない値になります。あまりを出す % を使って 8000 % 1500 ＝ 500 バイトと求めましょう</li>
+            <li>［A］<code>/</code>　［B］<code>-</code>　［C］<code>==</code> … パケットは5個ぶん詰めているので、ひくなら 8000 - 1500 * 5 です。- だと1個ぶんの 8000 - 1500 ＝ 6500 しかひけません。何個ぶんでも一度にひいてくれる % を使いましょう</li>
+            <li>［A］<code>/</code>　［B］<code>%</code>　［C］<code>!=</code> … この if は「残りが0のとき（ぴったり収まったとき）」に manpai をそのまま使う形です。!= だと残り500バイトのときに manpai ＝ 5 個となり、あまった500バイトを運ぶパケットが足りません。残りが0かどうかを == でたずねましょう</li>
+            <li>［A］<code>/</code>　［B］<code>%</code>　［C］<code>&gt;</code> … &gt; だと「残りがある」ときに manpai をそのまま使うことになり、5個で止まってしまいます。もう1個いるのは残りがあるときなので、条件は == で「残りが0のとき」だけ manpai のまま、という向きにします</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q045/index.html">第45問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
