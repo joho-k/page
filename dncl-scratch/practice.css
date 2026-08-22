@@ -272,3 +272,36 @@
         letter-spacing: -1px;
     }
 }
+
+/* 問題ごとの単元。押すとその単元だけにしぼりこむ */
+.practice-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.topic-chip {
+    padding: 3px 10px;
+    border: none;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--primary);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--neu-raised-sm);
+}
+
+.topic-chip:active,
+.topic-chip.active {
+    box-shadow: var(--neu-pressed);
+}
+
+.practice-result-note {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+}

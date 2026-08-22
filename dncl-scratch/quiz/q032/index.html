@@ -7,7 +7,7 @@
 
     <title>第32問 10進数を2進数に直す｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
     <meta name="description" content="10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
-    <meta name="keywords" content="プログラミング学習,情報I,DNCL,共通テスト,10進数を2進数に直す">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,繰り返し,10進数を2進数に直す">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q032/index.html">
 
@@ -37,7 +37,7 @@
       "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q032/index.html",
       "educationalLevel": "高等学校",
       "learningResourceType": "演習問題",
-      "teaches": "プログラミング, DNCL, アルゴリズム",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 繰り返し",
       "inLanguage": "ja",
       "isAccessibleForFree": true,
       "about": {
@@ -98,12 +98,6 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "練習問題集",
-          "item": "https://joho-kyoshitsu.com/dncl-scratch/practice.html"
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
           "name": "第32問 10進数を2進数に直す",
           "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q032/index.html"
         }
@@ -126,7 +120,7 @@
         <article>
             <h1>第32問 10進数を2進数に直す</h1>
             <p>10進数の n（＝13）を2進数の 1101 に直して表示するプログラムです。n を2でわったあまり（0か1）を下の位から順に取り出し、表示用の位（kurai＝1, 10, 100, …）をかけて足していきます。あまりの出し方、足し方、位の上げ方を選択肢から選ぼう（3か所の穴をうめよう）</p>
-            <p>難易度：★★★★★（5／難しい）。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+            <p>難易度：★★★★★（5／難しい）。単元：繰り返し。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
 
             <h2>プログラム</h2>
             <pre><code>n = 13
@@ -169,11 +163,17 @@ n &gt; 0 の間繰り返す:
             <li>［A］<code>n / 2</code>　［B］<code>amari + kurai</code>　［C］<code>kurai * 2</code> … 3か所とも違います。けたは n % 2 で取り出し、amari * kurai で位に置き、kurai * 10 で次のけたに進みます</li>
             </ul>
 
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
             <h2>ほかの問題</h2>
             <ul>
                 <li><a href="../q031/index.html">第31問へ</a></li>
                 <li><a href="../q033/index.html">第33問へ</a></li>
-                <li><a href="../../practice.html">問題一覧</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
             </ul>
         </article>
     </noscript>
