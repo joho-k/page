@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第46問 通信のエラーを見つける（パリティチェック）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="届いた8ビットのデータ bit（＝[1,0,1,1,0,1,0,1]）は、はじめの7ビットが本当のデータで、最後の bit[7] は「パリティビット」です。偶数パリティでは、はじめの7ビットにふくまれる1の個数が偶数なら0、奇数なら1をパリティビットにします。7ビットから正しいパリティビットを計算し、届いた bit[7] と同じかどうかで「正常」か「エラー」かを表示しよう。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,通信のエラーを見つける（パリティチェック）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q046/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第46問 通信のエラーを見つける（パリティチェック）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="届いた8ビットのデータ bit（＝[1,0,1,1,0,1,0,1]）は、はじめの7ビットが本当のデータで、最後の bit[7] は「パリティビット」です。偶数パリティでは、はじめの7ビットにふくまれる1の個数が偶数なら0、奇数なら1をパリティビットにします。7ビットから正しいパリティビットを計算し、届いた bit[7] と同じかどうかで「正常」か「エラー」かを表示しよう。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q046/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q046.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第46問 通信のエラーを見つける（パリティチェック）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="届いた8ビットのデータ bit（＝[1,0,1,1,0,1,0,1]）は、はじめの7ビットが本当のデータで、最後の bit[7] は「パリティビット」です。偶数パリティでは、はじめの7ビットにふくまれる1の個数が偶数なら0、奇数なら1をパリティビットにします。7ビットから正しいパリティビットを計算し、届いた bit[7] と同じかどうかで「正常」か「エラー」かを表示しよう。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q046.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q046/index.html#quiz",
+      "name": "第46問 通信のエラーを見つける（パリティチェック）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q046/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "届いた8ビットのデータ bit（＝[1,0,1,1,0,1,0,1]）は、はじめの7ビットが本当のデータで、最後の bit[7] は「パリティビット」です。偶数パリティでは、はじめの7ビットにふくまれる1の個数が偶数なら0、奇数なら1をパリティビットにします。7ビットから正しいパリティビットを計算し、届いた bit[7] と同じかどうかで「正常」か「エラー」かを表示しよう。あてはまる記号を選ぼう（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "== , + , %"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "=="
+          },
+          {
+            "@type": "Answer",
+            "text": "!="
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第46問 通信のエラーを見つける（パリティチェック）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q046/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q046";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第46問 通信のエラーを見つける（パリティチェック）</h1>
+            <p>届いた8ビットのデータ bit（＝[1,0,1,1,0,1,0,1]）は、はじめの7ビットが本当のデータで、最後の bit[7] は「パリティビット」です。偶数パリティでは、はじめの7ビットにふくまれる1の個数が偶数なら0、奇数なら1をパリティビットにします。7ビットから正しいパリティビットを計算し、届いた bit[7] と同じかどうかで「正常」か「エラー」かを表示しよう。あてはまる記号を選ぼう（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★☆（4／やや難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>bit = [1,0,1,1,0,1,0,1]
+kosuu = 0
+i を 0 から 6 まで 1 ずつ増やしながら繰り返す:
+  もし bit[i] ［A］ 1 ならば:
+    kosuu = kosuu ［B］ 1
+parity = kosuu ［C］ 2
+表示する(&quot;1の個数は&quot; + kosuu + &quot;個、計算したパリティビットは&quot; + parity + &quot;です&quot;)
+もし parity == bit[7] ならば:
+  表示する(&quot;正常に届きました&quot;)
+そうでなければ:
+  表示する(&quot;エラーが見つかりました&quot;)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>==</code></li>
+                <li><code>!=</code></li>
+                <li><code>&gt;</code></li>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+                <li><code>%</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>パリティビットは「1の個数を偶数にそろえるためのおまけの1ビット」です。まず bit[i] == 1 になった回数を kosuu + 1 で数え、kosuu % 2 を計算すると、偶数なら0・奇数なら1になります。これが届いた bit[7] と食いちがっていれば、通信のとちゅうでビットが化けた（エラー）とわかります</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>==</code></li>
+            <li>空欄 ［B］ … <code>+</code></li>
+            <li>空欄 ［C］ … <code>%</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>!=</code>　［B］<code>+</code>　［C］<code>%</code> … != は「1ではないとき」、つまり0の個数を数えることになります。はじめの7ビットに0は3個なので kosuu は3、パリティは 3 % 2 ＝ 1 となり、届いた bit[7] の1とたまたま一致して「正常」と表示されます。本当はエラーなのに見のがしてしまいます。1の個数を数えたいので == を使います</li>
+            <li>［A］<code>&gt;</code>　［B］<code>+</code>　［C］<code>%</code> … bit の中身は0か1しかないので、bit[i] &gt; 1 になることは一度もありません。kosuu は0のままで、パリティも0のまま数えたことになりません。ちょうど1かどうかを調べる == にしましょう</li>
+            <li>［A］<code>==</code>　［B］<code>-</code>　［C］<code>%</code> … - だと1が見つかるたびに kosuu が1ずつ減って -4 になってしまいます。個数を数えるときは1ずつふやす + です</li>
+            <li>［A］<code>==</code>　［B］<code>*</code>　［C］<code>%</code> … kosuu は0から始まるので、何回かけても 0 * 1 ＝ 0 のままです。1が4個あっても「0個」と数えたことになります。数えるのは + です</li>
+            <li>［A］<code>==</code>　［B］<code>+</code>　［C］<code>/</code> … / だと 4 / 2 ＝ 2 となり、0か1しかないはずのパリティビットが2になってしまいます。知りたいのは「偶数か奇数か」なので、2でわったあまりを出す % を使います</li>
+            <li>［A］<code>==</code>　［B］<code>+</code>　［C］<code>*</code> … * だと 4 * 2 ＝ 8 となり、パリティビットが8という、ありえない値になります。0か1にするには 2 でわったあまりの % です</li>
+            <li>［A］<code>!=</code>　［B］<code>+</code>　［C］<code>/</code> … 2か所ちがいます。数えたいのは1の個数なので ==、偶数か奇数かは2でわったあまりを見る % で調べます</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q045/index.html">第45問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
