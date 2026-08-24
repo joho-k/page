@@ -200,35 +200,71 @@
     padding: 5px 8px;
 }
 
-/* workspace */
-#workspace {
-    border: 2px dashed #ccc;
-    padding: 10px 0px 10px 10px;
+/* プログラムのエリア（関数 ＋ メインの処理）。スクロールはこの入れ物がまとめて持つので、
+   2つのエリアが別々にずれず、関数を呼びに行く矢印も content と一緒に動く。 */
+#program-areas {
+    position: relative;
     max-height: 70vh;
     overflow-x: auto;
     overflow-y: scroll;
-    white-space: nowrap;
-    background-color: var(--primary-light-2);
     scrollbar-color: var(--primary);
 }
 
-#workspace::-webkit-scrollbar {
+#program-areas::-webkit-scrollbar {
     width: 10px;
     height: 10px;
 }
 
-#workspace::-webkit-scrollbar-track {
+#program-areas::-webkit-scrollbar-track {
     border-radius: 999px;
 }
 
-#workspace::-webkit-scrollbar-thumb {
+#program-areas::-webkit-scrollbar-thumb {
     background-color: var(--primary-light-2);
     border-radius: 999px;
     border: 2px solid var(--primary);
 }
 
-#workspace::-webkit-scrollbar-corner {
+#program-areas::-webkit-scrollbar-corner {
     background: var(--primary-light-2);
+}
+
+/* エリアの見出しは、関数を使っているときだけ出す（ふつうの問題では今までどおりの見た目） */
+.program-area-title {
+    display: none;
+    margin: 0 0 6px;
+    padding-left: 8px;
+    border-left: 4px solid #6ea3b0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #35636f;
+}
+
+#program-areas.has-functions .program-area-title {
+    display: block;
+}
+
+#program-areas.has-functions .program-area-main .program-area-title {
+    border-left-color: #7f9fc7;
+    color: #3f668f;
+}
+
+#program-areas.has-functions #function-area {
+    margin-top: 12px;
+}
+
+/* workspace（メインの処理）と関数エリアの中身は、同じ見た目の枠にそろえる */
+#workspace,
+#function-workspace {
+    border: 2px dashed #ccc;
+    padding: 10px 0px 10px 10px;
+    white-space: nowrap;
+    background-color: var(--primary-light-2);
+}
+
+#function-workspace {
+    border-color: #8fb6bf;
+    background-color: #eef6f8;
 }
 
 #workspace-panel {
@@ -241,6 +277,76 @@
 #workspace-panel textarea {
     user-select: text;
     -webkit-user-select: text;
+}
+
+/* 関数を呼びに行く／戻ってくる矢印（ステップ実行中だけ出る） */
+.call-flight-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 5;
+    overflow: visible;
+}
+
+.call-flight-layer:empty {
+    display: none;
+}
+
+.call-flight-svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: visible;
+}
+
+.call-flight-chip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    /* 弧のふくらみの外側に置く。動かすとブロックの文字に重なって読めなくなる */
+    transform: translateY(-50%);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(39, 64, 96, 0.28);
+}
+
+.call-flight-chip-enter {
+    background: #3f7f8c;
+}
+
+.call-flight-chip-exit {
+    background: #6b7f3f;
+}
+
+/* 弧の上を走る丸（どちらへ動いているかを見せる） */
+.call-flight-dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(39, 64, 96, 0.35);
+}
+
+.call-flight-dot-enter {
+    background: #3f7f8c;
+}
+
+.call-flight-dot-exit {
+    background: #6b7f3f;
+}
+
+/* 呼び出し元（行き）／関数（戻り）の、飛び立つ側のブロック */
+.block.call-from {
+    outline: 3px dashed #3f7f8c;
+    outline-offset: 3px;
 }
 
 /* ブロック */
@@ -446,6 +552,51 @@
 .block[data-type="random"] {
     --block-bg: #b3922f;
     --block-border: #9a7d27;
+}
+
+/* 関数が2つ以上あるとき、どこからどこまでが1つの関数か分かるように間をあける */
+#function-workspace > .block {
+    margin-bottom: 4px;
+}
+
+#function-workspace > .block + .block {
+    margin-top: 22px;
+}
+
+/* 呼び出す関数はプルダウンから選ぶ */
+select.call-name {
+    width: auto;
+    min-width: 92px;
+    font-weight: 700;
+}
+
+/* 引数の並び（関数の定義・呼び出し）。数は操作パネルの「引数 ＋／－」で変える */
+.arg-list {
+    display: inline;
+    white-space: nowrap;
+}
+
+.arg-list:empty::before {
+    content: "引数なし";
+    color: #8a97a8;
+    font-size: 12px;
+    padding: 0 4px;
+}
+
+/* 関数（定義・戻り値・呼び出し） */
+.block[data-type="func"] {
+    --block-bg: #3f7f8c;
+    --block-border: #356b76;
+}
+
+.block[data-type="return"] {
+    --block-bg: #6b7f3f;
+    --block-border: #5a6c35;
+}
+
+.block[data-type="call"] {
+    --block-bg: #57709b;
+    --block-border: #4a6086;
 }
 
 .block:hover {
@@ -688,6 +839,106 @@ pre {
     gap: 8px;
     align-items: flex-start;
     margin-bottom: 8px;
+}
+
+/* 変数は「メインの処理」「関数の中」を全部出す。
+   いまステップ実行しているのと違う組は、色を落として目立たせない。 */
+.vars-group {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* 動いていない組は1行にまとめる（縦を取らせない） */
+.vars-group-inactive {
+    opacity: 0.5;
+    filter: grayscale(0.5);
+    margin-bottom: 6px;
+}
+
+.vars-line {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    width: 100%;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: #f2f4f6;
+    border: 1px solid #d3d9de;
+    color: #45525e;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.vars-line-label {
+    flex: none;
+    font-weight: 700;
+    color: #64707a;
+}
+
+.vars-line-items {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 変数1つを [a 4] のひとまとまりに見せる */
+.vars-line-item {
+    display: inline-block;
+    padding: 1px 8px;
+    border: 1px solid #c8d0d8;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.vars-line-item b {
+    font-weight: 700;
+    color: #29384b;
+}
+
+.vars-line-item .vars-line-value {
+    margin-left: 6px;
+    color: #45525e;
+}
+
+.vars-line-item + .vars-line-item {
+    margin-left: 6px;
+}
+
+.vars-line-none {
+    border: none;
+    background: none;
+    padding: 1px 0;
+    color: #8a97a8;
+}
+
+.vars-group-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.vars-scope {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #eef4f6;
+    border: 1px solid #bcd3da;
+    color: #35636f;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.vars-group-inactive .vars-scope {
+    background: #f2f4f6;
+    border-color: #d3d9de;
+    color: #64707a;
+}
+
+.vars-empty-small {
+    padding: 8px 12px;
+    font-size: 13px;
 }
 
 .vars-empty {
@@ -995,6 +1246,16 @@ pre {
 .calc-token-str {
     background: #e7f4e7;
     color: #2c5a2c;
+}
+
+/* 呼び出しの引数（仮引数の箱へ降りていく部分） */
+.call-arg-flier {
+    display: inline-block;
+}
+
+/* 仮引数はまわりに箱が描かれるので、カンマやカッコが隠れないよう左右をあける */
+.step-card-call [data-param] {
+    margin: 0 14px;
 }
 
 .calc-target {

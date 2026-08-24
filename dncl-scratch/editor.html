@@ -159,6 +159,8 @@
                 <button class="palette-block-button" data-block-type="floor">切り捨て</button>
                 <button class="palette-block-button" data-block-type="ceil">切り上げ</button>
                 <button class="palette-block-button" data-block-type="round">四捨五入</button>
+                <button class="palette-block-button" data-block-type="func" data-block-menu="function"
+                    aria-haspopup="true" aria-expanded="false">関数 ▾</button>
                 <span class="sample-buttons">
                     <button onclick="loadExample1()">例1:配列の集計</button>
                     <button onclick="loadExample2()">例2:九九</button>
@@ -189,7 +191,18 @@
                     <div id="array-control-panel" class="array-control-panel" hidden></div>
 
                     <div id="workspace-panel" class="program-panel">
-                        <div id="workspace"></div>
+                        <div id="program-areas">
+                            <section id="main-area" class="program-area program-area-main">
+                                <div class="program-area-title">メインの処理（ここから下の関数を呼び出す）</div>
+                                <div id="workspace"></div>
+                            </section>
+                            <section id="function-area" class="program-area program-area-function" hidden>
+                                <div class="program-area-title">関数（ここで作った関数を、上のメインの処理から呼び出す）</div>
+                                <div id="function-workspace" class="program-area-body"></div>
+                            </section>
+                            <!-- 関数を呼びに行く／戻ってくる矢印。executor.js が描く -->
+                            <div id="call-flight-layer" class="call-flight-layer" aria-hidden="true"></div>
+                        </div>
                     </div>
                     <div id="code-panel" class="program-panel program-panel-hidden">
                         <pre id="code"></pre>
