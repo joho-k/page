@@ -57,11 +57,10 @@
             id: "function",
             name: "関数",
             lead: "よく使う処理に名前をつけて、何度でも呼び出す。",
-            example: null,
-            pitfall: null,
+            example: "関数 tashizan(a, b):\n  a + b を返す\n\nkekka = tashizan(4, 3)\n表示する(kekka)",
+            pitfall: "引数の名前（a, b）は関数の中だけのもの。呼び出す側の変数名とそろえる必要はないし、関数の中で書きかえても呼び出す側は変わらない。",
             video: null,
             videoLabel: null,
-            comingSoon: true,
         },
     ];
 
@@ -69,7 +68,11 @@
     //   例) q015: ["variable"]
     const TOPIC_OVERRIDE = {};
 
-    const CONTROL = { if: "branch", ifelse: "branch", ifmulti: "branch", ifelsemulti: "branch", for: "loop", while: "loop" };
+    const CONTROL = {
+        if: "branch", ifelse: "branch", ifmulti: "branch", ifelsemulti: "branch",
+        for: "loop", while: "loop",
+        func: "function", return: "function",
+    };
     const CHILD_KEYS = ["body", "ifBody", "elseBody", "then", "else", "branches"];
 
     // 配列は ast のノード種別に出てこない（値の中の文字列として現れる）ので、式から見つける。
