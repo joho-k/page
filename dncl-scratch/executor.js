@@ -42,6 +42,7 @@ function highlightBlock(blockId) {
 function runTraceStep(step) {
     if (!step) return;
     changedVars = new Set();
+    currentCallFlight = null;
     highlightBlock(step.blockId);
     const varsBefore = structuredClone(vars);
     const result = step.run();
@@ -169,14 +170,34 @@ function escapeHtml(text) {
         .replaceAll(">", "&gt;");
 }
 
+// 変数はいつでも全部見せる。ただし、いまステップ実行しているのと違うところの変数
+// （関数の外＝メインの処理、呼び出し元の関数）はコントラストを落として目立たせない。
+// 引数と関数の中の変数は関数の中だけのものなので、まざらないよう組に分けて並べる。
+function scopeGroups() {
+    if (callStack.length === 0) {
+        // 関数を使わないプログラムでは見出しを出さない（今までの見た目のまま）
+        const label = Object.keys(functions).length > 0 ? "メインの処理の変数" : null;
+        return [{ label, values: vars, active: true }];
+    }
+
+    // callStack[i].savedVars は「その関数に入る直前の変数」＝ひとつ外側の組
+    const groups = callStack.map((frame, i) => ({
+        label: i === 0 ? "メインの処理の変数" : `関数 ${callStack[i - 1].name} の中の変数`,
+        values: frame.savedVars || {},
+        active: false,
+    }));
+
+    groups.push({
+        label: `関数 ${callStack[callStack.length - 1].name} の中の変数`,
+        values: vars,
+        active: true,
+    });
+
+    return groups;
+}
+
 function renderVars() {
     const varsEl = document.getElementById("vars");
-    const entries = Object.entries(vars);
-
-    if (entries.length === 0) {
-        varsEl.innerHTML = `<div class="vars-empty">まだ変数はありません</div>`;
-        return;
-    }
 
     function isRectangular2DArray(value) {
         if (!Array.isArray(value) || value.length === 0) return false;
@@ -185,11 +206,11 @@ function renderVars() {
         return value.every(row => row.length === width);
     }
 
-    function render1DArray(name, value) {
+    function render1DArray(name, value, active) {
         // プログラムと同じ [20, 69, 30] の1行表記。各要素の上に添字を薄く添え、
         // 参照中の要素だけ点滅させる。
         const items = value.map((item, index) => {
-            const highlightClass = highlightedArrayAccesses.has(`${name}:${index}`) ? " array-inline-cell-highlight" : "";
+            const highlightClass = active && highlightedArrayAccesses.has(`${name}:${index}`) ? " array-inline-cell-highlight" : "";
             return `<span class="array-inline-cell${highlightClass}">`
                 + `<span class="array-inline-index">${index}</span>`
                 + `<span class="array-inline-value">${escapeHtml(formatVarValue(item))}</span>`
@@ -203,7 +224,7 @@ function renderVars() {
         `;
     }
 
-    function render2DArray(name, value) {
+    function render2DArray(name, value, active) {
         const height = value.length;
         const width = value[0].length;
 
@@ -219,7 +240,7 @@ function renderVars() {
                 <tr class="array-var-value-row">
                     <th class="array-var-cell array-var-row-index-cell">${row}</th>
                     ${Array.from({ length: width }).map((_, col) => {
-                const highlightClass = highlightedArrayAccesses.has(`${name}:${row}:${col}`) ? " array-var-cell-highlight" : "";
+                const highlightClass = active && highlightedArrayAccesses.has(`${name}:${row}:${col}`) ? " array-var-cell-highlight" : "";
                 return `<td class="array-var-cell${highlightClass}">${escapeHtml(formatVarValue(value[row][col]))}</td>`;
             }).join("")}
                 </tr>
@@ -236,25 +257,77 @@ function renderVars() {
         `;
     }
 
-    varsEl.innerHTML = entries.map(([name, value]) => {
-        const activeClass = changedVars.has(name) ? " var-card-active" : "";
-        const refClass = highlightedVars.has(name) ? " var-card-ref" : "";
-        const kind = Array.isArray(value) ? "配列" : "値";
-        const valueHtml = Array.isArray(value)
-            ? (
-                isRectangular2DArray(value)
-                    ? render2DArray(name, value)
-                    : render1DArray(name, value)
-            )
-            : `<div class="var-value">${escapeHtml(formatVarValue(value))}</div>`;
+    // 光らせる（変わった・参照した）のは、いま動いている組の変数だけ
+    function cardsHtml(values, active) {
+        return Object.entries(values).map(([name, value]) => {
+            const activeClass = active && changedVars.has(name) ? " var-card-active" : "";
+            const refClass = active && highlightedVars.has(name) ? " var-card-ref" : "";
+            const kind = Array.isArray(value) ? "配列" : "値";
+            const valueHtml = Array.isArray(value)
+                ? (
+                    isRectangular2DArray(value)
+                        ? render2DArray(name, value, active)
+                        : render1DArray(name, value, active)
+                )
+                : `<div class="var-value">${escapeHtml(formatVarValue(value))}</div>`;
+
+            return `
+                <div class="var-card${activeClass}${refClass}${Array.isArray(value) ? " var-card-array" : ""}">
+                    <div class="var-card-head">
+                        <span class="var-name">${escapeHtml(name)}</span>
+                        <span class="var-kind">${kind}</span>
+                    </div>
+                    ${valueHtml}
+                </div>
+            `;
+        }).join("");
+    }
+
+    const groups = scopeGroups();
+
+    // 関数を使っていないプログラムは今までどおり、見出しなしで並べるだけ
+    if (groups.length === 1 && !groups[0].label) {
+        varsEl.innerHTML = Object.keys(groups[0].values).length === 0
+            ? `<div class="vars-empty">まだ変数はありません</div>`
+            : cardsHtml(groups[0].values, true);
+        return;
+    }
+
+    // いま動いていない組は高さを取らないよう、見出しと値を1行にまとめる
+    function inactiveLineHtml(group) {
+        const entries = Object.entries(group.values);
+
+        const items = entries.length === 0
+            ? `<span class="vars-line-item vars-line-none">まだ変数はありません</span>`
+            : entries.map(([name, value]) =>
+                `<span class="vars-line-item"><b>${escapeHtml(name)}</b>`
+                + `<span class="vars-line-value">${escapeHtml(formatVarValue(value))}</span></span>`
+            ).join("");
+
+        // 入りきらないぶんは …。全部はマウスを乗せれば読める
+        const plain = entries.map(([name, value]) => `${name} ${formatVarValue(value)}`).join("、");
 
         return `
-            <div class="var-card${activeClass}${refClass}${Array.isArray(value) ? " var-card-array" : ""}">
-                <div class="var-card-head">
-                    <span class="var-name">${escapeHtml(name)}</span>
-                    <span class="var-kind">${kind}</span>
+            <div class="vars-group vars-group-inactive">
+                <div class="vars-line" title="${escapeHtml(`${group.label}：${plain}`)}">
+                    <span class="vars-line-label">${escapeHtml(group.label)}</span>
+                    <span class="vars-line-items">${items}</span>
                 </div>
-                ${valueHtml}
+            </div>
+        `;
+    }
+
+    varsEl.innerHTML = groups.map((group) => {
+        if (!group.active) return inactiveLineHtml(group);
+
+        const cards = Object.keys(group.values).length === 0
+            ? `<div class="vars-empty vars-empty-small">まだ変数はありません</div>`
+            : cardsHtml(group.values, true);
+
+        return `
+            <div class="vars-group vars-group-active">
+                <div class="vars-scope">${escapeHtml(group.label)}</div>
+                <div class="vars-group-cards">${cards}</div>
             </div>
         `;
     }).join("");
@@ -328,7 +401,90 @@ function animateStepCard(container) {
         animateConditionCard(container, card);
         return;
     }
+    if (card && card.classList.contains("step-card-call")) {
+        animateCallEnterCard(container, card);
+        return;
+    }
     animateAssignmentCard(container);
+}
+
+// 呼び出しの引数が、下の行の仮引数の箱へ降りていくところを見せる。
+// 降りるのは「コピー」で、上の行の式（sum + 4 → 9）はそのまま残す。
+// 元の式ごと動かすと、計算の途中と答えが消えて何をしたのか読めなくなるため。
+function animateCallEnterCard(container, card) {
+    if (!container || !card) return;
+
+    const paramRow = [...card.querySelectorAll(".calc-row")][1];
+    if (!paramRow) return;
+
+    const cRect = container.getBoundingClientRect();
+    const pad = 6;
+    const gapY = 6;
+
+    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canAnimate = !reduceMotion && typeof Element.prototype.animate === "function";
+
+    paramRow.querySelectorAll("[data-param]").forEach((target) => {
+        const value = card.querySelector(`[data-arg="${target.dataset.param}"]`);
+        if (!value) return;
+
+        const tRect = target.getBoundingClientRect();
+        const vRect = value.getBoundingClientRect();
+        if (!tRect.width || !vRect.width) return;
+
+        // 箱に入るのはコピー。元の式は動かさないので、ずっと読める。
+        // 変数や配列のチップは中身の値だけを落とす（ラベルまで入れると箱が広くなりすぎる）。
+        const chipVal = value.querySelector(".chip-val");
+        let flier;
+
+        if (chipVal) {
+            flier = document.createElement("span");
+            flier.className = "calc-token calc-result";
+            flier.textContent = chipVal.textContent;
+        } else {
+            flier = value.cloneNode(true);
+            flier.removeAttribute("data-arg");
+        }
+
+        Object.assign(flier.style, {
+            position: "absolute",
+            margin: "0",
+            zIndex: "5",
+            pointerEvents: "none",
+        });
+        container.appendChild(flier);
+
+        const fw = flier.offsetWidth;
+        const fh = flier.offsetHeight;
+
+        const srcLeft = (vRect.left - cRect.left) + (vRect.width - fw) / 2;
+        const srcTop = (vRect.top - cRect.top) + (vRect.height - fh) / 2;
+        flier.style.left = `${srcLeft}px`;
+        flier.style.top = `${srcTop}px`;
+
+        // 値は仮引数の真下に中央ぞろえで収まる
+        const dstLeft = (tRect.left - cRect.left) + tRect.width / 2 - fw / 2;
+        const dstTop = (tRect.bottom - cRect.top) + gapY;
+
+        makeVarBox(container, paramRow, tRect, cRect, dstTop + fh, pad, fw);
+
+        const dx = dstLeft - srcLeft;
+        const dy = dstTop - srcTop;
+
+        if (!canAnimate) {
+            // 動かせないときは、最初から箱の中に置いておく
+            flier.style.transform = `translate(${dx}px, ${dy}px)`;
+            return;
+        }
+
+        flier.animate([
+            { transform: "translate(0, 0)", opacity: 0, offset: 0 },
+            { transform: "translate(0, 0)", opacity: 1, offset: 0.12 },
+            { transform: `translate(${dx}px, ${dy}px)`, opacity: 1, offset: 0.46 },
+            { transform: `translate(${dx}px, ${dy}px)`, opacity: 1, offset: 0.92 },
+            { transform: `translate(${dx}px, ${dy}px)`, opacity: 0, offset: 1 }
+        ], { duration: FLYIN_DURATION, easing: "ease-in-out", iterations: Infinity });
+    });
 }
 
 const FLYIN_DURATION = 3000;
@@ -1872,11 +2028,24 @@ function parseExpression(tokens) {
         throw new Error("不正: " + t);
     }
 
+    // 先頭のマイナス（-5 や -x）。関数が負の値を返したときにも通る道。
+    function unary() {
+        if (peek() === "-") {
+            consume();
+            return -unary();
+        }
+        if (peek() === "+") {
+            consume();
+            return unary();
+        }
+        return primary();
+    }
+
     function mul() {
-        let v = primary();
+        let v = unary();
         while (peek() === "*" || peek() === "/" || peek() === "%") {
             const op = consume();
-            const r = primary();
+            const r = unary();
 
             if (op === "*") v *= r;
             if (op === "/") v /= r;
@@ -1941,77 +2110,748 @@ function safeEval(expr) {
 }
 
 // ----------------
+// 関数を呼びに行く／戻ってくる矢印
+// ----------------
+// 「メインの処理のこの行から、関数エリアのこの関数へ飛んだ」が見えるように、
+// 2つのブロックのあいだに弧を描き、その上を吹き出しが行き来する。
+// currentCallFlight は runTraceStep のたびに消え、呼び出し／戻りのステップだけが立てる。
+
+let currentCallFlight = null;
+
+const CALL_FLIGHT_DURATION = 2600;
+
+function setCallFlight(flight) {
+    currentCallFlight = flight;
+}
+
+function clearCallFlightMarks() {
+    document.querySelectorAll(".call-from").forEach(el => el.classList.remove("call-from"));
+
+    const layer = document.getElementById("call-flight-layer");
+    if (layer) layer.replaceChildren();
+}
+
+/** 弧の始点・終点は、ブロックの右はしの少し外側。行き来する向きで色を変える。 */
+function renderCallFlight() {
+    clearCallFlightMarks();
+
+    const layer = document.getElementById("call-flight-layer");
+    const areas = document.getElementById("program-areas");
+    if (!layer || !areas || !currentCallFlight) return;
+
+    const { fromBlockId, toBlockId, label, kind } = currentCallFlight;
+    const fromEl = fromBlockId ? document.querySelector(`[data-block-id="${fromBlockId}"]`) : null;
+    const toEl = toBlockId ? document.querySelector(`[data-block-id="${toBlockId}"]`) : null;
+    if (!fromEl || !toEl || fromEl === toEl) return;
+
+    fromEl.classList.add("call-from");
+
+    const areaRect = areas.getBoundingClientRect();
+    const width = Math.max(areas.scrollWidth, areas.clientWidth);
+    const height = Math.max(areas.scrollHeight, areas.clientHeight);
+
+    // スクロールしていても content の座標系でそろえる
+    const toLocal = (rect) => ({
+        x: rect.left - areaRect.left + areas.scrollLeft,
+        y: rect.top - areaRect.top + areas.scrollTop,
+        w: rect.width,
+        h: rect.height,
+    });
+
+    const a = toLocal(fromEl.getBoundingClientRect());
+    const b = toLocal(toEl.getBoundingClientRect());
+
+    const x0 = a.x + a.w + 8;
+    const y0 = a.y + a.h / 2;
+    const x1 = b.x + b.w + 8;
+    const y1 = b.y + b.h / 2;
+
+    // 右へふくらませる。はみ出さないよう、エリアの幅までにおさめる
+    const bulge = Math.min(Math.max(x0, x1) + 72, Math.max(width - 14, Math.max(x0, x1) + 24));
+    const d = `M ${x0} ${y0} C ${bulge} ${y0}, ${bulge} ${y1}, ${x1} ${y1}`;
+
+    layer.style.width = `${width}px`;
+    layer.style.height = `${height}px`;
+
+    const color = kind === "exit" ? "#6b7f3f" : "#3f7f8c";
+    const markerId = `call-flight-arrow-${kind}`;
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "call-flight-svg");
+    svg.setAttribute("width", String(width));
+    svg.setAttribute("height", String(height));
+    svg.innerHTML = `
+        <defs>
+            <marker id="${markerId}" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="${color}"></path>
+            </marker>
+        </defs>
+        <path d="${d}" fill="none" stroke="${color}" stroke-width="3"
+              stroke-dasharray="7 6" stroke-linecap="round"
+              marker-end="url(#${markerId})" opacity="0.85"></path>
+    `;
+    layer.append(svg);
+
+    // 吹き出しは弧のふくらみの外側に置いて動かさない（ブロックの字に重ならないように）。
+    // 動きは弧の上を走る丸で見せる。
+    const chip = document.createElement("div");
+    chip.className = `call-flight-chip call-flight-chip-${kind}`;
+    chip.textContent = kind === "exit" ? `${label} を持ちかえる` : `${label} を呼ぶ`;
+    layer.append(chip);
+
+    const chipLeft = Math.max(8, Math.min(bulge + 14, width - chip.offsetWidth - 8));
+    chip.style.left = `${chipLeft}px`;
+    chip.style.top = `${(y0 + y1) / 2}px`;
+
+    const dot = document.createElement("div");
+    dot.className = `call-flight-dot call-flight-dot-${kind}`;
+    layer.append(dot);
+
+    animateCallFlight(chip, dot, d);
+}
+
+/** 弧の上を丸が走り、吹き出しはその場でふわっと出る。 */
+function animateCallFlight(chip, dot, pathData) {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        dot.remove();
+        return;
+    }
+
+    if (typeof Element.prototype.animate !== "function") {
+        dot.remove();
+        return;
+    }
+
+    chip.animate([
+        { opacity: 0.35, offset: 0 },
+        { opacity: 1, offset: 0.2 },
+        { opacity: 1, offset: 0.85 },
+        { opacity: 0.35, offset: 1 },
+    ], { duration: CALL_FLIGHT_DURATION, iterations: Infinity, easing: "ease-in-out" });
+
+    const canUsePath = window.CSS && CSS.supports && CSS.supports("offset-path", `path("${pathData}")`);
+
+    if (!canUsePath) {
+        dot.remove();
+        return;
+    }
+
+    dot.style.offsetPath = `path("${pathData}")`;
+    dot.style.offsetRotate = "0deg";
+
+    dot.animate([
+        { offsetDistance: "0%", opacity: 0 },
+        { offsetDistance: "0%", opacity: 1, offset: 0.1 },
+        { offsetDistance: "100%", opacity: 1, offset: 0.72 },
+        { offsetDistance: "100%", opacity: 0, offset: 0.86 },
+        { offsetDistance: "100%", opacity: 0 },
+    ], { duration: CALL_FLIGHT_DURATION, iterations: Infinity, easing: "ease-in-out" });
+}
+
+// 画面の幅が変わると弧の位置がずれるので描きなおす
+window.addEventListener("resize", () => {
+    if (currentCallFlight) renderCallFlight();
+});
+
+// ================================================================
+// 関数（ユーザー定義）
+// ================================================================
+// 「関数 tashizan(a, b):」で定義し、「a + b を返す」で戻り値を決め、
+// 「tashizan(4, 3)」で呼び出す。呼び出しは文としても、式の中でも書ける。
+//
+// ステップ実行では関数の中も1行ずつ見せたいので、式の中の呼び出しは
+// 「その場で計算」せず、次の手順で1つずつ解いていく。
+//   1. 文を実行しようとしたとき、まだ値が決まっていない呼び出しを1つ見つける
+//   2. その呼び出しのぶんのステップ（入る → 本体 → 戻る）を今の位置に差し込み、
+//      そのうしろに「同じ文をもう一度」積む
+//   3. 戻るステップで戻り値をキュー（stepCallValues）に積む
+//   4. もう一度実行された文は、キューの値で呼び出しを置き換えてから評価する
+// 呼び出しが入れ子（f(g(1))）でも、内側から順に同じ手順で解ける。
+
+let functions = {};              // 関数名 -> { name, params, body, blockId }
+let callStack = [];              // 実行中の呼び出し。中身は素のデータだけ（複製できるように）
+let callFrameCounter = 0;
+let stepCallValues = new Map();  // 文のステップ -> その文で解決済みの戻り値（評価順）
+
+const MAX_CALL_DEPTH = 50;
+
+/** プログラム全体から関数定義を集める。定義そのものは実行されない。 */
+function collectFunctions(ast) {
+    const map = {};
+
+    (function walk(nodes) {
+        (nodes || []).forEach((node) => {
+            if (!node || typeof node !== "object") return;
+
+            if (node.type === "func" && String(node.name ?? "").trim()) {
+                const name = String(node.name).trim();
+                map[name] = {
+                    name,
+                    params: splitCallArgs(String(node.params ?? "")).map(s => s.trim()).filter(Boolean),
+                    body: node.body || [],
+                    blockId: node.blockId
+                };
+            }
+
+            ["body", "ifBody", "elseBody"].forEach((key) => {
+                if (Array.isArray(node[key])) walk(node[key]);
+            });
+        });
+    })(ast);
+
+    return map;
+}
+
+/** 文字列リテラルの終わりの次の位置を返す。 */
+function skipStringLiteral(s, i) {
+    const close = s[i] === "“" ? "”" : s[i];
+    i++;
+    while (i < s.length && s[i] !== close) {
+        if (s[i] === "\\") i++;
+        i++;
+    }
+    return i + 1;
+}
+
+/** s[openIdx] の "(" に対応する ")" の位置。見つからなければ -1。 */
+function matchClosingParen(s, openIdx) {
+    let depth = 0;
+
+    for (let i = openIdx; i < s.length; i++) {
+        const ch = s[i];
+        if (ch === '"' || ch === "“") { i = skipStringLiteral(s, i) - 1; continue; }
+        if (ch === "(") depth++;
+        if (ch === ")") {
+            depth--;
+            if (depth === 0) return i;
+        }
+    }
+
+    return -1;
+}
+
+/** 引数の並び "a, f(b, c), 2" を、いちばん外側のカンマで分ける。 */
+function splitCallArgs(argsText) {
+    const s = String(argsText ?? "").trim();
+    if (s === "") return [];
+
+    const args = [];
+    let depth = 0;
+    let start = 0;
+
+    for (let i = 0; i < s.length; i++) {
+        const ch = s[i];
+        if (ch === '"' || ch === "“") { i = skipStringLiteral(s, i) - 1; continue; }
+        if (ch === "(" || ch === "[") depth++;
+        if (ch === ")" || ch === "]") depth--;
+        if (ch === "," && depth === 0) {
+            args.push(s.slice(start, i));
+            start = i + 1;
+        }
+    }
+
+    args.push(s.slice(start));
+    return args;
+}
+
+/** 式の中の、入れ子になっていないユーザー定義関数の呼び出し（左から順）。 */
+function topLevelUserCalls(expr) {
+    const s = String(expr ?? "");
+    const calls = [];
+    let i = 0;
+
+    while (i < s.length) {
+        const ch = s[i];
+
+        if (ch === '"' || ch === "“") { i = skipStringLiteral(s, i); continue; }
+
+        const m = /^[A-Za-z_]\w*/.exec(s.slice(i));
+        if (!m) { i++; continue; }
+
+        const name = m[0];
+        let j = i + name.length;
+        while (j < s.length && /\s/.test(s[j])) j++;
+
+        if (s[j] === "(" && Object.prototype.hasOwnProperty.call(functions, name)) {
+            const close = matchClosingParen(s, j);
+            if (close !== -1) {
+                calls.push({
+                    name,
+                    argsText: s.slice(j + 1, close),
+                    start: i,
+                    end: close,
+                    text: s.slice(i, close + 1)
+                });
+                i = close + 1;
+                continue;
+            }
+        }
+
+        i += name.length;
+    }
+
+    return calls;
+}
+
+/** 式の中の呼び出しを、値が決まる順（内側 → 外側、左 → 右）に並べる。 */
+function callsInEvalOrder(expr) {
+    const ordered = [];
+
+    topLevelUserCalls(expr).forEach((call) => {
+        callsInEvalOrder(call.argsText).forEach(inner => ordered.push(inner));
+        ordered.push(call);
+    });
+
+    return ordered;
+}
+
+/** 戻り値を、式の中にそのまま書ける形にする。 */
+function callValueLiteral(value) {
+    if (typeof value === "number") return String(value);
+    if (typeof value === "boolean") return value ? "1" : "0";
+    if (typeof value === "string") return JSON.stringify(value);
+    if (Array.isArray(value)) return JSON.stringify(value);
+    return "0";
+}
+
+/** 式の中の呼び出しを、解決済みの戻り値（state.values を評価順に消費）で置き換える。 */
+function substituteCallValues(expr, state) {
+    const s = String(expr ?? "");
+    const calls = topLevelUserCalls(s);
+    if (calls.length === 0) return s;
+
+    let out = "";
+    let last = 0;
+
+    calls.forEach((call) => {
+        substituteCallValues(call.argsText, state);   // 内側の値を先に使い切る
+        const value = state.values[state.i++];
+        out += s.slice(last, call.start) + callValueLiteral(value);
+        last = call.end + 1;
+    });
+
+    return out + s.slice(last);
+}
+
+/** その文でまだ値が決まっていない呼び出しを1つ返す。全部決まっていれば null。 */
+function nextPendingCall(step, node, fields) {
+    const values = stepCallValues.get(step) || [];
+    let resolved = 0;
+
+    for (const field of fields) {
+        const expr = node[field];
+        if (typeof expr !== "string") continue;
+
+        for (const call of callsInEvalOrder(expr)) {
+            if (resolved < values.length) { resolved++; continue; }
+
+            // 内側の呼び出しはこの時点で解決済みなので、引数は今すぐ評価できる
+            const innerCount = callsInEvalOrder(call.argsText).length;
+            const argsExpr = substituteCallValues(call.argsText, { values, i: resolved - innerCount });
+
+            return { call, argsExpr };
+        }
+    }
+
+    return null;
+}
+
+/** 呼び出しを戻り値で置き換えた、この文のコピーを作る（説明カードもこれを使う）。 */
+function resolveNodeCalls(step, node, fields) {
+    const values = stepCallValues.get(step);
+    if (!values || values.length === 0) return node;
+
+    const resolved = { ...node };
+    const state = { values, i: 0 };
+
+    fields.forEach((field) => {
+        if (typeof node[field] === "string") {
+            resolved[field] = substituteCallValues(node[field], state);
+        }
+    });
+
+    return resolved;
+}
+
+/** 関数の中に入り、本体と「戻る」ステップを今の位置に差し込む。 */
+function startCall(step, pending, options = {}) {
+    const fn = functions[pending.call.name];
+    const argExprs = splitCallArgs(pending.argsExpr).map(arg => arg.trim());
+    const argValues = argExprs.map(arg => safeEval(arg));
+    const callText = pending.call.text;
+
+    if (callStack.length >= MAX_CALL_DEPTH) {
+        const values = stepCallValues.get(step) || [];
+        values.push(0);
+        stepCallValues.set(step, values);
+        return { callDepthExceeded: true, name: fn.name };
+    }
+
+    // この文のステップ自身が「関数に入る」ステップを兼ねる。
+    // 光らせる場所を、呼び出した行から関数の定義へ移して「飛んだ」ことを見せる。
+    callStack.push({
+        id: ++callFrameCounter,
+        name: fn.name,
+        savedVars: vars,
+        returnValue: 0,
+        returned: false
+    });
+
+    const frameId = callFrameCounter;
+
+    vars = {};
+    fn.params.forEach((param, i) => { vars[param] = argValues[i] ?? 0; });
+    changedVars = new Set(fn.params);
+    highlightBlock(fn.blockId);
+    setCallFlight({ fromBlockId: step.blockId, toBlockId: fn.blockId, label: callText, kind: "enter" });
+
+    const exitStep = {
+        blockId: step.blockId,
+        callExitId: frameId,
+        run: () => {
+            const frame = callStack.pop();
+            vars = frame ? frame.savedVars : vars;
+            changedVars = new Set();
+
+            const returnValue = frame ? frame.returnValue : 0;
+
+            setCallFlight({
+                fromBlockId: fn.blockId,
+                toBlockId: step.blockId,
+                label: frame && frame.returned ? formatVarValue(returnValue) : "結果なし",
+                kind: "exit"
+            });
+
+            if (options.noRetry) {
+                stepCallValues.delete(step);
+            } else {
+                const values = stepCallValues.get(step) || [];
+                values.push(returnValue);
+                stepCallValues.set(step, values);
+            }
+
+            return { name: fn.name, returnValue, returned: !!(frame && frame.returned), callText };
+        },
+        getDetails: (scope, result) => buildCallExitExplanation(fn, result, callText)
+    };
+
+    const bodySteps = [];
+    buildTrace(fn.body, bodySteps);
+
+    // 戻ってきたら、この文をもう一度はじめから実行する（残りの呼び出しがあればまた解く）。
+    // 呼び出しだけの行は、戻ってきた時点で終わりなので積み直さない。
+    const tail = options.noRetry ? [] : [step];
+    trace.splice(stepIndex, 0, ...bodySteps, exitStep, ...tail);
+
+    return { calling: fn.name, callText, argValues, argExprs };
+}
+
+/** 「関数に入った」「呼び出しが深すぎる」ときの説明。ふつうの説明より先に出す。 */
+function callStartDetails(result, scope) {
+    if (result?.callDepthExceeded) {
+        return buildStepDetails(`関数 ${result.name} の呼び出しが深くなりすぎたため、これ以上は中に入りません。`);
+    }
+
+    if (result?.calling) {
+        return buildCallEnterExplanation(functions[result.calling], result, scope);
+    }
+
+    return null;
+}
+
+/** 文の実行の入口。呼び出しが残っていれば関数の中へ、そうでなければ普通に実行する。 */
+function runWithCalls(step, node, fields, execute, options = {}) {
+    const pending = nextPendingCall(step, node, fields);
+
+    if (pending) {
+        // 「tashizan(4, 3)」だけの行は、関数から戻ってきた時点でその行は終わり
+        const noRetry = !!options.callOnly && pending.call.text === String(node.value ?? "").trim();
+        return startCall(step, pending, { noRetry });
+    }
+
+    const resolved = resolveNodeCalls(step, node, fields);
+    stepCallValues.delete(step);
+
+    const result = execute(resolved) || {};
+    result.resolvedNode = resolved;
+    return result;
+}
+
+/** 呼び出し中の文は、説明カードも「値に置き換えたあとの式」で作る。 */
+function detailsNode(result, node) {
+    return result?.resolvedNode || node;
+}
+
+// 引数は「その場で計算してから入れる」のが見えるように出す。
+//   3         … そのまま
+//   sum       … 変数のチップ（名前と中身）
+//   data[i]   … 配列のチップ（どの要素かと中身）
+//   sum + 4   … 値つきの式 → 答え
+function argKind(expr, scope) {
+    const t = String(expr ?? "").trim();
+    if (t === "" || isNumericConstant(t) || isStringLiteral(t)) return "value";
+    if (isSimpleVariable(t)) return "ref";
+    if (scope && parseSimpleArrayAccess(t, scope)) return "ref";
+    return "calc";
+}
+
+/** 引数1つぶんの見た目。箱へ飛んでいく部分に data-arg を付ける。 */
+function argValueHtml(expr, value, scope, index) {
+    const kind = argKind(expr, scope);
+    const shown = formatVarValue(value);
+    const text = String(expr ?? "").trim();
+
+    if (kind === "value") {
+        return `<span class="calc-token call-arg-flier" data-arg="${index}">${escapeHtml(shown)}</span>`;
+    }
+
+    if (kind === "ref") {
+        return `<span class="call-arg-flier" data-arg="${index}">${exprToValueTokensHtml(text, scope)}</span>`;
+    }
+
+    // 式は「値つきの式 → 答え」。飛んでいくのは答えのほう。
+    return `${exprToValueTokensHtml(text, scope)}`
+        + `<span class="calc-result-arrow">→</span>`
+        + `<span class="calc-token calc-result call-arg-flier" data-arg="${index}">${escapeHtml(shown)}</span>`;
+}
+
+// 「呼び出しの引数が、そのまま仮引数の箱に入っていく」ところを見せるカード。
+//   kakezan( 4 , 3 )
+//   kakezan( a , b )   ← a と b が箱になり、上の 4 と 3 が降りてくる
+function buildCallEnterExplanation(fn, result, scope) {
+    const argValues = result?.argValues || [];
+    const argExprs = result?.argExprs || [];
+    const callText = result?.callText || "";
+
+    const comma = `<span class="calc-op">,</span>`;
+    const open = `<span class="calc-bracket">(</span>`;
+    const close = `<span class="calc-bracket">)</span>`;
+
+    const rows = [];
+
+    if (fn.params.length === 0) {
+        rows.push(`${calcToken(fn.name)}${open}${calcToken("引数なし")}${close}`);
+    } else {
+        const argsHtml = fn.params
+            .map((_, i) => argValueHtml(argExprs[i] ?? "", argValues[i] ?? 0, scope, i))
+            .join(comma);
+
+        const paramsHtml = fn.params
+            .map((param, i) => `<span class="calc-token calc-target" data-param="${i}">${escapeHtml(param)}</span>`)
+            .join(comma);
+
+        rows.push(`${calcToken(fn.name)}${open}${argsHtml}${close}`);
+        rows.push(`${calcToken(fn.name)}${open}${paramsHtml}${close}`);
+    }
+
+    const parts = fn.params.map((param, i) => {
+        const expr = String(argExprs[i] ?? "").trim();
+        const value = formatVarValue(argValues[i] ?? 0);
+        const kind = argKind(expr, scope);
+
+        if (kind === "value") return `${param} に ${value}`;
+        if (kind === "ref") return `${param} に ${expr} の ${value}`;
+        return `${param} に ${expr} を計算した ${value}`;
+    });
+
+    const html = buildStepCard({
+        title: `関数 ${escapeHtml(fn.name)} に入る`,
+        rows,
+        badge: `${escapeHtml(callText)} を実行する`,
+        cardClass: "step-card-call"
+    });
+
+    const text = fn.params.length
+        ? `関数 ${fn.name} を呼び出しました。${parts.join("、")} を入れて、関数の中の処理を始めます。`
+        : `関数 ${fn.name} を呼び出しました。関数の中の処理を始めます。`;
+
+    const highlights = argExprs.flatMap(expr => collectVarNames(expr, scope));
+
+    return buildStepDetails(text, { html, highlightVars: [...fn.params, ...highlights] });
+}
+
+function buildCallExitExplanation(fn, result, callText) {
+    const returnValue = result?.returnValue ?? 0;
+
+    if (!result?.returned) {
+        return buildStepDetails(
+            `関数 ${fn.name} の処理が終わりました。返す値はないので、呼び出したところに戻ります。`,
+            {
+                html: buildStepCard({
+                    title: `関数 ${escapeHtml(fn.name)} から戻る`,
+                    rows: [calcToken(callText)],
+                    badge: "戻り値はなし"
+                })
+            }
+        );
+    }
+
+    const html = buildStepCard({
+        title: `関数 ${escapeHtml(fn.name)} から戻る`,
+        rows: [`${calcToken(callText)}<span class="calc-result-arrow">→</span>${calcToken(formatVarValue(returnValue), "calc-result")}`],
+        badge: `戻り値は <b>${escapeHtml(formatVarValue(returnValue))}</b>`
+    });
+
+    return buildStepDetails(
+        `関数 ${fn.name} の処理が終わりました。${callText} の値は ${formatVarValue(returnValue)} です。呼び出したところに戻ります。`,
+        { html }
+    );
+}
+
+// ----------------
 // 正しいトレース生成（事前展開🔥）
 // ----------------
 function buildTrace(ast, targetTrace = trace) {
     if (targetTrace === trace && trace.length === 0 && stepIndex === 0) {
         whileIterationCounts = new Map();
         forIterationStates = new Map();
+        // 関数定義は実行されない。プログラム全体から集めて、呼び出せるようにするだけ。
+        functions = collectFunctions(ast);
+        callStack = [];
+        callFrameCounter = 0;
+        stepCallValues = new Map();
     }
 
     for (let node of ast) {
 
+        // 関数定義そのものはステップにしない（呼び出されたときに中へ入る）
+        if (node.type === "func") continue;
+
         if (node.type === "assign") {
-            targetTrace.push({
+            const step = {
                 blockId: node.blockId,
-                run: () => {
-                    const assignedValue = safeEval(node.value);
-                    const target = parseAssignmentTarget(node.name, vars);
+                run: () => runWithCalls(step, node, ["value"], (n) => {
+                    const assignedValue = safeEval(n.value);
+                    const target = parseAssignmentTarget(n.name, vars);
                     if (target) {
                         setIndexedVar(target, assignedValue);
                     } else {
-                        setVar(node.name, assignedValue);
+                        setVar(n.name, assignedValue);
                     }
                     return { assignedValue };
-                },
-                getDetails: (scope, result) => buildAssignExplanation(node, scope, result)
-            });
+                }),
+                getDetails: (scope, result) => callStartDetails(result, scope)
+                    || buildAssignExplanation(detailsNode(result, node), scope, result)
+            };
+            targetTrace.push(step);
         }
 
         if (node.type === "print") {
-            targetTrace.push({
+            const step = {
                 blockId: node.blockId,
-                run: () => {
-                    const val = safeEval(node.value);
+                run: () => runWithCalls(step, node, ["value"], (n) => {
+                    const val = safeEval(n.value);
                     output += (
                         Array.isArray(val)
                             ? JSON.stringify(val)
                             : val
                     ) + "\n";
                     return { printedValue: val };
-                },
-                getDetails: (scope, result) => buildPrintExplanation(node, scope, result)
-            });
+                }),
+                getDetails: (scope, result) => callStartDetails(result, scope)
+                    || buildPrintExplanation(detailsNode(result, node), scope, result)
+            };
+            targetTrace.push(step);
+        }
+
+        // 関数の呼び出しだけの行（tashizan(4, 3) / 切り捨て(3.9)）
+        if (node.type === "call") {
+            const step = {
+                blockId: node.blockId,
+                run: () => runWithCalls(step, node, ["value"], (n) => {
+                    return { callValue: safeEval(n.value) };
+                }, { callOnly: true }),
+                getDetails: (scope, result) => {
+                    const started = callStartDetails(result, scope);
+                    if (started) return started;
+                    const shown = detailsNode(result, node).value;
+                    return buildStepDetails(`${node.value} を実行しました。`, {
+                        html: buildStepCard({
+                            title: "関数の呼び出し",
+                            rows: [calcToken(String(node.value))],
+                            badge: shown !== node.value
+                                ? `結果は <b>${escapeHtml(formatVarValue(result?.callValue))}</b>`
+                                : ""
+                        })
+                    });
+                }
+            };
+            targetTrace.push(step);
+        }
+
+        // 「〜 を返す」。戻り値を決めて、関数の残りの行を飛ばして呼び出し元に戻る。
+        if (node.type === "return") {
+            const step = {
+                blockId: node.blockId,
+                run: () => runWithCalls(step, node, ["value"], (n) => {
+                    const returnValue = safeEval(n.value);
+                    const frame = callStack[callStack.length - 1];
+
+                    if (!frame) return { returnValue, outsideFunction: true };
+
+                    frame.returnValue = returnValue;
+                    frame.returned = true;
+
+                    // このフレームの出口まで、残りのステップを飛ばす
+                    let i = stepIndex;
+                    while (i < trace.length && trace[i].callExitId !== frame.id) i++;
+                    if (i < trace.length && i > stepIndex) trace.splice(stepIndex, i - stepIndex);
+
+                    return { returnValue, name: frame.name };
+                }),
+                getDetails: (scope, result) => {
+                    const started = callStartDetails(result, scope);
+                    if (started) return started;
+                    const shown = detailsNode(result, node).value;
+                    return buildStepDetails(
+                        `${node.value} の値 ${formatVarValue(result?.returnValue)} を、呼び出したところに返します。`,
+                        {
+                            html: buildStepCard({
+                                title: "戻り値を返す",
+                                rows: [`${exprToValueTokensHtml(shown, scope)}<span class="calc-result-arrow">→</span>${calcToken(formatVarValue(result?.returnValue), "calc-result")}`],
+                                badge: `<b>${escapeHtml(formatVarValue(result?.returnValue))}</b> を返す`
+                            }),
+                            highlightVars: collectVarNames(shown, scope)
+                        }
+                    );
+                }
+            };
+            targetTrace.push(step);
         }
 
         if (node.type === "if") {
-            targetTrace.push({
+            const step = {
                 blockId: node.blockId,
-                run: () => {
-                    const conditionValue = safeEval(node.condition);
+                run: () => runWithCalls(step, node, ["condition"], (n) => {
+                    const conditionValue = safeEval(n.condition);
                     if (conditionValue) {
                         insertTraceAtCurrentPosition(node.body);
                     }
                     return { conditionValue };
-                },
-                getDetails: (scope, result) => buildConditionExplanation(node.condition, result?.conditionValue, scope)
-            });
+                }),
+                getDetails: (scope, result) => callStartDetails(result, scope)
+                    || buildConditionExplanation(detailsNode(result, node).condition, result?.conditionValue, scope)
+            };
+            targetTrace.push(step);
         }
 
         if (node.type === "ifelse") {
-            targetTrace.push({
+            const step = {
                 blockId: node.blockId,
-                run: () => {
-                    const conditionValue = safeEval(node.condition);
+                run: () => runWithCalls(step, node, ["condition"], (n) => {
+                    const conditionValue = safeEval(n.condition);
                     if (conditionValue) {
                         insertTraceAtCurrentPosition(node.ifBody);
                     } else {
                         insertTraceAtCurrentPosition(node.elseBody);
                     }
                     return { conditionValue };
-                },
-                getDetails: (scope, result) => buildConditionExplanation(node.condition, result?.conditionValue, scope)
-            });
+                }),
+                getDetails: (scope, result) => callStartDetails(result, scope)
+                    || buildConditionExplanation(detailsNode(result, node).condition, result?.conditionValue, scope)
+            };
+            targetTrace.push(step);
         }
 
         if (node.type === "for") {
@@ -2019,15 +2859,15 @@ function buildTrace(ast, targetTrace = trace) {
             // start/end/step をビルド時ではなく run() の中で評価することで、
             // 「1 から n まで」のように終了値が実行時に決まる変数でも正しく回る。
             const forKey = node.blockId || node;
-            targetTrace.push({
+            const step = {
                 blockId: node.blockId,
-                run: () => {
-                    const start = safeEval(node.start);
-                    const end = safeEval(node.end);
-                    const step = safeEval(node.step);
+                run: () => runWithCalls(step, node, ["start", "end", "step"], (n) => {
+                    const start = safeEval(n.start);
+                    const end = safeEval(n.end);
+                    const stepValue = safeEval(n.step);
 
                     const prev = forIterationStates.get(forKey);
-                    const current = prev === undefined ? start : prev.current + step;
+                    const current = prev === undefined ? start : prev.current + stepValue;
 
                     // 繰り返し終了（0回のケースも含む）
                     if (current > end) {
@@ -2035,7 +2875,7 @@ function buildTrace(ast, targetTrace = trace) {
                         return { ended: true };
                     }
 
-                    const isLast = current + step > end;
+                    const isLast = current + stepValue > end;
                     setVar(node.varName, current);
 
                     // 本体を現在位置に挿入。続きがあるならループ制御ノード自身も後ろに積む。
@@ -2047,20 +2887,23 @@ function buildTrace(ast, targetTrace = trace) {
                         insertTraceAtCurrentPosition([...node.body, node]);
                     }
 
-                    return { current, end, step, start, isLast, ended: false };
-                },
+                    return { current, end, step: stepValue, start, isLast, ended: false };
+                }),
                 getDetails: (scope, result) => {
+                    const started = callStartDetails(result, scope);
+                    if (started) return started;
                     if (!result || result.ended) return null;
-                    return buildForDetails(node, result.current, result.end, result.step, result.isLast, result.start);
+                    return buildForDetails(detailsNode(result, node), result.current, result.end, result.step, result.isLast, result.start);
                 }
-            });
+            };
+            targetTrace.push(step);
         }
 
         if (node.type === "while") {
-            targetTrace.push({
+            const step = {
                 blockId: node.blockId,
-                run: () => {
-                    const conditionValue = safeEval(node.condition);
+                run: () => runWithCalls(step, node, ["condition"], (n) => {
+                    const conditionValue = safeEval(n.condition);
 
                     if (!conditionValue) {
                         return { conditionValue, ended: true };
@@ -2076,9 +2919,12 @@ function buildTrace(ast, targetTrace = trace) {
 
                     insertTraceAtCurrentPosition([...node.body, node]);
                     return { conditionValue, continued: true, iterationCount: nextCount };
-                },
+                }),
                 getDetails: (scope, result) => {
-                    const parts = buildConditionParts(node.condition, result?.conditionValue, scope);
+                    const started = callStartDetails(result, scope);
+                    if (started) return started;
+
+                    const parts = buildConditionParts(detailsNode(result, node).condition, result?.conditionValue, scope);
 
                     let suffix;
                     if (result?.stopped) {
@@ -2093,7 +2939,8 @@ function buildTrace(ast, targetTrace = trace) {
                     // 補足ノートはカードに出さず、説明文（data-alt/動画用）にだけ残す
                     return buildStepDetails(`${parts.text} ${suffix}`, { html: parts.html, highlightVars: parts.highlightVars });
                 }
-            });
+            };
+            targetTrace.push(step);
         }
     }
 }
@@ -2178,6 +3025,11 @@ function snapshotState() {
         highlightedVars: new Set(highlightedVars),
         whileIterationCounts: new Map(whileIterationCounts),
         forIterationStates: new Map(forIterationStates),
+        callStack: structuredClone(callStack),
+        callFrameCounter,
+        currentCallFlight: currentCallFlight ? { ...currentCallFlight } : null,
+        // キーはステップそのもの（trace と同じ実体）なので、中身の配列だけ複製する
+        stepCallValues: new Map([...stepCallValues].map(([step, values]) => [step, values.slice()])),
         activeBlockId: document.querySelector(".step-active")?.dataset.blockId || null
     };
 }
@@ -2194,6 +3046,10 @@ function restoreState(s) {
     highlightedVars = new Set(s.highlightedVars);
     whileIterationCounts = new Map(s.whileIterationCounts);
     forIterationStates = new Map(s.forIterationStates);
+    callStack = structuredClone(s.callStack);
+    callFrameCounter = s.callFrameCounter;
+    currentCallFlight = s.currentCallFlight ? { ...s.currentCallFlight } : null;
+    stepCallValues = new Map([...s.stepCallValues].map(([step, values]) => [step, values.slice()]));
     if (s.activeBlockId) {
         highlightBlock(s.activeBlockId);
     } else {
@@ -2226,6 +3082,11 @@ function stepStart() {
     changedVars = new Set();
     whileIterationCounts = new Map();
     forIterationStates = new Map();
+    functions = {};
+    callStack = [];
+    callFrameCounter = 0;
+    stepCallValues = new Map();
+    currentCallFlight = null;
     currentExplanation = STEP_INTRO_TEXT;
     currentExplanationHtml = null;
     highlightedArrayAccesses = new Set();
@@ -2264,6 +3125,11 @@ function cancelExecution() {
     changedVars = new Set();
     whileIterationCounts = new Map();
     forIterationStates = new Map();
+    functions = {};
+    callStack = [];
+    callFrameCounter = 0;
+    stepCallValues = new Map();
+    currentCallFlight = null;
     currentExplanation = STEP_INTRO_TEXT;
     currentExplanationHtml = null;
     highlightedArrayAccesses = new Set();
@@ -2289,4 +3155,6 @@ function updateUI() {
     document.getElementById("output").textContent = output;
     renderVars();
     renderExplanation();
+    // ブロックの位置が確定してから弧を描く
+    requestAnimationFrame(renderCallFlight);
 }
