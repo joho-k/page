@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第53問 駐車料金の早見表｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="1時間あたり300円の駐車場があります。1時間から5時間までとめたときの料金の早見表を、上から順に表示しよう。何時間目かを数えている変数は i です。くり返しの終わりの数と、料金を計算する記号の2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,繰り返し,駐車料金の早見表">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第53問 駐車料金の早見表｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="1時間あたり300円の駐車場があります。1時間から5時間までとめたときの料金の早見表を、上から順に表示しよう。何時間目かを数えている変数は i です。くり返しの終わりの数と、料金を計算する記号の2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q053.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第53問 駐車料金の早見表｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="1時間あたり300円の駐車場があります。1時間から5時間までとめたときの料金の早見表を、上から順に表示しよう。何時間目かを数えている変数は i です。くり返しの終わりの数と、料金を計算する記号の2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q053.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html#quiz",
+      "name": "第53問 駐車料金の早見表",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 繰り返し",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "1時間あたり300円の駐車場があります。1時間から5時間までとめたときの料金の早見表を、上から順に表示しよう。何時間目かを数えている変数は i です。くり返しの終わりの数と、料金を計算する記号の2か所の穴をうめよう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "5 , *"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "4"
+          },
+          {
+            "@type": "Answer",
+            "text": "5"
+          },
+          {
+            "@type": "Answer",
+            "text": "6"
+          },
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第53問 駐車料金の早見表",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q053";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第53問 駐車料金の早見表</h1>
+            <p>1時間あたり300円の駐車場があります。1時間から5時間までとめたときの料金の早見表を、上から順に表示しよう。何時間目かを数えている変数は i です。くり返しの終わりの数と、料金を計算する記号の2か所の穴をうめよう</p>
+            <p>難易度：★★☆☆☆（2／やさしい）。単元：繰り返し。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>i を 1 から ［A］ まで 1 ずつ増やしながら繰り返す:
+  ryoukin = 300 ［B］ i
+  表示する(i + &quot;時間で&quot; + ryoukin + &quot;円&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>4</code></li>
+                <li><code>5</code></li>
+                <li><code>6</code></li>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>料金は「1時間あたりの金額 × とめた時間」なので 300 * i です。for は終わりの数もふくめてくり返すので、1時間から5時間までなら 1 から 5 までと書きます。300円、600円、900円、1200円、1500円と5行出れば正解です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>5</code></li>
+            <li>空欄 ［B］ … <code>*</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>4</code>　［B］<code>*</code> … 4時間ぶんまでしか表示されません。i は1から始まり、終わりの数もふくめてくり返すので、5時間ぶん出すには 5 と書きます</li>
+            <li>［A］<code>6</code>　［B］<code>*</code> … 6時間ぶんまで表示されてしまいます。終わりの数もふくめてくり返すので、1から6だと6回です。5 と書きます</li>
+            <li>［A］<code>5</code>　［B］<code>+</code> … 300 + i では1時間ごとに1円ずつしか増えません。1時間で301円になってしまいます。「1時間あたり300円」は300を時間の数だけかけるので * を使います</li>
+            <li>［A］<code>5</code>　［B］<code>/</code> … 300 / i では時間がのびるほど安くなってしまいます。2時間で150円ではおかしいですね。* を使って 300 * 2 ＝ 600 とします</li>
+            <li>［A］<code>5</code>　［B］<code>-</code> … 300 - i では1時間ごとに1円ずつ安くなってしまいます。「1時間あたり300円」は300を時間の数だけかけるので * を使います</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q046/index.html">第46問へ</a></li>
+                
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
