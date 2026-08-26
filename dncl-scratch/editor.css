@@ -343,10 +343,44 @@
     background: #6b7f3f;
 }
 
-/* 呼び出し元（行き）／関数（戻り）の、飛び立つ側のブロック */
-.block.call-from {
-    outline: 3px dashed #3f7f8c;
-    outline-offset: 3px;
+/* 飛び立つ側。呼び出しの行では、行まるごとではなく呼び出しの部分だけが光る */
+.call-from {
+    position: relative;
+    z-index: 1;
+    border-radius: 9px;
+    outline: 3px solid var(--call-flight-color, #3f7f8c);
+    outline-offset: 2px;
+    box-shadow:
+        0 0 0 6px color-mix(in srgb, var(--call-flight-color, #3f7f8c) 22%, transparent),
+        0 4px 14px color-mix(in srgb, var(--call-flight-color, #3f7f8c) 35%, transparent);
+    animation: call-from-glow 1.6s ease-in-out infinite;
+}
+
+.call-from-enter {
+    --call-flight-color: #3f7f8c;
+}
+
+.call-from-exit {
+    --call-flight-color: #6b7f3f;
+}
+
+@keyframes call-from-glow {
+    0%, 100% {
+        box-shadow:
+            0 0 0 4px color-mix(in srgb, var(--call-flight-color, #3f7f8c) 16%, transparent),
+            0 4px 12px color-mix(in srgb, var(--call-flight-color, #3f7f8c) 25%, transparent);
+    }
+    50% {
+        box-shadow:
+            0 0 0 8px color-mix(in srgb, var(--call-flight-color, #3f7f8c) 28%, transparent),
+            0 4px 16px color-mix(in srgb, var(--call-flight-color, #3f7f8c) 45%, transparent);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .call-from {
+        animation: none;
+    }
 }
 
 /* ブロック */

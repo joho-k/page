@@ -2125,10 +2125,30 @@ function setCallFlight(flight) {
 }
 
 function clearCallFlightMarks() {
-    document.querySelectorAll(".call-from").forEach(el => el.classList.remove("call-from"));
+    document.querySelectorAll(".call-from").forEach(el => {
+        el.classList.remove("call-from", "call-from-enter", "call-from-exit");
+    });
 
     const layer = document.getElementById("call-flight-layer");
     if (layer) layer.replaceChildren();
+}
+
+/**
+ * 呼び出しの行の中から、いま呼んでいる呼び出しブロックを探す。
+ * sum = kakezan(4, 3) のように行の一部が呼び出しのときは、行まるごとではなく
+ * kakezan(4, 3) の部分だけを光らせたいため。見つからなければ行そのものを返す
+ * （表示する(nijou(2)) のように、呼び出しが入力欄の文字で書かれている場合）。
+ */
+function callElementIn(blockEl, callText) {
+    if (!blockEl || !callText) return blockEl;
+
+    const name = String(callText).split("(")[0].trim();
+    if (!name) return blockEl;
+
+    const found = [...blockEl.querySelectorAll('.block[data-type="call"]')]
+        .find(el => el.querySelector(".call-name")?.value.trim() === name);
+
+    return found || blockEl;
 }
 
 /** 弧の始点・終点は、ブロックの右はしの少し外側。行き来する向きで色を変える。 */
@@ -2139,12 +2159,17 @@ function renderCallFlight() {
     const areas = document.getElementById("program-areas");
     if (!layer || !areas || !currentCallFlight) return;
 
-    const { fromBlockId, toBlockId, label, kind } = currentCallFlight;
-    const fromEl = fromBlockId ? document.querySelector(`[data-block-id="${fromBlockId}"]`) : null;
-    const toEl = toBlockId ? document.querySelector(`[data-block-id="${toBlockId}"]`) : null;
-    if (!fromEl || !toEl || fromEl === toEl) return;
+    const { fromBlockId, toBlockId, callText, label, kind } = currentCallFlight;
 
-    fromEl.classList.add("call-from");
+    const fromBlock = fromBlockId ? document.querySelector(`[data-block-id="${fromBlockId}"]`) : null;
+    const toBlock = toBlockId ? document.querySelector(`[data-block-id="${toBlockId}"]`) : null;
+    if (!fromBlock || !toBlock || fromBlock === toBlock) return;
+
+    // 呼び出しの行の側は、行の中の呼び出しブロックまでしぼる
+    const fromEl = kind === "exit" ? fromBlock : callElementIn(fromBlock, callText);
+    const toEl = kind === "exit" ? callElementIn(toBlock, callText) : toBlock;
+
+    fromEl.classList.add("call-from", `call-from-${kind}`);
 
     const areaRect = areas.getBoundingClientRect();
     const width = Math.max(areas.scrollWidth, areas.clientWidth);
@@ -2504,7 +2529,13 @@ function startCall(step, pending, options = {}) {
     fn.params.forEach((param, i) => { vars[param] = argValues[i] ?? 0; });
     changedVars = new Set(fn.params);
     highlightBlock(fn.blockId);
-    setCallFlight({ fromBlockId: step.blockId, toBlockId: fn.blockId, label: callText, kind: "enter" });
+    setCallFlight({
+        fromBlockId: step.blockId,
+        toBlockId: fn.blockId,
+        callText,
+        label: callText,
+        kind: "enter"
+    });
 
     const exitStep = {
         blockId: step.blockId,
@@ -2519,6 +2550,7 @@ function startCall(step, pending, options = {}) {
             setCallFlight({
                 fromBlockId: fn.blockId,
                 toBlockId: step.blockId,
+                callText,
                 label: frame && frame.returned ? formatVarValue(returnValue) : "結果なし",
                 kind: "exit"
             });
