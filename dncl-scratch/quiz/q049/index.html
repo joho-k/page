@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第49問 関数を繰り返しの中で使う｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="1から4までの数を、それぞれ2乗して合計したい（1 + 4 + 9 + 16）。2乗を計算する関数 nijou を作り、繰り返しの中から呼び出して goukei にたしていきます。何回目かを数えている変数は i です。関数にわたす値として、あてはまるものを選ぼう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,繰り返し,関数,関数を繰り返しの中で使う">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第49問 関数を繰り返しの中で使う｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="1から4までの数を、それぞれ2乗して合計したい（1 + 4 + 9 + 16）。2乗を計算する関数 nijou を作り、繰り返しの中から呼び出して goukei にたしていきます。何回目かを数えている変数は i です。関数にわたす値として、あてはまるものを選ぼう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q049.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第49問 関数を繰り返しの中で使う｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="1から4までの数を、それぞれ2乗して合計したい（1 + 4 + 9 + 16）。2乗を計算する関数 nijou を作り、繰り返しの中から呼び出して goukei にたしていきます。何回目かを数えている変数は i です。関数にわたす値として、あてはまるものを選ぼう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q049.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html#quiz",
+      "name": "第49問 関数を繰り返しの中で使う",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 繰り返し, 関数",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "1から4までの数を、それぞれ2乗して合計したい（1 + 4 + 9 + 16）。2乗を計算する関数 nijou を作り、繰り返しの中から呼び出して goukei にたしていきます。何回目かを数えている変数は i です。関数にわたす値として、あてはまるものを選ぼう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "i"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "i"
+          },
+          {
+            "@type": "Answer",
+            "text": "x"
+          },
+          {
+            "@type": "Answer",
+            "text": "goukei"
+          },
+          {
+            "@type": "Answer",
+            "text": "4"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第49問 関数を繰り返しの中で使う",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q049/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q049";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第49問 関数を繰り返しの中で使う</h1>
+            <p>1から4までの数を、それぞれ2乗して合計したい（1 + 4 + 9 + 16）。2乗を計算する関数 nijou を作り、繰り返しの中から呼び出して goukei にたしていきます。何回目かを数えている変数は i です。関数にわたす値として、あてはまるものを選ぼう</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：繰り返し・関数。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>関数 nijou(x):
+  x * x を返す
+goukei = 0
+i を 1 から 4 まで 1 ずつ増やしながら繰り返す:
+  ni = nijou(［A］)
+  goukei = goukei + ni
+表示する(&quot;1から4までの2乗の合計は&quot; + goukei)</code></pre>
+            <p>空欄 ［A］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>i</code></li>
+                <li><code>x</code></li>
+                <li><code>goukei</code></li>
+                <li><code>4</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>繰り返しの中では i が 1, 2, 3, 4 と変わります。その i をそのまま関数にわたせば、1, 4, 9, 16 が順に返ってきます</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>i</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>x</code> … x は関数 nijou の中だけで使う名前（引数）です。繰り返している側には x という変数がないので、値が無いあつかいになり、合計は 0 のままです。何回目かを持っているのは i です</li>
+            <li>［A］<code>goukei</code> … goukei は合計を入れておく箱です。最初は 0 なので、nijou(0) は 0 になり、いつまでたっても合計は 0 のままです。2乗したいのは、いま何回目かを表す i です</li>
+            <li>［A］<code>4</code> … 4 だと毎回 nijou(4) の 16 をたすので、16 が4回で 64 になってしまいます。1回目は 1、2回目は 2、…と変わる値が必要なので i をわたします</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q048/index.html">第48問へ</a></li>
+                
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=function#problems">関数の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>

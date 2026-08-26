@@ -126,6 +126,12 @@ function buildCode(ast, keys, indent = "") {
             code += `${indent}${f(node.left)} ${f(node.op)} ${f(node.right)}\n`;
         } else if (node.type === "call") {
             code += `${indent}${f(node.value)}\n`;
+        } else if (node.type === "func") {
+            code +=
+                `${indent}関数 ${f(node.name)}(${f(node.params ?? "")}):\n` +
+                buildCode(node.body || [], keys, indent + "  ");
+        } else if (node.type === "return") {
+            code += `${indent}${f(node.value)} を返す\n`;
         }
     });
 

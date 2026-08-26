@@ -1,4 +1,24 @@
+// プログラムは「関数」と「メインの処理」の2つのエリアに分かれている。
+// workspace はメインの処理、functionWorkspace は関数の定義だけを置く場所。
+// programAreas は両方を含む入れ物で、「プログラム全体から探す」ときはこちらを使う。
 const workspace = document.getElementById("workspace");
+const functionWorkspace = document.getElementById("function-workspace");
+const programAreas = document.getElementById("program-areas");
+
+/** 関数エリアは、関数が1つも無いときは出さない（ふつうの問題の邪魔をしない）。 */
+function refreshFunctionArea() {
+    const area = document.getElementById("function-area");
+    if (!area || !programAreas) return;
+
+    const hasFunctions = functionWorkspace.querySelector('[data-type="func"]') !== null;
+    area.hidden = !hasFunctions;
+    programAreas.classList.toggle("has-functions", hasFunctions);
+}
+
+/** プログラム全体の AST。関数の定義が先、そのあとメインの処理。 */
+function buildProgramAst() {
+    return [...buildAST(functionWorkspace), ...buildAST(workspace)];
+}
 let programViewMode = "block";
 let blockIdCounter = 0;
 let activePaletteButton = null;
@@ -74,6 +94,21 @@ const BLOCK_PREVIEWS = {
         title: "四捨五入",
         code: `四捨五入(3.5)`,
         text: "小数を四捨五入して整数にします。"
+    },
+    func: {
+        title: "関数の定義",
+        code: `関数 tashizan(a, b):\n  a + b を返す`,
+        text: "よく使う処理に名前をつけてまとめます。()の中は引数（受け取る値）で、カンマで区切って並べます。定義しただけでは実行されません。"
+    },
+    return: {
+        title: "を返す（戻り値）",
+        code: `a + b を返す`,
+        text: "関数の結果（戻り値）を、呼び出したところに返します。ここで関数の処理は終わります。"
+    },
+    call: {
+        title: "関数を呼び出す",
+        code: `tashizan(4, 3)`,
+        text: "作った関数を実行します。呼ぶ関数はプルダウンで選び、引数の数はその関数の定義に合わせて決まります。戻り値を使いたいときは、代入の右側にこのブロックを入れます。"
     }
 };
 
@@ -126,6 +161,11 @@ const PALETTE_MENUS = {
         { type: "ifmulti", label: "複数条件" },
         { type: "ifelse", label: "もし＋そうでなければ" },
         { type: "ifelsemulti", label: "複数条件＋そうでなければ" }
+    ],
+    function: [
+        { type: "func", label: "関数の定義" },
+        { type: "return", label: "を返す（戻り値）" },
+        { type: "call", label: "関数を呼び出す" }
     ]
 };
 
@@ -391,12 +431,15 @@ function addBlock(type) {
     if (type === "floor") el = createRoundingBlock("floor");
     if (type === "ceil") el = createRoundingBlock("ceil");
     if (type === "round") el = createRoundingBlock("round");
+    if (type === "func") el = createFuncBlock();
+    if (type === "return") el = createReturnBlock();
+    if (type === "call") el = createCallBlock();
 
-    workspace.appendChild(el);
+    (type === "func" ? functionWorkspace : workspace).appendChild(el);
     updateCode();
 
     if (type === "array") {
-        setSelectedArrayBlock(el);
+        setSelectedBlock(el);
     }
 }
 
@@ -516,6 +559,7 @@ function readConditionValue(node) {
 
 function loadExample1() {
     workspace.innerHTML = "";
+    functionWorkspace.innerHTML = "";
 
     const sumAAssign = createAssignBlock();
     setInputValue(sumAAssign.querySelector(".assign-inline > input"), "sum_a");
@@ -601,6 +645,7 @@ function loadExample1() {
 
 function loadExample2() {
     workspace.innerHTML = "";
+    functionWorkspace.innerHTML = "";
 
     const outerFor = createForBlock();
     const outerInputs = outerFor.querySelectorAll("input");
@@ -633,6 +678,7 @@ function loadExample2() {
 
 function loadExample3() {
     workspace.innerHTML = "";
+    functionWorkspace.innerHTML = "";
 
     const arrayAssign = createArrayBlock();
     setInputValue(arrayAssign.querySelector("input"), "a");
@@ -675,6 +721,7 @@ function loadExample3() {
 
 function loadExample4() {
     workspace.innerHTML = "";
+    functionWorkspace.innerHTML = "";
 
     // a = 48
     const aAssign = createAssignBlock();
@@ -861,12 +908,15 @@ function createArrayBlock() {
     addElement();
 
     div.arrayOps = { addRow, removeRow, addElement, removeElement };
-
-    div.addEventListener("click", (event) => {
-        if (event.target.closest(".delete-btn")) return;
-        if (event.target.closest("input")) return;
-        setSelectedArrayBlock(div);
-    });
+    div.blockOps = {
+        title: "配列の操作",
+        buttons: [
+            { label: "要素 ＋", run: addElement },
+            { label: "要素 －", run: removeElement },
+            { label: "行 ＋", run: addRow },
+            { label: "行 －", run: removeRow },
+        ],
+    };
 
     addDeleteButton(div);
     return div;
@@ -1179,6 +1229,316 @@ function createWhileBlock(conditionCount = 1) {
 }
 
 // ----------------
+// 関数
+// ----------------
+// 関数 tashizan(a, b):
+//   a + b を返す
+// と書き、tashizan(4, 3) で呼び出す。
+// 引数は1つにつき入力欄1つ。数は配列と同じく操作パネルの ＋／－ で増やしたり減らしたりする。
+const MAX_CALL_ARGS = 6;
+
+// 入力欄を1つ作るたびに input が飛んで updateCode が走ると、
+// 作りかけの（引数が1つしかない）状態が呼び出し側に伝わってしまう。作り終わるまで止める。
+let rebuildingArgInputs = false;
+
+/** カンマ区切りの入力欄の並びを作り直す。 */
+function renderArgInputs(wrap, cls, values) {
+    const wasRebuilding = rebuildingArgInputs;
+    rebuildingArgInputs = true;
+
+    try {
+        wrap.innerHTML = "";
+
+        values.forEach((value, i) => {
+            if (i > 0) wrap.append(document.createTextNode(", "));
+
+            const input = document.createElement("input");
+            input.className = cls;
+            wrap.append(input);
+
+            autoResizeInput(input);
+            setInputMaybeBlank(input, value);
+        });
+    } finally {
+        rebuildingArgInputs = wasRebuilding;
+    }
+}
+
+/** 入力欄の並びを読んで「a, b」の形にする。1つだけ空なら引数なしとみなす。 */
+function readArgInputs(node, cls) {
+    const values = Array.from(node.querySelectorAll(`.${cls}`)).map(input => input.value.trim());
+    return (values.length === 1 && values[0] === "") ? "" : values.join(", ");
+}
+
+/** 関数の定義の「引数 ＋／－」。呼び出し側の引数の数は、ここに自動でついてくる。 */
+function makeArgOps(wrap, cls, nextValue) {
+    function values() {
+        return Array.from(wrap.querySelectorAll(`.${cls}`)).map(input => input.value);
+    }
+
+    function add() {
+        const list = values();
+        if (list.length >= MAX_CALL_ARGS) return;
+
+        renderArgInputs(wrap, cls, [...list, nextValue(list.length)]);
+        updateCode();
+    }
+
+    function remove() {
+        const list = values();
+        if (list.length === 0) return;
+
+        renderArgInputs(wrap, cls, list.slice(0, -1));
+        updateCode();
+    }
+
+    return {
+        title: "関数の操作",
+        buttons: [
+            { label: "引数 ＋", run: add },
+            { label: "引数 －", run: remove },
+        ],
+    };
+}
+
+/** すでにある関数と重ならない名前にする（tashizan → tashizan2 → tashizan3 …）。 */
+function nextFreeFunctionName(base, selfBlock) {
+    const taken = new Set(
+        Array.from(functionWorkspace.querySelectorAll('.block[data-type="func"]'))
+            .filter(block => block !== selfBlock)
+            .map(block => block.querySelector(".func-name")?.value.trim())
+            .filter(Boolean)
+    );
+
+    const wanted = String(base ?? "").trim() || "f";
+    if (!taken.has(wanted)) return wanted;
+
+    // 末尾の数字は付け直すので、いったん外す
+    const stem = wanted.replace(/\d+$/, "") || wanted;
+
+    let n = 2;
+    while (taken.has(`${stem}${n}`)) n++;
+
+    return `${stem}${n}`;
+}
+
+/** 関数の名前が変わったら、その関数を呼んでいたプルダウンも新しい名前に切りかえる。 */
+function renameCallsTo(oldName, newName) {
+    if (!oldName || oldName === newName) return;
+
+    programAreas.querySelectorAll("select.call-name").forEach((select) => {
+        if (select.dataset.blankIndex !== undefined) return;
+        if (select.value !== oldName) return;
+
+        refreshCallNameOptions(select, newName);
+    });
+}
+
+/** 関数の名前を入れる。重複していたら数字を足してずらす。 */
+function setFuncName(block, raw) {
+    const input = block.querySelector(".func-name");
+    const previous = block.dataset.funcName || "";
+
+    if (parseBlankToken(raw) !== null) {
+        setInputMaybeBlank(input, raw);
+        block.dataset.funcName = "";
+        return;
+    }
+
+    const name = nextFreeFunctionName(raw, block);
+    setInputValue(input, name);
+    block.dataset.funcName = name;
+    renameCallsTo(previous, name);
+}
+
+function createFuncBlock() {
+    const div = document.createElement("div");
+    div.className = "block func";
+    div.dataset.type = "func";
+    assignBlockId(div);
+
+    div.innerHTML = `
+    関数
+    <input class="func-name" value="tashizan">(<span class="arg-list func-params"></span>):
+    <div class="children dropzone"></div>
+  `;
+
+    const child = div.querySelector(".children");
+    const params = div.querySelector(".func-params");
+    const nameInput = div.querySelector(".func-name");
+
+    renderArgInputs(params, "func-param", ["a", "b"]);
+    autoResizeInput(nameInput);
+
+    // 同じ名前の関数は作らせない。作った時点で空いている名前にしておく。
+    setInputValue(nameInput, nextFreeFunctionName("tashizan", div));
+    div.dataset.funcName = nameInput.value;
+
+    // 打っている途中は変えず、入力を終えたところで重複を直して呼び出し側にも反映する
+    nameInput.addEventListener("change", () => {
+        setFuncName(div, nameInput.value || div.dataset.funcName);
+        updateCode();
+    });
+
+    enableDrop(child);
+    updatePlaceholder(child);
+
+    div.blockOps = makeArgOps(params, "func-param", (i) => String.fromCharCode(97 + (i % 26)));
+
+    addDeleteButton(div);
+    return div;
+}
+
+/** 関数の定義の引数欄を、引数の数だけ作り直す。 */
+function setFuncParams(block, params) {
+    renderArgInputs(block.querySelector(".func-params"), "func-param", params);
+}
+
+function createReturnBlock() {
+    const div = document.createElement("div");
+    div.className = "block return";
+    div.dataset.type = "return";
+    assignBlockId(div);
+
+    div.innerHTML = `
+    <input value="a + b"> を返す
+  `;
+
+    autoResizeInput(div.querySelector("input"));
+
+    addDeleteButton(div);
+    return div;
+}
+
+/** 関数エリアで定義されている関数の名前（上から順）。 */
+function definedFunctionNames() {
+    return Array.from(functionWorkspace.querySelectorAll('.block[data-type="func"]'))
+        .map(block => block.querySelector(".func-name")?.value.trim())
+        .filter(Boolean);
+}
+
+/** 定義されている関数（引数の数を知るため）。 */
+function findFunctionBlock(name) {
+    return Array.from(functionWorkspace.querySelectorAll('.block[data-type="func"]'))
+        .find(block => block.querySelector(".func-name")?.value.trim() === name) || null;
+}
+
+function callNameOptionsHtml(extraName = "") {
+    const names = definedFunctionNames();
+    if (extraName && !names.includes(extraName)) names.push(extraName);
+
+    return names
+        .map(name => `<option value="${escapeAttr(name)}">${escapeAttr(name)}</option>`)
+        .join("");
+}
+
+function escapeAttr(text) {
+    return String(text).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;");
+}
+
+/** 呼び出し先のプルダウンを、いま定義されている関数にそろえる。 */
+function refreshCallNameOptions(select, wantedName = null) {
+    if (select.dataset.blankIndex !== undefined) return;   // 問題の空欄は触らない
+
+    const current = wantedName ?? select.value;
+    const html = callNameOptionsHtml(current);
+
+    // 中身が変わっていないなら作り直さない（打っている途中で選択が飛ばないように）
+    if (select.dataset.optionsHtml === html) {
+        if (current) select.value = current;
+        return;
+    }
+
+    select.dataset.optionsHtml = html;
+    select.innerHTML = html;
+    if (current) select.value = current;
+}
+
+/** すべての呼び出しブロックのプルダウンを更新する。 */
+function refreshAllCallNames() {
+    programAreas.querySelectorAll("select.call-name").forEach(select => refreshCallNameOptions(select));
+}
+
+/** 選んだ関数の引数の数に、呼び出し側の欄の数を合わせる。 */
+function syncCallArgsToFunction(block) {
+    const funcBlock = findFunctionBlock(block.querySelector(".call-name").value.trim());
+    if (!funcBlock) return;
+
+    const inputs = Array.from(block.querySelectorAll(".call-arg"));
+
+    // 問題の空欄は数も並びも決まっているので触らない
+    if (inputs.some(input => input.dataset.blankIndex !== undefined)) return;
+
+    const wanted = funcBlock.querySelectorAll(".func-param").length;
+    const current = inputs.map(input => input.value);
+    if (current.length === wanted) return;
+
+    const next = Array.from({ length: wanted }, (_, i) => current[i] ?? "0");
+    renderArgInputs(block.querySelector(".call-args"), "call-arg", next);
+}
+
+// 入力欄を作り直すと input が飛んで update が走るので、入れ子で呼ばれないようにする
+let syncingCallArgs = false;
+
+/** すべての呼び出しブロックの引数の数を、呼ぶ関数の定義に合わせる。 */
+function syncAllCallArgs() {
+    if (syncingCallArgs || document.body.classList.contains("quiz-mode")) return;
+
+    syncingCallArgs = true;
+    try {
+        programAreas.querySelectorAll('.block[data-type="call"]').forEach(syncCallArgsToFunction);
+    } finally {
+        syncingCallArgs = false;
+    }
+}
+
+// 代入の右側にも置けるように expr クラスを付けておく。
+function createCallBlock() {
+    const div = document.createElement("div");
+    div.className = "block call expr";
+    div.dataset.type = "call";
+    assignBlockId(div);
+
+    div.innerHTML = `
+    <select class="call-name"></select>(<span class="arg-list call-args"></span>)
+  `;
+
+    const select = div.querySelector(".call-name");
+    const args = div.querySelector(".call-args");
+
+    // 作った時点で定義されている関数があれば、その1つ目を呼ぶ形にしておく
+    refreshCallNameOptions(select, definedFunctionNames()[0] || "tashizan");
+    renderArgInputs(args, "call-arg", ["4", "3"]);
+    syncCallArgsToFunction(div);
+
+    // 引数の数は選んだ関数で決まるので、呼び出し側に ＋／－ は付けない
+    select.addEventListener("change", updateCode);
+
+    addDeleteButton(div);
+    return div;
+}
+
+/** 呼び出しブロックの引数欄を、引数の数だけ作り直す。 */
+function setCallArgs(block, args) {
+    renderArgInputs(block.querySelector(".call-args"), "call-arg", args);
+}
+
+/** 呼び出す関数を選ぶプルダウンに値を入れる（問題の空欄にもできる）。 */
+function setCallName(block, raw) {
+    const select = block.querySelector(".call-name");
+    const name = parseBlankToken(raw) === null ? String(raw ?? "").trim() : "";
+
+    refreshCallNameOptions(select, name);
+    setSelectMaybeBlank(select, raw, callNameOptionsHtml(name));
+}
+
+/** 呼び出しブロックを tashizan(4, 3) の形の文字列にする。 */
+function readCallExpr(node) {
+    const name = node.querySelector(".call-name").value.trim() || "f";
+    return `${name}(${readArgInputs(node, "call-arg")})`;
+}
+
+// ----------------
 // ドラッグ
 // ----------------
 function syncAssignZone(zone) {
@@ -1210,12 +1570,16 @@ function enableDrop(el, options = {}) {
             name: "shared",
             put: (_to, _from, dragged) => {
                 const draggedType = dragged.dataset?.type;
-                const isExprLikeBlock = ["expr", "random"].includes(draggedType)
+                const isExprLikeBlock = ["expr", "random", "call"].includes(draggedType)
                     || dragged.classList.contains("expr");
 
                 if (options.onlyExprLike && !isExprLikeBlock) {
                     return false;
                 }
+
+                // 関数の定義は関数エリアにだけ置ける（メインの処理には置けない）
+                if (options.onlyFunctions && draggedType !== "func") return false;
+                if (!options.onlyFunctions && draggedType === "func") return false;
 
                 if (options.singleBlock) {
                     const blocks = Array.from(el.children)
@@ -1240,6 +1604,7 @@ function enableDrop(el, options = {}) {
     el._sortable = sortable;
 }
 enableDrop(workspace);
+enableDrop(functionWorkspace, { onlyFunctions: true });
 
 // ----------------
 // AST（配列対応）
@@ -1386,6 +1751,32 @@ function buildAST(container) {
             });
         }
 
+        if (type === "func") {
+            ast.push({
+                type,
+                blockId: node.dataset.blockId,
+                name: node.querySelector(".func-name").value.trim() || "f",
+                params: readArgInputs(node, "func-param"),
+                body: buildAST(node.querySelector(".children"))
+            });
+        }
+
+        if (type === "return") {
+            ast.push({
+                type,
+                blockId: node.dataset.blockId,
+                value: node.querySelector("input").value.trim() || "0"
+            });
+        }
+
+        if (type === "call") {
+            ast.push({
+                type: "call",
+                blockId: node.dataset.blockId,
+                value: readCallExpr(node)
+            });
+        }
+
         if (["floor", "ceil", "round"].includes(type)) {
             const input = node.querySelector("input");
             const rawValue = input ? input.value.trim() : "";
@@ -1446,6 +1837,13 @@ function buildCode(ast, indent = "") {
 
         if (node.type === "call")
             code += `${indent}${node.value}\n`;
+
+        if (node.type === "func")
+            code += `${indent}関数 ${node.name}(${node.params ?? ""}):\n` +
+                buildCode(node.body, indent + "  ");
+
+        if (node.type === "return")
+            code += `${indent}${node.value} を返す\n`;
     });
 
     return code;
@@ -1454,6 +1852,13 @@ function buildCode(ast, indent = "") {
 function buildExpression(node) {
 
     const type = node.dataset.type;
+
+    // 呼び出しブロックも「計算」と同じ場所に置けるので、演算子の select と
+    // 呼び出し先の select を取りちがえないよう先に見る
+    if (type === "call") {
+        return readCallExpr(node);
+    }
+
     const hasOperatorSelect = Boolean(node.querySelector("select"));
 
     if (type === "expr" || (node.classList.contains("expr") && hasOperatorSelect)) {
@@ -1482,16 +1887,23 @@ function buildExpression(node) {
 }
 
 function updateCode() {
-    const ast = buildAST(workspace);
+    // 引数の入力欄を作り直している最中は、作り終わってから1回だけ走らせる
+    if (rebuildingArgInputs) return;
+
+    refreshFunctionArea();
+    refreshAllCallNames();
+    syncAllCallArgs();
+
+    const ast = buildProgramAst();
     document.getElementById("code").textContent = buildCode(ast);
 
     document.querySelectorAll(".children:not(.expr-zone)").forEach(updatePlaceholder);
     document.querySelectorAll(".expr-zone").forEach(syncAssignZone);
 
-    if (selectedArrayBlock && !document.body.contains(selectedArrayBlock)) {
-        setSelectedArrayBlock(null);
+    if (selectedBlock && !document.body.contains(selectedBlock)) {
+        setSelectedBlock(null);
     } else {
-        renderArrayControlPanel();
+        renderBlockControlPanel();
     }
 
     window.currentAST = ast;
@@ -1503,57 +1915,48 @@ function updateCode() {
 }
 
 // ----------------
-// 配列 操作パネル
+// 操作パネル（選んだブロックの ＋／－）
 // ----------------
-let selectedArrayBlock = null;
+// 配列の「要素 ＋／－」と同じ場所に、関数と呼び出しの「引数 ＋／－」も出す。
+// ブロック側は blockOps に { title, buttons: [{ label, run }] } を持たせるだけでよい。
+let selectedBlock = null;
 
-function setSelectedArrayBlock(block) {
-    selectedArrayBlock = block;
-    renderArrayControlPanel();
+function setSelectedBlock(block) {
+    selectedBlock = block;
+    renderBlockControlPanel();
 }
 
-function renderArrayControlPanel() {
+function renderBlockControlPanel() {
     const panel = document.getElementById("array-control-panel");
     if (!panel) return;
 
-    if (!selectedArrayBlock || selectedArrayBlock.dataset.type !== "array") {
-        panel.hidden = true;
-        panel.innerHTML = "";
-        return;
-    }
+    const ops = selectedBlock?.blockOps;
 
-    const ops = selectedArrayBlock.arrayOps;
-    if (!ops) {
+    // 問題モードではプログラムの形を変えさせない
+    if (!ops || document.body.classList.contains("quiz-mode")) {
         panel.hidden = true;
         panel.innerHTML = "";
         return;
     }
 
     panel.hidden = false;
-    panel.innerHTML = `
-        <span class="array-control-panel-title">配列の操作</span>
-        <button type="button" data-op="addElement">要素 ＋</button>
-        <button type="button" data-op="removeElement">要素 －</button>
-        <button type="button" data-op="addRow">行 ＋</button>
-        <button type="button" data-op="removeRow">行 －</button>
-    `;
+    panel.innerHTML = `<span class="array-control-panel-title">${ops.title}</span>`;
 
-    panel.querySelectorAll("button[data-op]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const op = btn.dataset.op;
-            const ok = typeof ops[op] === "function" ? ops[op]() : false;
-            if (ok === false) {
-                // no-op
-            }
-        });
+    ops.buttons.forEach((op) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = op.label;
+        btn.addEventListener("click", () => op.run());
+        panel.append(btn);
     });
 }
 
-workspace.addEventListener("click", (event) => {
+// ＋／－を持つブロック（配列・関数・呼び出し）を触ったら、そのブロックの操作パネルを出す
+programAreas.addEventListener("click", (event) => {
+    if (event.target.closest(".delete-btn")) return;
+
     const block = event.target.closest(".block");
-    if (!block || block.dataset.type !== "array") {
-        setSelectedArrayBlock(null);
-    }
+    setSelectedBlock(block && block.blockOps ? block : null);
 });
 
 // ----------------
@@ -1729,9 +2132,61 @@ function parseArrayLiteral(raw) {
     return values;
 }
 
+// 「tashizan(4, 3)」を、関数名と引数に分ける。
+function parseCallExpr(raw) {
+    const s = String(raw ?? "").trim();
+    const open = s.indexOf("(");
+    if (open <= 0 || !s.endsWith(")")) return null;
+    return { name: s.slice(0, open).trim(), args: s.slice(open + 1, -1).trim() };
+}
+
+// 「nijou(i)」のように、式ぜんぶが1つの呼び出しになっているか。
+// 「nijou(i) + 1」のような式は対象外（呼び出しブロックには戻さない）。
+function parsePureCallExpr(raw) {
+    const s = String(raw ?? "").trim();
+    const m = s.match(/^([A-Za-z_]\w*)\s*\(([\s\S]*)\)$/);
+    if (!m) return null;
+
+    // 「f(1) + g(2)」を1つの呼び出しと勘違いしないよう、カッコの対応を見る
+    let depth = 0;
+    const body = m[2];
+    for (const ch of body) {
+        if (ch === "(") depth++;
+        if (ch === ")") depth--;
+        if (depth < 0) return null;
+    }
+    if (depth !== 0) return null;
+
+    return { name: m[1], args: splitTopLevelArgs(body) };
+}
+
+// 「a, f(b, c)」を、いちばん外側のカンマで分ける。
+function splitTopLevelArgs(argsText) {
+    const s = String(argsText ?? "").trim();
+    if (s === "") return [];
+
+    const args = [];
+    let depth = 0;
+    let start = 0;
+
+    for (let i = 0; i < s.length; i++) {
+        const ch = s[i];
+        if (ch === "(" || ch === "[") depth++;
+        if (ch === ")" || ch === "]") depth--;
+        if (ch === "," && depth === 0) {
+            args.push(s.slice(start, i).trim());
+            start = i + 1;
+        }
+    }
+
+    args.push(s.slice(start).trim());
+    return args;
+}
+
 function loadProgramFromAst(ast) {
     workspace.innerHTML = "";
-    setSelectedArrayBlock(null);
+    functionWorkspace.innerHTML = "";
+    setSelectedBlock(null);
 
     function appendNodes(nodes, container) {
         (nodes || []).forEach((node) => {
@@ -1782,6 +2237,16 @@ function loadProgramFromAst(ast) {
                 } else if (rawValue === "乱数()") {
 
                     const block = createRandomBlock();
+                    zone.insertBefore(block, valueInput);
+                    syncAssignZone(zone);
+
+                } else if (parsePureCallExpr(rawValue)) {
+
+                    const call = parsePureCallExpr(rawValue);
+                    const block = createCallBlock();
+                    setCallName(block, call.name);
+                    setCallArgs(block, call.args);
+
                     zone.insertBefore(block, valueInput);
                     syncAssignZone(zone);
 
@@ -1875,15 +2340,42 @@ function loadProgramFromAst(ast) {
                 container.appendChild(b);
                 return;
             }
+
+            if (node.type === "func") {
+                const b = createFuncBlock();
+                setFuncName(b, node.name ?? "f");
+                setFuncParams(b, splitTopLevelArgs(node.params ?? ""));
+                appendNodes(node.body, b.querySelector(".children"));
+                container.appendChild(b);
+                return;
+            }
+
+            if (node.type === "return") {
+                const b = createReturnBlock();
+                setInputMaybeBlank(b.querySelector("input"), node.value ?? "0");
+                container.appendChild(b);
+                return;
+            }
+
+            if (node.type === "call") {
+                const b = createCallBlock();
+                const parts = parseCallExpr(node.value);
+                setCallName(b, parts ? parts.name : (node.value ?? "f"));
+                setCallArgs(b, parts ? splitTopLevelArgs(parts.args) : []);
+                container.appendChild(b);
+                return;
+            }
         });
     }
 
-    appendNodes(ast, workspace);
+    // トップレベルの関数の定義は関数エリアへ、それ以外はメインの処理へ振り分ける
+    appendNodes((ast || []).filter(n => n && n.type === "func"), functionWorkspace);
+    appendNodes((ast || []).filter(n => !n || n.type !== "func"), workspace);
     updateCode();
 }
 
 function shareProgramUrl() {
-    const ast = window.currentAST || buildAST(workspace);
+    const ast = window.currentAST || buildProgramAst();
     const encoded = encodeProgramAst(ast);
     const url = new URL(window.location.href);
     url.searchParams.set("p", encoded);
@@ -1944,16 +2436,17 @@ function quizNormalizeAnswer(str) {
 function quizDisableEditingExceptBlanks() {
     try {
         workspace._sortable?.option("disabled", true);
+        functionWorkspace._sortable?.option("disabled", true);
     } catch (_e) {
         // no-op
     }
 
     // disable delete buttons (defense in depth; CSS hides too)
-    workspace.querySelectorAll(".delete-btn").forEach((btn) => {
+    programAreas.querySelectorAll(".delete-btn").forEach((btn) => {
         btn.style.pointerEvents = "none";
     });
 
-    const editable = workspace.querySelectorAll("input, select, textarea, button");
+    const editable = programAreas.querySelectorAll("input, select, textarea, button");
     editable.forEach((el) => {
         const isInputBlank = el.matches?.("input[data-blank-index]");
         const isSelectBlank = el.matches?.("select[data-blank-index]");
@@ -2005,7 +2498,7 @@ function quizSetupChoices(quiz) {
 function quizApplyChoice(choice) {
     if (!window.activeBlankId) return;
     const blanks = quizGetBlankInputs();
-    const target = workspace.querySelector(
+    const target = programAreas.querySelector(
         `[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
     );
     if (!target) return;
@@ -2016,7 +2509,7 @@ function quizApplyChoice(choice) {
     target.dispatchEvent(new Event("input"));
     target.classList.remove("quiz-blank-pulse");
 
-    workspace
+    programAreas
         .querySelectorAll(".quiz-blank-active")
         .forEach((el) => el.classList.remove("quiz-blank-active"));
 
@@ -2050,7 +2543,7 @@ function quizEnsureChoicePopover() {
     // スクロール/リサイズしても空欄の下に追従させる
     const reposition = () => {
         if (pop.hidden || !window.activeBlankId) return;
-        const t = workspace.querySelector(
+        const t = programAreas.querySelector(
             `[data-blank-index="${CSS.escape(window.activeBlankId)}"]`,
         );
         if (t) quizPositionChoicePopover(pop, t);
@@ -2098,11 +2591,14 @@ function quizHideChoicePopover() {
     if (pop) pop.hidden = true;
 }
 
+const BLANK_SELECTOR = "input[data-blank-index], select[data-blank-index]";
+
 function quizGetBlankInputs() {
+    // 画面では「メインの処理」が上だが、空欄の順番は ast の並び（関数の定義 → メインの処理）に
+    // そろえる。answers の values はその順で書かれているため。
     return [
-        ...workspace.querySelectorAll(
-            "input[data-blank-index], select[data-blank-index]"
-        )
+        ...functionWorkspace.querySelectorAll(BLANK_SELECTOR),
+        ...workspace.querySelectorAll(BLANK_SELECTOR),
     ];
 }
 
@@ -2229,7 +2725,7 @@ function quizSetupBlankTapBehavior() {
     // ここではキャプチャ段階の保険として委譲でも止めておく（動的に増えた select 対策）。
     // ※ touchstart で preventDefault すると実機でタップ(click)自体がキャンセルされるため使わない。
     ["pointerdown", "mousedown"].forEach((type) => {
-        workspace.addEventListener(type, (event) => {
+        programAreas.addEventListener(type, (event) => {
             if (event.target.closest?.("select[data-blank-index]")) {
                 event.preventDefault();
             }
@@ -2241,7 +2737,7 @@ function quizSetupBlankTapBehavior() {
         if (event.target.closest?.("#quiz-choices-popover")) return; // 選択肢自体
         if (event.target.closest?.("input[data-blank-index], select[data-blank-index]")) return; // 空欄
         if (window.activeBlankId) {
-            workspace
+            programAreas
                 .querySelectorAll(".quiz-blank-active")
                 .forEach((el) => el.classList.remove("quiz-blank-active"));
             window.activeBlankId = null;
@@ -2249,7 +2745,7 @@ function quizSetupBlankTapBehavior() {
         quizHideChoicePopover();
     });
 
-    workspace.addEventListener("click", (event) => {
+    programAreas.addEventListener("click", (event) => {
         const target = event.target.closest?.(
             "input[data-blank-index], select[data-blank-index]"
         );
@@ -2267,7 +2763,7 @@ function quizSetupBlankTapBehavior() {
             quizUpdateCompletionPrompt();
             return;
         }
-        workspace
+        programAreas
             .querySelectorAll(".quiz-blank-active")
             .forEach((el) => el.classList.remove("quiz-blank-active"));
         target.classList.add("quiz-blank-active");
@@ -2281,7 +2777,7 @@ function quizSetupBlankTapBehavior() {
 function quizFocusFirstBlank() {
     const blanks = quizGetBlankInputs();
     if (blanks.length === 0) return;
-    workspace
+    programAreas
         .querySelectorAll("input[data-blank-index]")
         .forEach((el) => el.classList.remove("quiz-blank-active", "quiz-blank-pulse"));
     // 選択肢はタップで出す。最初は出さず、先頭の空欄を点滅させてタップを促すだけにする。
@@ -2612,7 +3108,7 @@ function setupQuizModeIfPresent() {
             .forEach((el) => quizShowScrollHint(el));
 
         // プログラム（ブロック表示）の横スクロールにもガイドを出す
-        quizShowScrollHint(document.getElementById("workspace"));
+        quizShowScrollHint(document.getElementById("workspace-panel"));
     }, 250);
 
     return true;

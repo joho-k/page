@@ -3577,4 +3577,216 @@ window.quizData = {
         ],
         defaultHint: "パリティビットは「1の個数を偶数にそろえるためのおまけの1ビット」です。まず bit[i] == 1 になった回数を kosuu + 1 で数え、kosuu % 2 を計算すると、偶数なら0・奇数なら1になります。これが届いた bit[7] と食いちがっていれば、通信のとちゅうでビットが化けた（エラー）とわかります",
     },
+    q047: {
+        title: "関数が返すのはどの値？",
+        addedAt: "2026-08-23 03:00",
+        difficulty: 1,
+        question: "関数は、よく使う処理に名前をつけてまとめたものです。ここでは、2つの数を受け取って合計を返す関数 tashizan を作りました。関数の中では、受け取った a と b を足した結果を goukei に入れています。呼び出したところに合計を持ち帰るには、どの値を返せばよいでしょうか。あてはまるものを選ぼう",
+        ast: [
+            {
+                type: "func",
+                name: "tashizan",
+                params: "a, b",
+                body: [
+                    {
+                        type: "assign",
+                        name: "goukei",
+                        value: "a + b"
+                    },
+                    {
+                        type: "return",
+                        value: "__BLANK_blank_a__"
+                    }
+                ]
+            },
+            {
+                type: "assign",
+                name: "kekka",
+                value: "tashizan(4, 3)"
+            },
+            {
+                type: "print",
+                value: "\"4と3を足すと\" + kekka"
+            }
+        ],
+        choices: [
+            { label: "goukei", value: "goukei" },
+            { label: "a", value: "a" },
+            { label: "b", value: "b" },
+            { label: "kekka", value: "kekka" },
+        ],
+        answers: [
+            {
+                values: ["goukei"],
+                correct: true,
+            },
+            {
+                values: ["a"],
+                correct: false,
+                hint: "a は受け取った1つ目の値そのものなので、返ってくるのは 4 だけです。足し算の答えは goukei に入っているので、goukei を返しましょう",
+            },
+            {
+                values: ["b"],
+                correct: false,
+                hint: "b は受け取った2つ目の値そのものなので、返ってくるのは 3 だけです。足し算の答えは goukei に入っているので、goukei を返しましょう",
+            },
+            {
+                values: ["kekka"],
+                correct: false,
+                hint: "kekka は関数の外の変数です。関数の中から外の変数は見えないので、値が無いあつかいになってしまいます。関数の中で作った goukei を返しましょう",
+            }
+        ],
+        defaultHint: "「〜 を返す」は、その値を呼び出したところへ持ち帰る合図です。tashizan(4, 3) の場所に、返した値がそのまま入ります",
+    },
+    q048: {
+        title: "おつりの関数、引数はどの順番？",
+        addedAt: "2026-08-23 06:00",
+        difficulty: 2,
+        question: "おつりを計算する関数 otsuri を使います。この関数は、1つ目に「はらったお金」、2つ目に「品物のねだん」を受け取り、その差を返します。1000円をはらって780円の品物を買ったときのおつりを求めたい。呼び出すときの ( ) の中に、どの変数をどの順番で書けばよいでしょうか。あてはまるものを選ぼう（2か所の穴をうめよう）",
+        ast: [
+            {
+                type: "func",
+                name: "otsuri",
+                params: "harau, nedan",
+                body: [
+                    {
+                        type: "assign",
+                        name: "kaeshi",
+                        value: "harau - nedan"
+                    },
+                    {
+                        type: "return",
+                        value: "kaeshi"
+                    }
+                ]
+            },
+            {
+                type: "assign",
+                name: "harai",
+                value: "1000"
+            },
+            {
+                type: "assign",
+                name: "kakaku",
+                value: "780"
+            },
+            {
+                type: "assign",
+                name: "okane",
+                value: "otsuri(__BLANK_blank_a__, __BLANK_blank_b__)"
+            },
+            {
+                type: "print",
+                value: "\"おつりは\" + okane + \"円です\""
+            }
+        ],
+        choices: [
+            { label: "harai", value: "harai" },
+            { label: "kakaku", value: "kakaku" },
+            { label: "harau", value: "harau" },
+            { label: "nedan", value: "nedan" },
+        ],
+        answers: [
+            {
+                values: ["harai", "kakaku"],
+                correct: true,
+            },
+            {
+                values: ["kakaku", "harai"],
+                correct: false,
+                hint: "順番が逆です。1つ目が harau（はらったお金）、2つ目が nedan（ねだん）なので、この順だと 780 - 1000 になって -220 円になってしまいます",
+            },
+            {
+                values: ["harau", "nedan"],
+                correct: false,
+                hint: "harau と nedan は関数の中だけで使う名前（引数）です。呼び出す側にはこの名前の変数はないので、値が無いあつかいになります。呼び出す側にある harai と kakaku をわたしましょう",
+            },
+            {
+                values: ["harai", "nedan"],
+                correct: false,
+                hint: "1つ目の harai は合っています。2つ目の nedan は関数の中だけの名前なので、呼び出す側からは使えません。ねだんが入っているのは kakaku です",
+            },
+            {
+                values: ["kakaku", "nedan"],
+                correct: false,
+                hint: "どちらもずれています。1つ目には「はらったお金」の harai、2つ目には「ねだん」の kakaku をわたします。harau・nedan は関数の中だけの名前です",
+            }
+        ],
+        defaultHint: "引数は、書いた順にそのまま関数へわたります。1つ目が harau、2つ目が nedan なので、呼び出す側も「はらったお金、ねだん」の順にそろえます",
+    },
+    q049: {
+        title: "関数を繰り返しの中で使う",
+        addedAt: "2026-08-23 09:00",
+        difficulty: 3,
+        question: "1から4までの数を、それぞれ2乗して合計したい（1 + 4 + 9 + 16）。2乗を計算する関数 nijou を作り、繰り返しの中から呼び出して goukei にたしていきます。何回目かを数えている変数は i です。関数にわたす値として、あてはまるものを選ぼう",
+        ast: [
+            {
+                type: "func",
+                name: "nijou",
+                params: "x",
+                body: [
+                    {
+                        type: "return",
+                        value: "x * x"
+                    }
+                ]
+            },
+            {
+                type: "assign",
+                name: "goukei",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "1",
+                end: "4",
+                step: "1",
+                body: [
+                    {
+                        type: "assign",
+                        name: "ni",
+                        value: "nijou(__BLANK_blank_a__)"
+                    },
+                    {
+                        type: "assign",
+                        name: "goukei",
+                        value: "goukei + ni"
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"1から4までの2乗の合計は\" + goukei"
+            }
+        ],
+        choices: [
+            { label: "i", value: "i" },
+            { label: "x", value: "x" },
+            { label: "goukei", value: "goukei" },
+            { label: "4", value: "4" },
+        ],
+        answers: [
+            {
+                values: ["i"],
+                correct: true,
+            },
+            {
+                values: ["x"],
+                correct: false,
+                hint: "x は関数 nijou の中だけで使う名前（引数）です。繰り返している側には x という変数がないので、値が無いあつかいになり、合計は 0 のままです。何回目かを持っているのは i です",
+            },
+            {
+                values: ["goukei"],
+                correct: false,
+                hint: "goukei は合計を入れておく箱です。最初は 0 なので、nijou(0) は 0 になり、いつまでたっても合計は 0 のままです。2乗したいのは、いま何回目かを表す i です",
+            },
+            {
+                values: ["4"],
+                correct: false,
+                hint: "4 だと毎回 nijou(4) の 16 をたすので、16 が4回で 64 になってしまいます。1回目は 1、2回目は 2、…と変わる値が必要なので i をわたします",
+            }
+        ],
+        defaultHint: "繰り返しの中では i が 1, 2, 3, 4 と変わります。その i をそのまま関数にわたせば、1, 4, 9, 16 が順に返ってきます",
+    },
 }

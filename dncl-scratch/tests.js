@@ -603,6 +603,204 @@ const TESTS = [
         ],
         expected: "OK\nYES\n"
     },
+
+    // ----------------
+    // 関数（ユーザー定義）
+    // ----------------
+    {
+        name: "関数: 引数と戻り値",
+        ast: [
+            {
+                type: "func", name: "tashizan", params: "a, b",
+                body: [{ type: "return", value: "a + b" }]
+            },
+            { type: "assign", name: "kekka", value: "tashizan(4, 3)" },
+            { type: "print", value: "kekka" }
+        ],
+        expected: "7\n"
+    },
+
+    {
+        name: "関数: 表示の中で呼ぶ",
+        ast: [
+            {
+                type: "func", name: "nijou", params: "x",
+                body: [{ type: "return", value: "x * x" }]
+            },
+            { type: "print", value: "nijou(6)" },
+            { type: "print", value: "nijou(13)" }
+        ],
+        expected: "36\n169\n"
+    },
+
+    {
+        name: "関数: 式の一部として呼ぶ",
+        ast: [
+            {
+                type: "func", name: "nijou", params: "x",
+                body: [{ type: "return", value: "x * x" }]
+            },
+            { type: "assign", name: "s", value: "nijou(3) + nijou(4)" },
+            { type: "print", value: "s" }
+        ],
+        expected: "25\n"
+    },
+
+    {
+        name: "関数: 入れ子の呼び出し",
+        ast: [
+            {
+                type: "func", name: "nijou", params: "x",
+                body: [{ type: "return", value: "x * x" }]
+            },
+            { type: "print", value: "nijou(nijou(2))" }
+        ],
+        expected: "16\n"
+    },
+
+    {
+        name: "関数: 引数はローカル（呼び出し元は変わらない）",
+        ast: [
+            {
+                type: "func", name: "kaeru", params: "x",
+                body: [
+                    { type: "assign", name: "x", value: "x + 100" },
+                    { type: "return", value: "x" }
+                ]
+            },
+            { type: "assign", name: "x", value: "1" },
+            { type: "assign", name: "y", value: "kaeru(x)" },
+            { type: "print", value: "x" },
+            { type: "print", value: "y" }
+        ],
+        expected: "1\n101\n"
+    },
+
+    {
+        name: "関数: 返したら残りは実行しない",
+        ast: [
+            {
+                type: "func", name: "hantei", params: "n",
+                body: [
+                    {
+                        type: "if", condition: "n >= 10",
+                        body: [{ type: "return", value: '"2けた以上"' }]
+                    },
+                    { type: "return", value: '"1けた"' }
+                ]
+            },
+            { type: "print", value: "hantei(97)" },
+            { type: "print", value: "hantei(3)" }
+        ],
+        expected: "2けた以上\n1けた\n"
+    },
+
+    {
+        name: "関数: 中で繰り返す",
+        ast: [
+            {
+                type: "func", name: "goukei", params: "n",
+                body: [
+                    { type: "assign", name: "sum", value: "0" },
+                    {
+                        type: "for", varName: "i", start: "1", end: "n", step: "1",
+                        body: [{ type: "assign", name: "sum", value: "sum + i" }]
+                    },
+                    { type: "return", value: "sum" }
+                ]
+            },
+            { type: "print", value: "goukei(5)" }
+        ],
+        expected: "15\n"
+    },
+
+    {
+        name: "関数: 呼び出しだけの行（戻り値を使わない）",
+        ast: [
+            {
+                type: "func", name: "aisatsu", params: "namae",
+                body: [{ type: "print", value: '"こんにちは、" + namae' }]
+            },
+            { type: "call", value: 'aisatsu("たろう")' },
+            { type: "call", value: 'aisatsu("はなこ")' }
+        ],
+        expected: "こんにちは、たろう\nこんにちは、はなこ\n"
+    },
+
+    {
+        name: "関数: 条件の中で呼ぶ",
+        ast: [
+            {
+                type: "func", name: "amari", params: "a, b",
+                body: [{ type: "return", value: "a % b" }]
+            },
+            {
+                type: "ifelse", condition: "amari(10, 2) == 0",
+                ifBody: [{ type: "print", value: '"偶数"' }],
+                elseBody: [{ type: "print", value: '"奇数"' }]
+            }
+        ],
+        expected: "偶数\n"
+    },
+
+    {
+        name: "関数: 繰り返しの終わりの値に使う",
+        ast: [
+            {
+                type: "func", name: "kaisu", params: "n",
+                body: [{ type: "return", value: "n * 2" }]
+            },
+            {
+                type: "for", varName: "i", start: "1", end: "kaisu(2)", step: "1",
+                body: [{ type: "print", value: "i" }]
+            }
+        ],
+        expected: "1\n2\n3\n4\n"
+    },
+
+    {
+        name: "関数: 再帰（階乗）",
+        ast: [
+            {
+                type: "func", name: "kaijou", params: "n",
+                body: [
+                    {
+                        type: "if", condition: "n <= 1",
+                        body: [{ type: "return", value: "1" }]
+                    },
+                    { type: "return", value: "n * kaijou(n - 1)" }
+                ]
+            },
+            { type: "print", value: "kaijou(5)" }
+        ],
+        expected: "120\n"
+    },
+
+    {
+        name: "関数: 配列を返す",
+        ast: [
+            {
+                type: "func", name: "tsukuru", params: "",
+                body: [{ type: "return", value: "[3, 1, 2]" }]
+            },
+            { type: "assign", name: "a", value: "tsukuru()" },
+            { type: "print", value: "a[0]" },
+            { type: "print", value: "a" }
+        ],
+        expected: "3\n[3,1,2]\n"
+    },
+
+    {
+        name: "関数: 定義しただけでは実行されない",
+        ast: [
+            {
+                type: "func", name: "damare", params: "",
+                body: [{ type: "print", value: '"出ないはず"' }]
+            },
+            { type: "print", value: '"OK"' }
+        ],
+        expected: "OK\n"
+    },
 ];
 
 // =========================

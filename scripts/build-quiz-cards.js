@@ -109,7 +109,7 @@ async function captureProgram(page, base, id) {
     await page.goto(`${base}/dncl-scratch/editor.html?mode=quiz&id=${id}`, {
         waitUntil: "networkidle",
     });
-    await page.waitForSelector("#workspace .block", { timeout: 15000 });
+    await page.waitForSelector("#program-areas .block", { timeout: 15000 });
 
     // 撮影中だけ、空欄（.quiz-blank）を「？」入りの太枠にして一目で分かるようにする
     await page.evaluate(() => {
@@ -147,11 +147,13 @@ async function captureProgram(page, base, id) {
             panel.style.maxHeight = "none";
             panel.style.overflow = "visible";
         }
-        const ws = document.getElementById("workspace");
-        if (ws) {
-            ws.style.height = "auto";
-            ws.style.width = "fit-content";
-            ws.style.overflow = "visible";
+        // 関数エリアとメインの処理の両方が入る入れ物を撮る
+        const areas = document.getElementById("program-areas");
+        if (areas) {
+            areas.style.maxHeight = "none";
+            areas.style.height = "auto";
+            areas.style.width = "fit-content";
+            areas.style.overflow = "visible";
         }
     });
 
@@ -160,9 +162,9 @@ async function captureProgram(page, base, id) {
         document.querySelectorAll(".scroll-hint-overlay").forEach((el) => el.remove());
     });
 
-    const workspace = page.locator("#workspace");
-    const box = await workspace.boundingBox();
-    const buf = await workspace.screenshot({ omitBackground: true });
+    const program = page.locator("#program-areas");
+    const box = await program.boundingBox();
+    const buf = await program.screenshot({ omitBackground: true });
 
     return {
         dataUri: `data:image/png;base64,${buf.toString("base64")}`,
