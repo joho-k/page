@@ -2171,6 +2171,12 @@ function renderCallFlight() {
 
     fromEl.classList.add("call-from", `call-from-${kind}`);
 
+    // 戻ってきたときは、行まるごとではなく呼び出しの部分を光らせる
+    if (kind === "exit" && toEl !== toBlock) {
+        toBlock.classList.remove("step-active");
+        toEl.classList.add("step-active");
+    }
+
     const areaRect = areas.getBoundingClientRect();
     const width = Math.max(areas.scrollWidth, areas.clientWidth);
     const height = Math.max(areas.scrollHeight, areas.clientHeight);
@@ -2222,7 +2228,9 @@ function renderCallFlight() {
     // 動きは弧の上を走る丸で見せる。
     const chip = document.createElement("div");
     chip.className = `call-flight-chip call-flight-chip-${kind}`;
-    chip.textContent = kind === "exit" ? `${label} を持ちかえる` : `${label} を呼ぶ`;
+    chip.textContent = kind === "exit"
+        ? (label === "結果なし" ? "返す値はなし" : `${label} が返ってくる`)
+        : `${label} を呼ぶ`;
     layer.append(chip);
 
     const chipLeft = Math.max(8, Math.min(bulge + 14, width - chip.offsetWidth - 8));
@@ -2548,7 +2556,7 @@ function startCall(step, pending, options = {}) {
             const returnValue = frame ? frame.returnValue : 0;
 
             setCallFlight({
-                fromBlockId: fn.blockId,
+                fromBlockId: (frame && frame.returnBlockId) || fn.blockId,
                 toBlockId: step.blockId,
                 callText,
                 label: frame && frame.returned ? formatVarValue(returnValue) : "結果なし",
@@ -2824,6 +2832,7 @@ function buildTrace(ast, targetTrace = trace) {
 
                     frame.returnValue = returnValue;
                     frame.returned = true;
+                    frame.returnBlockId = node.blockId;   // 矢印はこの「を返す」から出す
 
                     // このフレームの出口まで、残りのステップを飛ばす
                     let i = stepIndex;
