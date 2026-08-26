@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第54問 アルファベットをずらす暗号（シーザー暗号）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="シーザー暗号は、アルファベットを決まった数だけ後ろにずらして文字をかくす暗号です。A を1、B を2、… 、Z を26として、W X Y Z を番号にした配列 moji（＝[23,24,25,26]）を、zure（＝3）だけずらした番号にして表示しよう。左から moji[0], moji[1], … , moji[3] の4個です。ずらした結果が26をこえたときだけ、A にもどるように26をひいて折り返します。26（＝Z）はまだ折り返さないことに気をつけよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,アルファベットをずらす暗号（シーザー暗号）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q054/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第54問 アルファベットをずらす暗号（シーザー暗号）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="シーザー暗号は、アルファベットを決まった数だけ後ろにずらして文字をかくす暗号です。A を1、B を2、… 、Z を26として、W X Y Z を番号にした配列 moji（＝[23,24,25,26]）を、zure（＝3）だけずらした番号にして表示しよう。左から moji[0], moji[1], … , moji[3] の4個です。ずらした結果が26をこえたときだけ、A にもどるように26をひいて折り返します。26（＝Z）はまだ折り返さないことに気をつけよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q054/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q054.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第54問 アルファベットをずらす暗号（シーザー暗号）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="シーザー暗号は、アルファベットを決まった数だけ後ろにずらして文字をかくす暗号です。A を1、B を2、… 、Z を26として、W X Y Z を番号にした配列 moji（＝[23,24,25,26]）を、zure（＝3）だけずらした番号にして表示しよう。左から moji[0], moji[1], … , moji[3] の4個です。ずらした結果が26をこえたときだけ、A にもどるように26をひいて折り返します。26（＝Z）はまだ折り返さないことに気をつけよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q054.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q054/index.html#quiz",
+      "name": "第54問 アルファベットをずらす暗号（シーザー暗号）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q054/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "シーザー暗号は、アルファベットを決まった数だけ後ろにずらして文字をかくす暗号です。A を1、B を2、… 、Z を26として、W X Y Z を番号にした配列 moji（＝[23,24,25,26]）を、zure（＝3）だけずらした番号にして表示しよう。左から moji[0], moji[1], … , moji[3] の4個です。ずらした結果が26をこえたときだけ、A にもどるように26をひいて折り返します。26（＝Z）はまだ折り返さないことに気をつけよう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "> , -"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": ">="
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "+"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第54問 アルファベットをずらす暗号（シーザー暗号）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q054/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q054";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第54問 アルファベットをずらす暗号（シーザー暗号）</h1>
+            <p>シーザー暗号は、アルファベットを決まった数だけ後ろにずらして文字をかくす暗号です。A を1、B を2、… 、Z を26として、W X Y Z を番号にした配列 moji（＝[23,24,25,26]）を、zure（＝3）だけずらした番号にして表示しよう。左から moji[0], moji[1], … , moji[3] の4個です。ずらした結果が26をこえたときだけ、A にもどるように26をひいて折り返します。26（＝Z）はまだ折り返さないことに気をつけよう（2か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>zure = 3
+moji = [23,24,25,26]
+i を 0 から 3 まで 1 ずつ増やしながら繰り返す:
+  ban = moji[i] + zure
+  もし ban ［A］ 26 ならば:
+    ban = ban ［B］ 26
+  表示する(&quot;もとの番号&quot; + moji[i] + &quot;は&quot; + ban + &quot;になります&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>&gt;</code></li>
+                <li><code>&gt;=</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>-</code></li>
+                <li><code>+</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>A=1, B=2, …, Z=26 なので、番号は1〜26の間にあれば正しいアルファベットです。23+3=26 は Z のままでよく、24+3=27 は26をこえたので27-26=1、つまり A にもどります。「こえたとき」だけ折り返すので、条件は &gt;= ではなく &gt; です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>&gt;</code></li>
+            <li>空欄 ［B］ … <code>-</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>&gt;=</code>　［B］<code>-</code> … &gt;= だと26そのものも折り返してしまいます。26は Z のことなので、まだアルファベットの中におさまっています。折り返すのは26をこえた27からなので &gt; を使います</li>
+            <li>［A］<code>&lt;</code>　［B］<code>-</code> … &lt; だと向きが逆で、26より小さいときに26をひいてしまいます。ひくのは26をこえたときです</li>
+            <li>［A］<code>&gt;</code>　［B］<code>+</code> … 条件は合っています。でも + だと27がさらに大きくなって53になってしまいます。26をこえたぶんを A から数えなおすので、26をひきます</li>
+            <li>［A］<code>&gt;=</code>　［B］<code>+</code> … 2か所とも違います。折り返すのは26をこえたとき（&gt;）で、そのときは26をひきます（-）</li>
+            <li>［A］<code>&lt;</code>　［B］<code>+</code> … 2か所とも違います。26をこえたとき（&gt;）に、26をひいて（-）A にもどします</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q046/index.html">第46問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
