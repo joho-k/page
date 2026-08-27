@@ -33,7 +33,7 @@ const BLOCK_PREVIEWS = {
     print: {
         title: "表示",
         code: `表示する(x)`,
-        text: "変数や計算結果を出力します。"
+        text: "変数や計算結果を出力します。( )の中には、文字をつなぐ ＋ の計算ブロックを入れられます。"
     },
     if: {
         title: "条件",
@@ -928,8 +928,10 @@ function createArrayBlock() {
 // 計算のブロックの左右や、切り捨ての( )の中は「式スロット」。
 // 直接文字を書いてもいいし、乱数や計算などのブロックをドラッグで入れてもいい。
 // 中にブロックが入っているあいだは、入力欄は隠れる（代入ブロックの expr-zone と同じ考え方）。
-function exprSlotHtml(value) {
-    return `<span class="expr-slot"><input class="slot-value" value="${value}"></span>`;
+// 表示する( ) の中だけは「＋でつなぐ計算」しか入れられない（print-slot）。
+function exprSlotHtml(value, extraClass = "") {
+    const className = extraClass ? `expr-slot ${extraClass}` : "expr-slot";
+    return `<span class="${className}"><input class="slot-value" value="${value}"></span>`;
 }
 
 function slotValueInput(slot) {
@@ -953,8 +955,12 @@ function setupExprSlots(block) {
         const input = slotValueInput(slot);
         if (input) autoResizeInput(input);
 
+        // 表示する( ) には計算ブロックだけ（乱数や切り捨てはそのままでは入れられない）
+        const printSlot = slot.classList.contains("print-slot");
+
         enableDrop(slot, {
-            onlyExprLike: true,
+            onlyExprLike: !printSlot,
+            onlyExpr: printSlot,
             singleBlock: true,
             skipPlaceholder: true,
             onChange: () => syncExprSlot(slot)
@@ -966,6 +972,11 @@ function setupExprSlots(block) {
 
 function exprSlotsOf(block) {
     return Array.from(block.querySelectorAll(":scope > .expr-slot"));
+}
+
+function isPlusExprBlock(block) {
+    return block.dataset.type === "expr"
+        && block.querySelector(":scope > select")?.value === "+";
 }
 
 // 計算の中に入れた計算は、カッコが要らないときだけ枠を消して1つの式に見せる。
@@ -986,12 +997,36 @@ function syncNestedExprLook() {
     });
 }
 
+// 表示する( ) に直に入っている計算は、文字をつなぐ ＋ だけにする。
+// （その中に入れ子にした計算は、今までどおり全部の演算子を選べる。）
+function syncPrintSlotOperators() {
+    document.querySelectorAll('.block[data-type="expr"] > select.expr-op').forEach((select) => {
+        // クイズの空欄になっている演算子は作り直さない
+        if (select.dataset.blankIndex !== undefined) return;
+
+        const inPrintSlot = select.closest(".expr-slot")?.classList.contains("print-slot");
+        const mode = inPrintSlot ? "plus" : "all";
+
+        if (select.dataset.opMode === mode) return;
+
+        const current = select.value;
+        select.dataset.opMode = mode;
+        select.innerHTML = mode === "plus" ? EXPR_OP_PLUS_ONLY_HTML : EXPR_OP_OPTIONS_HTML;
+        select.value = mode === "plus" ? "+" : (current || "+");
+    });
+}
+
 const EXPR_OP_OPTIONS_HTML = `
         <option value="+">＋</option>
         <option value="-">－</option>
         <option value="*">＊</option>
         <option value="/">／</option>
         <option value="%">%</option>
+`;
+
+// 表示する( ) の中では、文字をつなぐ ＋ だけを選べるようにする
+const EXPR_OP_PLUS_ONLY_HTML = `
+        <option value="+">＋</option>
 `;
 
 function createExprBlock() {
@@ -1095,11 +1130,11 @@ function createPrintBlock() {
 
     div.innerHTML = `
       表示する(
-        <input value="x">
+        ${exprSlotHtml("x", "print-slot")}
       )
     `;
 
-    autoResizeInput(div.querySelector("input"));
+    setupExprSlots(div);
 
     addDeleteButton(div);
     return div;
@@ -1642,6 +1677,11 @@ function enableDrop(el, options = {}) {
                     return false;
                 }
 
+                // 表示する( ) の中に入れられるのは計算ブロックだけ
+                if (options.onlyExpr && draggedType !== "expr") {
+                    return false;
+                }
+
                 // 関数の定義は関数エリアにだけ置ける（メインの処理には置けない）
                 if (options.onlyFunctions && draggedType !== "func") return false;
                 if (!options.onlyFunctions && draggedType === "func") return false;
@@ -1754,7 +1794,7 @@ function buildAST(container) {
             ast.push({
                 type,
                 blockId: node.dataset.blockId,
-                value: node.querySelector("input").value
+                value: readExprSlot(exprSlotsOf(node)[0])
             });
         }
 
@@ -1999,6 +2039,7 @@ function updateCode() {
     refreshFunctionArea();
     refreshAllCallNames();
     syncAllCallArgs();
+    syncPrintSlotOperators();
     syncNestedExprLook();
 
     const ast = buildProgramAst();
@@ -2358,7 +2399,8 @@ function splitTopLevelArgs(argsText) {
 }
 
 // 式の文字列を、できるだけブロックに戻す。戻せない式（ただの変数や数）は null。
-function createBlockFromExpression(raw) {
+// deep: 乱数や切り捨てが無くてもブロックに戻す（表示する( ) の文字の連結で使う）
+function createBlockFromExpression(raw, { deep = false } = {}) {
     const value = stripOuterParens(raw);
 
     const rounding = parseRoundingExpr(value);
@@ -2385,7 +2427,7 @@ function createBlockFromExpression(raw) {
     const slots = exprSlotsOf(expr);
     const opSelect = expr.querySelector(":scope > select");
 
-    fillExprSlot(slots[0], parts.left);
+    fillExprSlot(slots[0], parts.left, { deep });
 
     const blankId = parseBlankToken(parts.op);
     if (blankId !== null) {
@@ -2404,19 +2446,32 @@ function createBlockFromExpression(raw) {
         opSelect.value = parts.op;
     }
 
-    fillExprSlot(slots[1], parts.right);
+    fillExprSlot(slots[1], parts.right, { deep });
 
     return expr;
 }
 
 // スロットに値を入れる。乱数や切り捨てが混じっているときだけ、
 // 中身もブロックに戻す（「i / 10」のような式は今までどおり文字のまま見せる）。
-function fillExprSlot(slot, raw) {
+function fillExprSlot(slot, raw, { deep = false } = {}) {
     if (!slot) return;
 
     const value = String(raw ?? "").trim();
     const input = slotValueInput(slot);
-    const inner = expressionNeedsBlock(value) ? createBlockFromExpression(value) : null;
+
+    // 表示する( ) の中の「"合計は" + goukei + "円"」は、文字の連結が見えるようにブロックで出す。
+    // それ以外のスロットは、乱数や切り捨てが混じっている式だけブロックに戻す。
+    const printSlot = slot.classList.contains("print-slot");
+    const buildBlock = deep || printSlot || expressionNeedsBlock(value);
+
+    let inner = buildBlock
+        ? createBlockFromExpression(value, { deep: deep || printSlot })
+        : null;
+
+    // 表示する( ) に置けるのは「＋でつなぐ計算」だけ。それ以外は文字のまま見せる
+    if (inner && printSlot && !isPlusExprBlock(inner)) {
+        inner = null;
+    }
 
     if (inner) {
         slot.insertBefore(inner, input);
@@ -2475,7 +2530,7 @@ function loadProgramFromAst(ast) {
 
             if (node.type === "print") {
                 const b = createPrintBlock();
-                setInputMaybeBlank(b.querySelector("input"), node.value ?? "0");
+                fillExprSlot(exprSlotsOf(b)[0], node.value ?? "0");
                 container.appendChild(b);
                 return;
             }
