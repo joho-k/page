@@ -3195,6 +3195,31 @@ function quizGoToList() {
     location.href = target;
 }
 
+// 問題文のうしろに「条件分岐の解説」のような解説動画へのボタンを出す。
+function quizInsertVideoLinks(quiz, id) {
+    const host = document.getElementById("quiz-question-title");
+    const topics = window.dnclTopics;
+    if (!host || !topics) return;
+
+    topics.videosOf(quiz, id).forEach((topic) => {
+        const link = document.createElement("a");
+        link.className = "quiz-question-video";
+        link.href = `https://youtu.be/${topic.video}?utm_source=joho-kyoshitsu&utm_medium=quiz`;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.innerHTML = `<i class="fa-solid fa-play"></i> ${topic.name}の解説`;
+
+        // サイトから動画へどれだけ出ていったかを見るため
+        link.addEventListener("click", () => {
+            if (typeof gtag === "function") {
+                gtag("event", "video_click", { video_id: topic.video, video_title: topic.videoLabel });
+            }
+        });
+
+        host.append(" ", link);
+    });
+}
+
 function quizHookJudge(quiz) {
     // ステップの「前へ/次へ」の表示切り替えに連動して、操作スペースの中身を切り替える
     if (typeof window.setStepButtonsVisible === "function") {
@@ -3302,6 +3327,9 @@ function setupQuizModeIfPresent() {
     if (quizTitleEl) {
         quizTitleEl.textContent = quiz.question ?? `問題 ${p.id}`;
     }
+
+    // 問題文のうしろに、その単元の解説動画へのボタンを出す
+    quizInsertVideoLinks(quiz, p.id);
 
     // hide palette areas
     const palette = document.querySelector(".palette");
