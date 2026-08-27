@@ -3137,6 +3137,14 @@ function stepStart() {
     buildTrace(window.currentAST || []);
     executionActive = true;
     setStepButtonsVisible(true);   // 「次へ」「前へ」はここで初めて出す
+
+    // 押したらすぐ1行目を実行する（最初の1回「次へ」を押させない）。
+    // 問題モードが window.stepNext を差しかえているので、そちらを通す。
+    if (trace.length > 0) {
+        (window.stepNext || stepNext)();
+        return;
+    }
+
     updateUI();
     updateStepButtons();
 }

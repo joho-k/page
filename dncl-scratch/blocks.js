@@ -3252,11 +3252,11 @@ function quizHookJudge(quiz) {
     if (typeof window.stepStart === "function") {
         const originalStepStart = window.stepStart;
         window.stepStart = function (...args) {
-            const ret = originalStepStart.apply(this, args);
-            // ステップ回答を始め直したら「次へ」表示に戻す
+            // ステップ回答を始め直したら「次へ」表示に戻す。
+            // stepStart は1行目を実行するので、そのあとの「✅ 答え合わせ」表示を消さないよう先に戻す。
             const next = document.getElementById("step-next-button");
             if (next) next.textContent = "▶ 次へ";
-            return ret;
+            return originalStepStart.apply(this, args);
         };
     }
 
