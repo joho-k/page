@@ -449,21 +449,32 @@ function setInputValue(input, value) {
 }
 
 function setArray1DValues(arrayBlock, values) {
-    const ops = arrayBlock.arrayOps;
-    if (!ops) return;
+    setArray2DValues(arrayBlock, [values]);
+}
 
-    // 行は1行にする
+// 行×列の値を配列ブロックに入れる。行数・要素数もそれに合わせる。
+function setArray2DValues(arrayBlock, rows) {
+    const ops = arrayBlock.arrayOps;
+    if (!ops || !Array.isArray(rows) || rows.length === 0) return;
+
+    const colCount = rows[0].length;
+    if (colCount < 1) return;
+
+    // いったん1行にしてから、要素数 → 行数の順にそろえる
     while (ops.removeRow()) { }
 
     const rowItems = arrayBlock.querySelector(".array2d-row-items");
     if (!rowItems) return;
 
-    const current = rowItems.querySelectorAll("input").length;
-    while (rowItems.querySelectorAll("input").length < values.length) ops.addElement();
-    while (rowItems.querySelectorAll("input").length > values.length && values.length >= 1) ops.removeElement();
+    while (rowItems.querySelectorAll("input").length < colCount) ops.addElement();
+    while (rowItems.querySelectorAll("input").length > colCount) ops.removeElement();
 
-    rowItems.querySelectorAll("input").forEach((input, idx) => {
-        setInputValue(input, values[idx] ?? "0");
+    while (arrayBlock.querySelectorAll(".array2d-row").length < rows.length) ops.addRow();
+
+    arrayBlock.querySelectorAll(".array2d-row-items").forEach((items, rowIdx) => {
+        items.querySelectorAll("input").forEach((input, colIdx) => {
+            setInputValue(input, rows[rowIdx]?.[colIdx] ?? "0");
+        });
     });
 }
 
@@ -2336,7 +2347,7 @@ function parseRoundingExpr(raw) {
 }
 
 // 1次元の配列リテラル（"[4,9,1,2,3,4,7]"）を要素の配列にする。
-// 空配列・2次元は配列ブロックに戻さない（そのままテキストで見せる）。
+// 空配列・2次元は対象外（2次元は parseArrayMatrixLiteral が受け持つ）。
 function parseArrayLiteral(raw) {
     const s = String(raw ?? "").trim();
     if (!s.startsWith("[") || !s.endsWith("]")) return null;
@@ -2345,6 +2356,22 @@ function parseArrayLiteral(raw) {
     const values = inner.split(",").map((v) => v.trim());
     if (values.some((v) => v === "")) return null;
     return values;
+}
+
+// 2次元の配列リテラル（"[[1,2,3],[4,5,6]]"）を行ごとの配列にする。
+// 行の長さがそろっていないものは配列ブロックに戻さない（そのままテキストで見せる）。
+function parseArrayMatrixLiteral(raw) {
+    const s = String(raw ?? "").trim();
+    if (!s.startsWith("[[") || !s.endsWith("]]")) return null;
+
+    const inner = s.slice(1, -1).trim();
+    if (!hasBalancedBrackets(inner)) return null;
+
+    const rows = splitTopLevelArgs(inner).map((row) => parseArrayLiteral(row));
+    if (rows.length === 0 || rows.some((row) => row === null)) return null;
+    if (rows.some((row) => row.length !== rows[0].length)) return null;
+
+    return rows;
 }
 
 // 「tashizan(4, 3)」を、関数名と引数に分ける。
@@ -2498,12 +2525,14 @@ function loadProgramFromAst(ast) {
             if (!node || typeof node !== "object") return;
 
             if (node.type === "assign") {
-                // 配列リテラルの代入（a = [4,9,1,2,3,4,7]）は配列ブロックに戻す
-                const arrayValues = parseArrayLiteral(node.value);
-                if (arrayValues) {
+                // 配列リテラルの代入（a = [4,9,1,2,3,4,7] や a = [[1,2],[3,4]]）は配列ブロックに戻す
+                const matrix = parseArrayMatrixLiteral(node.value);
+                const arrayValues = matrix ? null : parseArrayLiteral(node.value);
+
+                if (matrix || arrayValues) {
                     const b = createArrayBlock();
                     setInputValue(b.querySelector(".array2d-head input"), node.name ?? "a");
-                    setArray1DValues(b, arrayValues);
+                    setArray2DValues(b, matrix || [arrayValues]);
                     container.appendChild(b);
                     return;
                 }
