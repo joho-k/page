@@ -588,6 +588,51 @@
     --block-border: #9a7d27;
 }
 
+/* 計算の左右や、切り捨ての( )の中。乱数や計算のブロックをここに入れられる。
+   ふだんは今までどおりの見た目にして、ドラッグ中とマウスを乗せたときだけ入れ先を示す
+   （枠は outline なので、出ても中身の位置がずれない）。 */
+.expr-slot {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    gap: 4px;
+    border-radius: 6px;
+}
+
+.expr-slot:hover,
+body.block-dragging .expr-slot {
+    outline: 2px dashed rgba(41, 56, 75, 0.38);
+    outline-offset: 1px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* 計算の中に入れた計算は、カッコが要らないときは枠を消して1つの式に見せる
+   （A + b + C の b のとなりに枠線が出ないように）。カッコが要るときは枠を残す。 */
+.block[data-type="expr"].expr-flat,
+.block[data-type="expr"].expr-flat:hover {
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* 枠が見えないので、その×だけ出ていても何を消すのか分からない。
+   消すときは外側の×か、ドラッグでわくの外へ出す。 */
+.block[data-type="expr"].expr-flat > .delete-btn {
+    display: none;
+}
+
+/* 中にブロックが入っているスロットは、もう入れられないので示さない。
+   問題モードはブロックを動かせないので、こちらも示さない。 */
+.expr-slot:has(> .block):hover,
+body.block-dragging .expr-slot:has(> .block),
+body.quiz-mode .expr-slot:hover {
+    outline: none;
+    background: none;
+}
+
+
 /* 関数が2つ以上あるとき、どこからどこまでが1つの関数か分かるように間をあける */
 #function-workspace > .block {
     margin-bottom: 4px;
@@ -1587,7 +1632,6 @@ pre {
     line-height: 1.5;
 }
 
-
 /* 共通：選択肢・操作の見出しラベル */
 .quiz-choices-label,
 .quiz-actions-label {
@@ -2063,6 +2107,7 @@ pre {
     .question-panel-grid {
         grid-template-columns: 1fr;
     }
+}
 }
 /*
  * 問題ページ（quiz/qNNN/）の「この問題の単元」バー。
