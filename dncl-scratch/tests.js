@@ -78,6 +78,21 @@ const TESTS = [
         expected: "2\n"
     },
     {
+        name: "切り捨て（式を引数にできる）",
+        ast: [
+            { type: "assign", name: "x", value: "切り捨て(87 / 10) * 10" },
+            { type: "print", value: "x" }
+        ],
+        expected: "80\n"
+    },
+    {
+        name: "乱数を計算の中に入れる（さいころ）",
+        ast: [
+            { type: "assign", name: "saikoro", value: "切り捨て(乱数() * 6) + 1" }
+        ],
+        assert: () => Number.isInteger(vars.saikoro) && vars.saikoro >= 1 && vars.saikoro <= 6
+    },
+    {
         name: "乱数()",
         ast: [
             { type: "assign", name: "r", value: "乱数()" }

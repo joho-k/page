@@ -588,6 +588,51 @@
     --block-border: #9a7d27;
 }
 
+/* 計算の左右や、切り捨ての( )の中。乱数や計算のブロックをここに入れられる。
+   ふだんは今までどおりの見た目にして、ドラッグ中とマウスを乗せたときだけ入れ先を示す
+   （枠は outline なので、出ても中身の位置がずれない）。 */
+.expr-slot {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    gap: 4px;
+    border-radius: 6px;
+}
+
+.expr-slot:hover,
+body.block-dragging .expr-slot {
+    outline: 2px dashed rgba(41, 56, 75, 0.38);
+    outline-offset: 1px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* 計算の中に入れた計算は、カッコが要らないときは枠を消して1つの式に見せる
+   （A + b + C の b のとなりに枠線が出ないように）。カッコが要るときは枠を残す。 */
+.block[data-type="expr"].expr-flat,
+.block[data-type="expr"].expr-flat:hover {
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* 枠が見えないので、その×だけ出ていても何を消すのか分からない。
+   消すときは外側の×か、ドラッグでわくの外へ出す。 */
+.block[data-type="expr"].expr-flat > .delete-btn {
+    display: none;
+}
+
+/* 中にブロックが入っているスロットは、もう入れられないので示さない。
+   問題モードはブロックを動かせないので、こちらも示さない。 */
+.expr-slot:has(> .block):hover,
+body.block-dragging .expr-slot:has(> .block),
+body.quiz-mode .expr-slot:hover {
+    outline: none;
+    background: none;
+}
+
+
 /* 関数が2つ以上あるとき、どこからどこまでが1つの関数か分かるように間をあける */
 #function-workspace > .block {
     margin-bottom: 4px;
@@ -1587,6 +1632,28 @@ pre {
     line-height: 1.5;
 }
 
+/* 問題文のうしろに置く「条件分岐の解説」などの解説動画ボタン */
+.quiz-question-video {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 4px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    box-shadow: var(--neu-raised-sm);
+}
+
+.quiz-question-video:active {
+    box-shadow: var(--neu-pressed-color);
+}
+
 
 /* 共通：選択肢・操作の見出しラベル */
 .quiz-choices-label,
@@ -2064,67 +2131,4 @@ pre {
         grid-template-columns: 1fr;
     }
 }
-/*
- * 問題ページ（quiz/qNNN/）の「この問題の単元」バー。
- * 検索から問題ページに直接来た人を、単元の解説動画と一覧に戻すための導線。
- */
-.quiz-topic-bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    max-width: 1400px;
-    margin: 0 auto 12px;
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: var(--bg);
-    box-shadow: var(--neu-raised-sm);
-}
-
-.quiz-topic-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: #6b7280;
-}
-
-.quiz-topic-chip,
-.quiz-topic-video {
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: var(--bg);
-    color: var(--primary);
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    box-shadow: var(--neu-raised-sm);
-}
-
-.quiz-topic-chip:active,
-.quiz-topic-video:active {
-    box-shadow: var(--neu-pressed);
-}
-
-.quiz-topic-video {
-    margin-left: auto;
-    background: var(--primary);
-    color: #fff;
-}
-
-/* 動画が2本並ぶときは、間をあけずに右側にまとめる */
-.quiz-topic-video + .quiz-topic-video {
-    margin-left: 0;
-}
-
-.quiz-topic-video:active {
-    box-shadow: var(--neu-pressed-color);
-}
-
-@media (max-width: 768px) {
-    .quiz-topic-bar {
-        border-radius: 18px;
-    }
-
-    .quiz-topic-video {
-        margin-left: 0;
-    }
 }

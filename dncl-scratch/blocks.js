@@ -33,7 +33,7 @@ const BLOCK_PREVIEWS = {
     print: {
         title: "表示",
         code: `表示する(x)`,
-        text: "変数や計算結果を出力します。"
+        text: "変数や計算結果を出力します。( )の中には、文字をつなぐ ＋ の計算ブロックを入れられます。"
     },
     if: {
         title: "条件",
@@ -73,27 +73,27 @@ const BLOCK_PREVIEWS = {
     expr: {
         title: "計算",
         code: `例: x + 1`,
-        text: "足し算の他に、引き算、掛け算、割り算、あまりを作れます。"
+        text: "足し算の他に、引き算、掛け算、割り算、あまりを作れます。左右のわくには乱数などのブロックも入れられます。"
     },
     random: {
         title: "乱数",
         code: `乱数()`,
-        text: "0以上1未満のランダムな値を作れます。"
+        text: "0以上1未満のランダムな値を作れます。計算や切り捨ての中にも入れられます。"
     },
     floor: {
         title: "切り捨て",
         code: `切り捨て(3.9)`,
-        text: "小数を切り捨てて整数にします。"
+        text: "小数を切り捨てて整数にします。( )の中には計算のブロックも入れられます。"
     },
     ceil: {
         title: "切り上げ",
         code: `切り上げ(3.1)`,
-        text: "小数を切り上げて整数にします。"
+        text: "小数を切り上げて整数にします。( )の中には計算のブロックも入れられます。"
     },
     round: {
         title: "四捨五入",
         code: `四捨五入(3.5)`,
-        text: "小数を四捨五入して整数にします。"
+        text: "小数を四捨五入して整数にします。( )の中には計算のブロックも入れられます。"
     },
     func: {
         title: "関数の定義",
@@ -449,21 +449,32 @@ function setInputValue(input, value) {
 }
 
 function setArray1DValues(arrayBlock, values) {
-    const ops = arrayBlock.arrayOps;
-    if (!ops) return;
+    setArray2DValues(arrayBlock, [values]);
+}
 
-    // 行は1行にする
+// 行×列の値を配列ブロックに入れる。行数・要素数もそれに合わせる。
+function setArray2DValues(arrayBlock, rows) {
+    const ops = arrayBlock.arrayOps;
+    if (!ops || !Array.isArray(rows) || rows.length === 0) return;
+
+    const colCount = rows[0].length;
+    if (colCount < 1) return;
+
+    // いったん1行にしてから、要素数 → 行数の順にそろえる
     while (ops.removeRow()) { }
 
     const rowItems = arrayBlock.querySelector(".array2d-row-items");
     if (!rowItems) return;
 
-    const current = rowItems.querySelectorAll("input").length;
-    while (rowItems.querySelectorAll("input").length < values.length) ops.addElement();
-    while (rowItems.querySelectorAll("input").length > values.length && values.length >= 1) ops.removeElement();
+    while (rowItems.querySelectorAll("input").length < colCount) ops.addElement();
+    while (rowItems.querySelectorAll("input").length > colCount) ops.removeElement();
 
-    rowItems.querySelectorAll("input").forEach((input, idx) => {
-        setInputValue(input, values[idx] ?? "0");
+    while (arrayBlock.querySelectorAll(".array2d-row").length < rows.length) ops.addRow();
+
+    arrayBlock.querySelectorAll(".array2d-row-items").forEach((items, rowIdx) => {
+        items.querySelectorAll("input").forEach((input, colIdx) => {
+            setInputValue(input, rows[rowIdx]?.[colIdx] ?? "0");
+        });
     });
 }
 
@@ -922,6 +933,113 @@ function createArrayBlock() {
     return div;
 }
 
+// ----------------
+// 式スロット（値を入れるところ）
+// ----------------
+// 計算のブロックの左右や、切り捨ての( )の中は「式スロット」。
+// 直接文字を書いてもいいし、乱数や計算などのブロックをドラッグで入れてもいい。
+// 中にブロックが入っているあいだは、入力欄は隠れる（代入ブロックの expr-zone と同じ考え方）。
+// 表示する( ) の中だけは「＋でつなぐ計算」しか入れられない（print-slot）。
+function exprSlotHtml(value, extraClass = "") {
+    const className = extraClass ? `expr-slot ${extraClass}` : "expr-slot";
+    return `<span class="${className}"><input class="slot-value" value="${value}"></span>`;
+}
+
+function slotValueInput(slot) {
+    return slot.querySelector(":scope > .slot-value");
+}
+
+function slotBlock(slot) {
+    return Array.from(slot.children).find(
+        (child) => child.classList && child.classList.contains("block")
+    ) || null;
+}
+
+function syncExprSlot(slot) {
+    const input = slotValueInput(slot);
+    if (!input) return;
+    input.style.display = slotBlock(slot) ? "none" : "inline-block";
+}
+
+function setupExprSlots(block) {
+    block.querySelectorAll(".expr-slot").forEach((slot) => {
+        const input = slotValueInput(slot);
+        if (input) autoResizeInput(input);
+
+        // 表示する( ) には計算ブロックだけ（乱数や切り捨てはそのままでは入れられない）
+        const printSlot = slot.classList.contains("print-slot");
+
+        enableDrop(slot, {
+            onlyExprLike: !printSlot,
+            onlyExpr: printSlot,
+            singleBlock: true,
+            skipPlaceholder: true,
+            onChange: () => syncExprSlot(slot)
+        });
+
+        syncExprSlot(slot);
+    });
+}
+
+function exprSlotsOf(block) {
+    return Array.from(block.querySelectorAll(":scope > .expr-slot"));
+}
+
+function isPlusExprBlock(block) {
+    return block.dataset.type === "expr"
+        && block.querySelector(":scope > select")?.value === "+";
+}
+
+// 計算の中に入れた計算は、カッコが要らないときだけ枠を消して1つの式に見せる。
+// （A + b + C は枠なしで地続きに、(a + b) * c はカッコの代わりに枠でまとまりを見せる。）
+function syncNestedExprLook() {
+    document.querySelectorAll('.block[data-type="expr"]').forEach((block) => {
+        const slot = block.parentElement;
+        const parent = slot?.classList.contains("expr-slot") ? slot.parentElement : null;
+
+        const flat = parent?.dataset?.type === "expr"
+            && !needsParens(
+                exprBlockOp(block),
+                exprBlockOp(parent),
+                exprSlotsOf(parent)[0] === slot ? "left" : "right"
+            );
+
+        block.classList.toggle("expr-flat", Boolean(flat));
+    });
+}
+
+// 表示する( ) に直に入っている計算は、文字をつなぐ ＋ だけにする。
+// （その中に入れ子にした計算は、今までどおり全部の演算子を選べる。）
+function syncPrintSlotOperators() {
+    document.querySelectorAll('.block[data-type="expr"] > select.expr-op').forEach((select) => {
+        // クイズの空欄になっている演算子は作り直さない
+        if (select.dataset.blankIndex !== undefined) return;
+
+        const inPrintSlot = select.closest(".expr-slot")?.classList.contains("print-slot");
+        const mode = inPrintSlot ? "plus" : "all";
+
+        if (select.dataset.opMode === mode) return;
+
+        const current = select.value;
+        select.dataset.opMode = mode;
+        select.innerHTML = mode === "plus" ? EXPR_OP_PLUS_ONLY_HTML : EXPR_OP_OPTIONS_HTML;
+        select.value = mode === "plus" ? "+" : (current || "+");
+    });
+}
+
+const EXPR_OP_OPTIONS_HTML = `
+        <option value="+">＋</option>
+        <option value="-">－</option>
+        <option value="*">＊</option>
+        <option value="/">／</option>
+        <option value="%">%</option>
+`;
+
+// 表示する( ) の中では、文字をつなぐ ＋ だけを選べるようにする
+const EXPR_OP_PLUS_ONLY_HTML = `
+        <option value="+">＋</option>
+`;
+
 function createExprBlock() {
     const div = document.createElement("div");
     div.className = "block expr";
@@ -929,21 +1047,14 @@ function createExprBlock() {
     assignBlockId(div);
 
     div.innerHTML = `
-      <input value="x">
-      <select>
-        <option value="+">＋</option>
-        <option value="-">－</option>
-        <option value="*">＊</option>
-        <option value="/">／</option>
-        <option value="%">%</option>
-      </select>
-      <input value="1">
+      ${exprSlotHtml("x")}
+      <select class="expr-op">${EXPR_OP_OPTIONS_HTML}</select>
+      ${exprSlotHtml("1")}
     `;
 
-    const inputs = div.querySelectorAll("input");
-    inputs.forEach(autoResizeInput);
+    setupExprSlots(div);
 
-    div.querySelector("select").addEventListener("change", updateCode);
+    div.querySelector(".expr-op").addEventListener("change", updateCode);
 
     addDeleteButton(div);
     return div;
@@ -977,11 +1088,11 @@ function createRoundingBlock(kind) {
 
     div.innerHTML = `
       ${label}(
-        <input value="x">
+        ${exprSlotHtml("x")}
       )
     `;
 
-    autoResizeInput(div.querySelector("input"));
+    setupExprSlots(div);
     addDeleteButton(div);
     return div;
 }
@@ -1030,11 +1141,11 @@ function createPrintBlock() {
 
     div.innerHTML = `
       表示する(
-        <input value="x">
+        ${exprSlotHtml("x", "print-slot")}
       )
     `;
 
-    autoResizeInput(div.querySelector("input"));
+    setupExprSlots(div);
 
     addDeleteButton(div);
     return div;
@@ -1577,6 +1688,11 @@ function enableDrop(el, options = {}) {
                     return false;
                 }
 
+                // 表示する( ) の中に入れられるのは計算ブロックだけ
+                if (options.onlyExpr && draggedType !== "expr") {
+                    return false;
+                }
+
                 // 関数の定義は関数エリアにだけ置ける（メインの処理には置けない）
                 if (options.onlyFunctions && draggedType !== "func") return false;
                 if (!options.onlyFunctions && draggedType === "func") return false;
@@ -1594,11 +1710,16 @@ function enableDrop(el, options = {}) {
             }
         },
         animation: 150,
+        // ドラッグ中は、乱数などを入れられるところ（式スロット）を点線で示す
+        onStart: () => document.body.classList.add("block-dragging"),
         onAdd: handleDropChange,
         onUpdate: handleDropChange,
         onRemove: handleDropChange,
         onSort: handleDropChange,
-        onEnd: handleDropChange
+        onEnd: () => {
+            document.body.classList.remove("block-dragging");
+            handleDropChange();
+        }
     });
 
     el._sortable = sortable;
@@ -1684,7 +1805,7 @@ function buildAST(container) {
             ast.push({
                 type,
                 blockId: node.dataset.blockId,
-                value: node.querySelector("input").value
+                value: readExprSlot(exprSlotsOf(node)[0])
             });
         }
 
@@ -1731,15 +1852,15 @@ function buildAST(container) {
         }
 
         if (type === "expr") {
-            const i = node.querySelectorAll("input");
-            const op = node.querySelector("select").value;
+            const slots = exprSlotsOf(node);
+            const op = node.querySelector(":scope > select").value;
 
             ast.push({
                 type: "expr",
                 blockId: node.dataset.blockId,
-                left: i[0].value,
+                left: readExprSlot(slots[0], { parentOp: op, side: "left" }),
                 op,
-                right: i[1].value
+                right: readExprSlot(slots[1], { parentOp: op, side: "right" })
             });
         }
 
@@ -1778,18 +1899,10 @@ function buildAST(container) {
         }
 
         if (["floor", "ceil", "round"].includes(type)) {
-            const input = node.querySelector("input");
-            const rawValue = input ? input.value.trim() : "";
-            const labelByKind = {
-                floor: "切り捨て",
-                ceil: "切り上げ",
-                round: "四捨五入"
-            };
-
             ast.push({
                 type: "call",
                 blockId: node.dataset.blockId,
-                value: `${labelByKind[type]}(${rawValue || "0"})`
+                value: buildExpression(node)
             });
         }
     });
@@ -1849,6 +1962,47 @@ function buildCode(ast, indent = "") {
     return code;
 }
 
+const OP_PRECEDENCE = { "+": 1, "-": 1, "*": 2, "/": 2, "%": 2 };
+
+// 計算の中に入れた計算に、カッコが要るかどうか。
+// 要らないときは付けない（A + b + C は A + (b + C) にしない）。
+function needsParens(childOp, parentOp, side) {
+    const child = OP_PRECEDENCE[childOp] ?? 0;
+    const parent = OP_PRECEDENCE[parentOp] ?? 0;
+
+    if (!child || !parent) return true; // 分からないときは安全側でカッコを付ける
+    if (child < parent) return true;    // (a + b) * c
+
+    // a - (b + c) や a / (b * c) は、カッコを外すと意味が変わる
+    return child === parent && side === "right" && ["-", "/", "%"].includes(parentOp);
+}
+
+function exprBlockOp(block) {
+    return block?.querySelector(":scope > select")?.value ?? "";
+}
+
+// スロットの中身を式の文字列にする。ブロックが入っていればその中身を、
+// 入っていなければ書かれた文字をそのまま使う。
+// 計算の中の計算は、順番が変わってしまうときだけカッコで包む（(a + b) * c）。
+function readExprSlot(slot, { parentOp = "", side = "", fallback = "" } = {}) {
+    if (!slot) return fallback;
+
+    const block = slotBlock(slot);
+
+    if (!block) {
+        const input = slotValueInput(slot);
+        const raw = String(input?.value ?? "").trim();
+        return raw === "" ? fallback : raw;
+    }
+
+    const expr = buildExpression(block);
+    const wrap = parentOp
+        && block.dataset.type === "expr"
+        && needsParens(exprBlockOp(block), parentOp, side);
+
+    return wrap ? `(${expr})` : expr;
+}
+
 function buildExpression(node) {
 
     const type = node.dataset.type;
@@ -1859,13 +2013,16 @@ function buildExpression(node) {
         return readCallExpr(node);
     }
 
-    const hasOperatorSelect = Boolean(node.querySelector("select"));
+    const operatorSelect = node.querySelector(":scope > select");
 
-    if (type === "expr" || (node.classList.contains("expr") && hasOperatorSelect)) {
-        const i = node.querySelectorAll("input");
-        const op = node.querySelector("select").value;
+    if (type === "expr" || (node.classList.contains("expr") && operatorSelect)) {
+        const slots = exprSlotsOf(node);
+        const op = operatorSelect.value;
 
-        return `${i[0].value} ${op} ${i[1].value}`;
+        const left = readExprSlot(slots[0], { parentOp: op, side: "left" });
+        const right = readExprSlot(slots[1], { parentOp: op, side: "right" });
+
+        return `${left} ${op} ${right}`;
     }
 
     if (type === "random") {
@@ -1873,7 +2030,7 @@ function buildExpression(node) {
     }
 
     if (["floor", "ceil", "round"].includes(type)) {
-        const value = node.querySelector("input")?.value?.trim() || "0";
+        const value = readExprSlot(exprSlotsOf(node)[0], { fallback: "0" });
         if (type === "floor") return `切り捨て(${value})`;
         if (type === "ceil") return `切り上げ(${value})`;
         return `四捨五入(${value})`;
@@ -1893,12 +2050,15 @@ function updateCode() {
     refreshFunctionArea();
     refreshAllCallNames();
     syncAllCallArgs();
+    syncPrintSlotOperators();
+    syncNestedExprLook();
 
     const ast = buildProgramAst();
     document.getElementById("code").textContent = buildCode(ast);
 
     document.querySelectorAll(".children:not(.expr-zone)").forEach(updatePlaceholder);
     document.querySelectorAll(".expr-zone").forEach(syncAssignZone);
+    document.querySelectorAll(".expr-slot").forEach(syncExprSlot);
 
     if (selectedBlock && !document.body.contains(selectedBlock)) {
         setSelectedBlock(null);
@@ -2110,7 +2270,8 @@ function parseSimpleBinaryExpr(raw) {
     }
     const ops = ["==", "!=", "<=", ">=", "+", "-", "*", "/", "%"];
     for (const op of ops) {
-        const idx = s.indexOf(op);
+        // カッコの中の演算子（切り捨て(a * 10) / 10 の * など）では区切らない
+        const idx = indexOfTopLevel(s, op);
         if (idx <= 0) continue;
         const left = s.slice(0, idx).trim();
         const right = s.slice(idx + op.length).trim();
@@ -2120,8 +2281,73 @@ function parseSimpleBinaryExpr(raw) {
     return null;
 }
 
+// カッコ・角カッコの外側にある演算子だけを探す。
+function indexOfTopLevel(text, op) {
+    const s = String(text ?? "");
+    let depth = 0;
+
+    for (let i = 0; i < s.length; i += 1) {
+        const ch = s[i];
+        if (ch === "(" || ch === "[") depth += 1;
+        else if (ch === ")" || ch === "]") depth -= 1;
+        else if (depth === 0 && s.startsWith(op, i)) return i;
+    }
+
+    return -1;
+}
+
+// カッコの対応が取れているか（「(a) + (b)」は取れている、「a) + (b」は取れていない）。
+function hasBalancedBrackets(text) {
+    let depth = 0;
+
+    for (const ch of String(text ?? "")) {
+        if (ch === "(" || ch === "[") depth += 1;
+        if (ch === ")" || ch === "]") depth -= 1;
+        if (depth < 0) return false;
+    }
+
+    return depth === 0;
+}
+
+// 式ぜんぶを包んでいるカッコを外す（「(a + b)」→「a + b」。「(a) + (b)」はそのまま）。
+function stripOuterParens(raw) {
+    let s = String(raw ?? "").trim();
+
+    while (s.startsWith("(") && s.endsWith(")")) {
+        const inner = s.slice(1, -1);
+        if (!hasBalancedBrackets(inner)) break;
+        s = inner.trim();
+    }
+
+    return s;
+}
+
+const ROUNDING_LABELS = {
+    floor: "切り捨て",
+    ceil: "切り上げ",
+    round: "四捨五入"
+};
+
+// 「切り捨て(byou / 60)」を、種類と中身に分ける。
+// 「切り捨て(a) + f(1)」のように式の一部でしかないものは対象外。
+function parseRoundingExpr(raw) {
+    const s = String(raw ?? "").trim();
+
+    for (const [kind, label] of Object.entries(ROUNDING_LABELS)) {
+        const head = `${label}(`;
+        if (!s.startsWith(head) || !s.endsWith(")")) continue;
+
+        const inner = s.slice(head.length, -1);
+        if (!hasBalancedBrackets(inner)) continue;
+
+        return { kind, value: inner.trim() };
+    }
+
+    return null;
+}
+
 // 1次元の配列リテラル（"[4,9,1,2,3,4,7]"）を要素の配列にする。
-// 空配列・2次元は配列ブロックに戻さない（そのままテキストで見せる）。
+// 空配列・2次元は対象外（2次元は parseArrayMatrixLiteral が受け持つ）。
 function parseArrayLiteral(raw) {
     const s = String(raw ?? "").trim();
     if (!s.startsWith("[") || !s.endsWith("]")) return null;
@@ -2130,6 +2356,22 @@ function parseArrayLiteral(raw) {
     const values = inner.split(",").map((v) => v.trim());
     if (values.some((v) => v === "")) return null;
     return values;
+}
+
+// 2次元の配列リテラル（"[[1,2,3],[4,5,6]]"）を行ごとの配列にする。
+// 行の長さがそろっていないものは配列ブロックに戻さない（そのままテキストで見せる）。
+function parseArrayMatrixLiteral(raw) {
+    const s = String(raw ?? "").trim();
+    if (!s.startsWith("[[") || !s.endsWith("]]")) return null;
+
+    const inner = s.slice(1, -1).trim();
+    if (!hasBalancedBrackets(inner)) return null;
+
+    const rows = splitTopLevelArgs(inner).map((row) => parseArrayLiteral(row));
+    if (rows.length === 0 || rows.some((row) => row === null)) return null;
+    if (rows.some((row) => row.length !== rows[0].length)) return null;
+
+    return rows;
 }
 
 // 「tashizan(4, 3)」を、関数名と引数に分ける。
@@ -2183,6 +2425,96 @@ function splitTopLevelArgs(argsText) {
     return args;
 }
 
+// 式の文字列を、できるだけブロックに戻す。戻せない式（ただの変数や数）は null。
+// deep: 乱数や切り捨てが無くてもブロックに戻す（表示する( ) の文字の連結で使う）
+function createBlockFromExpression(raw, { deep = false } = {}) {
+    const value = stripOuterParens(raw);
+
+    const rounding = parseRoundingExpr(value);
+    if (rounding) {
+        const block = createRoundingBlock(rounding.kind);
+        fillExprSlot(exprSlotsOf(block)[0], rounding.value);
+        return block;
+    }
+
+    if (value === "乱数()") return createRandomBlock();
+
+    const call = parsePureCallExpr(value);
+    if (call) {
+        const block = createCallBlock();
+        setCallName(block, call.name);
+        setCallArgs(block, call.args);
+        return block;
+    }
+
+    const parts = parseSimpleBinaryExpr(value);
+    if (!parts) return null;
+
+    const expr = createExprBlock();
+    const slots = exprSlotsOf(expr);
+    const opSelect = expr.querySelector(":scope > select");
+
+    fillExprSlot(slots[0], parts.left, { deep });
+
+    const blankId = parseBlankToken(parts.op);
+    if (blankId !== null) {
+        opSelect.dataset.blankIndex = blankId;
+        opSelect.classList.add("quiz-blank");
+        opSelect.innerHTML = `
+                <option value=""></option>
+                <option value="+">＋</option>
+                <option value="-">－</option>
+                <option value="*">＊</option>
+                <option value="/">／</option>
+                <option value="%">%</option>
+            `;
+        opSelect.value = "";
+    } else {
+        opSelect.value = parts.op;
+    }
+
+    fillExprSlot(slots[1], parts.right, { deep });
+
+    return expr;
+}
+
+// スロットに値を入れる。乱数や切り捨てが混じっているときだけ、
+// 中身もブロックに戻す（「i / 10」のような式は今までどおり文字のまま見せる）。
+function fillExprSlot(slot, raw, { deep = false } = {}) {
+    if (!slot) return;
+
+    const value = String(raw ?? "").trim();
+    const input = slotValueInput(slot);
+
+    // 表示する( ) の中の「"合計は" + goukei + "円"」は、文字の連結が見えるようにブロックで出す。
+    // それ以外のスロットは、乱数や切り捨てが混じっている式だけブロックに戻す。
+    const printSlot = slot.classList.contains("print-slot");
+    const buildBlock = deep || printSlot || expressionNeedsBlock(value);
+
+    let inner = buildBlock
+        ? createBlockFromExpression(value, { deep: deep || printSlot })
+        : null;
+
+    // 表示する( ) に置けるのは「＋でつなぐ計算」だけ。それ以外は文字のまま見せる
+    if (inner && printSlot && !isPlusExprBlock(inner)) {
+        inner = null;
+    }
+
+    if (inner) {
+        slot.insertBefore(inner, input);
+    } else {
+        setInputMaybeBlank(input, value);
+    }
+
+    syncExprSlot(slot);
+}
+
+// 乱数・切り捨て・切り上げ・四捨五入が入っている式は、文字で見せるよりブロックの方が分かりやすい。
+function expressionNeedsBlock(raw) {
+    const s = String(raw ?? "");
+    return ["乱数", ...Object.values(ROUNDING_LABELS)].some((label) => s.includes(`${label}(`));
+}
+
 function loadProgramFromAst(ast) {
     workspace.innerHTML = "";
     functionWorkspace.innerHTML = "";
@@ -2193,12 +2525,14 @@ function loadProgramFromAst(ast) {
             if (!node || typeof node !== "object") return;
 
             if (node.type === "assign") {
-                // 配列リテラルの代入（a = [4,9,1,2,3,4,7]）は配列ブロックに戻す
-                const arrayValues = parseArrayLiteral(node.value);
-                if (arrayValues) {
+                // 配列リテラルの代入（a = [4,9,1,2,3,4,7] や a = [[1,2],[3,4]]）は配列ブロックに戻す
+                const matrix = parseArrayMatrixLiteral(node.value);
+                const arrayValues = matrix ? null : parseArrayLiteral(node.value);
+
+                if (matrix || arrayValues) {
                     const b = createArrayBlock();
                     setInputValue(b.querySelector(".array2d-head input"), node.name ?? "a");
-                    setArray1DValues(b, arrayValues);
+                    setArray2DValues(b, matrix || [arrayValues]);
                     container.appendChild(b);
                     return;
                 }
@@ -2210,81 +2544,13 @@ function loadProgramFromAst(ast) {
                 const valueInput = b.querySelector(".assign-value");
                 const rawValue = node.value ?? "0";
 
-                const floorMatch = rawValue.match(/^切り捨て\((.*)\)$/);
-                const ceilMatch = rawValue.match(/^切り上げ\((.*)\)$/);
-                const roundMatch = rawValue.match(/^四捨五入\((.*)\)$/);
+                const block = createBlockFromExpression(rawValue);
 
-                if (floorMatch || ceilMatch || roundMatch) {
-                    let kind = "floor";
-                    let value = floorMatch?.[1];
-
-                    if (ceilMatch) {
-                        kind = "ceil";
-                        value = ceilMatch[1];
-                    }
-
-                    if (roundMatch) {
-                        kind = "round";
-                        value = roundMatch[1];
-                    }
-
-                    const block = createRoundingBlock(kind);
-                    setInputMaybeBlank(block.querySelector("input"), value.trim());
-
+                if (block) {
                     zone.insertBefore(block, valueInput);
                     syncAssignZone(zone);
-
-                } else if (rawValue === "乱数()") {
-
-                    const block = createRandomBlock();
-                    zone.insertBefore(block, valueInput);
-                    syncAssignZone(zone);
-
-                } else if (parsePureCallExpr(rawValue)) {
-
-                    const call = parsePureCallExpr(rawValue);
-                    const block = createCallBlock();
-                    setCallName(block, call.name);
-                    setCallArgs(block, call.args);
-
-                    zone.insertBefore(block, valueInput);
-                    syncAssignZone(zone);
-
                 } else {
-                    const parts = parseSimpleBinaryExpr(rawValue);
-
-                    if (parts) {
-                        const expr = createExprBlock();
-                        const inputs = expr.querySelectorAll("input");
-                        const opSelect = expr.querySelector("select");
-
-                        setInputMaybeBlank(inputs[0], parts.left);
-
-                        const blankId = parseBlankToken(parts.op);
-                        if (blankId !== null) {
-                            opSelect.dataset.blankIndex = blankId;
-                            opSelect.classList.add("quiz-blank");
-                            opSelect.innerHTML = `
-                <option value=""></option>
-                <option value="+">＋</option>
-                <option value="-">－</option>
-                <option value="*">＊</option>
-                <option value="/">／</option>
-                <option value="%">%</option>
-            `;
-                            opSelect.value = "";
-                        } else {
-                            opSelect.value = parts.op;
-                        }
-
-                        setInputMaybeBlank(inputs[1], parts.right);
-
-                        zone.insertBefore(expr, valueInput);
-                        syncAssignZone(zone);
-
-                    } else {
-                        setInputMaybeBlank(valueInput, rawValue);
-                    }
+                    setInputMaybeBlank(valueInput, rawValue);
                 }
 
                 container.appendChild(b);
@@ -2293,7 +2559,7 @@ function loadProgramFromAst(ast) {
 
             if (node.type === "print") {
                 const b = createPrintBlock();
-                setInputMaybeBlank(b.querySelector("input"), node.value ?? "0");
+                fillExprSlot(exprSlotsOf(b)[0], node.value ?? "0");
                 container.appendChild(b);
                 return;
             }
@@ -2437,6 +2703,10 @@ function quizDisableEditingExceptBlanks() {
     try {
         workspace._sortable?.option("disabled", true);
         functionWorkspace._sortable?.option("disabled", true);
+        // 代入の値の枠や、計算・切り捨ての中のスロットもドラッグできないようにする
+        programAreas.querySelectorAll(".expr-zone, .expr-slot").forEach((zone) => {
+            zone._sortable?.option("disabled", true);
+        });
     } catch (_e) {
         // no-op
     }
@@ -2925,6 +3195,31 @@ function quizGoToList() {
     location.href = target;
 }
 
+// 問題文のうしろに「条件分岐の解説」のような解説動画へのボタンを出す。
+function quizInsertVideoLinks(quiz, id) {
+    const host = document.getElementById("quiz-question-title");
+    const topics = window.dnclTopics;
+    if (!host || !topics) return;
+
+    topics.videosOf(quiz, id).forEach((topic) => {
+        const link = document.createElement("a");
+        link.className = "quiz-question-video";
+        link.href = `https://youtu.be/${topic.video}?utm_source=joho-kyoshitsu&utm_medium=quiz`;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.innerHTML = `<i class="fa-solid fa-play"></i> ${topic.name}の解説`;
+
+        // サイトから動画へどれだけ出ていったかを見るため
+        link.addEventListener("click", () => {
+            if (typeof gtag === "function") {
+                gtag("event", "video_click", { video_id: topic.video, video_title: topic.videoLabel });
+            }
+        });
+
+        host.append(" ", link);
+    });
+}
+
 function quizHookJudge(quiz) {
     // ステップの「前へ/次へ」の表示切り替えに連動して、操作スペースの中身を切り替える
     if (typeof window.setStepButtonsVisible === "function") {
@@ -2957,11 +3252,11 @@ function quizHookJudge(quiz) {
     if (typeof window.stepStart === "function") {
         const originalStepStart = window.stepStart;
         window.stepStart = function (...args) {
-            const ret = originalStepStart.apply(this, args);
-            // ステップ回答を始め直したら「次へ」表示に戻す
+            // ステップ回答を始め直したら「次へ」表示に戻す。
+            // stepStart は1行目を実行するので、そのあとの「✅ 答え合わせ」表示を消さないよう先に戻す。
             const next = document.getElementById("step-next-button");
             if (next) next.textContent = "▶ 次へ";
-            return ret;
+            return originalStepStart.apply(this, args);
         };
     }
 
@@ -3032,6 +3327,9 @@ function setupQuizModeIfPresent() {
     if (quizTitleEl) {
         quizTitleEl.textContent = quiz.question ?? `問題 ${p.id}`;
     }
+
+    // 問題文のうしろに、その単元の解説動画へのボタンを出す
+    quizInsertVideoLinks(quiz, p.id);
 
     // hide palette areas
     const palette = document.querySelector(".palette");
