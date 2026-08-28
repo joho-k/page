@@ -3789,4 +3789,110 @@ window.quizData = {
         ],
         defaultHint: "繰り返しの中では i が 1, 2, 3, 4 と変わります。その i をそのまま関数にわたせば、1, 4, 9, 16 が順に返ってきます",
     },
+    q055: {
+        title: "いちばん長く続いたのは何日？（連続記録）",
+        addedAt: "2026-08-28",
+        difficulty: 5,
+        question: "8日ぶんの勉強の記録が配列 kiroku に入っています（1＝勉強した日、0＝休んだ日）。いちばん長く続けられたのは何日連続だったかを求めよう。いま何日続いているかを renzoku で数え、これまでの最高記録を saidai に残します。休んだ日が来たら数えなおしになることに気をつけよう（3か所の穴をうめよう）",
+        ast: [
+            {
+                type: "assign",
+                name: "kiroku",
+                value: "[1,1,0,1,1,1,0,1]"
+            },
+            {
+                type: "assign",
+                name: "renzoku",
+                value: "0"
+            },
+            {
+                type: "assign",
+                name: "saidai",
+                value: "0"
+            },
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "7",
+                step: "1",
+                body: [
+                    {
+                        type: "ifelse",
+                        condition: "kiroku[i] == 1",
+                        ifBody: [
+                            {
+                                type: "assign",
+                                name: "renzoku",
+                                value: "renzoku __BLANK_blank_a__ 1"
+                            },
+                            {
+                                type: "if",
+                                condition: "renzoku __BLANK_blank_b__ saidai",
+                                body: [
+                                    {
+                                        type: "assign",
+                                        name: "saidai",
+                                        value: "renzoku"
+                                    }
+                                ]
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "assign",
+                                name: "renzoku",
+                                value: "__BLANK_blank_c__"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "print",
+                value: "\"いちばん長く続いたのは\" + saidai + \"日\""
+            }
+        ],
+        choices: [
+            { label: "+", value: "+" },
+            { label: "-", value: "-" },
+            { label: ">", value: ">" },
+            { label: "<", value: "<" },
+            { label: "0", value: "0" },
+            { label: "1", value: "1" },
+            { label: "renzoku", value: "renzoku" }
+        ],
+        answers: [
+            {
+                values: ["+", ">", "0"],
+                correct: true
+            },
+            {
+                values: ["+", ">", "1"],
+                correct: false,
+                hint: "休んだ日に renzoku を 1 にすると、休んだ日を1日ぶん数えたことになります。0 に戻さないと連続が切れたことになりません。この記録では 4日連続 と出てしまいます（本当は 3日）。数えなおしは 0 からです"
+            },
+            {
+                values: ["+", "<", "0"],
+                correct: false,
+                hint: "< だと「今の連続が最高記録より短いとき」に記録を書きかえてしまいます。saidai は 0 のままか、短い数に上書きされるだけです。最高記録は「今のほうが長いとき」＝ > のときに更新します"
+            },
+            {
+                values: ["-", ">", "0"],
+                correct: false,
+                hint: "勉強した日は連続日数がふえるので、たし算です。- だと renzoku が 0, -1, -2 と減っていき、saidai は 0 のまま（0日）になってしまいます"
+            },
+            {
+                values: ["-", "<", "1"],
+                correct: false,
+                hint: "3か所ともちがいます。勉強した日は renzoku に 1 をたす（+）、今の連続が最高記録より長いとき（>）に saidai を書きかえる、休んだ日は renzoku を 0 に戻す、の3つがそろって最長記録が求まります"
+            },
+            {
+                values: ["+", ">", "renzoku"],
+                correct: false,
+                hint: "renzoku をそのまま入れても値は変わらないので、休んだ日でも連続が切れません。1 の数を全部たしただけの 6日 になってしまいます。連続が切れたら 0 に戻します"
+            }
+        ],
+        defaultHint: "やることは3つです。①勉強した日（kiroku[i] が 1）なら renzoku に 1 をたす ②その renzoku が saidai より大きければ saidai を書きかえる ③休んだ日なら renzoku を 0 に戻す。この記録では 1,1 で2日 → 休み → 1,1,1 で3日 → 休み → 1 で1日 なので、答えは3日です",
+    },
 }
