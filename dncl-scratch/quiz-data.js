@@ -3789,4 +3789,59 @@ window.quizData = {
         ],
         defaultHint: "繰り返しの中では i が 1, 2, 3, 4 と変わります。その i をそのまま関数にわたせば、1, 4, 9, 16 が順に返ってきます",
     },
+    q056: {
+        title: "配列の番号は0から（3人目の点数）",
+        addedAt: "2026-08-31",
+        difficulty: 1,
+        question: "4人のテストの点数が、配列 tensu に左から順に入っています。3人目の点数を取り出して表示したい。取り出す番号（添字）を bangou に入れてから tensu[bangou] で取り出します。配列の番号は 0 から数えることに気をつけて、bangou に入る数を選ぼう",
+        ast: [
+            {
+                type: "assign",
+                name: "tensu",
+                value: "[60,75,90,85]"
+            },
+            {
+                type: "assign",
+                name: "bangou",
+                value: "__BLANK_blank_a__"
+            },
+            {
+                type: "assign",
+                name: "san",
+                value: "tensu[bangou]"
+            },
+            {
+                type: "print",
+                value: "\"3人目の点数は\" + san + \"点\""
+            }
+        ],
+        choices: [
+            { label: "0", value: "0" },
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+            { label: "3", value: "3" }
+        ],
+        answers: [
+            {
+                values: ["2"],
+                correct: true
+            },
+            {
+                values: ["0"],
+                correct: false,
+                hint: "tensu[0] は左はしの 60 で、1人目の点数です。0 番が1人目なので、3人目は 0 から2つ進んだところにあります"
+            },
+            {
+                values: ["1"],
+                correct: false,
+                hint: "tensu[1] は2人目の 75 です。番号は 0 から数えるので、番号は「何人目」より1つ小さくなります。3人目なら 3 - 1 です"
+            },
+            {
+                values: ["3"],
+                correct: false,
+                hint: "3人目だから 3 と書きたくなりますが、tensu[3] は右はしの 85（4人目）です。番号が 0 から始まるぶん、1つずれてしまいます"
+            }
+        ],
+        defaultHint: "番号は左から 0, 1, 2, 3 の順です。tensu[0] が 60、tensu[1] が 75、tensu[2] が 90、tensu[3] が 85。3人目の 90 を取り出す番号はどれかな",
+    },
 }
