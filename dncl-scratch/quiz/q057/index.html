@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第57問 パスワードは何通り？（4けたの数字）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="0から9までの数字が使える「4けたのパスワード」は、全部で何通り作れるでしょうか。1けたなら10通り、2けたならそのそれぞれにまた10通りずつ枝分かれ…とけたが増えるごとに通り数はふくらんでいきます。通り数を入れておく箱 kumi に、1けたぶんずつためていくプログラムです。kumi の最初の値と、繰り返しの中の計算をうめよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,繰り返し,パスワードは何通り？（4けたの数字）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第57問 パスワードは何通り？（4けたの数字）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="0から9までの数字が使える「4けたのパスワード」は、全部で何通り作れるでしょうか。1けたなら10通り、2けたならそのそれぞれにまた10通りずつ枝分かれ…とけたが増えるごとに通り数はふくらんでいきます。通り数を入れておく箱 kumi に、1けたぶんずつためていくプログラムです。kumi の最初の値と、繰り返しの中の計算をうめよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q057.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第57問 パスワードは何通り？（4けたの数字）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="0から9までの数字が使える「4けたのパスワード」は、全部で何通り作れるでしょうか。1けたなら10通り、2けたならそのそれぞれにまた10通りずつ枝分かれ…とけたが増えるごとに通り数はふくらんでいきます。通り数を入れておく箱 kumi に、1けたぶんずつためていくプログラムです。kumi の最初の値と、繰り返しの中の計算をうめよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q057.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html#quiz",
+      "name": "第57問 パスワードは何通り？（4けたの数字）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 繰り返し",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "0から9までの数字が使える「4けたのパスワード」は、全部で何通り作れるでしょうか。1けたなら10通り、2けたならそのそれぞれにまた10通りずつ枝分かれ…とけたが増えるごとに通り数はふくらんでいきます。通り数を入れておく箱 kumi に、1けたぶんずつためていくプログラムです。kumi の最初の値と、繰り返しの中の計算をうめよう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "1 , *"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "0"
+          },
+          {
+            "@type": "Answer",
+            "text": "1"
+          },
+          {
+            "@type": "Answer",
+            "text": "10"
+          },
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第57問 パスワードは何通り？（4けたの数字）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q057";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第57問 パスワードは何通り？（4けたの数字）</h1>
+            <p>0から9までの数字が使える「4けたのパスワード」は、全部で何通り作れるでしょうか。1けたなら10通り、2けたならそのそれぞれにまた10通りずつ枝分かれ…とけたが増えるごとに通り数はふくらんでいきます。通り数を入れておく箱 kumi に、1けたぶんずつためていくプログラムです。kumi の最初の値と、繰り返しの中の計算をうめよう（2か所の穴をうめよう）</p>
+            <p>難易度：★★☆☆☆（2／やさしい）。単元：繰り返し。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>shurui = 10
+kumi = ［A］
+i を 1 から 4 まで 1 ずつ増やしながら繰り返す:
+  kumi = kumi ［B］ shurui
+表示する(&quot;4けたの数字のパスワードは&quot; + kumi + &quot;通りです&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>0</code></li>
+                <li><code>1</code></li>
+                <li><code>10</code></li>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>かけ算をためていくときは、最初の箱に 1 を入れます（0 だと何をかけても 0 のままです）。1けたごとに10通りずつ枝分かれするので、10 を4回かけて 10 * 10 * 10 * 10 ＝ 10000通りになります</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>1</code></li>
+            <li>空欄 ［B］ … <code>*</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>0</code>　［B］<code>*</code> … 0 に何をかけても 0 のままなので、4回くり返しても kumi は 0 通りのままです。たし算の合計は 0 から始めますが、かけ算をためていくときは 1 から始めます</li>
+            <li>［A］<code>10</code>　［B］<code>*</code> … 最初から 10 が入っていると、そこにさらに10を4回かけて 100000 通り（5けたぶん）になってしまいます。10をかけるのは4回だけでよいので、最初は 1 です</li>
+            <li>［A］<code>1</code>　［B］<code>+</code> … + だと 1 + 10 + 10 + 10 + 10 ＝ 41 通りにしかなりません。けたが1つ増えるたびに、それまでの1通り1通りが10通りずつに枝分かれするので、たし算ではなくかけ算です</li>
+            <li>［A］<code>1</code>　［B］<code>-</code> … - だと 1 から10を4回ひいて -39 通りになってしまいます。通り数はけたが増えるほど多くなるので、ひき算ではなくかけ算です</li>
+            <li>［A］<code>1</code>　［B］<code>/</code> … / だと 1 を10で4回わって 0.0001 になってしまいます。けたが増えるほど通り数は多くなるので、わり算ではなくかけ算です</li>
+            <li>［A］<code>0</code>　［B］<code>+</code> … 2か所とも違います。+ では 0 + 10 + 10 + 10 + 10 ＝ 40 通りにしかなりません。かけ算を 1 からためていくのが正しい形です</li>
+            <li>［A］<code>10</code>　［B］<code>+</code> … 10 + 10 + 10 + 10 + 10 ＝ 50 通りです。4けたのパスワードは50通りよりずっと多く作れます。1 から始めて10をかけていきましょう</li>
+            <li>［A］<code>0</code>　［B］<code>-</code> … 0 から10を4回ひいて -40 通りになります。通り数がマイナスになることはありません。1 から始めて10をかけていきましょう</li>
+            <li>［A］<code>10</code>　［B］<code>-</code> … 10 から10を4回ひいて -30 通りになります。けたが増えるほど通り数は多くなるので、かけ算を使います</li>
+            <li>［A］<code>0</code>　［B］<code>/</code> … 0 を10でわっても 0 のままです。かけ算をためていくときの最初の値は 1、計算は * です</li>
+            <li>［A］<code>10</code>　［B］<code>/</code> … 10 を10で4回わると 0.001 になってしまいます。通り数を増やしたいので * を使い、最初は 1 から始めます</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q049/index.html">第49問へ</a></li>
+                
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
