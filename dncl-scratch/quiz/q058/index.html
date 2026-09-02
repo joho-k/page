@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第58問 100日後は何曜日？（あまりでひとまわり）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="曜日を配列 youbi に並べました（youbi[0] が日曜日、youbi[1] が月曜日…）。今日は水曜日なので youbi[3] です。曜日は7日でひとまわりすることを使って、今日から100日後が何曜日になるかを表示しよう（空欄は2つ）。｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,配列,100日後は何曜日？（あまりでひとまわり）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第58問 100日後は何曜日？（あまりでひとまわり）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="曜日を配列 youbi に並べました（youbi[0] が日曜日、youbi[1] が月曜日…）。今日は水曜日なので youbi[3] です。曜日は7日でひとまわりすることを使って、今日から100日後が何曜日になるかを表示しよう（空欄は2つ）。｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q058.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第58問 100日後は何曜日？（あまりでひとまわり）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="曜日を配列 youbi に並べました（youbi[0] が日曜日、youbi[1] が月曜日…）。今日は水曜日なので youbi[3] です。曜日は7日でひとまわりすることを使って、今日から100日後が何曜日になるかを表示しよう（空欄は2つ）。｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q058.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html#quiz",
+      "name": "第58問 100日後は何曜日？（あまりでひとまわり）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "曜日を配列 youbi に並べました（youbi[0] が日曜日、youbi[1] が月曜日…）。今日は水曜日なので youbi[3] です。曜日は7日でひとまわりすることを使って、今日から100日後が何曜日になるかを表示しよう（空欄は2つ）。",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "% , 7"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "%"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "6"
+          },
+          {
+            "@type": "Answer",
+            "text": "7"
+          },
+          {
+            "@type": "Answer",
+            "text": "24"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第58問 100日後は何曜日？（あまりでひとまわり）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q058";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第58問 100日後は何曜日？（あまりでひとまわり）</h1>
+            <p>曜日を配列 youbi に並べました（youbi[0] が日曜日、youbi[1] が月曜日…）。今日は水曜日なので youbi[3] です。曜日は7日でひとまわりすることを使って、今日から100日後が何曜日になるかを表示しよう（空欄は2つ）。</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>youbi = [&quot;日&quot;,&quot;月&quot;,&quot;火&quot;,&quot;水&quot;,&quot;木&quot;,&quot;金&quot;,&quot;土&quot;]
+kyou = 3
+hi = 100
+saki = (kyou + hi) ［A］ ［B］
+表示する(&quot;今日から&quot; + hi + &quot;日後は&quot; + youbi[saki] + &quot;曜日です&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>%</code></li>
+                <li><code>/</code></li>
+                <li><code>*</code></li>
+                <li><code>6</code></li>
+                <li><code>7</code></li>
+                <li><code>24</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>水曜日は youbi[3] なので、3 + 100 = 103 が「日曜日から数えた番号」になります。曜日は7日でひとまわりするので、103 を 7 でわったあまりを出せば 0〜6 の添字にもどせます。あまりを出す記号は % です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>%</code></li>
+            <li>空欄 ［B］ … <code>7</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>%</code>　［B］<code>6</code> … 曜日は日・月・火・水・木・金・土の7つでひとまわりします。6 でわると 103 % 6 = 1 になり、youbi[1] の月曜日になってしまいます。わる数は曜日の個数と同じ 7 です</li>
+            <li>［A］<code>%</code>　［B］<code>24</code> … 24 は1日の時間の数です。いまひとまわりさせたいのは曜日なので、103 % 24 = 7 となり、配列 youbi の範囲（0〜6）からはみ出してしまいます。わる数は 7 です</li>
+            <li>［A］<code>/</code>　［B］<code>7</code> … / は商を出す記号なので 103 / 7 = 14.71… という小数になり、youbi の添字として使えません。ほしいのは「7でわったあまり」なので % を使います</li>
+            <li>［A］<code>/</code>　［B］<code>6</code> … 2か所ちがいます。ひとまわりの計算に使うのは、わり算の商（/）ではなく、あまり（%）です。そして曜日は7つなので、わる数も 7 になります</li>
+            <li>［A］<code>*</code>　［B］<code>7</code> … * でかけると 103 * 7 = 721 になり、どんどん大きくなってしまいます。ひとまわりさせたいときは、7 でわったあまり（%）を使うと 0〜6 におさまります</li>
+            </ul>
+
+            
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q049/index.html">第49問へ</a></li>
+                
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
