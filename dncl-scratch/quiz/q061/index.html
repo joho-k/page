@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第61問 あまりが出たらもう1回（ロープウェイは何回？）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="38人のクラスが、定員7人のロープウェイに乗ります。全員を運ぶには何回動かせばよいかを表示しよう。38 / 7 ＝ 5.42… なので、まるまる7人乗せられるのは5回。それでも乗りきれない人が残るなら、もう1回動かさなければいけません。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,あまりが出たらもう1回（ロープウェイは何回？）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第61問 あまりが出たらもう1回（ロープウェイは何回？）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="38人のクラスが、定員7人のロープウェイに乗ります。全員を運ぶには何回動かせばよいかを表示しよう。38 / 7 ＝ 5.42… なので、まるまる7人乗せられるのは5回。それでも乗りきれない人が残るなら、もう1回動かさなければいけません。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q061.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第61問 あまりが出たらもう1回（ロープウェイは何回？）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="38人のクラスが、定員7人のロープウェイに乗ります。全員を運ぶには何回動かせばよいかを表示しよう。38 / 7 ＝ 5.42… なので、まるまる7人乗せられるのは5回。それでも乗りきれない人が残るなら、もう1回動かさなければいけません。あてはまる記号を選ぼう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q061.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html#quiz",
+      "name": "第61問 あまりが出たらもう1回（ロープウェイは何回？）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "38人のクラスが、定員7人のロープウェイに乗ります。全員を運ぶには何回動かせばよいかを表示しよう。38 / 7 ＝ 5.42… なので、まるまる7人乗せられるのは5回。それでも乗りきれない人が残るなら、もう1回動かさなければいけません。あてはまる記号を選ぼう（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "% , > , +"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "%"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": ">="
+          },
+          {
+            "@type": "Answer",
+            "text": "=="
+          },
+          {
+            "@type": "Answer",
+            "text": "+"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第61問 あまりが出たらもう1回（ロープウェイは何回？）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q061";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第61問 あまりが出たらもう1回（ロープウェイは何回？）</h1>
+            <p>38人のクラスが、定員7人のロープウェイに乗ります。全員を運ぶには何回動かせばよいかを表示しよう。38 / 7 ＝ 5.42… なので、まるまる7人乗せられるのは5回。それでも乗りきれない人が残るなら、もう1回動かさなければいけません。あてはまる記号を選ぼう（3か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：条件分岐。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>ninzu = 38
+teiin = 7
+kaisu = 切り捨て(ninzu / teiin)
+nokori = ninzu ［A］ teiin
+もし nokori ［B］ 0 ならば:
+  kaisu = kaisu ［C］ 1
+表示する(&quot;乗りきれない人は&quot; + nokori + &quot;人&quot;)
+表示する(&quot;ロープウェイは&quot; + kaisu + &quot;回動かします&quot;)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>%</code></li>
+                <li><code>/</code></li>
+                <li><code>*</code></li>
+                <li><code>-</code></li>
+                <li><code>&gt;</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>&gt;=</code></li>
+                <li><code>==</code></li>
+                <li><code>+</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>「わり算の答えを切り上げる」は、共通テストでもよく出る考え方です。まず 切り捨て(38 / 7) ＝ 5 でまるまる運べる回数を出し、38 % 7 ＝ 3 で乗りきれない人を調べ、その人が1人でもいれば（&gt; 0）回数に +1 します</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>%</code></li>
+            <li>空欄 ［B］ … <code>&gt;</code></li>
+            <li>空欄 ［C］ … <code>+</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>/</code>　［B］<code>&gt;</code>　［C］<code>+</code> … 38 / 7 ＝ 5.428… は「何回分乗せられるか」であって、乗りきれずに残った人数ではありません。「乗りきれない人は5.428…人」と表示されてしまいます。わったあまりを出す % を使いましょう</li>
+            <li>［A］<code>-</code>　［B］<code>&gt;</code>　［C］<code>+</code> … 38 - 7 ＝ 31 は「1回運んだあとの残り」でしかなく、5回運んだあとの残りではありません。「乗りきれない人は31人」と出てしまいます。7人ずつ運びきったあとの残りは 38 % 7 ＝ 3 です</li>
+            <li>［A］<code>*</code>　［B］<code>&gt;</code>　［C］<code>+</code> … 38 * 7 ＝ 266 で、クラスの人数より多くなってしまいます。わったあとに残る人数を求めたいので % を使いましょう</li>
+            <li>［A］<code>%</code>　［B］<code>==</code>　［C］<code>+</code> … nokori == 0 は「ちょうど割り切れたとき」です。割り切れたなら追加の1回はいりません。逆に残りが3人いるときこそ、もう1回動かす必要があります。0より大きいかを調べる &gt; にしましょう</li>
+            <li>［A］<code>%</code>　［B］<code>&lt;</code>　［C］<code>+</code> … あまりはマイナスにならないので、nokori &lt; 0 は一度も成り立ちません。kaisu は5回のままになり、残った3人が乗れなくなります。0より大きいかを調べる &gt; を使います</li>
+            <li>［A］<code>%</code>　［B］<code>&gt;=</code>　［C］<code>+</code> … nokori &gt;= 0 はあまりが0のときも成り立つので、ちょうど割り切れる場合（例えば35人なら5回でぴったり）にもむだな1回が足されてしまいます。残りがあるときだけ足したいので &gt; です</li>
+            <li>［A］<code>%</code>　［B］<code>&gt;</code>　［C］<code>-</code> … 5 - 1 ＝ 4回になり、運ぶ回数が減ってしまいます。乗りきれない人を運ぶために「もう1回」増やしたいので + です</li>
+            <li>［A］<code>%</code>　［B］<code>&gt;</code>　［C］<code>*</code> … 5 * 1 ＝ 5 なので、かけても回数は5回のまま変わりません。1回ふやすには + を使います</li>
+            <li>［A］<code>/</code>　［B］<code>&gt;</code>　［C］<code>*</code> … 2か所ちがいます。残りの人数は 38 % 7 ＝ 3 で求め、その残りがいるときは kaisu + 1 として回数を1ふやします</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q049/index.html">第49問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
