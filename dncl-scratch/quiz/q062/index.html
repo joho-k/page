@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第62問 2つの値を入れかえる（席のこうかん）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="AさんとBさんの席をこうかんします。いま seki_a には 3、seki_b には 8 が入っています。これを入れかえて、Aさんが8番、Bさんが3番になるようにしよう。いきなり seki_a = seki_b としてしまうと、もとの 3 が上書きされて消えてしまうので、先に temp という別の箱にどけておきます。2か所の空らんにあてはまる変数を選ぼう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,変数と代入,2つの値を入れかえる（席のこうかん）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第62問 2つの値を入れかえる（席のこうかん）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="AさんとBさんの席をこうかんします。いま seki_a には 3、seki_b には 8 が入っています。これを入れかえて、Aさんが8番、Bさんが3番になるようにしよう。いきなり seki_a = seki_b としてしまうと、もとの 3 が上書きされて消えてしまうので、先に temp という別の箱にどけておきます。2か所の空らんにあてはまる変数を選ぼう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q062.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第62問 2つの値を入れかえる（席のこうかん）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="AさんとBさんの席をこうかんします。いま seki_a には 3、seki_b には 8 が入っています。これを入れかえて、Aさんが8番、Bさんが3番になるようにしよう。いきなり seki_a = seki_b としてしまうと、もとの 3 が上書きされて消えてしまうので、先に temp という別の箱にどけておきます。2か所の空らんにあてはまる変数を選ぼう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q062.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html#quiz",
+      "name": "第62問 2つの値を入れかえる（席のこうかん）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 変数と代入",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "AさんとBさんの席をこうかんします。いま seki_a には 3、seki_b には 8 が入っています。これを入れかえて、Aさんが8番、Bさんが3番になるようにしよう。いきなり seki_a = seki_b としてしまうと、もとの 3 が上書きされて消えてしまうので、先に temp という別の箱にどけておきます。2か所の空らんにあてはまる変数を選ぼう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "seki_a , temp"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "seki_a"
+          },
+          {
+            "@type": "Answer",
+            "text": "seki_b"
+          },
+          {
+            "@type": "Answer",
+            "text": "temp"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第62問 2つの値を入れかえる（席のこうかん）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q062";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第62問 2つの値を入れかえる（席のこうかん）</h1>
+            <p>AさんとBさんの席をこうかんします。いま seki_a には 3、seki_b には 8 が入っています。これを入れかえて、Aさんが8番、Bさんが3番になるようにしよう。いきなり seki_a = seki_b としてしまうと、もとの 3 が上書きされて消えてしまうので、先に temp という別の箱にどけておきます。2か所の空らんにあてはまる変数を選ぼう</p>
+            <p>難易度：★★☆☆☆（2／やさしい）。単元：変数と代入。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>seki_a = 3
+seki_b = 8
+temp = ［A］
+seki_a = seki_b
+seki_b = ［B］
+表示する(&quot;Aさんの席は&quot; + seki_a + &quot;番&quot;)
+表示する(&quot;Bさんの席は&quot; + seki_b + &quot;番&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>seki_a</code></li>
+                <li><code>seki_b</code></li>
+                <li><code>temp</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>入れかえは3段階です。①temp = seki_a で 3 を temp にどける ②seki_a = seki_b で seki_a を 8 にする（ここで seki_a のもとの 3 は消える）③seki_b = temp で、どけておいた 3 を seki_b に入れる。②のあとに seki_a を使っても、もう 3 は残っていないことに注意しよう</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>seki_a</code></li>
+            <li>空欄 ［B］ … <code>temp</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>seki_a</code>　［B］<code>seki_a</code> … temp に 3 をどけたところまでは正解です。でも seki_b = seki_a を実行する時点では、その1つ前の行で seki_a が 8 に書きかわっています。だから seki_b にも 8 が入り、2人とも8番になってしまいます。使うのは、どけておいた temp です</li>
+            <li>［A］<code>seki_a</code>　［B］<code>seki_b</code> … seki_b = seki_b は「自分に自分を入れる」ので、seki_b は 8 のまま何も変わりません。seki_a も 8 になっているので2人とも8番です。3 が入っているのは temp なので、temp を入れましょう</li>
+            <li>［A］<code>seki_b</code>　［B］<code>temp</code> … どけておきたいのは、これから上書きされてしまう seki_a の 3 のほうです。temp = seki_b にすると temp は 8 になり、最後に seki_b = temp としても 8 が戻るだけ。3 はどこにも残らず消えてしまいます</li>
+            <li>［A］<code>seki_b</code>　［B］<code>seki_a</code> … temp に 8 をどけても、seki_a = seki_b で 3 は上書きされて消えます。そのあと seki_b = seki_a とすると 8 が入り、2人とも8番です。消える前の 3 を temp にどけておくのがコツです</li>
+            <li>［A］<code>seki_b</code>　［B］<code>seki_b</code> … temp を使わずに素通りしている形です。seki_a は 8 になり、seki_b は 8 のまま。2人とも8番になってしまいます。先に temp = seki_a として 3 を守っておきましょう</li>
+            <li>［A］<code>temp</code>　［B］<code>temp</code> … 1つ目の temp = temp は、まだ何も入っていない箱を自分に入れているだけで、意味がありません。ここでは、これから消えてしまう seki_a の 3 を temp にどけます</li>
+            <li>［A］<code>temp</code>　［B］<code>seki_a</code> … temp = temp では 3 をどけられません。さらに seki_b = seki_a としても、seki_a はすでに 8 になっているので2人とも8番です。1つ目は seki_a、2つ目は temp にしましょう</li>
+            <li>［A］<code>temp</code>　［B］<code>seki_b</code> … どちらの行も値が動いていません。seki_a だけが 8 に上書きされて、2人とも8番になります。入れかえには「①どける ②上書き ③どけた値を戻す」の3段階が必要です</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/hFkzjGTo498">第1回 変数と代入</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q049/index.html">第49問へ</a></li>
+                
+                <li><a href="../../index.html?topic=variable#problems">変数と代入の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>

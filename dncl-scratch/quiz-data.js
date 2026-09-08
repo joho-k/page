@@ -3789,4 +3789,97 @@ window.quizData = {
         ],
         defaultHint: "繰り返しの中では i が 1, 2, 3, 4 と変わります。その i をそのまま関数にわたせば、1, 4, 9, 16 が順に返ってきます",
     },
+    q062: {
+        title: "2つの値を入れかえる（席のこうかん）",
+        addedAt: "2026-09-08",
+        difficulty: 2,
+        question: "AさんとBさんの席をこうかんします。いま seki_a には 3、seki_b には 8 が入っています。これを入れかえて、Aさんが8番、Bさんが3番になるようにしよう。いきなり seki_a = seki_b としてしまうと、もとの 3 が上書きされて消えてしまうので、先に temp という別の箱にどけておきます。2か所の空らんにあてはまる変数を選ぼう",
+        ast: [
+            {
+                type: "assign",
+                name: "seki_a",
+                value: "3"
+            },
+            {
+                type: "assign",
+                name: "seki_b",
+                value: "8"
+            },
+            {
+                type: "assign",
+                name: "temp",
+                value: "__BLANK_blank_a__"
+            },
+            {
+                type: "assign",
+                name: "seki_a",
+                value: "seki_b"
+            },
+            {
+                type: "assign",
+                name: "seki_b",
+                value: "__BLANK_blank_b__"
+            },
+            {
+                type: "print",
+                value: "\"Aさんの席は\" + seki_a + \"番\""
+            },
+            {
+                type: "print",
+                value: "\"Bさんの席は\" + seki_b + \"番\""
+            }
+        ],
+        choices: [
+            { label: "seki_a", value: "seki_a" },
+            { label: "seki_b", value: "seki_b" },
+            { label: "temp", value: "temp" }
+        ],
+        answers: [
+            {
+                values: ["seki_a", "temp"],
+                correct: true
+            },
+            {
+                values: ["seki_a", "seki_a"],
+                correct: false,
+                hint: "temp に 3 をどけたところまでは正解です。でも seki_b = seki_a を実行する時点では、その1つ前の行で seki_a が 8 に書きかわっています。だから seki_b にも 8 が入り、2人とも8番になってしまいます。使うのは、どけておいた temp です"
+            },
+            {
+                values: ["seki_a", "seki_b"],
+                correct: false,
+                hint: "seki_b = seki_b は「自分に自分を入れる」ので、seki_b は 8 のまま何も変わりません。seki_a も 8 になっているので2人とも8番です。3 が入っているのは temp なので、temp を入れましょう"
+            },
+            {
+                values: ["seki_b", "temp"],
+                correct: false,
+                hint: "どけておきたいのは、これから上書きされてしまう seki_a の 3 のほうです。temp = seki_b にすると temp は 8 になり、最後に seki_b = temp としても 8 が戻るだけ。3 はどこにも残らず消えてしまいます"
+            },
+            {
+                values: ["seki_b", "seki_a"],
+                correct: false,
+                hint: "temp に 8 をどけても、seki_a = seki_b で 3 は上書きされて消えます。そのあと seki_b = seki_a とすると 8 が入り、2人とも8番です。消える前の 3 を temp にどけておくのがコツです"
+            },
+            {
+                values: ["seki_b", "seki_b"],
+                correct: false,
+                hint: "temp を使わずに素通りしている形です。seki_a は 8 になり、seki_b は 8 のまま。2人とも8番になってしまいます。先に temp = seki_a として 3 を守っておきましょう"
+            },
+            {
+                values: ["temp", "temp"],
+                correct: false,
+                hint: "1つ目の temp = temp は、まだ何も入っていない箱を自分に入れているだけで、意味がありません。ここでは、これから消えてしまう seki_a の 3 を temp にどけます"
+            },
+            {
+                values: ["temp", "seki_a"],
+                correct: false,
+                hint: "temp = temp では 3 をどけられません。さらに seki_b = seki_a としても、seki_a はすでに 8 になっているので2人とも8番です。1つ目は seki_a、2つ目は temp にしましょう"
+            },
+            {
+                values: ["temp", "seki_b"],
+                correct: false,
+                hint: "どちらの行も値が動いていません。seki_a だけが 8 に上書きされて、2人とも8番になります。入れかえには「①どける ②上書き ③どけた値を戻す」の3段階が必要です"
+            }
+        ],
+        defaultHint: "入れかえは3段階です。①temp = seki_a で 3 を temp にどける ②seki_a = seki_b で seki_a を 8 にする（ここで seki_a のもとの 3 は消える）③seki_b = temp で、どけておいた 3 を seki_b に入れる。②のあとに seki_a を使っても、もう 3 は残っていないことに注意しよう",
+    },
 }
