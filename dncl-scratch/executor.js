@@ -2671,7 +2671,7 @@ function buildCallEnterExplanation(fn, result, scope) {
     const rows = [];
 
     if (fn.params.length === 0) {
-        rows.push(`${calcToken(fn.name)}${open}${calcToken("引数なし")}${close}`);
+        rows.push(`${calcToken(fn.name)}${open}${close}`);
     } else {
         const argsHtml = fn.params
             .map((_, i) => argValueHtml(argExprs[i] ?? "", argValues[i] ?? 0, scope, i))

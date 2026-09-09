@@ -655,13 +655,6 @@ select.call-name {
     white-space: nowrap;
 }
 
-.arg-list:empty::before {
-    content: "引数なし";
-    color: #8a97a8;
-    font-size: 12px;
-    padding: 0 4px;
-}
-
 /* 関数（定義・戻り値・呼び出し） */
 .block[data-type="func"] {
     --block-bg: #3f7f8c;
