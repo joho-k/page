@@ -139,6 +139,35 @@ async function captureProgram(page, base, id) {
         });
     });
 
+    // マス目の多い配列（A〜Z の26マスなど）は、撮影中だけ途中を「…」に省略する。
+    // そのまま撮ると横に長くなりすぎて、プログラム全体が縮んで読めなくなるため。
+    await page.evaluate(() => {
+        const KEEP_HEAD = 3;
+        const KEEP_TAIL = 3;
+        const commaBefore = (cell) => {
+            const prev = cell.previousElementSibling;
+            return prev && prev.classList.contains("array2d-comma") ? prev : null;
+        };
+
+        document.querySelectorAll(".array2d-row-items").forEach((items) => {
+            const cells = [...items.querySelectorAll("input.array2d-cell")];
+            if (cells.length <= KEEP_HEAD + KEEP_TAIL + 2) return;
+
+            const hidden = cells.slice(KEEP_HEAD, cells.length - KEEP_TAIL);
+            // 「…」を差しこむ前に、消すカンマを控えておく（差しこむと隣が変わるため）
+            const commas = hidden.map(commaBefore);
+
+            const dots = document.createElement("span");
+            dots.className = "array2d-comma";
+            dots.textContent = "…";
+            items.insertBefore(dots, hidden[0]);
+
+            // 「…」の手前のカンマだけ残し、省略するマスとそのカンマは消す
+            hidden.forEach((cell) => cell.remove());
+            commas.slice(1).forEach((comma) => comma?.remove());
+        });
+    });
+
     // パネルのスクロールで見切れないよう、撮影中だけ高さ制限を外す
     await page.evaluate(() => {
         const panel = document.getElementById("workspace-panel");
