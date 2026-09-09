@@ -3940,4 +3940,92 @@ window.quizData = {
         ],
         defaultHint: "abc[1 - 1] が A、abc[26 - 1] が Z です。番号が1〜26の間にあれば、そのままアルファベットに直せます。W（23番目）は 23+3 ＝ 26 で Z のままでよく、X（24番目）は 24+3 ＝ 27 と26をこえるので 27-26 ＝ 1、つまり A にもどります。「こえたとき」だけ折り返すので、条件は >= ではなく > です"
     },
+    q052: {
+        title: "じゃんけんの勝ち負け（3つでひとまわり）",
+        addedAt: "2026-09-03",
+        difficulty: 4,
+        question: "じゃんけんの手を グー＝0、チョキ＝1、パー＝2 という数字で表します。Aさんはパー（2）、Bさんはグー（0）を出しました。グー→チョキ→パー→グー…と3つの手はひとまわりしているので、sa ＝ te_a - te_b + 3 を3でわったあまり kekka を見ると、0のときはあいこ、そうでないときは勝ち負けが決まります。Aさんの勝ちになるのは kekka がいくつのときかな",
+        ast: [
+            {
+                type: "assign",
+                name: "te_a",
+                value: "2"
+            },
+            {
+                type: "assign",
+                name: "te_b",
+                value: "0"
+            },
+            {
+                type: "assign",
+                name: "sa",
+                value: "te_a - te_b + 3"
+            },
+            {
+                type: "assign",
+                name: "kekka",
+                value: "sa % 3"
+            },
+            {
+                type: "print",
+                value: "\"kekkaは\" + kekka + \"です\""
+            },
+            {
+                type: "ifelse",
+                condition: "kekka == 0",
+                ifBody: [
+                    {
+                        type: "print",
+                        value: "\"あいこ\""
+                    }
+                ],
+                elseBody: [
+                    {
+                        type: "ifelse",
+                        condition: "kekka == __BLANK_blank_a__",
+                        ifBody: [
+                            {
+                                type: "print",
+                                value: "\"Aさんの勝ち\""
+                            }
+                        ],
+                        elseBody: [
+                            {
+                                type: "print",
+                                value: "\"Bさんの勝ち\""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        choices: [
+            { label: "0", value: "0" },
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+            { label: "3", value: "3" },
+        ],
+        answers: [
+            {
+                values: ["2"],
+                correct: true,
+            },
+            {
+                values: ["1"],
+                correct: false,
+                hint: "kekka は 5 % 3 ＝ 2 になるので、kekka == 1 は成り立たず「Bさんの勝ち」と表示されてしまいます。でもパー（2）はグー（0）に勝ちます。グーがチョキに勝つとき（2-1+3）% 3、チョキがパーに勝つとき（1-2+3）% 3 もどちらも 2 です。Aさんが勝つ番号は 2 のほうです",
+            },
+            {
+                values: ["3"],
+                correct: false,
+                hint: "3 でわったあまりは 0・1・2 のどれかにしかならないので、kekka == 3 は一生成り立ちません。だれが何を出しても「Bさんの勝ち」になってしまいます。あまりとしてありえる 2 を選びましょう",
+            },
+            {
+                values: ["0"],
+                correct: false,
+                hint: "kekka == 0 のときは、ひとつ外側の「もし」ですでに「あいこ」と表示されています。だから内側にもう一度 0 と書いても、そこには絶対にたどりつきません。ここに書くのはAさんが勝つときの番号 2 です",
+            }
+        ],
+        defaultHint: "グー（0）→チョキ（1）→パー（2）→グー…と手は3つでひとまわりします。Aさんはパー（2）、Bさんはグー（0）なので sa ＝ 2 - 0 + 3 ＝ 5。これを 3 でわったあまりにすると 5 % 3 ＝ 2 です。じつは「グーがチョキに勝つ」「チョキがパーに勝つ」ときも同じ 2 になるので、kekka が 2 のときがAさんの勝ちです"
+    },
 }
