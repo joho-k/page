@@ -373,7 +373,9 @@ function inputDisplayWidth(value) {
 
 function autoResizeInput(input) {
     const resize = () => {
-        if (input.classList.contains("assign-value")) {
+        // 代入の値は枠いっぱいに広げる。ただし空欄（？）だけは中身に合わせて小さくする
+        // （juni = ？ のように、答えが1文字なのに横長の箱になってしまうのを防ぐ）。
+        if (input.classList.contains("assign-value") && !input.classList.contains("quiz-blank")) {
             input.style.width = "100%";
             return;
         }
@@ -2254,6 +2256,8 @@ function setInputMaybeBlank(input, raw) {
     input.dataset.blankIndex = String(blankId);
     input.readOnly = true;
     input.classList.add("quiz-blank");
+    // 空欄になったことが分かってから幅を測りなおす（代入の値は 100% ではなく中身に合わせる）
+    input.dispatchEvent(new Event("input"));
 }
 
 function parseSimpleBinaryExpr(raw) {
