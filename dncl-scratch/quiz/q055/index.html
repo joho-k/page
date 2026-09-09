@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第55問 いちばん安いのはいくら？（最小値をさがす）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="5つの店の値段を配列 nedan（＝[320,280,350,260,300]）に入れました。この中でいちばん安い値段を見つけて表示しよう。saiyasu に「今のところ一番安い値段」を入れておき、店を1つずつ見ながら、それより安ければ saiyasu を入れかえます。1つ目の店はもう saiyasu に入っているので、くり返しは i ＝ 1（2つ目の店）から始めます。ポイントは saiyasu の最初の値です。合計を数えるときのように 0 から始めてよいか、よく考えよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,いちばん安いのはいくら？（最小値をさがす）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q055/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第55問 いちばん安いのはいくら？（最小値をさがす）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="5つの店の値段を配列 nedan（＝[320,280,350,260,300]）に入れました。この中でいちばん安い値段を見つけて表示しよう。saiyasu に「今のところ一番安い値段」を入れておき、店を1つずつ見ながら、それより安ければ saiyasu を入れかえます。1つ目の店はもう saiyasu に入っているので、くり返しは i ＝ 1（2つ目の店）から始めます。ポイントは saiyasu の最初の値です。合計を数えるときのように 0 から始めてよいか、よく考えよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q055/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q055.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第55問 いちばん安いのはいくら？（最小値をさがす）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="5つの店の値段を配列 nedan（＝[320,280,350,260,300]）に入れました。この中でいちばん安い値段を見つけて表示しよう。saiyasu に「今のところ一番安い値段」を入れておき、店を1つずつ見ながら、それより安ければ saiyasu を入れかえます。1つ目の店はもう saiyasu に入っているので、くり返しは i ＝ 1（2つ目の店）から始めます。ポイントは saiyasu の最初の値です。合計を数えるときのように 0 から始めてよいか、よく考えよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q055.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q055/index.html#quiz",
+      "name": "第55問 いちばん安いのはいくら？（最小値をさがす）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q055/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "5つの店の値段を配列 nedan（＝[320,280,350,260,300]）に入れました。この中でいちばん安い値段を見つけて表示しよう。saiyasu に「今のところ一番安い値段」を入れておき、店を1つずつ見ながら、それより安ければ saiyasu を入れかえます。1つ目の店はもう saiyasu に入っているので、くり返しは i ＝ 1（2つ目の店）から始めます。ポイントは saiyasu の最初の値です。合計を数えるときのように 0 から始めてよいか、よく考えよう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "nedan[0] , <"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "0"
+          },
+          {
+            "@type": "Answer",
+            "text": "100"
+          },
+          {
+            "@type": "Answer",
+            "text": "nedan[0]"
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": "=="
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第55問 いちばん安いのはいくら？（最小値をさがす）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q055/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q055";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第55問 いちばん安いのはいくら？（最小値をさがす）</h1>
+            <p>5つの店の値段を配列 nedan（＝[320,280,350,260,300]）に入れました。この中でいちばん安い値段を見つけて表示しよう。saiyasu に「今のところ一番安い値段」を入れておき、店を1つずつ見ながら、それより安ければ saiyasu を入れかえます。1つ目の店はもう saiyasu に入っているので、くり返しは i ＝ 1（2つ目の店）から始めます。ポイントは saiyasu の最初の値です。合計を数えるときのように 0 から始めてよいか、よく考えよう（2か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>nedan = [320,280,350,260,300]
+saiyasu = ［A］
+i を 1 から 4 まで 1 ずつ増やしながら繰り返す:
+  もし nedan[i] ［B］ saiyasu ならば:
+    saiyasu = nedan[i]
+表示する(&quot;いちばん安いのは&quot; + saiyasu + &quot;円です&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>0</code></li>
+                <li><code>100</code></li>
+                <li><code>nedan[0]</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>&gt;</code></li>
+                <li><code>==</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>最小値さがしは「まず1つ目を仮のチャンピオンにして、あとから来た相手が強ければ（安ければ）入れかえる」と考えます。だから saiyasu = nedan[0] から始め、くらべる相手は2つ目（i ＝ 1）から。もし nedan[i] &lt; saiyasu なら入れかえます。合計のように 0 から始めると、0 より安い店は無いので 0 のまま終わってしまいます。答えは 260 円です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>nedan[0]</code></li>
+            <li>空欄 ［B］ … <code>&lt;</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>nedan[0]</code>　［B］<code>&gt;</code> … スタートの値は正しいのですが、&gt; だと「今より高ければ入れかえる」になり、いちばん高い 350 円が残ってしまいます。さがしたいのは安い方なので、&lt; を使って「今より安ければ入れかえる」にしましょう</li>
+            <li>［A］<code>nedan[0]</code>　［B］<code>==</code> … == は「等しいか」を調べる記号なので、安いか高いかをくらべられません。320 円とちょうど同じ値段の店は2つ目から先にないので、入れかえは一度も起きず、saiyasu は 320 のまま終わります</li>
+            <li>［A］<code>0</code>　［B］<code>&lt;</code> … 合計を数えるときのくせで 0 から始めると失敗します。0 より安い店は1つもないので、if の中が一度も実行されず、答えは 0 円のままです。最初は「1つ目の店の値段」＝ nedan[0] を入れておきましょう</li>
+            <li>［A］<code>0</code>　［B］<code>&gt;</code> … 2か所とも違います。0 から始めて &gt; でくらべると、どの店も 0 より高いので入れかえが起こり続け、最後にはいちばん高い 350 円が残ります</li>
+            <li>［A］<code>0</code>　［B］<code>==</code> … 0 と等しい値段の店はないので、if の中は一度も実行されません。答えは 0 円のままです。最初の値は nedan[0]、くらべる記号は &lt; です</li>
+            <li>［A］<code>100</code>　［B］<code>&lt;</code> … 100 は「どの店よりも安い値段」なので、100 より安い店が見つからず、答えは 100 円になってしまいます。実際には売っていない値段を勝手に置くのではなく、nedan[0] を入れておくのが確実です</li>
+            <li>［A］<code>100</code>　［B］<code>&gt;</code> … 2か所とも違います。100 から始めて &gt; でくらべると、どの店も 100 より高いので入れかわり続け、いちばん高い 350 円が残ります</li>
+            <li>［A］<code>100</code>　［B］<code>==</code> … ちょうど 100 円の店はないので入れかえが起こらず、答えは 100 円のままです。最初は nedan[0]（＝320）を入れ、&lt; で「もっと安い店」をさがしましょう</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q054/index.html">第54問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
