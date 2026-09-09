@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第53問 同じ点なら同じ順位（テストの順位づけ）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="4人のテストの点数 ten（＝[70, 90, 80, 90]）を、一人ずつ「何位か」に直して表示しよう。順位は「自分より高い点の人が何人いるか」を数えて、その人数に1をたせば求められます。同じ点の人は同じ順位（90点は2人とも1位で、2位はいない）になるようにしよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,同じ点なら同じ順位（テストの順位づけ）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第53問 同じ点なら同じ順位（テストの順位づけ）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="4人のテストの点数 ten（＝[70, 90, 80, 90]）を、一人ずつ「何位か」に直して表示しよう。順位は「自分より高い点の人が何人いるか」を数えて、その人数に1をたせば求められます。同じ点の人は同じ順位（90点は2人とも1位で、2位はいない）になるようにしよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q053.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第53問 同じ点なら同じ順位（テストの順位づけ）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="4人のテストの点数 ten（＝[70, 90, 80, 90]）を、一人ずつ「何位か」に直して表示しよう。順位は「自分より高い点の人が何人いるか」を数えて、その人数に1をたせば求められます。同じ点の人は同じ順位（90点は2人とも1位で、2位はいない）になるようにしよう（3か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q053.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html#quiz",
+      "name": "第53問 同じ点なら同じ順位（テストの順位づけ）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "4人のテストの点数 ten（＝[70, 90, 80, 90]）を、一人ずつ「何位か」に直して表示しよう。順位は「自分より高い点の人が何人いるか」を数えて、その人数に1をたせば求められます。同じ点の人は同じ順位（90点は2人とも1位で、2位はいない）になるようにしよう（3か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "1 , > , +"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "0"
+          },
+          {
+            "@type": "Answer",
+            "text": "1"
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": ">="
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第53問 同じ点なら同じ順位（テストの順位づけ）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q053/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q053";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第53問 同じ点なら同じ順位（テストの順位づけ）</h1>
+            <p>4人のテストの点数 ten（＝[70, 90, 80, 90]）を、一人ずつ「何位か」に直して表示しよう。順位は「自分より高い点の人が何人いるか」を数えて、その人数に1をたせば求められます。同じ点の人は同じ順位（90点は2人とも1位で、2位はいない）になるようにしよう（3か所の穴をうめよう）</p>
+            <p>難易度：★★★★★（5／難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>ten = [70,90,80,90]
+i を 0 から 3 まで 1 ずつ増やしながら繰り返す:
+  juni = ［A］
+  j を 0 から 3 まで 1 ずつ増やしながら繰り返す:
+    もし ten[j] ［B］ ten[i] ならば:
+      juni = juni ［C］ 1
+  表示する(ten[i] + &quot;点は&quot; + juni + &quot;位&quot;)</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>0</code></li>
+                <li><code>1</code></li>
+                <li><code>&gt;</code></li>
+                <li><code>&gt;=</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>順位は「自分より上に何人いるか ＋ 1」で求まります。だから juni は 1 からスタートし、内側のくり返しでは「自分より高い点（ten[j] &gt; ten[i]）」の人だけを 1 ずつプラスして数えます。= を入れないのがポイントで、同じ点の人はお互いを数えないので自然と同じ順位になります</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>1</code></li>
+            <li>空欄 ［B］ … <code>&gt;</code></li>
+            <li>空欄 ［C］ … <code>+</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>0</code>　［B］<code>&gt;</code>　［C］<code>+</code> … 数え方は合っていますが、スタートが1つずれています。1番高い人は、自分より高い人が0人なので juni が 0 のままになり、90点が「0位」と出てしまいます。順位は1位から始まるので、最初に入れておくのは 1 です</li>
+            <li>［A］<code>1</code>　［B］<code>&gt;=</code>　［C］<code>+</code> … &gt;= にすると「自分と同じ点」も数えてしまいます。j は自分自身も通るので、どの人も必ず1人分多く数えて 70点は5位。さらに90点は2人いてお互いを数えあうので、2人とも3位になってしまいます。数えたいのは「自分より高い人」だけなので &gt; を使います</li>
+            <li>［A］<code>1</code>　［B］<code>&lt;</code>　［C］<code>+</code> … &lt; だと「自分より低い人」を数えてしまうので、順番が逆さまになります。一番高い 90点が 3位、一番低い 70点が 1位 と出てしまいます。上に何人いるかを数えたいので &gt; です</li>
+            <li>［A］<code>1</code>　［B］<code>&gt;</code>　［C］<code>-</code> … 人数を数えるのにひき算にしています。juni は 1 から始まるので、高い人が見つかるたびに 0、-1、-2 と減ってしまい、70点が「-2位」と出ます。1人見つかるごとに順位は下がる（数字は大きくなる）ので + です</li>
+            <li>［A］<code>0</code>　［B］<code>&gt;=</code>　［C］<code>+</code> … &gt;= で自分自身を余分に1人数えるぶんを、スタートの 0 が打ち消しています。点数がばらばらならこれでも合いますが、同じ点の人がいるとお互いを数えあってずれます。90点は2人とも2位になり、1位がいなくなってしまいます。「juni は1位からスタート」「数えるのは自分より高い人だけ（&gt;）」が正しい組み合わせです</li>
+            <li>［A］<code>0</code>　［B］<code>&lt;</code>　［C］<code>+</code> … どちらもちがいます。&lt; だと低い人を数えて順番が逆さまになり、スタートが 0 なので「0位」が出てしまいます。juni は 1 から始め、自分より高い人（&gt;）を数えましょう</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q052/index.html">第52問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
