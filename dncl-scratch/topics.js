@@ -50,8 +50,8 @@
             lead: "同じ種類の値をまとめて入れて、番号で取り出す。",
             example: "ten = [72,85,80,90,58,88]\n表示する(ten[0])",
             pitfall: "番号は0から始まる。6個入っていても最後は ten[5] で、ten[6] は無い。",
-            video: null,
-            videoLabel: null,
+            video: "IHeEIbfMA3Q",
+            videoLabel: "第4回 配列",
         },
         {
             id: "function",
@@ -59,8 +59,8 @@
             lead: "よく使う処理に名前をつけて、何度でも呼び出す。",
             example: "関数 tashizan(a, b):\n  a + b を返す\n\nkekka = tashizan(4, 3)\n表示する(kekka)",
             pitfall: "引数の名前（a, b）は関数の中だけのもの。呼び出す側の変数名とそろえる必要はないし、関数の中で書きかえても呼び出す側は変わらない。",
-            video: null,
-            videoLabel: null,
+            video: "gN3RKryVn18",
+            videoLabel: "第5回 関数",
         },
     ];
 
