@@ -804,6 +804,14 @@ select.call-name {
     display: none;
 }
 
+/* 代入の値が空欄（？）のときは、点線のわくも中身に合わせて縮める。
+   広いわくの真ん中に「？」がぽつんと浮くのを防ぐ（カード画像でも読みやすくする）。 */
+.block[data-type="assign"] .expr-zone:has(> .assign-value.quiz-blank) {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+}
+
 .block[data-type="assign"] .expr-zone .placeholder {
     display: block;
     width: 100%;
