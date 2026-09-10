@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第56問 40%で当たるおみくじ｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="「当たりが出る確率40%」のおみくじを作ろう。関数 omikuji は、乱数を使って 1 から 10 までのどれかの数を r に入れ、r が当たりの範囲におさまっていれば「当たり」、そうでなければ「はずれ」を返します。10個の数のうち4個が当たりになれば40%です。omikuji には当たりの個数を wariai としてわたします。2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,関数,40%で当たるおみくじ">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q056/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第56問 40%で当たるおみくじ｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="「当たりが出る確率40%」のおみくじを作ろう。関数 omikuji は、乱数を使って 1 から 10 までのどれかの数を r に入れ、r が当たりの範囲におさまっていれば「当たり」、そうでなければ「はずれ」を返します。10個の数のうち4個が当たりになれば40%です。omikuji には当たりの個数を wariai としてわたします。2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q056/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q056.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第56問 40%で当たるおみくじ｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="「当たりが出る確率40%」のおみくじを作ろう。関数 omikuji は、乱数を使って 1 から 10 までのどれかの数を r に入れ、r が当たりの範囲におさまっていれば「当たり」、そうでなければ「はずれ」を返します。10個の数のうち4個が当たりになれば40%です。omikuji には当たりの個数を wariai としてわたします。2か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q056.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q056/index.html#quiz",
+      "name": "第56問 40%で当たるおみくじ",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q056/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 関数",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "「当たりが出る確率40%」のおみくじを作ろう。関数 omikuji は、乱数を使って 1 から 10 までのどれかの数を r に入れ、r が当たりの範囲におさまっていれば「当たり」、そうでなければ「はずれ」を返します。10個の数のうち4個が当たりになれば40%です。omikuji には当たりの個数を wariai としてわたします。2か所の穴をうめよう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<= , 4"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "<="
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": ">="
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": "4"
+          },
+          {
+            "@type": "Answer",
+            "text": "10"
+          },
+          {
+            "@type": "Answer",
+            "text": "40"
+          },
+          {
+            "@type": "Answer",
+            "text": "0.4"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第56問 40%で当たるおみくじ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q056/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q056";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第56問 40%で当たるおみくじ</h1>
+            <p>「当たりが出る確率40%」のおみくじを作ろう。関数 omikuji は、乱数を使って 1 から 10 までのどれかの数を r に入れ、r が当たりの範囲におさまっていれば「当たり」、そうでなければ「はずれ」を返します。10個の数のうち4個が当たりになれば40%です。omikuji には当たりの個数を wariai としてわたします。2か所の穴をうめよう</p>
+            <p>難易度：★★★★☆（4／やや難しい）。単元：条件分岐・繰り返し・関数。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>関数 omikuji(wariai):
+  r = 切り捨て(乱数() * 10) + 1
+  もし r ［A］ wariai ならば:
+    &quot;当たり&quot; を返す
+  &quot;はずれ&quot; を返す
+i を 1 から 5 まで 1 ずつ増やしながら繰り返す:
+  kekka = omikuji(［B］)
+  表示する(i + &quot;回目は&quot; + kekka)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>&lt;=</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>&gt;=</code></li>
+                <li><code>&gt;</code></li>
+                <li><code>4</code></li>
+                <li><code>10</code></li>
+                <li><code>40</code></li>
+                <li><code>0.4</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>切り捨て(乱数() * 10) + 1 は、1 から 10 までのどれかの数を作ります。10個のうち4個が当たりなら 4 わる 10 で40%。だから 1・2・3・4 を当たりにすればよく、4 もふくめるので r &lt;= 4、つまり wariai には 4 をわたします。乱数を使っているので実行するたびに結果は変わりますが、何回もためすと4割くらいが「当たり」になります</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>&lt;=</code></li>
+            <li>空欄 ［B］ … <code>4</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>&lt;</code>　［B］<code>4</code> … &lt; だと当たりになるのは 1・2・3 の3個だけで、30%になってしまいます。4 も当たりにふくめたいので、「以下」の &lt;= を使います</li>
+            <li>［A］<code>&gt;=</code>　［B］<code>4</code> … 向きが逆です。&gt;= だと 4・5・6・7・8・9・10 の7個が当たりになり、70%になってしまいます。当たりにしたいのは小さいほうの4個なので &lt;= です</li>
+            <li>［A］<code>&gt;</code>　［B］<code>4</code> … 向きが逆です。&gt; だと 5 から 10 までの6個が当たりになり、60%になってしまいます。1 から 4 までを当たりにする &lt;= を使います</li>
+            <li>［A］<code>&lt;=</code>　［B］<code>40</code> … 40% の「40」をそのまま入れたくなりますが、r は 1 から 10 までの数です。r &lt;= 40 はいつでも成り立つので、10回中10回とも当たり＝100%になってしまいます。10個のうち何個を当たりにするかを考えて、4 を入れましょう</li>
+            <li>［A］<code>&lt;=</code>　［B］<code>0.4</code> … 0.4 は「40%」を小数にしたものですが、r は 1 から 10 までの整数です。r &lt;= 0.4 はいちども成り立たず、ぜんぶ「はずれ」になってしまいます。1 から 10 のうち4個を当たりにするので 4 です</li>
+            <li>［A］<code>&lt;=</code>　［B］<code>10</code> … r は必ず 10 以下なので、r &lt;= 10 はいつでも成り立ちます。10回中10回とも当たり＝100%です。10個のうち4個だけを当たりにしたいので 4 を入れます</li>
+            <li>［A］<code>&lt;</code>　［B］<code>10</code> … 2か所ちがいます。r &lt; 10 だと 1 から 9 までの9個が当たりで90%です。当たりの個数は 4、そして 4 ちょうども当たりにふくめるので &lt;= を使います</li>
+            <li>［A］<code>&gt;</code>　［B］<code>40</code> … 2か所ちがいます。r &gt; 40 になる r はないので、ぜんぶ「はずれ」です。1 から 4 までを当たりにする &lt;= と 4 の組み合わせにしましょう</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/gN3RKryVn18">第5回 関数</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q055/index.html">第55問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=function#problems">関数の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
