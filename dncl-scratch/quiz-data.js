@@ -4315,4 +4315,90 @@ window.quizData = {
         ],
         defaultHint: "最小値さがしは「まず1つ目を仮のチャンピオンにして、あとから来た相手が強ければ（安ければ）入れかえる」と考えます。だから saiyasu = nedan[0] から始め、くらべる相手は2つ目（i ＝ 1）から。もし nedan[i] < saiyasu なら入れかえます。合計のように 0 から始めると、0 より安い店は無いので 0 のまま終わってしまいます。答えは 260 円です"
     },
+    q056: {
+        title: "無回答をのぞいて平均を出す（アンケートの集計）",
+        addedAt: "2026-09-10",
+        difficulty: 4,
+        question: "6人に「授業の満足度」を5段階（1〜5）でたずね、答えを配列 kotae（＝[4,5,-1,3,-1,4]）に入れました。-1 は「無回答」というしるしで、点数ではありません。無回答の人をとばして、答えた人だけの平均点を出そう。goukei には答えた人の点数の合計、ninzu には答えた人の人数を数えていきます。最後にわる数を何にするかがポイントです（3か所の穴をうめよう）",
+        ast: [
+            { type: "assign", name: "kotae", value: "[4,5,-1,3,-1,4]" },
+            { type: "assign", name: "goukei", value: "0" },
+            { type: "assign", name: "ninzu", value: "0" },
+            {
+                type: "for",
+                varName: "i",
+                start: "0",
+                end: "5",
+                step: "1",
+                body: [
+                    {
+                        type: "if",
+                        condition: "kotae[i] __BLANK_blank_a__ 0",
+                        body: [
+                            { type: "assign", name: "goukei", value: "goukei + __BLANK_blank_b__" },
+                            { type: "assign", name: "ninzu", value: "ninzu + 1" },
+                        ],
+                    },
+                ],
+            },
+            { type: "assign", name: "heikin", value: "goukei / __BLANK_blank_c__" },
+            { type: "print", value: "\"答えた人は\" + ninzu + \"人、平均は\" + heikin + \"点です\"" },
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: "<", value: "<" },
+            { label: "!=", value: "!=" },
+            { label: "kotae[i]", value: "kotae[i]" },
+            { label: "1", value: "1" },
+            { label: "6", value: "6" },
+            { label: "ninzu", value: "ninzu" },
+        ],
+        answers: [
+            {
+                values: [">", "kotae[i]", "ninzu"],
+                correct: true,
+            },
+            {
+                values: [">", "kotae[i]", "6"],
+                correct: false,
+                hint: "無回答をとばすところまでは正しく、goukei は 16、ninzu は 4 になります。ところが最後を 6 でわると 16 ÷ 6 ＝ 2.66… となり、答えていない2人まで「0点の人」として数えたのと同じことになってしまいます。平均は「合計 ÷ 答えた人数」なので、わる数は ninzu です",
+            },
+            {
+                values: [">", "1", "ninzu"],
+                correct: false,
+                hint: "goukei に 1 をたしていくと、点数ではなく人数を数えることになります。goukei も ninzu も 4 になり、平均は 4 ÷ 4 ＝ 1 点。合計にたすのは、その人の答えた点数 kotae[i] です",
+            },
+            {
+                values: [">", "6", "ninzu"],
+                correct: false,
+                hint: "6 は人数であって点数ではありません。答えた4人ぶん 6 ずつたして goukei は 24 になり、平均は 24 ÷ 4 ＝ 6 点。5段階のアンケートなのに6点という、ありえない答えになります。たすのは kotae[i] です",
+            },
+            {
+                values: ["!=", "kotae[i]", "ninzu"],
+                correct: false,
+                hint: "kotae[i] != 0 は「0ではないとき」という意味です。-1 も 0 ではないので、無回答の2人もそのまま合計に入ってしまいます。goukei は 16 - 2 ＝ 14、ninzu は 6 になり、平均は 2.33… 点。点数として使えるのは1以上の値なので、kotae[i] > 0 でふるいわけます",
+            },
+            {
+                values: ["!=", "kotae[i]", "6"],
+                correct: false,
+                hint: "2か所ちがいます。!= 0 では -1 の人も数に入ってしまい、さらに 6 でわると「無回答の人も答えた」ことになります。正しくは kotae[i] > 0 で答えた人だけを選び、その人数 ninzu でわります",
+            },
+            {
+                values: ["<", "kotae[i]", "ninzu"],
+                correct: false,
+                hint: "< だと「0より小さい人」＝無回答の人だけを集めることになります。goukei は -2、ninzu は 2 で、平均は -1 点。とりたいのは無回答ではなく、答えた人の方なので > を使います",
+            },
+            {
+                values: ["<", "1", "6"],
+                correct: false,
+                hint: "3か所ともちがいます。答えた人を選ぶのは kotae[i] > 0、合計にたすのはその人の点数 kotae[i]、最後にわるのは答えた人数 ninzu です",
+            },
+            {
+                values: [">", "kotae[i]", "1"],
+                correct: false,
+                hint: "1 でわっても数は変わらないので、平均ではなく合計の 16 がそのまま表示されます。平均を出すには、合計を「答えた人数」でわる必要があります。その人数は ninzu に数えてあります",
+            },
+        ],
+        defaultHint: "アンケートには「無回答」がまざることがあり、-1 のような点数にならない値でしるしを付けます。これをそのまま計算に入れると平均がくるってしまうので、まず kotae[i] > 0 で「答えた人」だけを選びます。えらんだ人の点数を goukei にたし、同時に ninzu で人数を数えておくのがコツ。最後は goukei / ninzu、つまり「合計 ÷ 答えた人数」でわります。全体の6人でわらないように気をつけよう。答えは、答えた人が4人、平均は4点です",
+    },
 }
