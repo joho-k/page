@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第57問 60を素数のかけ算に分ける（素因数分解）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="60 を素数のかけ算（60 ＝ 2 × 2 × 3 × 5）に分ける「素因数分解」をしよう。割る数 d を 2 から始めて、n が d で割り切れたら d を表示し、n を d で割った答えに置きかえます。割り切れなければ d を 1 ふやします。割り切れたときは d をふやさず、同じ d でもう一度割れるか調べるのがポイントです。2, 2, 3, 5 と最後の 5 まで表示されるように、くり返しの条件にも気をつけて3か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,60を素数のかけ算に分ける（素因数分解）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第57問 60を素数のかけ算に分ける（素因数分解）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="60 を素数のかけ算（60 ＝ 2 × 2 × 3 × 5）に分ける「素因数分解」をしよう。割る数 d を 2 から始めて、n が d で割り切れたら d を表示し、n を d で割った答えに置きかえます。割り切れなければ d を 1 ふやします。割り切れたときは d をふやさず、同じ d でもう一度割れるか調べるのがポイントです。2, 2, 3, 5 と最後の 5 まで表示されるように、くり返しの条件にも気をつけて3か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q057.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第57問 60を素数のかけ算に分ける（素因数分解）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="60 を素数のかけ算（60 ＝ 2 × 2 × 3 × 5）に分ける「素因数分解」をしよう。割る数 d を 2 から始めて、n が d で割り切れたら d を表示し、n を d で割った答えに置きかえます。割り切れなければ d を 1 ふやします。割り切れたときは d をふやさず、同じ d でもう一度割れるか調べるのがポイントです。2, 2, 3, 5 と最後の 5 まで表示されるように、くり返しの条件にも気をつけて3か所の穴をうめよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q057.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html#quiz",
+      "name": "第57問 60を素数のかけ算に分ける（素因数分解）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "60 を素数のかけ算（60 ＝ 2 × 2 × 3 × 5）に分ける「素因数分解」をしよう。割る数 d を 2 から始めて、n が d で割り切れたら d を表示し、n を d で割った答えに置きかえます。割り切れなければ d を 1 ふやします。割り切れたときは d をふやさず、同じ d でもう一度割れるか調べるのがポイントです。2, 2, 3, 5 と最後の 5 まで表示されるように、くり返しの条件にも気をつけて3か所の穴をうめよう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<= , % , /"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "%"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": "<="
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第57問 60を素数のかけ算に分ける（素因数分解）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q057";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第57問 60を素数のかけ算に分ける（素因数分解）</h1>
+            <p>60 を素数のかけ算（60 ＝ 2 × 2 × 3 × 5）に分ける「素因数分解」をしよう。割る数 d を 2 から始めて、n が d で割り切れたら d を表示し、n を d で割った答えに置きかえます。割り切れなければ d を 1 ふやします。割り切れたときは d をふやさず、同じ d でもう一度割れるか調べるのがポイントです。2, 2, 3, 5 と最後の 5 まで表示されるように、くり返しの条件にも気をつけて3か所の穴をうめよう</p>
+            <p>難易度：★★★★★（5／難しい）。単元：条件分岐・繰り返し。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>n = 60
+d = 2
+d ［A］ n の間繰り返す:
+  amari = n ［B］ d
+  もし amari == 0 ならば:
+    表示する(d)
+    n = n ［C］ d
+  そうでなければ:
+    d = d + 1</code></pre>
+            <p>空欄 ［A］・［B］・［C］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>%</code></li>
+                <li><code>/</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>&lt;=</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>素因数分解は「小さい数から順に、割れるだけ割る」をくり返します。割り切れたかどうかは、あまり（%）が 0 かどうかで調べます。割り切れたら d を表示して、n を割った答え（/）に置きかえます。このとき d はふやさず、同じ d でもう一度割れるか調べるので 2 が2回出ます。最後は d と n がどちらも 5 になったときも割りたいので、くり返しの条件は d &lt;= n です。表示は 2, 2, 3, 5 の順です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>&lt;=</code></li>
+            <li>空欄 ［B］ … <code>%</code></li>
+            <li>空欄 ［C］ … <code>/</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>&lt;</code>　［B］<code>%</code>　［C］<code>/</code> … 割り算の2か所は正解です。でも &lt; だと、d と n が同じ数になったところでくり返しが終わってしまいます。n が 5 まで小さくなり、d が 5 まで進んだとき 5 &lt; 5 は成り立たないので、最後の 5 が表示されず 2, 2, 3 で止まります。d と n が同じときも割ってみたいので &lt;= を使います</li>
+            <li>［A］<code>&lt;=</code>　［B］<code>%</code>　［C］<code>%</code> … n = n % d にすると、n に「割ったあまり」が入ってしまいます。60 は 2 で割り切れるので n は 0 になり、d &lt;= n（2 &lt;= 0）が成り立たずにすぐ終わります。表示は 2 だけです。n を小さくしていくときは、割った答えを求める / を使います</li>
+            <li>［A］<code>&lt;</code>　［B］<code>%</code>　［C］<code>%</code> … 2か所ちがいます。n = n % d だと n があまりの 0 になり、2 を1回表示しただけで終わります。さらに &lt; だと、最後に d と n が同じ数になったときの 5 も表示できません。n を小さくするのは /、くり返しの条件は &lt;= です</li>
+            <li>［A］<code>&lt;=</code>　［B］<code>/</code>　［C］<code>/</code> … amari = n / d にすると、amari には割った答え（60 ÷ 2 ＝ 30 など）が入ります。60 を割った答えが 0 になることはないので、amari == 0 が一度も成り立たず、d が 61 になるまで数えて何も表示されずに終わります。割り切れたかどうかは、あまりを求める % で調べます</li>
+            <li>［A］<code>&lt;</code>　［B］<code>/</code>　［C］<code>/</code> … amari = n / d では割った答えが入るので 0 にならず、何も表示されません。あまりを求めるのは % です。さらにくり返しの条件も &lt; だと、d と n が同じになったときの最後の 5 が出せません。&lt;= にしましょう</li>
+            <li>［A］<code>&lt;=</code>　［B］<code>/</code>　［C］<code>%</code> … / と % が逆になっています。amari = n / d だと割った答えが入るので 0 にならず、何も表示されずに終わります。割り切れたか調べる（あまりを出す）のが %、n を割った答えに置きかえて小さくするのが / です</li>
+            <li>［A］<code>&lt;</code>　［B］<code>/</code>　［C］<code>%</code> … 3か所ともちがいます。/ と % が逆なので amari が 0 にならず、何も表示されません。さらに &lt; だと最後の 5 も出せません。くり返しは d &lt;= n のあいだ、あまりは %、n を小さくするのは / です</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q055/index.html">第55問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
