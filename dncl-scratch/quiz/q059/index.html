@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第59問 1万歩は何日つづいた？（いちばん長い連続記録）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="「1日10000歩以上歩く」を目標にして、8日間の歩数を配列 hosu（＝[10000,12000,8000,11000,10000,13000,9500,10200]）に記録しました。目標を何日つづけて達成できたか、いちばん長い連続記録を求めよう。ren は「今つづいている日数」、saidai は「これまででいちばん長い記録」です。目標を達成した日は ren を1ふやし、saidai より長くなったら記録を書きかえます。達成できなかった日は、連続がとぎれます。ちょうど10000歩の日も「達成」に入ることに気をつけよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,1万歩は何日つづいた？（いちばん長い連続記録）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q059/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第59問 1万歩は何日つづいた？（いちばん長い連続記録）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="「1日10000歩以上歩く」を目標にして、8日間の歩数を配列 hosu（＝[10000,12000,8000,11000,10000,13000,9500,10200]）に記録しました。目標を何日つづけて達成できたか、いちばん長い連続記録を求めよう。ren は「今つづいている日数」、saidai は「これまででいちばん長い記録」です。目標を達成した日は ren を1ふやし、saidai より長くなったら記録を書きかえます。達成できなかった日は、連続がとぎれます。ちょうど10000歩の日も「達成」に入ることに気をつけよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q059/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q059.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第59問 1万歩は何日つづいた？（いちばん長い連続記録）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="「1日10000歩以上歩く」を目標にして、8日間の歩数を配列 hosu（＝[10000,12000,8000,11000,10000,13000,9500,10200]）に記録しました。目標を何日つづけて達成できたか、いちばん長い連続記録を求めよう。ren は「今つづいている日数」、saidai は「これまででいちばん長い記録」です。目標を達成した日は ren を1ふやし、saidai より長くなったら記録を書きかえます。達成できなかった日は、連続がとぎれます。ちょうど10000歩の日も「達成」に入ることに気をつけよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q059.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q059/index.html#quiz",
+      "name": "第59問 1万歩は何日つづいた？（いちばん長い連続記録）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q059/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "「1日10000歩以上歩く」を目標にして、8日間の歩数を配列 hosu（＝[10000,12000,8000,11000,10000,13000,9500,10200]）に記録しました。目標を何日つづけて達成できたか、いちばん長い連続記録を求めよう。ren は「今つづいている日数」、saidai は「これまででいちばん長い記録」です。目標を達成した日は ren を1ふやし、saidai より長くなったら記録を書きかえます。達成できなかった日は、連続がとぎれます。ちょうど10000歩の日も「達成」に入ることに気をつけよう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": ">= , 0"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": ">="
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": "0"
+          },
+          {
+            "@type": "Answer",
+            "text": "1"
+          },
+          {
+            "@type": "Answer",
+            "text": "ren"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第59問 1万歩は何日つづいた？（いちばん長い連続記録）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q059/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q059";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第59問 1万歩は何日つづいた？（いちばん長い連続記録）</h1>
+            <p>「1日10000歩以上歩く」を目標にして、8日間の歩数を配列 hosu（＝[10000,12000,8000,11000,10000,13000,9500,10200]）に記録しました。目標を何日つづけて達成できたか、いちばん長い連続記録を求めよう。ren は「今つづいている日数」、saidai は「これまででいちばん長い記録」です。目標を達成した日は ren を1ふやし、saidai より長くなったら記録を書きかえます。達成できなかった日は、連続がとぎれます。ちょうど10000歩の日も「達成」に入ることに気をつけよう（2か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>hosu = [10000,12000,8000,11000,10000,13000,9500,10200]
+ren = 0
+saidai = 0
+i を 0 から 7 まで 1 ずつ増やしながら繰り返す:
+  もし hosu[i] ［A］ 10000 ならば:
+    ren = ren + 1
+    もし ren &gt; saidai ならば:
+      saidai = ren
+  そうでなければ:
+    ren = ［B］
+表示する(&quot;いちばん長い連続記録は&quot; + saidai + &quot;日です&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>&gt;=</code></li>
+                <li><code>&gt;</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>0</code></li>
+                <li><code>1</code></li>
+                <li><code>ren</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>連続記録は「つづいている間は1ずつふやし、とぎれたら 0 にもどす」と考えます。ren は今の連続日数、saidai はその中でいちばん長かった記録です。目標は「10000歩以上」なので、ちょうど10000歩の日もふくめて hosu[i] &gt;= 10000 でくらべます。とぎれた日に ren = 0 としないと、とびとびの日数まで合計されてしまいます。答えは4日目〜6日目の 3 日です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>&gt;=</code></li>
+            <li>空欄 ［B］ … <code>0</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>&gt;=</code>　［B］<code>1</code> … くらべる記号は正解です。でも ren = 1 だと、8000歩しか歩けなかった日を「連続1日目」として数えてしまいます。4日目からの3日連続が4日連続になり、答えが 4 日になります。とぎれた日は、つづいている日数を 0 にもどしましょう</li>
+            <li>［A］<code>&gt;=</code>　［B］<code>ren</code> … ren = ren は「何も変えない」ので、連続がとぎれても ren が 0 にもどりません。すると達成した日がとびとびでも全部たし算され、答えは達成した日の合計の 6 日になります。求めたいのは「つづけて」達成した日数なので、とぎれた日は 0 にもどします</li>
+            <li>［A］<code>&gt;</code>　［B］<code>0</code> … とぎれた日を 0 にもどすのは正解です。でも &gt; だと、ちょうど10000歩の日（1日目と5日目）が「未達成」あつかいになり、連続が何度も切れて答えが 1 日になります。「10000歩以上」は 10000 もふくむので &gt;= を使います</li>
+            <li>［A］<code>&gt;</code>　［B］<code>1</code> … 2か所とも違います。&gt; ではちょうど10000歩の日が未達成になり、さらに ren = 1 で、とぎれた日まで1日目として数えてしまいます。答えは 2 日になります</li>
+            <li>［A］<code>&gt;</code>　［B］<code>ren</code> … 2か所とも違います。&gt; ではちょうど10000歩の日が数えられず、ren = ren では連続がとぎれてもリセットされません。10000歩より多く歩いた日の合計 4 日が答えになってしまいます</li>
+            <li>［A］<code>&lt;</code>　［B］<code>0</code> … &lt; だと「10000歩より少ない日」をつづけて数えることになり、目標を達成できなかった日の連続記録（1 日）を求めてしまいます。達成した日を数えたいので、10000歩以上＝ &gt;= を使います</li>
+            <li>［A］<code>&lt;</code>　［B］<code>1</code> … 2か所とも違います。&lt; では達成できなかった日を数えてしまい、ren = 1 で、とぎれるたびに1日目から数え直すことになります。答えは 2 日になります</li>
+            <li>［A］<code>&lt;</code>　［B］<code>ren</code> … 2か所とも違います。&lt; では達成できなかった日（8000歩と9500歩）を数えてしまい、ren = ren でリセットもされないので、答えは 2 日になります</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q055/index.html">第55問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
