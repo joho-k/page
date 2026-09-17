@@ -1431,7 +1431,10 @@ function buildStepCard({ title, rows = [], badge = "", badgeClass = "", cardClas
 
 // 1つの被演算子（オペランド）を「表示する(結合)」と同じ concat-chip で見せる。
 // 変数や配列要素は ラベル(式)＋値 のチップ、定数・文字列はそのままのトークン。
-function operandChip(exprText, scope) {
+// knownValue … すでに実行して分かっている値。乱数() のように「評価するたびに
+// 変わる」式は、ここで測りなおすと実際に代入された値と食いちがってしまうので、
+// 分かっているときは必ずそれを使う。
+function operandChip(exprText, scope, knownValue) {
     const t = String(exprText).trim();
     if (isNumericConstant(t)) {
         return calcToken(t);
@@ -1477,7 +1480,7 @@ function operandChip(exprText, scope) {
             + `</span>`;
     }
 
-    const value = safeEvalWithScope(t, scope);
+    const value = knownValue !== undefined ? knownValue : safeEvalWithScope(t, scope);
     return `<span class="concat-chip">`
         + `<span class="chip-label">${escapeHtml(prettyExpr(t))}</span>`
         + `<span class="chip-val">${escapeHtml(formatVarValue(value))}</span>`
@@ -1741,7 +1744,7 @@ function buildAssignExplanation(node, scope, result) {
     if (Array.isArray(value)) {
         rowHtml = `${calcToken(`${node.name}${arrayTag}`, "calc-target")}${calcOp("=")}${calcToken(formatVarValue(value))}`;
     } else {
-        rowHtml = `${calcToken(`${node.name}${arrayTag}`, "calc-target")}${calcOp("=")}${operandChip(node.value, scope)}`;
+        rowHtml = `${calcToken(`${node.name}${arrayTag}`, "calc-target")}${calcOp("=")}${operandChip(node.value, scope, value)}`;
     }
     const html = buildStepCard({
         title: "今のステップ",
