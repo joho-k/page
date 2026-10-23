@@ -143,3 +143,407 @@
     font-size: 1.05rem;
     text-align: center;
 }
+/* ===== HTML で組んだスライド（.hslide） =====
+   元スライド（1920×1080）の 30px を 1em とし、幅に合わせて文字も図も一緒に縮む。 */
+.hslide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #f4f5f7;
+    color: #111;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-weight: 500;
+    line-height: 1.35;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+}
+.hslide .hs-c { position: absolute; inset: 0; font-size: calc(100cqw / 64); }
+.hslide .hs-a { position: absolute; }
+.hslide b { font-weight: 800; }
+.hslide p, .hslide ul { margin: 0; }
+.hslide img { max-width: none; display: block; }
+.hslide a { color: #0645ad; }
+.hslide .fs-t { font-size: .8em; }
+.hslide .fs-s { font-size: .93em; }
+.hslide .fs-b { font-size: 1.15em; }
+.hslide .fs-m { font-size: 1.33em; }
+.hslide .fs-l { font-size: 1.6em; }
+.hslide .fs-xl { font-size: 1.9em; }
+.hslide .hs-center { text-align: center; }
+.hslide .hs-right { text-align: right; }
+.hslide .hs-left { text-align: left !important; }
+.hslide .hs-red, .hslide .redtxt { color: #cd3232; }
+.hslide .hs-blue { color: #3232cd; }
+.hslide .hs-gray { color: #888; }
+
+/* 見出し：左の青い帯＋太字 */
+.hslide .hs-head {
+    position: absolute; left: 4.37em; top: 1.9em; height: 4.6em;
+    display: flex; align-items: center; gap: 1.2em;
+    border-left: 1em solid #3232cd; padding-left: .5em;
+}
+.hslide .hs-head-t { font-size: 2.7em; font-weight: 900; white-space: nowrap; letter-spacing: .02em; }
+.hslide .hs-badge {
+    font-size: 2.1em; font-weight: 900; color: #cd3232; background: #fff;
+    padding: .1em .9em; border-radius: .3em; box-shadow: .1em .12em .2em rgba(0, 0, 0, .25);
+}
+.hslide .hs-sub {
+    font-size: 1.5em; font-weight: 900; border-left: .3em solid #3232cd;
+    padding-left: .3em; margin-bottom: .3em;
+}
+
+/* チップ（四角い札） */
+.hslide .hs-chip {
+    display: inline-block; text-align: center; white-space: nowrap;
+    background: #d6d6f5; color: #3232cd;
+    padding: .08em .45em; border-radius: .25em;
+    box-shadow: .12em .14em .22em rgba(0, 0, 0, .28);
+}
+.hslide .hs-chip.white { background: #fff; color: #3232cd; }
+.hslide .hs-chip.white.redtxt { color: #cd3232; }
+.hslide .hs-chip.pink { background: #f6d6d6; color: #cd3232; }
+.hslide .hs-chip.red { background: #fff; color: #cd3232; }
+.hslide .hs-chip.gray { background: #d6dce6; color: #111; min-width: 5.2em; }
+.hslide .hs-chip.blue { background: #3232cd; color: #fff; min-width: 5.2em; }
+.hslide .hs-chip.redbg { background: #cd3232; color: #fff; min-width: 5.2em; }
+.hslide .hs-chip.sq { min-width: 1.4em; padding: .08em .2em; }
+.hslide .hs-chip.wide { min-width: 1.9em; }
+.hslide .hs-row { display: flex; align-items: center; }
+.hslide .hs-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 .45em; width: calc(715em / 30); box-sizing: border-box; }
+.hslide .hs-cols.fs-m { width: calc(715em / 30 / 1.33); }
+.hslide .hs-cols.fs-b { width: calc(715em / 30 / 1.15); }
+.hslide .hs-cols.fs-l { width: calc(715em / 30 / 1.6); }
+.hslide .hs-cols.one { grid-template-columns: 1fr; }
+.hslide .hs-cols > .hs-chip { display: flex; align-items: center; justify-content: center; min-width: 0; }
+.hslide .hs-cols.tight > .hs-chip { line-height: 1.05; padding: 0 .2em; }
+
+/* 白いカード・緑のメモ・吹き出し */
+.hslide .hs-card {
+    position: relative; background: #fff; border-radius: .6em; padding: .6em .8em;
+    box-shadow: .15em .2em .4em rgba(0, 0, 0, .2); box-sizing: border-box;
+}
+.hslide .hs-green { background: #e2f0d9; padding: .3em .4em; }
+.hslide .hs-bubble {
+    background: #fff; border-radius: .7em; padding: .4em .6em;
+    box-shadow: .15em .2em .4em rgba(0, 0, 0, .2);
+}
+.hslide .hs-bubble.sq { border: .07em solid #3232cd; border-radius: 0; box-shadow: none; }
+.hslide .hs-mark { background: #f6d6d6; }
+.hslide .hs-redbox { border: .12em solid #cd3232; padding: 0 .2em; color: #666; }
+.hslide .hs-blank { display: inline-block; width: 5.2em; }
+
+/* 5×5 のマス */
+.hslide .hs-grid {
+    display: grid; grid-template-columns: repeat(5, var(--cell));
+    grid-auto-rows: var(--cell); border: .07em solid #000; width: max-content;
+}
+.hslide .hs-grid > span {
+    display: flex; align-items: center; justify-content: center;
+    border: .035em solid #000; font-size: calc(var(--cell) * .45);
+}
+.hslide .hs-grid .w { background: #fff; color: #000; }
+.hslide .hs-grid .k { background: #000; color: #fff; }
+.hslide .hs-grid .q { background: #fff; color: #000; }
+.hslide .hs-grid .hl { box-shadow: inset 0 0 0 .2em #cd3232; }
+
+/* 矢印 */
+.hslide .hs-arrow {
+    width: 3.5em; height: 2.2em; background: #fff; margin: .2em auto 0;
+    clip-path: polygon(0 30%, 60% 30%, 60% 0, 100% 50%, 60% 100%, 60% 70%, 0 70%);
+    filter: drop-shadow(.1em .1em .1em rgba(0, 0, 0, .3));
+}
+.hslide .hs-arrow-down {
+    width: 3.5em; height: 2.6em; background: #fff;
+    clip-path: polygon(30% 0, 70% 0, 70% 50%, 100% 50%, 50% 100%, 0 50%, 30% 50%);
+}
+
+/* 箇条書き */
+.hslide .hs-ul { padding-left: 1.2em; }
+.hslide .hs-ul > div { padding-left: 1em; text-indent: -1em; }
+.hslide .hs-ul > div::before { content: "・"; }
+
+/* 分数 */
+.hslide .hs-formula { display: flex; align-items: center; gap: .3em; }
+.hslide .hs-formula sub { font-size: .55em; }
+.hslide .hs-frac .hs-chip { line-height: 1.25; padding: .1em .6em; }
+.hslide .hs-frac hr { border: 0; border-top: .06em solid #cd3232; margin: .08em 0; }
+.hslide .hs-ratio { display: flex; align-items: center; justify-content: center; gap: .3em; }
+.hslide .hs-frac2 { display: inline-flex; flex-direction: column; text-align: center; line-height: 1.15; }
+.hslide .hs-frac2 > span:first-child { border-bottom: .06em solid #000; }
+.hslide .hs-ratio b { font-size: 1.5em; }
+
+/* 拡張子・ZIP のファイル表示 */
+.hslide .hs-file { display: flex; align-items: center; gap: .3em; padding: .1em .3em; margin-bottom: .25em; border-radius: .25em; }
+.hslide .hs-file.sel { background: #4669e0; color: #fff; }
+.hslide .hs-file .hs-ext { outline: .12em solid #cd3232; padding: 0 .1em; }
+.hslide .hs-fileicon { width: .7em; height: .9em; background: #fff; border: .06em solid #999; border-radius: .1em; display: inline-block; }
+.hslide .hs-zip, .hslide .hs-docx {
+    width: 7.5em; height: 9.5em; margin: 0 auto .4em; background: #f2f2f2; border: .08em solid #ccc;
+    border-radius: .3em; display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: .6em; box-sizing: border-box; font-size: 1.5em; color: #888; letter-spacing: .05em;
+}
+.hslide .hs-zip.sm, .hslide .hs-docx { width: 4.5em; height: 5.6em; font-size: 1.3em; }
+.hslide .hs-docx { background: #2b579a; color: #fff; align-items: center; padding: 0; font-weight: 900; }
+
+/* 白い四角（JPEG の色くらべ） */
+.hslide .hs-square { width: 12.07em; height: 12.07em; border: .4em solid #000; box-sizing: border-box; }
+
+/* HTML スライドの行は高さを固定しない（スライドの高さに合わせる） */
+.image-row.show:has(.hslide) { height: auto; overflow: visible; }
+.image-row:has(.hslide) figure { flex: 1.5; }
+
+/* ===== 画面配置：左にスライド、右に動画・目次・切り替え（右は固定） ===== */
+.word-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 120px;
+}
+.word-side {
+    position: sticky;
+    top: 86px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 4px;
+}
+.word-side h4 { margin: 4px 0 0; padding: 6px 12px; font-size: 1.05em; }
+.word-side .youtube-wrapper { border-radius: 8px; overflow: hidden; }
+.word-side .toggle-button { margin: 6px 0 0; padding: 10px 12px; font-size: 1em; }
+.word-side .title-list { margin: 0; padding: 8px 10px; list-style: none; }
+.word-side .title-list li {
+    height: auto; margin: 0; padding: 2px;
+    box-shadow: none; text-decoration: none; font-size: .9em; line-height: 1.5;
+}
+.word-side .title-list li a { text-decoration: underline 2px var(--primary); }
+.word-side #related-words ul { margin: 0; padding: 0; }
+.word-side #related-words li { margin: 4px 0; padding: 6px 10px; font-size: .9em; }
+
+/* 右の列にかぶらないよう、パソコンでは「上に戻る」を小さくする */
+@media (min-width: 961px) {
+    .scroll-top-btn { width: 64px; height: 64px; font-size: 13px; line-height: 1.2; bottom: 20px; right: 20px; }
+}
+
+/* スライド：説明文はスライドの下に置く */
+.word-stage .image-row.show { display: block; height: auto; overflow: visible; }
+.word-stage .image-row figure { margin: 0; }
+.word-stage .image-row h5 { margin: 0 0 10px; }
+.word-stage .image-row .image-row-description,
+.word-stage .image-row .image-row-description-padding-top { margin: 12px 0 0; padding: 0; }
+.word-stage.is-list .image-row { margin-bottom: 48px; }
+
+/* スライドの上に重ねる「＜ ＞」 */
+.slide-frame { position: relative; }
+.slide-frame > img { display: block; width: 100%; }
+.slide-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px; border-radius: 50%; border: none;
+    background: rgba(0, 41, 92, .78); color: #fff;
+    font-size: 34px; line-height: 44px; padding: 0; cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+}
+.slide-arrow.prev { left: 10px; }
+.slide-arrow.next { right: 10px; }
+.slide-arrow:disabled { opacity: .25; cursor: default; }
+.slide-arrow:not(:disabled):hover { background: var(--primary); }
+.word-stage .slide-nav.show { justify-content: center; margin-top: 8px; }
+.word-stage .slide-nav p { margin: 0; font-weight: bold; color: var(--primary); }
+
+@media (max-width: 960px) {
+    .word-layout { grid-template-columns: 1fr; }
+    .word-side { position: static; max-height: none; overflow: visible; }
+    .slide-arrow { width: 36px; height: 36px; font-size: 26px; line-height: 32px; }
+    .slide-arrow.prev { left: 4px; }
+    .slide-arrow.next { right: 4px; }
+}
+
+/* ===== スクロールせずに1画面に収める・タイトルは常に表示 ===== */
+#word-body .page-title {
+    position: sticky;
+    top: 70px;
+    z-index: 20;
+    margin: 0 0 6px;
+    padding: 8px 16px;
+    font-size: 1.6em;
+}
+#word-body .term-lead {
+    max-width: none;
+    margin: 0 0 10px;
+    font-size: .95em;
+    line-height: 1.6;
+}
+#word-body main > .warning {
+    margin: 24px 0 0;
+    padding: 8px 12px;
+    font-size: .85em;
+}
+/* スライドの幅は「画面の高さに収まる大きさ」まで。
+   見出し（タイトル・リード・節の見出し）とページ番号・説明文のぶんを高さから引く */
+.word-stage {
+    --slide-max: calc((100vh - 365px) * 16 / 9);
+}
+.word-stage:not(.is-list) .image-row,
+.word-stage:not(.is-list) .slide-nav {
+    max-width: max(480px, var(--slide-max));
+    margin-left: auto;
+    margin-right: auto;
+}
+.word-stage .image-row h5 { padding: 6px 14px; font-size: 16px; margin-bottom: 6px; }
+.word-stage .image-row .image-row-description p { margin: 4px 0; }
+.word-stage .slide-nav.show { margin-top: 4px; }
+.word-layout { margin-bottom: 40px; }
+.word-side {
+    top: 136px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+/* 右の列：目次だけが伸び縮みし、切り替えボタンは常に見える */
+.word-side .title-list { flex: 1 1 auto; min-height: 60px; overflow-y: auto; }
+.word-side > * { flex-shrink: 0; }
+.word-side .youtube-wrapper { flex-shrink: 1; min-height: 120px; }
+
+@media (max-width: 768px) {
+    #word-body .page-title { top: 60px; font-size: 1.3em; }
+}
+@media (max-width: 960px) {
+    .word-side { position: static; max-height: none; overflow: visible; }
+    .word-stage:not(.is-list) .image-row,
+    .word-stage:not(.is-list) .slide-nav { max-width: none; }
+}
+
+/* スライド右下のページ番号 */
+.slide-count {
+    position: absolute; right: 10px; bottom: 8px; margin: 0;
+    padding: 2px 10px; border-radius: 999px;
+    background: rgba(0, 41, 92, .78); color: #fff; font-size: 13px; font-weight: bold;
+}
+
+/* 右の列からはみ出さない（ul の width:100% に枠線・余白が足されて横にはみ出し、横スクロールしていた） */
+.word-side { overflow-x: hidden; padding: 4px 10px 10px 4px; }
+.word-side > * { box-sizing: border-box; width: 100%; max-width: 100%; margin-left: 0; margin-right: 0; }
+.word-side ul { box-sizing: border-box; width: 100%; }
+
+/* 節の見出しの帯：スライドの上に常に出す（一覧表示ではタイトルの下に貼りつく） */
+.section-bar {
+    position: sticky; top: 124px; z-index: 15;
+    max-width: max(480px, var(--slide-max)); margin: 0 auto 6px;
+    padding: 6px 14px; border-radius: 10px;
+    background: var(--primary); color: #fff; font-weight: bold; font-size: 16px;
+    box-sizing: border-box;
+}
+.word-stage.is-list .section-bar { max-width: none; }
+/* 各スライドに付いていた見出しは帯にまとめたので、画面には出さない（HTML には残す） */
+.word-stage .image-row figure > h5 { display: none; }
+@media (max-width: 768px) {
+    .section-bar { top: 108px; }
+}
+
+/* ===== タイトルの帯（高さを半分に）＋「用語の辞典一覧」に戻るボタン ===== */
+.title-bar {
+    position: sticky; top: 70px; z-index: 20;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    margin: 0 0 4px; padding: 3px 8px; border-radius: 14px;
+    background: var(--primary); box-shadow: var(--neu-raised-sm);
+}
+#word-body .title-bar .page-title {
+    position: static; grid-column: 2;
+    margin: 0; padding: 2px 12px; font-size: 1.15em; line-height: 1.4;
+    box-shadow: none; background: none;
+}
+.back-to-list {
+    grid-column: 1; justify-self: start;
+    padding: 2px 12px; border-radius: 999px;
+    background: rgba(255, 255, 255, .16); color: #fff; font-size: .85em; font-weight: bold;
+    text-decoration: none; white-space: nowrap;
+}
+.back-to-list:hover { background: rgba(255, 255, 255, .3); }
+.section-bar { top: 112px; }
+.word-side { top: 112px; }
+.word-stage { --slide-max: calc((100vh - 345px) * 16 / 9); }
+@media (max-width: 768px) {
+    .title-bar { top: 60px; }
+    .section-bar { top: 102px; }
+    .back-to-list { font-size: .75em; padding: 2px 8px; }
+}
+
+/* ===== ニューモーフィズムにそろえる：タイトル・戻るボタン・節の見出しを「動画で解説」と同じ浮き出しの形に ===== */
+.title-bar {
+    display: flex; grid-template-columns: none; gap: 14px;
+    padding: 8px 6px 10px; border-radius: 0;
+    background: var(--bg); box-shadow: none;
+}
+#word-body .title-bar .page-title {
+    flex: 1; margin: 0; padding: 6px 14px; font-size: 1.15em; line-height: 1.4;
+    background: var(--bg); color: var(--primary); border-radius: 16px;
+    box-shadow: var(--neu-raised-sm);
+}
+.back-to-list {
+    display: flex; align-items: center; padding: 6px 16px; border-radius: 16px;
+    background: var(--bg); color: var(--primary); font-size: .95em;
+    box-shadow: var(--neu-raised-sm);
+}
+.back-to-list:hover { background: var(--bg); box-shadow: var(--neu-pressed); }
+.section-bar {
+    background: var(--bg); color: var(--primary); text-align: center;
+    border-radius: 16px; padding: 6px 14px; font-size: 1.05em;
+    box-shadow: var(--neu-raised-sm); margin-bottom: 12px;
+}
+/* 「ひとことで解説」の本文 */
+#word-body .word-side .term-lead {
+    margin: 0; padding: 4px 6px; text-align: left; font-size: .92em; line-height: 1.7;
+}
+.section-bar { top: 122px; }
+.word-side { top: 122px; }
+@media (max-width: 768px) {
+    .title-bar { gap: 8px; padding: 6px 2px 8px; }
+    .back-to-list { padding: 4px 10px; font-size: .75em; }
+    .section-bar { top: 112px; }
+}
+
+/* 右の列を詰めて、目次に高さを回す：関連単語は横に並ぶ小さな札に */
+.word-side { gap: 8px; }
+.word-side h4 { padding: 4px 12px; }
+.word-side #related-words ul { display: flex; flex-wrap: wrap; gap: 6px; }
+.word-side #related-words li { margin: 0; padding: 4px 10px; font-size: .85em; border-radius: 12px; }
+#word-body .word-side .term-lead { font-size: .88em; line-height: 1.6; padding: 2px 6px; }
+
+/* 用語のタイトルは元の見た目（紺の帯・白い文字・角丸）のまま。高さだけ半分 */
+#word-body .title-bar .page-title {
+    background: var(--primary); color: #fff; border-radius: 20px;
+    box-shadow: var(--neu-raised);
+}
+
+/* タイトル・節の見出しは画面に貼りつけない（スライドに重なるため） */
+.title-bar, .section-bar { position: static; }
+.word-side { top: 80px; max-height: calc(100vh - 175px); }
+
+/* 全画面ボタン（スライドの右上） */
+.slide-fs {
+    position: absolute; top: 8px; right: 8px; z-index: 3;
+    width: 36px; height: 36px; border-radius: 10px; border: none; padding: 0;
+    background: rgba(0, 41, 92, .78); color: #fff; font-size: 16px; cursor: pointer;
+}
+.slide-fs:hover { background: var(--primary); }
+
+/* ===== 全画面表示 ===== */
+body.slide-fullscreen { overflow: hidden; }
+body.slide-fullscreen .slide-frame {
+    position: fixed; z-index: 1000; background: #111;
+    left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: min(100vw, calc(100vh * 16 / 9)); width: min(100vw, calc(100dvh * 16 / 9));
+    box-shadow: 0 0 0 100vmax #111;
+}
+body.slide-fullscreen .slide-frame .hslide { border-radius: 0; box-shadow: none; }
+/* 縦持ちのときは90度回して、横向きの画面いっぱいに出す */
+@media (orientation: portrait) {
+    body.slide-fullscreen .slide-frame {
+        width: min(100vh, calc(100vw * 16 / 9)); width: min(100dvh, calc(100vw * 16 / 9));
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+}
+body.slide-fullscreen .slide-arrow { width: 44px; height: 44px; font-size: 30px; line-height: 40px; }
