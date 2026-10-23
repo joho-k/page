@@ -1431,12 +1431,9 @@ function buildStepCard({ title, rows = [], badge = "", badgeClass = "", cardClas
 
 // 1つの被演算子（オペランド）を「表示する(結合)」と同じ concat-chip で見せる。
 // 変数や配列要素は ラベル(式)＋値 のチップ、定数・文字列はそのままのトークン。
-/*
-  値のチップ。
-  knownValue を渡すと、式を評価し直さずにその値を使う。
-  評価し直すと `乱数()` がもう一度振られてしまい、
-  **チップから飛んでいく数と、変数に入る数が食い違う**（実際にそうなっていた）。
-*/
+// knownValue … すでに実行して分かっている値。乱数() のように「評価するたびに
+// 変わる」式は、ここで測りなおすと実際に代入された値と食いちがってしまうので、
+// 分かっているときは必ずそれを使う。
 function operandChip(exprText, scope, knownValue) {
     const t = String(exprText).trim();
     if (isNumericConstant(t)) {
@@ -1728,7 +1725,7 @@ function buildAssignExplanation(node, scope, result) {
 
     // 別の変数をそのまま代入したとき（例: a = b）は concat-chip で値を見せる
     if (isSimpleVariable(node.value) && !arrayAccess) {
-        const row = `${calcToken(node.name, "calc-target")}${calcOp("=")}${operandChip(node.value, scope, value)}`;
+        const row = `${calcToken(node.name, "calc-target")}${calcOp("=")}${operandChip(node.value, scope)}`;
         const html = buildStepCard({
             title: "今のステップ",
             rows: [row],
