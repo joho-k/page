@@ -109,278 +109,476 @@
         </header>
         <main>
             <h1 class="page-title">データの圧縮</h1>
-            <p class="term-lead">ファイルサイズを小さくする「データの圧縮」の考え方（可逆圧縮・非可逆圧縮）を図解でやさしく解説。情報Iや共通テスト対策に。</p>
+            <p class="term-lead">工夫してデータの量を小さくすること。完全に元に戻せる「可逆圧縮」と、戻せない「非可逆圧縮」がある。</p>
             <div id="image-explanation" class="content-item">
                 <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
                 <div class="image-row" id="slide-0">
                     <figure>
-                        <h5>データの圧縮とは</h5><img src="img/01.png" alt="">
+                        <h5>データの圧縮とは</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">データは0と1の文字の羅列である</span></div><div class="hs-a" style="left:5em;top:7.83em;"><div class="hs-card fs-b" style="width:22.03em;height:11.3em;white-space:nowrap"><div class="hs-sub">文字コード（JISコード）</div>
+    <div>「ネ」という文字は <span class="hs-chip">11001000</span></div>
+    <div style="margin-top:.3em">「コ」という文字は <span class="hs-chip">10111010</span></div>
+    <div style="margin-top:.3em">それらを合わせ <span class="hs-chip red">1100100010111010</span></div></div></div><div class="hs-a" style="left:32.33em;top:7.83em;"><div class="hs-card fs-b" style="width:23.19em;height:11.3em;white-space:nowrap"><div class="hs-sub">画像のデジタル化</div>
+    <div>①標本化：等間隔のマス（ピクセル）に分ける</div>
+    <div>②量子化：色の情報をつける</div>
+    <div>③符号化：左上から順に2進数にする</div>
+    <div style="margin-top:.3em">→ <span class="hs-chip">1111111111111111…</span></div></div></div><div class="hs-a" style="left:5em;top:22.33em;"><div class="hs-card fs-b" style="width:46.96em;white-space:nowrap"><div class="hs-sub">音のデジタル化</div>
+    <div>[<span class="hs-red">符号化</span>] 量子化された値を2進数にする：7→0111、9→1001、6→0110 …</div>
+    <div style="margin-top:.3em">結合して、<span class="hs-chip red">0111100101101000011101000011010001100110</span></div></div></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> データは0と1の文字の羅列です。文字コード（JISコード）、画像のデジタル化、音のデジタル化のどれも、最後は0と1の並びで表されます。</p>
+                        <p> たとえば文字の「ネ」は11001000、「コ」は10111010となり、画像や音も符号化すると0と1の長い並びになります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-1">
-                    <figure><img src="img/02.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮</span></div><div class="hs-a" style="left:0em;top:12.33em;"><div class="fs-xl hs-center" style="width:33.68em">0と1のデータを、<br><u>うまいこと</u>工夫して<br><span class="hs-chip white"><span class="hs-red"><b>データサイズを削減</b></span></span> する<br>こと。</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 圧縮とは、0と1のデータを、うまいこと工夫してデータサイズを削減することです。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-2">
                     <figure>
-                        <h5>ランレングス法</h5><img src="img/03.png" alt="">
+                        <h5>ランレングス法</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">1111110001110111000111111</span></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 圧縮の原理を、カタカナの「エ」を画像にしたもの（横5×縦5ピクセル）で確かめます。</p>
+                        <p> ①黒を0、白を1として符号化すると、1111110001110111000111111 になります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-3">
-                    <figure><img src="img/04.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w hl"></span><span class="w hl"></span><span class="w hl"></span><span class="w hl"></span><span class="w hl"></span><span class="w hl"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em"><b>111111</b>0001110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:37.67em;top:15.17em;"><div class="fs-m hs-blue">1 が連続で6ビット分でている</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> ②同じ値が連続している部分に区切って、その連続するビット数を表します。</p>
+                        <p> はじめは1が連続で6ビット分でているので「6」です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-4">
-                    <figure><img src="img/05.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k hl"></span><span class="k hl"></span><span class="k hl"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">111111<b>000</b>1110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:37.67em;top:15.17em;"><div class="fs-m hs-blue">0 が連続で3ビット分でている</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span><span class="hs-chip fs-m sq">3</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 次は0が連続で3ビット分でているので「3」です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-5">
-                    <figure><img src="img/06.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">1111110001110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">1</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">6</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 同じように最後まで区切ると、6・3・3・1・3・3・6 となります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-6">
-                    <figure><img src="img/07.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">1111110001110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">1</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">6</span></div></div><div class="hs-a" style="left:7.07em;top:22.07em;"><div class="fs-m">③2進数に変換する。<br>ただし、区切りがわからなくなるので、<br>各ビットは最も長いビット数にそろえる<br>(足りない部分は先頭に0を加えて補う。)</div></div><div class="hs-a" style="left:35.6em;top:23.33em;"><div class="hs-row" style="gap:0.3em"><span class="hs-chip fs-m">110</span><span class="hs-chip fs-m">11</span><span class="hs-chip fs-m">11</span><span class="hs-chip fs-m">1</span><span class="hs-chip fs-m">11</span><span class="hs-chip fs-m">11</span><span class="hs-chip fs-m">110</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> ③連続するビット数を2進数に変換すると、110・11・11・1・11・11・110 となります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-7">
-                    <figure><img src="img/08.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">1111110001110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">1</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">6</span></div></div><div class="hs-a" style="left:7.07em;top:22.07em;"><div class="fs-m">③2進数に変換する。<br>ただし、区切りがわからなくなるので、<br>各ビットは最も長いビット数にそろえる<br>(足りない部分は先頭に0を加えて補う。)</div></div><div class="hs-a" style="left:35.6em;top:23.33em;"><div class="hs-row" style="gap:0.3em"><span class="hs-chip fs-m">110</span><span class="hs-chip fs-m">11</span><span class="hs-chip fs-m">11</span><span class="hs-chip fs-m">1</span><span class="hs-chip fs-m">11</span><span class="hs-chip fs-m">11</span><span class="hs-chip fs-m">110</span></div></div><div class="hs-a" style="left:36.5em;top:25.73em;"><div class="fs-l hs-blue hs-center" style="width:12.92em">↑　一番長いビット数　↑<br>に合わせる</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> ただし、このままでは区切りがわからなくなるので、各ビットは一番長いビット数にそろえます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-8">
-                    <figure><img src="img/09.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">1111110001110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">1</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">6</span></div></div><div class="hs-a" style="left:7.07em;top:22.07em;"><div class="fs-m">③2進数に変換する。<br><span class="hs-red"><b>ただし、区切りがわからなくなるので、<br>各ビットは最も長いビット数にそろえる<br>(足りない部分は先頭に0を加えて補う。)</b></span></div></div><div class="hs-a" style="left:35.6em;top:23.33em;"><div class="hs-row" style="gap:0.3em"><span class="hs-chip fs-m">110</span><span class="hs-chip fs-m"><span class="hs-red"><b>0</b></span>11</span><span class="hs-chip fs-m"><span class="hs-red"><b>0</b></span>11</span><span class="hs-chip fs-m"><span class="hs-red"><b>00</b></span>1</span><span class="hs-chip fs-m"><span class="hs-red"><b>0</b></span>11</span><span class="hs-chip fs-m"><span class="hs-red"><b>0</b></span>11</span><span class="hs-chip fs-m">110</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 足りない部分は先頭に0を加えて補います。すると、110・011・011・001・011・011・110 となります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-9">
-                    <figure><img src="img/10.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">1111110001110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">1</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">6</span></div></div><div class="hs-a" style="left:7.07em;top:22.07em;"><div class="fs-m">③2進数に変換する。<br>ただし、区切りがわからなくなるので、<br>各ビットは最も長いビット数にそろえる<br>(足りない部分は先頭に0を加えて補う。)</div></div><div class="hs-a" style="left:35.6em;top:23.33em;"><div class="hs-row" style="gap:0.3em"><span class="hs-chip fs-m">110</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">001</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">110</span></div></div><div class="hs-a" style="left:7.07em;top:30em;"><div class="fs-m">④データサイズを比べよう</div></div><div class="hs-a" style="left:26.67em;top:30em;"><span class="hs-chip white fs-m">① 圧縮前</span></div><div class="hs-a" style="left:43.33em;top:30em;"><span class="hs-chip white fs-m">② 圧縮後</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> ④圧縮前と圧縮後のデータサイズを比べてみましょう。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-10">
-                    <figure><img src="img/11.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">1111110001110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">1</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">6</span></div></div><div class="hs-a" style="left:7.07em;top:22.07em;"><div class="fs-m">③2進数に変換する。<br>ただし、区切りがわからなくなるので、<br>各ビットは最も長いビット数にそろえる<br>(足りない部分は先頭に0を加えて補う。)</div></div><div class="hs-a" style="left:35.6em;top:23.33em;"><div class="hs-row" style="gap:0.3em"><span class="hs-chip fs-m">110</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">001</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">110</span></div></div><div class="hs-a" style="left:7.07em;top:30em;"><div class="fs-m">④データサイズを比べよう</div></div><div class="hs-a" style="left:26.67em;top:30em;"><span class="hs-chip white fs-m">① 圧縮前</span></div><div class="hs-a" style="left:43.33em;top:30em;"><span class="hs-chip white fs-m">② 圧縮後</span></div><div class="hs-a" style="left:34.33em;top:30em;"><span class="hs-chip fs-m">25ビット</span></div><div class="hs-a" style="left:50.93em;top:30em;"><span class="hs-chip fs-m">21ビット</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 圧縮前は25ビット、圧縮後は21ビットです。圧縮によってデータサイズが小さくなりました。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-11">
-                    <figure><img src="img/12.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">カタカナの「エ」を画像にしたものを圧縮<br>①黒を0、白を1とし、符号化する。</div></div><div class="hs-a" style="left:41.83em;top:1.5em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:35.6em;top:12.6em;"><span class="hs-chip fs-m" style="min-width:16.64em">1111110001110111000111111</span></div><div class="hs-a" style="left:7.07em;top:17.27em;"><div class="fs-m">②同じ値が連続している部分に区切って、<br>その連続するビット数を表す。</div></div><div class="hs-a" style="left:36em;top:17.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip fs-m sq">6</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">1</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">3</span><span class="hs-chip fs-m sq">6</span></div></div><div class="hs-a" style="left:7.07em;top:22.07em;"><div class="fs-m">③2進数に変換する。<br>ただし、区切りがわからなくなるので、<br>各ビットは最も長いビット数にそろえる<br>(足りない部分は先頭に0を加えて補う。)</div></div><div class="hs-a" style="left:35.6em;top:23.33em;"><div class="hs-row" style="gap:0.3em"><span class="hs-chip fs-m">110</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">001</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">110</span></div></div><div class="hs-a" style="left:7.07em;top:30em;"><div class="fs-m">④データサイズを比べよう</div></div><div class="hs-a" style="left:26.67em;top:30em;"><span class="hs-chip white fs-m">① 圧縮前</span></div><div class="hs-a" style="left:43.33em;top:30em;"><span class="hs-chip white fs-m">② 圧縮後</span></div><div class="hs-a" style="left:34.33em;top:30em;"><span class="hs-chip fs-m">25ビット</span></div><div class="hs-a" style="left:50.93em;top:30em;"><span class="hs-chip fs-m">21ビット</span></div><div class="hs-a" style="left:0em;top:32.93em;"><div class="fs-m hs-center" style="width:48.12em">連続したデータに着目して圧縮する方法 = <span class="hs-chip pink"><b>ランレングス法</b></span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> このように、同じデータが連続していることに着目して圧縮する方法を「ランレングス法」といいます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-12">
-                    <figure><img src="img/13.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮の原理</span></div><div class="hs-a" style="left:7.07em;top:10.83em;"><div class="fs-m">圧縮できないこともある</div></div><div class="hs-a" style="left:28em;top:6.07em;"><div class="hs-grid" style="--cell:1.97em"><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span></div></div><div class="hs-a" style="left:10.33em;top:17.77em;"><span class="hs-chip white fs-m">① 圧縮前</span></div><div class="hs-a" style="left:18.6em;top:17.77em;"><span class="hs-chip fs-m">1000111101110011110110001</span>　<span class="hs-chip pink fs-m">25ビット</span></div><div class="hs-a" style="left:18.93em;top:22.27em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">1</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">1</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">2</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">1</span><span class="hs-chip white fs-m sq">2</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">1</span></div></div><div class="hs-a" style="left:10.33em;top:25.4em;"><span class="hs-chip white fs-m">② 圧縮後</span></div><div class="hs-a" style="left:18.6em;top:25.4em;"><div class="hs-row" style="gap:0.3em"><span class="hs-chip fs-m">001</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">100</span><span class="hs-chip fs-m">001</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">010</span><span class="hs-chip fs-m">100</span><span class="hs-chip fs-m">001</span><span class="hs-chip fs-m">010</span><span class="hs-chip fs-m">011</span><span class="hs-chip fs-m">001</span></div></div><div class="hs-a" style="left:46.83em;top:28.5em;"><span class="hs-chip pink fs-m">33ビット</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> ただし、圧縮できないこともあります。数字の「3」の画像は、圧縮前が1000111101110011110110001の25ビットです。</p>
+                        <p> 連続するビット数は1・3・4・1・3・2・4・1・2・3・1と細かく分かれ、3ビットずつの2進数にすると33ビットになり、かえって大きくなってしまいます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-13">
                     <figure>
-                        <h5>データの展開(解凍)</h5><img src="img/14.png" alt="">
+                        <h5>データの展開(解凍)</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div>白と黒が交互に現れ、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 圧縮したデータを元に戻してみましょう。次の圧縮したデータ 110100110011110 を元に戻し、画像を生成します。</p>
+                        <p> ただし、黒を0、白を1として符号化しています。画像サイズは横5ピクセル×縦5ピクセルで、1番上の行の左端の画素は白で始まるものとします。白と黒が交互に現れ、同じ色の連続個数を3ビットの2進数で表しています。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-14">
-                    <figure><img src="img/15.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div>白と黒が交互に現れ、<span class="hs-red"><b>同じ色の連続個数を<br>3ビットの2進数で表している。</b></span></div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 同じ色の連続個数は3ビットの2進数で表しているので、まず①3ビットずつに区切ります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-15">
-                    <figure><img src="img/16.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div>白と黒が交互に現れ、<span class="hs-red"><b>同じ色の連続個数を<br>3ビットの2進数で表している。</b></span></div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 3ビットずつに区切ると、110・100・110・011・110 となります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-16">
-                    <figure><img src="img/17.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div>白と黒が交互に現れ、<span class="hs-red"><b>同じ色の連続個数を<br>3ビットの2進数で表している。</b></span></div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 次に②3ビットの2進数を10進数に変換し、色の連続個数にします。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-17">
-                    <figure><img src="img/18.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div>白と黒が交互に現れ、<span class="hs-red"><b>同じ色の連続個数を<br>3ビットの2進数で表している。</b></span></div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 10進数に変換すると、6・4・6・3・6 となります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-18">
-                    <figure><img src="img/19.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div>白と黒が交互に現れ、<span class="hs-red"><b>同じ色の連続個数を<br>3ビットの2進数で表している。</b></span></div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 最後に③色の情報に変換します。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-19">
-                    <figure><img src="img/20.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、<b>横5ピクセル×縦5ピクセル</b></div><div>1番上の行の左端の画素は白で始まるものとする。</div><div>白と黒が交互に現れ、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 画像サイズは横5ピクセル×縦5ピクセルなので、5×5のマスに色をぬっていきます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-20">
-                    <figure><img src="img/21.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div><b>1番上の行の左端の画素は白で始まるものとする。</b></div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:36.67em;top:22.67em;"><div class="fs-m">↑白が6つ続くという意味</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 1番上の行の左端の画素は白で始まり、白と黒は交互に現れます。最初の「6」は、白が6つ続くという意味です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-21">
-                    <figure><img src="img/22.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div><b>1番上の行の左端の画素は白で始まるものとする。</b></div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:36.67em;top:22.67em;"><div class="fs-m">↑白が6つ続くという意味</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 左上から右へ、1行目の5マスと2行目の左端の1マス、あわせて6マスを白でぬります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-22">
-                    <figure><img src="img/23.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:40em;top:22.67em;"><div class="fs-m">↑次の色は黒。4つ連続で続く</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 次の「4」は、次の色は黒で、4つ連続で続くという意味です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-23">
-                    <figure><img src="img/24.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:40em;top:22.67em;"><div class="fs-m">↑次の色は黒。4つ連続で続く</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 2行目の残りの4マスを黒でぬります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-24">
-                    <figure><img src="img/25.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:43.33em;top:22.67em;"><div class="fs-m">↑次の色は白。6つ連続で続く</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 3つ目の「6」は、次の色は白で、6つ連続で続くという意味です。3行目の5マスと4行目の左端の1マスを白でぬります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-25">
-                    <figure><img src="img/26.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:46.5em;top:22.67em;"><div class="fs-m">↑次の色は黒。<br>　3つ連続で続く</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 4つ目の「3」は、次の色は黒で、3つ連続で続くという意味です。4行目の2〜4マス目を黒でぬります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-26">
-                    <figure><img src="img/27.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:34.67em;top:22.67em;"><div class="fs-m">次の色は白。6つ連続で続く↑</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 最後の「6」は、次の色は白で、6つ連続で続くという意味です。4行目の右端と5行目の5マスを白でぬると、画像が完成します。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-27">
-                    <figure><img src="img/28.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:0em;top:28.4em;"><div class="fs-l hs-right" style="width:21.46em">④0(黒)と1(白)の元のデータに戻す</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 最後に④0（黒）と1（白）の元のデータに戻します。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-28">
-                    <figure><img src="img/29.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:0em;top:28.4em;"><div class="fs-l hs-right" style="width:21.46em">④0(黒)と1(白)の元のデータに戻す</div></div><div class="hs-a" style="left:15em;top:30.67em;"><span class="hs-chip fs-m hs-left" style="min-width:14.53em">11111</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 1行目は白が5つなので、11111 です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-29">
-                    <figure><img src="img/30.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:0em;top:28.4em;"><div class="fs-l hs-right" style="width:21.46em">④0(黒)と1(白)の元のデータに戻す</div></div><div class="hs-a" style="left:15em;top:30.67em;"><span class="hs-chip fs-m hs-left" style="min-width:14.53em">1111110000</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 2行目は白が1つ、黒が4つなので、ここまでで 1111110000 となります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-30">
-                    <figure><img src="img/31.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:0em;top:28.4em;"><div class="fs-l hs-right" style="width:21.46em">④0(黒)と1(白)の元のデータに戻す</div></div><div class="hs-a" style="left:15em;top:30.67em;"><span class="hs-chip fs-m hs-left" style="min-width:14.53em">111111000011111</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 3行目は白が5つなので、ここまでで 111111000011111 となります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-31">
-                    <figure><img src="img/32.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:4.9em;top:8.17em;"><div class="fs-m">以下の圧縮したデータを元に戻し、画像を生成せよ。</div>
+  <div class="fs-s">ただし、<div class="hs-ul"><div>黒を0、白を1とし、符号化している。</div><div>画像サイズは、横5ピクセル×縦5ピクセル</div><div>1番上の行の左端の画素は白で始まるものとする。</div><div><b>白と黒が交互に現れ</b>、同じ色の連続個数を<br>3ビットの2進数で表している。</div></div></div></div><div class="hs-a" style="left:35.9em;top:14.67em;"><span class="hs-chip fs-m" style="min-width:11.78em">110100110011110</span></div><div class="hs-a" style="left:0em;top:17.33em;"><div class="fs-l hs-right" style="width:21.46em">① 3ビットずつに区切る</div></div><div class="hs-a" style="left:35.9em;top:17.33em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">100</span><span class="hs-chip white fs-m">110</span><span class="hs-chip white fs-m">011</span><span class="hs-chip white fs-m">110</span></div></div><div class="hs-a" style="left:0em;top:20.4em;"><div class="fs-l hs-right" style="width:21.46em">② 10進数に変換し、色の連続個数にする</div></div><div class="hs-a" style="left:36.27em;top:20.33em;"><div class="hs-row" style="gap:1.37em"><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">4</span><span class="hs-chip white fs-m sq">6</span><span class="hs-chip white fs-m sq">3</span><span class="hs-chip white fs-m sq">6</span></div></div><div class="hs-a" style="left:0em;top:23.6em;"><div class="fs-l hs-right" style="width:21.46em">③ 色の情報に変換する</div></div><div class="hs-a" style="left:38.83em;top:25.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span></div></div><div class="hs-a" style="left:0em;top:28.4em;"><div class="fs-l hs-right" style="width:21.46em">④0(黒)と1(白)の元のデータに戻す</div></div><div class="hs-a" style="left:15em;top:30.67em;"><span class="hs-chip fs-m hs-left" style="min-width:14.53em">1111110000111111000111111</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 4行目と5行目も同じように戻すと、元のデータは 1111110000111111000111111 になります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-32">
-                    <figure><img src="img/33.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:17.67em;top:11.67em;"><div class="fs-m">圧縮したデータ</div></div><div class="hs-a" style="left:28em;top:11.5em;"><span class="hs-chip fs-m" style="min-width:14.49em">110100110011110</span></div><div class="hs-a" style="left:19em;top:19.67em;"><div class="fs-m">元のデータ</div></div><div class="hs-a" style="left:28em;top:19.4em;"><span class="hs-chip fs-m" style="min-width:14.49em">1111110000111111000111111</span></div><div class="hs-a" style="left:27.6em;top:23.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 圧縮したデータ 110100110011110 が、元のデータ 1111110000111111000111111 に戻りました。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-33">
-                    <figure><img src="img/34.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮したデータを元に戻そう</span></div><div class="hs-a" style="left:17.67em;top:11.67em;"><div class="fs-m">圧縮したデータ</div></div><div class="hs-a" style="left:28em;top:11.5em;"><span class="hs-chip fs-m" style="min-width:14.49em">110100110011110</span></div><div class="hs-a" style="left:19em;top:19.67em;"><div class="fs-m">元のデータ</div></div><div class="hs-a" style="left:28em;top:19.4em;"><span class="hs-chip fs-m" style="min-width:14.49em">1111110000111111000111111</span></div><div class="hs-a" style="left:27.6em;top:23.53em;"><div class="hs-grid" style="--cell:1.93em"><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span></div></div><div class="hs-a" style="left:36.33em;top:14.67em;"><div class="hs-arrow-down"></div></div><div class="hs-a" style="left:39.9em;top:14.67em;"><div class="fs-m">圧縮したデータを元に戻すこと</div></div><div class="hs-a" style="left:43.33em;top:16.6em;"><span class="hs-chip white fs-l"><span class="hs-red"><b>展開</b></span> <small>または</small> <span class="hs-red"><b>解凍</b></span></span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> このように、圧縮したデータを元に戻すことを「展開」または「解凍」といいます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-34">
                     <figure>
-                        <h5>エントロピー符号化</h5><img src="img/35.png" alt="">
+                        <h5>エントロピー符号化</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">エントロピー符号化</span></div><div class="hs-a" style="left:5.17em;top:8.17em;"><div class="fs-xl">文字をコード化する。</div></div><div class="hs-a" style="left:13.17em;top:12.17em;"><div class="fs-m">(肩叩き機)</div></div><div class="hs-a" style="left:10.73em;top:13.5em;"><div class="fs-xl">かたたたきき</div></div><div class="hs-a" style="left:14em;top:16.33em;"><div class="fs-m">か→00 き→01 た→10<br>として文字コード化すると</div></div><div class="hs-a" style="left:29em;top:13.33em;"><div class="hs-arrow"></div></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> エントロピー符号化は、文字をコード化するときの工夫です。たとえば「かたたたきき」（肩叩き機）を、か→00、き→01、た→10 として文字コード化してみます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-35">
-                    <figure><img src="img/36.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">エントロピー符号化</span></div><div class="hs-a" style="left:5.17em;top:8.17em;"><div class="fs-xl">文字をコード化する。</div></div><div class="hs-a" style="left:13.17em;top:12.17em;"><div class="fs-m">(肩叩き機)</div></div><div class="hs-a" style="left:10.73em;top:13.5em;"><div class="fs-xl">かたたたきき</div></div><div class="hs-a" style="left:14em;top:16.33em;"><div class="fs-m">か→00 き→01 た→10<br>として文字コード化すると</div></div><div class="hs-a" style="left:29em;top:13.33em;"><div class="hs-arrow"></div></div><div class="hs-a" style="left:33.6em;top:12.07em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-l wide">か</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">き</span><span class="hs-chip white fs-l wide">き</span></div></div><div class="hs-a" style="left:33.6em;top:15em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-l wide redtxt">00</span><span class="hs-chip white fs-l wide redtxt">10</span><span class="hs-chip white fs-l wide redtxt">10</span><span class="hs-chip white fs-l wide redtxt">10</span><span class="hs-chip white fs-l wide redtxt">01</span><span class="hs-chip white fs-l wide redtxt">01</span></div></div><div class="hs-a" style="left:51.6em;top:18em;"><span class="hs-chip pink fs-m">12ビット</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> すると、00・10・10・10・01・01 となり、全部で12ビットになります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-36">
-                    <figure><img src="img/37.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">エントロピー符号化</span></div><div class="hs-a" style="left:5.17em;top:8.17em;"><div class="fs-xl">よく出る文字のコード化の長さを短くする = エントロピー符号化</div></div><div class="hs-a" style="left:13.17em;top:12.17em;"><div class="fs-m">(肩叩き機)</div></div><div class="hs-a" style="left:10.73em;top:13.5em;"><div class="fs-xl">かたたたきき</div></div><div class="hs-a" style="left:14em;top:16.33em;"><div class="fs-m">か→00 き→01 た→10<br>として文字コード化すると</div></div><div class="hs-a" style="left:29em;top:13.33em;"><div class="hs-arrow"></div></div><div class="hs-a" style="left:33.6em;top:12.07em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-l wide">か</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">き</span><span class="hs-chip white fs-l wide">き</span></div></div><div class="hs-a" style="left:33.6em;top:15em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-l wide">00</span><span class="hs-chip white fs-l wide">10</span><span class="hs-chip white fs-l wide">10</span><span class="hs-chip white fs-l wide">10</span><span class="hs-chip white fs-l wide">01</span><span class="hs-chip white fs-l wide">01</span></div></div><div class="hs-a" style="left:51.6em;top:18em;"><span class="hs-chip pink fs-m">12ビット</span></div><div class="hs-a" style="left:13em;top:22.4em;"><div class="fs-m"><span class="hs-chip white"><span class="hs-red"><b>た</b></span></span> の出現確率が高い。</div></div><div class="hs-a" style="left:13.1em;top:25.67em;"><div class="fs-m">なので、<br>「た」の文字コードを<br>「1」とする</div></div><div class="hs-a" style="left:29em;top:24.67em;"><div class="hs-arrow"></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> この文字列では「た」の出現確率が高いので、「た」の文字コードを「1」とします。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-37">
-                    <figure><img src="img/38.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">エントロピー符号化</span></div><div class="hs-a" style="left:5.17em;top:8.17em;"><div class="fs-xl">よく出る文字のコード化の長さを短くする = エントロピー符号化</div></div><div class="hs-a" style="left:13.17em;top:12.17em;"><div class="fs-m">(肩叩き機)</div></div><div class="hs-a" style="left:10.73em;top:13.5em;"><div class="fs-xl">かたたたきき</div></div><div class="hs-a" style="left:14em;top:16.33em;"><div class="fs-m">か→00 き→01 た→10<br>として文字コード化すると</div></div><div class="hs-a" style="left:29em;top:13.33em;"><div class="hs-arrow"></div></div><div class="hs-a" style="left:33.6em;top:12.07em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-l wide">か</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">た</span><span class="hs-chip white fs-l wide">き</span><span class="hs-chip white fs-l wide">き</span></div></div><div class="hs-a" style="left:33.6em;top:15em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-l wide">00</span><span class="hs-chip white fs-l wide">10</span><span class="hs-chip white fs-l wide">10</span><span class="hs-chip white fs-l wide">10</span><span class="hs-chip white fs-l wide">01</span><span class="hs-chip white fs-l wide">01</span></div></div><div class="hs-a" style="left:51.6em;top:18em;"><span class="hs-chip pink fs-m">12ビット</span></div><div class="hs-a" style="left:13em;top:22.4em;"><div class="fs-m"><span class="hs-chip white"><span class="hs-red"><b>た</b></span></span> の出現確率が高い。</div></div><div class="hs-a" style="left:13.1em;top:25.67em;"><div class="fs-m">なので、<br>「た」の文字コードを<br>「1」とする</div></div><div class="hs-a" style="left:29em;top:24.67em;"><div class="hs-arrow"></div></div><div class="hs-a" style="left:33.6em;top:24.93em;"><div class="hs-row" style="gap:0.6em"><span class="hs-chip white fs-l wide redtxt">00</span><span class="hs-chip white fs-l wide redtxt">1</span><span class="hs-chip white fs-l wide redtxt">1</span><span class="hs-chip white fs-l wide redtxt">1</span><span class="hs-chip white fs-l wide redtxt">01</span><span class="hs-chip white fs-l wide redtxt">01</span></div></div><div class="hs-a" style="left:51.6em;top:27.93em;"><span class="hs-chip pink fs-m">9ビット</span></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> すると、00・1・1・1・01・01 となり、9ビットに減ります。このように、よく出る文字のコード化の長さを短くする方法を「エントロピー符号化」といいます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-38">
                     <figure>
-                        <h5>圧縮率</h5><img src="img/39.png" alt="">
+                        <h5>圧縮率</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮率</span></div><div class="hs-a" style="left:5.83em;top:7.83em;"><div class="fs-xl">どれくらい圧縮できたか？を表す指標。</div></div><div class="hs-a" style="left:18.93em;top:10.83em;"><div class="hs-formula fs-xl">圧縮率<sub>(%)</sub> = <span class="hs-frac"><span class="hs-chip white"><span class="hs-red">圧縮<b>後</b>のデータ量</span><hr><span class="hs-red">圧縮<b>前</b>のデータ量</span></span></span></div></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 圧縮率は、どれくらい圧縮できたか？を表す指標です。圧縮率（%）＝圧縮後のデータ量÷圧縮前のデータ量 で求めます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-39">
-                    <figure><img src="img/40.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮率</span></div><div class="hs-a" style="left:5.83em;top:7.83em;"><div class="fs-xl">どれくらい圧縮できたか？を表す指標。</div></div><div class="hs-a" style="left:18.93em;top:10.83em;"><div class="hs-formula fs-xl">圧縮率<sub>(%)</sub> = <span class="hs-frac"><span class="hs-chip white"><span class="hs-red">圧縮<b>後</b>のデータ量</span><hr><span class="hs-red">圧縮<b>前</b>のデータ量</span></span></span></div></div><div class="hs-a" style="left:7.5em;top:18.17em;"><div class="hs-card" style="width:23.33em;height:9.83em">
+      <div class="hs-a" style="left:0.67em;top:0.83em"><div class="hs-grid" style="--cell:0.8em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div>
+      <div class="hs-a fs-s" style="left:5.67em;top:0.73em"><span class="hs-chip white">① 圧縮前</span></div>
+      <div class="hs-a fs-s" style="left:6.67em;top:2.83em"><span class="hs-chip white">1111110001110111000111111</span></div>
+      <div class="hs-a fs-s" style="left:5.67em;top:5.17em"><span class="hs-chip white">② 圧縮後</span></div>
+      <div class="hs-a fs-s" style="left:6.67em;top:7.27em"><span class="hs-chip white">110011011001011011110</span></div></div></div><div class="hs-a" style="left:33em;top:18.17em;"><div class="hs-card" style="width:23.33em;height:9.83em">
+      <div class="hs-a" style="left:0.6em;top:0.47em"><div style="font-size:.7em;line-height:1.25;white-space:nowrap">(肩叩き機)<br><span style="font-size:1.6em">かたたたきき</span><br>か→00 き→01 た→10<br>として文字コード化すると</div></div>
+      <div class="hs-a" style="left:10.6em;top:0.6em"><div style="font-size:.65em"><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide">か</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">き</span><span class="hs-chip white wide">き</span></div><div style="height:.3em"></div><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide">00</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">01</span><span class="hs-chip white wide">01</span></div></div></div>
+      <div class="hs-a" style="left:1em;top:5.5em"><div style="font-size:.7em;line-height:1.3;white-space:nowrap"><span class="hs-chip white"><span class="hs-red"><b>た</b></span></span> の出現確率が高い。<br>なので、「た」の<br>文字コードを「1」とする</div></div>
+      <div class="hs-a" style="left:10.6em;top:6.17em"><div style="font-size:.65em"><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide redtxt">00</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">01</span><span class="hs-chip white wide redtxt">01</span></div></div></div></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> ここまでの2つの例で、圧縮率を計算してみましょう。「エ」の画像は、圧縮前が1111110001110111000111111、圧縮後が110011011001011011110です。「かたたたきき」は、圧縮前が001010100101、圧縮後が001110101です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-40">
-                    <figure><img src="img/41.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮率</span></div><div class="hs-a" style="left:5.83em;top:7.83em;"><div class="fs-xl">どれくらい圧縮できたか？を表す指標。</div></div><div class="hs-a" style="left:18.93em;top:10.83em;"><div class="hs-formula fs-xl">圧縮率<sub>(%)</sub> = <span class="hs-frac"><span class="hs-chip white"><span class="hs-red">圧縮<b>後</b>のデータ量</span><hr><span class="hs-red">圧縮<b>前</b>のデータ量</span></span></span></div></div><div class="hs-a" style="left:7.5em;top:18.17em;"><div class="hs-card" style="width:23.33em;height:9.83em">
+      <div class="hs-a" style="left:0.67em;top:0.83em"><div class="hs-grid" style="--cell:0.8em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div>
+      <div class="hs-a fs-s" style="left:5.67em;top:0.73em"><span class="hs-chip white">① 圧縮前</span> <span class="hs-chip pink fs-s">25ビット</span></div>
+      <div class="hs-a fs-s" style="left:6.67em;top:2.83em"><span class="hs-chip white">1111110001110111000111111</span></div>
+      <div class="hs-a fs-s" style="left:5.67em;top:5.17em"><span class="hs-chip white">② 圧縮後</span> <span class="hs-chip pink fs-s">21ビット</span></div>
+      <div class="hs-a fs-s" style="left:6.67em;top:7.27em"><span class="hs-chip white">110011011001011011110</span></div></div></div><div class="hs-a" style="left:33em;top:18.17em;"><div class="hs-card" style="width:23.33em;height:9.83em">
+      <div class="hs-a" style="left:0.6em;top:0.47em"><div style="font-size:.7em;line-height:1.25;white-space:nowrap">(肩叩き機)<br><span style="font-size:1.6em">かたたたきき</span><br>か→00 き→01 た→10<br>として文字コード化すると</div></div>
+      <div class="hs-a" style="left:10.6em;top:0.6em"><div style="font-size:.65em"><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide">か</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">き</span><span class="hs-chip white wide">き</span></div><div style="height:.3em"></div><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide">00</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">01</span><span class="hs-chip white wide">01</span></div><div class="hs-right" style="margin-top:.3em"><span class="hs-chip pink">12ビット</span></div></div></div>
+      <div class="hs-a" style="left:1em;top:5.5em"><div style="font-size:.7em;line-height:1.3;white-space:nowrap"><span class="hs-chip white"><span class="hs-red"><b>た</b></span></span> の出現確率が高い。<br>なので、「た」の<br>文字コードを「1」とする</div></div>
+      <div class="hs-a" style="left:10.6em;top:6.17em"><div style="font-size:.65em"><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide redtxt">00</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">01</span><span class="hs-chip white wide redtxt">01</span></div><div class="hs-right" style="margin-top:.3em"><span class="hs-chip pink">9ビット</span></div></div></div></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 「エ」の画像は、圧縮前が25ビット、圧縮後が21ビットです。「かたたたきき」は、圧縮前が12ビット、圧縮後が9ビットです。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-41">
-                    <figure><img src="img/42.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮率</span></div><div class="hs-a" style="left:5.83em;top:7.83em;"><div class="fs-xl">どれくらい圧縮できたか？を表す指標。</div></div><div class="hs-a" style="left:18.93em;top:10.83em;"><div class="hs-formula fs-xl">圧縮率<sub>(%)</sub> = <span class="hs-frac"><span class="hs-chip white"><span class="hs-red">圧縮<b>後</b>のデータ量</span><hr><span class="hs-red">圧縮<b>前</b>のデータ量</span></span></span></div></div><div class="hs-a" style="left:7.5em;top:18.17em;"><div class="hs-card" style="width:23.33em;height:9.83em">
+      <div class="hs-a" style="left:0.67em;top:0.83em"><div class="hs-grid" style="--cell:0.8em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div>
+      <div class="hs-a fs-s" style="left:5.67em;top:0.73em"><span class="hs-chip white">① 圧縮前</span> <span class="hs-chip pink fs-s">25ビット</span></div>
+      <div class="hs-a fs-s" style="left:6.67em;top:2.83em"><span class="hs-chip white">1111110001110111000111111</span></div>
+      <div class="hs-a fs-s" style="left:5.67em;top:5.17em"><span class="hs-chip white">② 圧縮後</span> <span class="hs-chip pink fs-s">21ビット</span></div>
+      <div class="hs-a fs-s" style="left:6.67em;top:7.27em"><span class="hs-chip white">110011011001011011110</span></div></div></div><div class="hs-a" style="left:33em;top:18.17em;"><div class="hs-card" style="width:23.33em;height:9.83em">
+      <div class="hs-a" style="left:0.6em;top:0.47em"><div style="font-size:.7em;line-height:1.25;white-space:nowrap">(肩叩き機)<br><span style="font-size:1.6em">かたたたきき</span><br>か→00 き→01 た→10<br>として文字コード化すると</div></div>
+      <div class="hs-a" style="left:10.6em;top:0.6em"><div style="font-size:.65em"><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide">か</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">き</span><span class="hs-chip white wide">き</span></div><div style="height:.3em"></div><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide">00</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">01</span><span class="hs-chip white wide">01</span></div><div class="hs-right" style="margin-top:.3em"><span class="hs-chip pink">12ビット</span></div></div></div>
+      <div class="hs-a" style="left:1em;top:5.5em"><div style="font-size:.7em;line-height:1.3;white-space:nowrap"><span class="hs-chip white"><span class="hs-red"><b>た</b></span></span> の出現確率が高い。<br>なので、「た」の<br>文字コードを「1」とする</div></div>
+      <div class="hs-a" style="left:10.6em;top:6.17em"><div style="font-size:.65em"><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide redtxt">00</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">01</span><span class="hs-chip white wide redtxt">01</span></div><div class="hs-right" style="margin-top:.3em"><span class="hs-chip pink">9ビット</span></div></div></div></div></div><div class="hs-a" style="left:7.5em;top:29.33em;"><div class="hs-card fs-m hs-ratio" style="width:17.54em">圧縮率 = <span class="hs-frac2"><span>21ビット</span><span>25ビット</span></span> = <span class="hs-red"><b>84%</b></span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 「エ」の画像の圧縮率は、21ビット÷25ビット＝84%です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-42">
-                    <figure><img src="img/43.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮率</span></div><div class="hs-a" style="left:5.83em;top:7.83em;"><div class="fs-xl">どれくらい圧縮できたか？を表す指標。</div></div><div class="hs-a" style="left:18.93em;top:10.83em;"><div class="hs-formula fs-xl">圧縮率<sub>(%)</sub> = <span class="hs-frac"><span class="hs-chip white"><span class="hs-red">圧縮<b>後</b>のデータ量</span><hr><span class="hs-red">圧縮<b>前</b>のデータ量</span></span></span></div></div><div class="hs-a" style="left:7.5em;top:18.17em;"><div class="hs-card" style="width:23.33em;height:9.83em">
+      <div class="hs-a" style="left:0.67em;top:0.83em"><div class="hs-grid" style="--cell:0.8em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div>
+      <div class="hs-a fs-s" style="left:5.67em;top:0.73em"><span class="hs-chip white">① 圧縮前</span> <span class="hs-chip pink fs-s">25ビット</span></div>
+      <div class="hs-a fs-s" style="left:6.67em;top:2.83em"><span class="hs-chip white">1111110001110111000111111</span></div>
+      <div class="hs-a fs-s" style="left:5.67em;top:5.17em"><span class="hs-chip white">② 圧縮後</span> <span class="hs-chip pink fs-s">21ビット</span></div>
+      <div class="hs-a fs-s" style="left:6.67em;top:7.27em"><span class="hs-chip white">110011011001011011110</span></div></div></div><div class="hs-a" style="left:33em;top:18.17em;"><div class="hs-card" style="width:23.33em;height:9.83em">
+      <div class="hs-a" style="left:0.6em;top:0.47em"><div style="font-size:.7em;line-height:1.25;white-space:nowrap">(肩叩き機)<br><span style="font-size:1.6em">かたたたきき</span><br>か→00 き→01 た→10<br>として文字コード化すると</div></div>
+      <div class="hs-a" style="left:10.6em;top:0.6em"><div style="font-size:.65em"><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide">か</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">た</span><span class="hs-chip white wide">き</span><span class="hs-chip white wide">き</span></div><div style="height:.3em"></div><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide">00</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">10</span><span class="hs-chip white wide">01</span><span class="hs-chip white wide">01</span></div><div class="hs-right" style="margin-top:.3em"><span class="hs-chip pink">12ビット</span></div></div></div>
+      <div class="hs-a" style="left:1em;top:5.5em"><div style="font-size:.7em;line-height:1.3;white-space:nowrap"><span class="hs-chip white"><span class="hs-red"><b>た</b></span></span> の出現確率が高い。<br>なので、「た」の<br>文字コードを「1」とする</div></div>
+      <div class="hs-a" style="left:10.6em;top:6.17em"><div style="font-size:.65em"><div class="hs-row" style="gap:.25em"><span class="hs-chip white wide redtxt">00</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">1</span><span class="hs-chip white wide redtxt">01</span><span class="hs-chip white wide redtxt">01</span></div><div class="hs-right" style="margin-top:.3em"><span class="hs-chip pink">9ビット</span></div></div></div></div></div><div class="hs-a" style="left:7.5em;top:29.33em;"><div class="hs-card fs-m hs-ratio" style="width:17.54em">圧縮率 = <span class="hs-frac2"><span>21ビット</span><span>25ビット</span></span> = <span class="hs-red"><b>84%</b></span></div></div><div class="hs-a" style="left:33em;top:29.33em;"><div class="hs-card fs-m hs-ratio" style="width:17.54em">圧縮率 = <span class="hs-frac2"><span>9ビット</span><span>12ビット</span></span> = <span class="hs-red"><b>75%</b></span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 「かたたたきき」の圧縮率は、9ビット÷12ビット＝75%です。圧縮率は、数字が小さいほどよく圧縮できていることを表します。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-43">
-                    <figure><img src="img/44.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮率</span></div><div class="hs-a" style="left:5.83em;top:7.67em;"><div class="fs-xl">圧縮率は、<span class="hs-blank"></span>を超えると、圧縮できていないことになる</div></div><div class="hs-a" style="left:18.93em;top:10.83em;"><div class="hs-formula fs-xl">圧縮率<sub>(%)</sub> = <span class="hs-frac"><span class="hs-chip white"><span class="hs-red">圧縮<b>後</b>のデータ量</span><hr><span class="hs-red">圧縮<b>前</b>のデータ量</span></span></span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 圧縮率は、ある値を超えると、圧縮できていないことになります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-44">
-                    <figure><img src="img/45.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮率</span></div><div class="hs-a" style="left:5.83em;top:7.67em;"><div class="fs-xl">圧縮率は、<span class="hs-blank"></span>を超えると、圧縮できていないことになる</div></div><div class="hs-a" style="left:18.93em;top:10.83em;"><div class="hs-formula fs-xl">圧縮率<sub>(%)</sub> = <span class="hs-frac"><span class="hs-chip white"><span class="hs-red">圧縮<b>後</b>のデータ量</span><hr><span class="hs-red">圧縮<b>前</b>のデータ量</span></span></span></div></div><div class="hs-a" style="left:17.67em;top:20em;"><div class="fs-l">圧縮前</div></div><div class="hs-a" style="left:22.83em;top:19.4em;"><div class="hs-cols one fs-m" style="height:1.88em"><span class="hs-chip white">25ビット</span></div></div><div class="hs-a" style="left:17.67em;top:23.43em;"><div class="fs-l">圧縮後</div></div><div class="hs-a" style="left:22.83em;top:22.83em;"><div class="hs-cols fs-m" style="height:1.88em"><span class="hs-chip white">24ビット</span><span class="hs-chip white">25ビット</span><span class="hs-chip white">26ビット</span></div></div><div class="hs-a" style="left:22.83em;top:26.17em;"><div class="hs-cols fs-b tight" style="height:2.32em"><span class="hs-chip white">圧縮<br>できている</span><span class="hs-chip white"><span class="hs-blue">変わらない</span></span><span class="hs-chip white"><span class="hs-red">圧縮<br>できていない</span></span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> たとえば圧縮前が25ビットのとき、圧縮後が24ビットなら圧縮できている、25ビットなら変わらない、26ビットなら圧縮できていない、ということになります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-45">
-                    <figure><img src="img/46.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">圧縮率</span></div><div class="hs-a" style="left:5.83em;top:7.67em;"><div class="fs-xl">圧縮率は、<span class="hs-chip white"><span class="hs-red">100%</span></span>を超えると、圧縮できていないことになる</div></div><div class="hs-a" style="left:18.93em;top:10.83em;"><div class="hs-formula fs-xl">圧縮率<sub>(%)</sub> = <span class="hs-frac"><span class="hs-chip white"><span class="hs-red">圧縮<b>後</b>のデータ量</span><hr><span class="hs-red">圧縮<b>前</b>のデータ量</span></span></span></div></div><div class="hs-a" style="left:17.67em;top:20em;"><div class="fs-l">圧縮前</div></div><div class="hs-a" style="left:22.83em;top:19.4em;"><div class="hs-cols one fs-m" style="height:1.88em"><span class="hs-chip white">25ビット</span></div></div><div class="hs-a" style="left:17.67em;top:23.43em;"><div class="fs-l">圧縮後</div></div><div class="hs-a" style="left:22.83em;top:22.83em;"><div class="hs-cols fs-m" style="height:1.88em"><span class="hs-chip white">24ビット</span><span class="hs-chip white">25ビット</span><span class="hs-chip white">26ビット</span></div></div><div class="hs-a" style="left:22.83em;top:26.17em;"><div class="hs-cols fs-b tight" style="height:2.32em"><span class="hs-chip white">圧縮<br>できている</span><span class="hs-chip white"><span class="hs-blue">変わらない</span></span><span class="hs-chip white"><span class="hs-red">圧縮<br>できていない</span></span></div></div><div class="hs-a" style="left:22.83em;top:29.77em;"><div class="hs-cols fs-m" style="height:1.95em"><span class="hs-chip gray">98%</span><span class="hs-chip blue">100%</span><span class="hs-chip redbg">102%</span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 圧縮率で表すと、24ビットは98%、25ビットは100%、26ビットは102%です。つまり、圧縮率が100%を超えると、圧縮できていないことになります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-46">
                     <figure>
-                        <h5>拡張子とは？</h5><img src="img/47.png" alt="">
+                        <h5>拡張子とは？</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">拡張子</span></div><div class="hs-a" style="left:5.93em;top:7.83em;"><div class="fs-xl">ファイルの種類を表す。「ファイル名<u>.拡張子名</u>」</div></div><div class="hs-a" style="left:7.5em;top:13.5em;"><div class="hs-card" style="width:30.33em;height:19.83em">
+    <div class="hs-a fs-s" style="left:0.67em;top:0.83em;white-space:nowrap"><div class="hs-file"><span class="hs-fileicon"></span>08_データの圧縮<span class="hs-ext">.docx</span></div><div class="hs-file sel"><span class="hs-fileicon"></span>08_データの圧縮.docx<span class="hs-ext">.zip</span></div><div class="hs-file"><span class="hs-fileicon"></span>08_データの圧縮<span class="hs-ext">.pptx</span></div></div>
+    <div class="hs-a hs-center" style="left:18.67em;top:1.33em;width:11em"><div class="hs-zip">ZIP</div><div class="fs-s" style="white-space:nowrap"><b>08_データの圧縮.docx.zip</b></div><div class="fs-s hs-gray">ZIP アーカイブ - 63 KB</div></div></div></div><div class="hs-a" style="left:43.33em;top:13.73em;"><div class="hs-green fs-m" style="width:9.53em;white-space:nowrap">例えば…<br><br>.txt → テキスト<br>.pdf → 文書ファイル</div></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 拡張子とは、ファイルの種類を表すもので、「ファイル名.拡張子名」のように書きます。たとえば、.docx はWordファイル、.pptx はPowerPointファイル、.zip はZIPファイルです。</p>
+                        <p> ほかにも、.txt はテキスト、.pdf は文書ファイルを表します。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-47">
                     <figure>
-                        <h5>一般的なデータの圧縮形式 ZIP形式</h5><img src="img/48.png" alt="">
+                        <h5>一般的なデータの圧縮形式 ZIP形式</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">一般的なデータの圧縮の例</span><span class="hs-badge">ZIP形式</span></div><div class="hs-a" style="left:5.93em;top:7.83em;"><div class="fs-xl">一般的なファイル(Wordファイルやテキストファイルなど)を<br>圧縮する形式。メールのファイル添付などに使う。</div></div><div class="hs-a" style="left:7.67em;top:15.67em;"><div class="hs-card hs-center" style="width:20em;white-space:nowrap"><div class="hs-docx">W</div><div class="fs-m"><b>08_データの圧縮.docx</b></div><div class="fs-l"><span class="hs-redbox">429 KB</span></div></div></div><div class="hs-a" style="left:29.67em;top:20em;"><div class="hs-center fs-m">圧縮<div class="hs-arrow"></div></div></div><div class="hs-a" style="left:36.33em;top:15.67em;"><div class="hs-card hs-center" style="width:20em;white-space:nowrap"><div class="hs-zip sm">ZIP</div><div class="fs-m"><b>08_データの圧縮.docx.zip</b></div><div class="fs-l">ZIPアーカイブ - <span class="hs-redbox">63 KB</span></div></div></div><div class="hs-a" style="left:17em;top:29.67em;"><div class="hs-card fs-l hs-center" style="width:18.75em;white-space:nowrap">元のファイルと比べると<br>ファイルサイズが小さくなっている</div></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> ZIP形式は、一般的なデータの圧縮の例です。一般的なファイル（Wordファイルやテキストファイルなど）を圧縮する形式で、メールのファイル添付などに使います。</p>
+                        <p> たとえば429KBのWordファイルをZIP形式で圧縮すると63KBになり、元のファイルと比べるとファイルサイズが小さくなっています。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-48">
                     <figure>
-                        <h5>音楽データの圧縮形式 mp3形式</h5><img src="img/49.png" alt="">
+                        <h5>音楽データの圧縮形式 mp3形式</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">音声データの圧縮の例</span><span class="hs-badge">mp3</span></div><div class="hs-a" style="left:8.73em;top:7.93em;"><img src="img/parts/mp3-mokkin.png" alt="木琴をたたく人" style="width:10.67em"></div><div class="hs-a" style="left:15.33em;top:20.93em;"><img src="img/parts/mp3-taiko.png" alt="太鼓をたたく人" style="width:13.33em"></div><div class="hs-a" style="left:19.07em;top:10.6em;"><div class="fs-m">同時に音を鳴らす</div></div><div class="hs-a" style="left:44.73em;top:12.93em;"><img src="img/parts/mp3-listener.png" alt="耳をすませて聞く人" style="width:9.5em"></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 音声データの圧縮の例が、mp3形式です。たとえば、木琴と太鼓で同時に音を鳴らすとします。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-49">
-                    <figure><img src="img/50.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">音声データの圧縮の例</span><span class="hs-badge">mp3</span></div><div class="hs-a" style="left:8.73em;top:7.93em;"><img src="img/parts/mp3-mokkin.png" alt="木琴をたたく人" style="width:10.67em"></div><div class="hs-a" style="left:15.33em;top:20.93em;"><img src="img/parts/mp3-taiko.png" alt="太鼓をたたく人" style="width:13.33em"></div><div class="hs-a" style="left:19.07em;top:10.6em;"><div class="fs-m">同時に音を鳴らす</div></div><div class="hs-a" style="left:44.73em;top:12.93em;"><img src="img/parts/mp3-listener.png" alt="耳をすませて聞く人" style="width:9.5em"></div><div class="hs-a" style="left:36.33em;top:27.17em;"><div class="fs-l">木琴は聞き取りにくい<br>太鼓は聞き取りやすい</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> このとき、聞いている人には木琴は聞き取りにくく、太鼓は聞き取りやすくなります。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-50">
-                    <figure><img src="img/51.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">音声データの圧縮の例</span><span class="hs-badge">mp3</span></div><div class="hs-a" style="left:8.73em;top:7.93em;"><img src="img/parts/mp3-mokkin.png" alt="木琴をたたく人" style="width:10.67em"></div><div class="hs-a" style="left:15.33em;top:20.93em;"><img src="img/parts/mp3-taiko.png" alt="太鼓をたたく人" style="width:13.33em"></div><div class="hs-a" style="left:19.07em;top:10.6em;"><div class="fs-m">同時に音を鳴らす</div></div><div class="hs-a" style="left:44.73em;top:12.93em;"><img src="img/parts/mp3-listener.png" alt="耳をすませて聞く人" style="width:9.5em"></div><div class="hs-a" style="left:36.33em;top:27.17em;"><div class="fs-l">木琴は聞き取りにくい<br>太鼓は聞き取りやすい</div></div><div class="hs-a" style="left:33.43em;top:30.67em;"><div class="hs-green fs-l">大きな音の近くでなっている<br>小さな音は聞き取りにくい</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 大きな音の近くで鳴っている小さな音は、人間には聞き取りにくいのです。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-51">
-                    <figure><img src="img/52.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">音声データの圧縮の例</span><span class="hs-badge">mp3</span></div><div class="hs-a" style="left:8.73em;top:7.93em;"><img src="img/parts/mp3-mokkin.png" alt="木琴をたたく人" style="width:10.67em"></div><div class="hs-a" style="left:15.33em;top:20.93em;"><img src="img/parts/mp3-taiko.png" alt="太鼓をたたく人" style="width:13.33em"></div><div class="hs-a" style="left:19.07em;top:10.6em;"><div class="fs-m">同時に音を鳴らす</div></div><div class="hs-a" style="left:38.1em;top:11.43em;"><img src="img/parts/mp3-mic.png" alt="音の波形とマイク" style="width:14em"></div><div class="hs-a" style="left:36.33em;top:27.17em;"><div class="fs-l">データ的には、(聞こえないけど)<br>どちらの音の波形も記録される</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> しかし、データ的には、聞こえないけれど、どちらの音の波形も記録されます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-52">
-                    <figure><img src="img/53.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">音声データの圧縮の例</span><span class="hs-badge">mp3</span></div><div class="hs-a" style="left:8.73em;top:7.93em;"><img src="img/parts/mp3-mokkin.png" alt="木琴をたたく人" style="width:10.67em"></div><div class="hs-a" style="left:15.33em;top:20.93em;"><img src="img/parts/mp3-taiko.png" alt="太鼓をたたく人" style="width:13.33em"></div><div class="hs-a" style="left:19.07em;top:10.6em;"><div class="fs-m">同時に音を鳴らす</div></div><div class="hs-a" style="left:38.1em;top:11.43em;"><img src="img/parts/mp3-mic.png" alt="音の波形とマイク" style="width:14em"></div><div class="hs-a" style="left:36.33em;top:27.17em;"><div class="fs-l">データ的には、<span class="hs-mark">(聞こえないけど)</span><br>どちらの音の波形も記録される</div></div><div class="hs-a" style="left:29.67em;top:19.5em;"><div class="hs-bubble fs-l hs-center" style="width:9.69em"><span class="hs-red">聞こえないなら、<br>その部分だけ<br>データを削除しよう</span></div></div><div class="hs-a" style="left:18.83em;top:30.73em;"><div class="hs-card fs-m hs-center" style="width:20.43em">人間の聴覚の特性を利用して<br>音声データの一部を削除し圧縮する方法</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> そこで、聞こえないなら、その部分だけデータを削除しようと考えます。このように、人間の聴覚の特性を利用して、音声データの一部を削除し圧縮する方法がmp3形式です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-53">
                     <figure>
-                        <h5>画像データの圧縮形式 JPEG形式</h5><img src="img/54.png" alt="">
+                        <h5>画像データの圧縮形式 JPEG形式</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">画像データの圧縮の例</span><span class="hs-badge">JPEG</span></div><div class="hs-a" style="left:5.83em;top:7.83em;"><div class="fs-xl">色の見分けつきますか？(どちらが濃いですか？)</div></div><div class="hs-a" style="left:16.33em;top:12.07em;"><div class="hs-square" style="background:#ffffff"></div></div><div class="hs-a" style="left:35.57em;top:12.07em;"><div class="hs-square" style="background:#fefefe"></div></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 画像データの圧縮の例が、JPEG形式です。ここに2つの白い四角があります。色の見分けがつきますか？どちらが濃いでしょうか？</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-54">
-                    <figure><img src="img/55.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">画像データの圧縮の例</span><span class="hs-badge">JPEG</span></div><div class="hs-a" style="left:5.83em;top:7.83em;"><div class="fs-xl">色の見分けつきますか？(どちらが濃いですか？)</div></div><div class="hs-a" style="left:16.33em;top:12.07em;"><div class="hs-square" style="background:#ffffff"></div></div><div class="hs-a" style="left:35.57em;top:12.07em;"><div class="hs-square" style="background:#fefefe"></div></div><div class="hs-a" style="left:16.33em;top:24.07em;"><div class="fs-m hs-center" style="width:9.08em;white-space:nowrap">R:255 G:255 B:255</div></div><div class="hs-a" style="left:35.57em;top:24.07em;"><div class="fs-m hs-center" style="width:9.08em;white-space:nowrap">R:254 G:254 B:254</div></div><div class="hs-a" style="left:16.57em;top:27em;"><div class="hs-card fs-m hs-center" style="width:23.44em">人間は色の変化には鈍感 = 同じ色にしてしまう</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 左はR:255 G:255 B:255、右はR:254 G:254 B:254で、じつは少しだけ色がちがいます。人間は色の変化には鈍感なので、このような色を同じ色にしてしまいます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-55">
-                    <figure><img src="img/56.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">画像データの圧縮の例</span><span class="hs-badge">JPEG</span></div><div class="hs-a" style="left:5.83em;top:7.83em;"><div class="fs-xl">色調の似ている部分をまとめ、情報量を少なくし圧縮する</div></div><div class="hs-a" style="left:17.23em;top:10.57em;"><img src="img/parts/jpeg-photo.jpg" alt="似ている色調を統合する例と、JPEG（最高画質）と JPEG（低画質）の写真の比較" style="width:29.53em"></div><div class="hs-a" style="left:0em;top:33.5em;"><div class="fs-s hs-center" style="width:68.82em"><a href="https://support.nec-lavie.jp/navigate/application/prevent/useful/20130514/index.html" target="_blank" rel="noopener">https://support.nec-lavie.jp/navigate/application/prevent/useful/20130514/index.html</a></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> JPEG形式は、色調の似ている部分をまとめ、情報量を少なくして圧縮します。似ている色調を統合してしまうので、最高画質と低画質を比べると、低画質のほうは色がまとめられて粗く見えます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-56">
                     <figure>
-                        <h5>動画データの圧縮形式 MPEG形式</h5><img src="img/57.png" alt="">
+                        <h5>動画データの圧縮形式 MPEG形式</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">動画データの圧縮の例</span><span class="hs-badge">MPEG</span></div><div class="hs-a" style="left:12.67em;top:6.4em;"><img src="img/parts/mpeg-frames.jpg" alt="圧縮していない映像と MPEG 圧縮した映像のフレームの比較" style="width:39.6em"></div><div class="hs-a" style="left:22.93em;top:23.23em;"><div class="hs-bubble sq fs-b hs-center" style="width:17.97em;white-space:nowrap">前のフレームと同じところは、<br>そこのデータだけ消去</div></div><div class="hs-a" style="left:4.6em;top:27.17em;"><div class="hs-bubble sq fs-b" style="width:21.8em;white-space:nowrap">再生プレイヤーが、うまく結びつけて<br>圧縮前の映像と同じ映像が流れるようにする</div></div><div class="hs-a" style="left:0em;top:32.17em;"><div class="fs-m hs-center" style="width:48.12em"><a href="https://www.itmedia.co.jp/mobile/0206/10/n_key.html" target="_blank" rel="noopener">https://www.itmedia.co.jp/mobile/0206/10/n_key.html</a> より</div></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 動画データの圧縮の例が、MPEG形式です。圧縮していない映像は、1コマ1コマ（フレーム）をすべて記録しています。</p>
+                        <p> MPEG圧縮では、前のフレームと同じところは、そこのデータだけ消去します。再生プレイヤーが、うまく結びつけて、圧縮前の映像と同じ映像が流れるようにします。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-57">
                     <figure>
-                        <h5>可逆圧縮と非可逆圧縮</h5><img src="img/58.png" alt="">
+                        <h5>可逆圧縮と非可逆圧縮</h5><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">可逆圧縮と非可逆圧縮</span></div><div class="hs-a" style="left:0em;top:7.83em;"><div class="fs-xl hs-center" style="width:33.68em">圧縮したデータを<b>完全に</b>元の0と1のデータに</div></div><div class="hs-a" style="left:0em;top:11.27em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せる</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:11.27em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:13.93em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せない</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:13.93em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">非可逆圧縮</span></span></div></div></div>
                     </figure>
-                    <div class="image-row-description image-row-description-padding-top"></div>
+                    <div class="image-row-description image-row-description-padding-top">
+                        <p> 圧縮したデータを完全に元の0と1のデータに戻せる圧縮方法を「可逆圧縮」、戻せない圧縮方法を「非可逆圧縮」といいます。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-58">
-                    <figure><img src="img/59.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">可逆圧縮と非可逆圧縮</span></div><div class="hs-a" style="left:0em;top:7.83em;"><div class="fs-xl hs-center" style="width:33.68em">圧縮したデータを<b>完全に</b>元の0と1のデータに</div></div><div class="hs-a" style="left:0em;top:11.27em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せる</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:11.27em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:13.93em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せない</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:13.93em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">非可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:18.17em;"><div class="fs-m hs-center" style="width:48.12em">① ランレングス法で圧縮されたこのデータ、完全に元に戻せる？</div></div><div class="hs-a" style="left:6.83em;top:20.73em;"><span class="hs-chip fs-m" style="min-width:11.73em">110100110011110</span></div><div class="hs-a" style="left:9.73em;top:23.23em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> ①ランレングス法で圧縮されたデータ 110100110011110 は、完全に元に戻せるでしょうか？</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-59">
-                    <figure><img src="img/60.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">可逆圧縮と非可逆圧縮</span></div><div class="hs-a" style="left:0em;top:7.83em;"><div class="fs-xl hs-center" style="width:33.68em">圧縮したデータを<b>完全に</b>元の0と1のデータに</div></div><div class="hs-a" style="left:0em;top:11.27em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せる</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:11.27em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:13.93em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せない</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:13.93em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">非可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:18.17em;"><div class="fs-m hs-center" style="width:48.12em">① ランレングス法で圧縮されたこのデータ、完全に元に戻せる？</div></div><div class="hs-a" style="left:6.83em;top:20.73em;"><span class="hs-chip fs-m" style="min-width:11.73em">110100110011110</span></div><div class="hs-a" style="left:9.73em;top:23.23em;"><div class="hs-grid" style="--cell:1.93em"><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span><span class="w"></span></div></div><div class="hs-a" style="left:22.5em;top:27em;"><div class="hs-arrow"></div></div><div class="hs-a" style="left:24.07em;top:20.73em;"><span class="hs-chip fs-m" style="min-width:14.53em">1111110000111111000111111</span></div><div class="hs-a" style="left:28.83em;top:23.23em;"><div class="hs-grid" style="--cell:1.93em"><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="k">0</span><span class="k">0</span><span class="k">0</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span><span class="w">1</span></div></div><div class="hs-a" style="left:40.5em;top:24.07em;"><div class="fs-b" style="line-height:1.3;white-space:nowrap">同じ色の連続個数を<br>何ビットで表すかが<br>分かれば、完全に<br>戻すことができる。<br><br>つまり <span class="hs-chip white fs-l"><span class="hs-red"><b>可逆圧縮</b></span></span> である。</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> 同じ色の連続個数を何ビットで表すかが分かれば、1111110000111111000111111 に完全に戻すことができます。つまり、ランレングス法は可逆圧縮です。</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-60">
-                    <figure><img src="img/61.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">可逆圧縮と非可逆圧縮</span></div><div class="hs-a" style="left:0em;top:7.83em;"><div class="fs-xl hs-center" style="width:33.68em">圧縮したデータを<b>完全に</b>元の0と1のデータに</div></div><div class="hs-a" style="left:0em;top:11.27em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せる</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:11.27em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:13.93em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せない</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:13.93em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">非可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:18.17em;"><div class="fs-m hs-center" style="width:48.12em">② mp3形式の音声データ、完全に元に戻せる？</div></div><div class="hs-a" style="left:8.83em;top:20.93em;"><img src="img/parts/mp3-mokkin.png" alt="木琴をたたく人" style="width:5.5em"></div><div class="hs-a" style="left:12.27em;top:27.67em;"><img src="img/parts/mp3-taiko.png" alt="太鼓をたたく人" style="width:6.83em"></div><div class="hs-a" style="left:14.17em;top:22.17em;"><div class="fs-s">同時に音を鳴らす</div></div><div class="hs-a" style="left:24.33em;top:22.67em;"><img src="img/parts/mp3-mic.png" alt="音の波形とマイク" style="width:7.17em"></div><div class="hs-a" style="left:19.67em;top:26.83em;"><div class="hs-bubble fs-t hs-center" style="width:10.41em;white-space:nowrap"><span class="hs-red">聞こえないなら、<br>その部分だけ<br>データを削除しよう</span></div></div><div class="hs-a" style="left:23.33em;top:31em;"><div class="fs-s">データ的には、<span class="hs-mark">(聞こえないけど)</span><br>どちらの音の波形も記録される</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> ②mp3形式の音声データは、完全に元に戻せるでしょうか？</p>
+                    </div>
                 </div>
                 <div class="image-row" id="slide-61">
-                    <figure><img src="img/62.png" alt=""></figure>
-                    <div class="image-row-description"></div>
+                    <figure><div class="hslide"><div class="hs-c"><div class="hs-head"><span class="hs-head-t">可逆圧縮と非可逆圧縮</span></div><div class="hs-a" style="left:0em;top:7.83em;"><div class="fs-xl hs-center" style="width:33.68em">圧縮したデータを<b>完全に</b>元の0と1のデータに</div></div><div class="hs-a" style="left:0em;top:11.27em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せる</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:11.27em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:13.93em;"><div class="fs-xl hs-right" style="width:17.54em"><u>戻せない</u>圧縮方法</div></div><div class="hs-a" style="left:34.33em;top:13.93em;"><span class="hs-chip white fs-xl" style="min-width:6.28em"><span class="hs-red">非可逆圧縮</span></span></div><div class="hs-a" style="left:0em;top:18.17em;"><div class="fs-m hs-center" style="width:48.12em">② mp3形式の音声データ、完全に元に戻せる？</div></div><div class="hs-a" style="left:8.83em;top:20.93em;"><img src="img/parts/mp3-mokkin.png" alt="木琴をたたく人" style="width:5.5em"></div><div class="hs-a" style="left:12.27em;top:27.67em;"><img src="img/parts/mp3-taiko.png" alt="太鼓をたたく人" style="width:6.83em"></div><div class="hs-a" style="left:14.17em;top:22.17em;"><div class="fs-s">同時に音を鳴らす</div></div><div class="hs-a" style="left:24.33em;top:22.67em;"><img src="img/parts/mp3-mic.png" alt="音の波形とマイク" style="width:7.17em"></div><div class="hs-a" style="left:19.67em;top:26.83em;"><div class="hs-bubble fs-t hs-center" style="width:10.41em;white-space:nowrap"><span class="hs-red">聞こえないなら、<br>その部分だけ<br>データを削除しよう</span></div></div><div class="hs-a" style="left:23.33em;top:31em;"><div class="fs-s">データ的には、<span class="hs-mark">(聞こえないけど)</span><br>どちらの音の波形も記録される</div></div><div class="hs-a" style="left:40.5em;top:24.07em;"><div class="fs-b" style="line-height:1.3;white-space:nowrap">人間に聞こえにくい音そのものを<br>削除してしまっていて、<br>その部分のデータを戻すことができない。<br><br>つまり <span class="hs-chip white fs-l"><span class="hs-red"><b>非可逆圧縮</b></span></span> である。</div></div></div></div></figure>
+                    <div class="image-row-description">
+                        <p> mp3形式は、人間に聞こえにくい音そのものを削除してしまっているので、その部分のデータを戻すことができません。つまり、mp3形式は非可逆圧縮です。</p>
+                    </div>
                 </div>
                 <!-- ここまでベタ打ち -->
             </div>
@@ -403,260 +601,330 @@
         {
             title: "データの圧縮とは",
             descriptions: [
+                "データは0と1の文字の羅列です。文字コード（JISコード）、画像のデジタル化、音のデジタル化のどれも、最後は0と1の並びで表されます。",
+                "たとえば文字の「ネ」は11001000、「コ」は10111010となり、画像や音も符号化すると0と1の長い並びになります。",
             ]
         },
         {
             descriptions: [
+                "圧縮とは、0と1のデータを、うまいこと工夫してデータサイズを削減することです。",
             ]
         },
         {
             title: "ランレングス法",
             descriptions: [
+                "圧縮の原理を、カタカナの「エ」を画像にしたもの（横5×縦5ピクセル）で確かめます。",
+                "①黒を0、白を1として符号化すると、1111110001110111000111111 になります。",
             ]
         },
         {
             descriptions: [
+                "②同じ値が連続している部分に区切って、その連続するビット数を表します。",
+                "はじめは1が連続で6ビット分でているので「6」です。",
             ]
         },
         {
             descriptions: [
+                "次は0が連続で3ビット分でているので「3」です。",
             ]
         },
         {
             descriptions: [
+                "同じように最後まで区切ると、6・3・3・1・3・3・6 となります。",
             ]
         },
         {
             descriptions: [
+                "③連続するビット数を2進数に変換すると、110・11・11・1・11・11・110 となります。",
             ]
         },
         {
             descriptions: [
+                "ただし、このままでは区切りがわからなくなるので、各ビットは一番長いビット数にそろえます。",
             ]
         },
         {
             descriptions: [
+                "足りない部分は先頭に0を加えて補います。すると、110・011・011・001・011・011・110 となります。",
             ]
         },
         {
             descriptions: [
+                "④圧縮前と圧縮後のデータサイズを比べてみましょう。",
             ]
         },
         {
             descriptions: [
+                "圧縮前は25ビット、圧縮後は21ビットです。圧縮によってデータサイズが小さくなりました。",
             ]
         },
         {
             descriptions: [
+                "このように、同じデータが連続していることに着目して圧縮する方法を「ランレングス法」といいます。",
             ]
         },
         {
             descriptions: [
+                "ただし、圧縮できないこともあります。数字の「3」の画像は、圧縮前が1000111101110011110110001の25ビットです。",
+                "連続するビット数は1・3・4・1・3・2・4・1・2・3・1と細かく分かれ、3ビットずつの2進数にすると33ビットになり、かえって大きくなってしまいます。",
             ]
         },
         {
             title: "データの展開(解凍)",
             descriptions: [
+                "圧縮したデータを元に戻してみましょう。次の圧縮したデータ 110100110011110 を元に戻し、画像を生成します。",
+                "ただし、黒を0、白を1として符号化しています。画像サイズは横5ピクセル×縦5ピクセルで、1番上の行の左端の画素は白で始まるものとします。白と黒が交互に現れ、同じ色の連続個数を3ビットの2進数で表しています。",
             ]
         },
         {
             descriptions: [
+                "同じ色の連続個数は3ビットの2進数で表しているので、まず①3ビットずつに区切ります。",
             ]
         },
         {
             descriptions: [
+                "3ビットずつに区切ると、110・100・110・011・110 となります。",
             ]
         },
         {
             descriptions: [
+                "次に②3ビットの2進数を10進数に変換し、色の連続個数にします。",
             ]
         },
         {
             descriptions: [
+                "10進数に変換すると、6・4・6・3・6 となります。",
             ]
         },
         {
             descriptions: [
+                "最後に③色の情報に変換します。",
             ]
         },
         {
             descriptions: [
+                "画像サイズは横5ピクセル×縦5ピクセルなので、5×5のマスに色をぬっていきます。",
             ]
         },
         {
             descriptions: [
+                "1番上の行の左端の画素は白で始まり、白と黒は交互に現れます。最初の「6」は、白が6つ続くという意味です。",
             ]
         },
         {
             descriptions: [
+                "左上から右へ、1行目の5マスと2行目の左端の1マス、あわせて6マスを白でぬります。",
             ]
         },
         {
             descriptions: [
+                "次の「4」は、次の色は黒で、4つ連続で続くという意味です。",
             ]
         },
         {
             descriptions: [
+                "2行目の残りの4マスを黒でぬります。",
             ]
         },
         {
             descriptions: [
+                "3つ目の「6」は、次の色は白で、6つ連続で続くという意味です。3行目の5マスと4行目の左端の1マスを白でぬります。",
             ]
         },
         {
             descriptions: [
+                "4つ目の「3」は、次の色は黒で、3つ連続で続くという意味です。4行目の2〜4マス目を黒でぬります。",
             ]
         },
         {
             descriptions: [
+                "最後の「6」は、次の色は白で、6つ連続で続くという意味です。4行目の右端と5行目の5マスを白でぬると、画像が完成します。",
             ]
         },
         {
             descriptions: [
+                "最後に④0（黒）と1（白）の元のデータに戻します。",
             ]
         },
         {
             descriptions: [
+                "1行目は白が5つなので、11111 です。",
             ]
         },
         {
             descriptions: [
+                "2行目は白が1つ、黒が4つなので、ここまでで 1111110000 となります。",
             ]
         },
         {
             descriptions: [
+                "3行目は白が5つなので、ここまでで 111111000011111 となります。",
             ]
         },
         {
             descriptions: [
+                "4行目と5行目も同じように戻すと、元のデータは 1111110000111111000111111 になります。",
             ]
         },
         {
             descriptions: [
+                "圧縮したデータ 110100110011110 が、元のデータ 1111110000111111000111111 に戻りました。",
             ]
         },
         {
             descriptions: [
+                "このように、圧縮したデータを元に戻すことを「展開」または「解凍」といいます。",
             ]
         },
         {
             title: "エントロピー符号化",
             descriptions: [
+                "エントロピー符号化は、文字をコード化するときの工夫です。たとえば「かたたたきき」（肩叩き機）を、か→00、き→01、た→10 として文字コード化してみます。",
             ]
         },
         {
             descriptions: [
+                "すると、00・10・10・10・01・01 となり、全部で12ビットになります。",
             ]
         },
         {
             descriptions: [
+                "この文字列では「た」の出現確率が高いので、「た」の文字コードを「1」とします。",
             ]
         },
         {
             descriptions: [
+                "すると、00・1・1・1・01・01 となり、9ビットに減ります。このように、よく出る文字のコード化の長さを短くする方法を「エントロピー符号化」といいます。",
             ]
         },
         {
             title: "圧縮率",
             descriptions: [
+                "圧縮率は、どれくらい圧縮できたか？を表す指標です。圧縮率（%）＝圧縮後のデータ量÷圧縮前のデータ量 で求めます。",
             ]
         },
         {
             descriptions: [
+                "ここまでの2つの例で、圧縮率を計算してみましょう。「エ」の画像は、圧縮前が1111110001110111000111111、圧縮後が110011011001011011110です。「かたたたきき」は、圧縮前が001010100101、圧縮後が001110101です。",
             ]
         },
         {
             descriptions: [
+                "「エ」の画像は、圧縮前が25ビット、圧縮後が21ビットです。「かたたたきき」は、圧縮前が12ビット、圧縮後が9ビットです。",
             ]
         },
         {
             descriptions: [
+                "「エ」の画像の圧縮率は、21ビット÷25ビット＝84%です。",
             ]
         },
         {
             descriptions: [
+                "「かたたたきき」の圧縮率は、9ビット÷12ビット＝75%です。圧縮率は、数字が小さいほどよく圧縮できていることを表します。",
             ]
         },
         {
             descriptions: [
+                "圧縮率は、ある値を超えると、圧縮できていないことになります。",
             ]
         },
         {
             descriptions: [
+                "たとえば圧縮前が25ビットのとき、圧縮後が24ビットなら圧縮できている、25ビットなら変わらない、26ビットなら圧縮できていない、ということになります。",
             ]
         },
         {
             descriptions: [
+                "圧縮率で表すと、24ビットは98%、25ビットは100%、26ビットは102%です。つまり、圧縮率が100%を超えると、圧縮できていないことになります。",
             ]
         },
         {
             title: "拡張子とは？",
             descriptions: [
+                "拡張子とは、ファイルの種類を表すもので、「ファイル名.拡張子名」のように書きます。たとえば、.docx はWordファイル、.pptx はPowerPointファイル、.zip はZIPファイルです。",
+                "ほかにも、.txt はテキスト、.pdf は文書ファイルを表します。",
             ]
         },
         {
             title: "一般的なデータの圧縮形式 ZIP形式",
             descriptions: [
+                "ZIP形式は、一般的なデータの圧縮の例です。一般的なファイル（Wordファイルやテキストファイルなど）を圧縮する形式で、メールのファイル添付などに使います。",
+                "たとえば429KBのWordファイルをZIP形式で圧縮すると63KBになり、元のファイルと比べるとファイルサイズが小さくなっています。",
             ]
         },
         {
             title: "音楽データの圧縮形式 mp3形式",
             descriptions: [
+                "音声データの圧縮の例が、mp3形式です。たとえば、木琴と太鼓で同時に音を鳴らすとします。",
             ]
         },
         {
             descriptions: [
+                "このとき、聞いている人には木琴は聞き取りにくく、太鼓は聞き取りやすくなります。",
             ]
         },
         {
             descriptions: [
+                "大きな音の近くで鳴っている小さな音は、人間には聞き取りにくいのです。",
             ]
         },
         {
             descriptions: [
+                "しかし、データ的には、聞こえないけれど、どちらの音の波形も記録されます。",
             ]
         },
         {
             descriptions: [
+                "そこで、聞こえないなら、その部分だけデータを削除しようと考えます。このように、人間の聴覚の特性を利用して、音声データの一部を削除し圧縮する方法がmp3形式です。",
             ]
         },
         {
             title: "画像データの圧縮形式 JPEG形式",
             descriptions: [
+                "画像データの圧縮の例が、JPEG形式です。ここに2つの白い四角があります。色の見分けがつきますか？どちらが濃いでしょうか？",
             ]
         },
         {
             descriptions: [
+                "左はR:255 G:255 B:255、右はR:254 G:254 B:254で、じつは少しだけ色がちがいます。人間は色の変化には鈍感なので、このような色を同じ色にしてしまいます。",
             ]
         },
         {
             descriptions: [
+                "JPEG形式は、色調の似ている部分をまとめ、情報量を少なくして圧縮します。似ている色調を統合してしまうので、最高画質と低画質を比べると、低画質のほうは色がまとめられて粗く見えます。",
             ]
         },
         {
             title: "動画データの圧縮形式 MPEG形式",
             descriptions: [
+                "動画データの圧縮の例が、MPEG形式です。圧縮していない映像は、1コマ1コマ（フレーム）をすべて記録しています。",
+                "MPEG圧縮では、前のフレームと同じところは、そこのデータだけ消去します。再生プレイヤーが、うまく結びつけて、圧縮前の映像と同じ映像が流れるようにします。",
             ]
         },
         {
             title: "可逆圧縮と非可逆圧縮",
             descriptions: [
+                "圧縮したデータを完全に元の0と1のデータに戻せる圧縮方法を「可逆圧縮」、戻せない圧縮方法を「非可逆圧縮」といいます。",
             ]
         },
         {
             descriptions: [
+                "①ランレングス法で圧縮されたデータ 110100110011110 は、完全に元に戻せるでしょうか？",
             ]
         },
         {
             descriptions: [
+                "同じ色の連続個数を何ビットで表すかが分かれば、1111110000111111000111111 に完全に戻すことができます。つまり、ランレングス法は可逆圧縮です。",
             ]
         },
         {
             descriptions: [
+                "②mp3形式の音声データは、完全に元に戻せるでしょうか？",
             ]
         },
         {
             descriptions: [
+                "mp3形式は、人間に聞こえにくい音そのものを削除してしまっているので、その部分のデータを戻すことができません。つまり、mp3形式は非可逆圧縮です。",
             ]
         },
     ]
