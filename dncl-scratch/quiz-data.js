@@ -4397,4 +4397,68 @@ window.quizData = {
         ],
         defaultHint: "乱数() は 0 以上 1 未満の数を返します。0 から 1 までの帯のうち、0 から 0.4 までのぶんがちょうど4割。この「0.4 より小さいほう」を当たりにしたいので、r と 0.4 をくらべる記号は < です。乱数を使っているので実行するたびに結果は変わりますが、何回もためすと4割くらいが「当たり」になります"
     },
+  q057: {
+        title: "選挙の議席はどう配る？（ドント式）",
+        addedAt: "2026-10-23",
+        difficulty: 4,
+        question: "比例代表では、得票をそのまま比べるのではなく「ドント式」で議席を配ります。やり方は、各党の得票を 1, 2, 3 …と順番にわり、その商が大きい順に議席を渡していく、というものです。配列 tou に党名、hyou に得票（＝[900,1500,600]）、giseki にいま持っている議席（最初は全部0）が入っています。5議席を配るプログラムを完成させよう。商は「その党の得票 ÷（いま持っている議席 ＋ 1）」で求めます。議席を取った党は、次からわる数が大きくなるので商が下がります（2か所の穴をうめよう）",
+        ast: [
+            { type: "assign", name: "tou", value: "[\"A党\",\"B党\",\"C党\"]" },
+            { type: "assign", name: "hyou", value: "[900,1500,600]" },
+            { type: "assign", name: "giseki", value: "[0,0,0]" },
+            {
+                type: "for", varName: "k", start: "1", end: "5", step: "1",
+                body: [
+                    { type: "assign", name: "saidai", value: "0" },
+                    { type: "assign", name: "touban", value: "0" },
+                    {
+                        type: "for", varName: "i", start: "0", end: "2", step: "1",
+                        body: [
+                            { type: "assign", name: "shou", value: "hyou[i] / __BLANK_blank_a__" },
+                            {
+                                type: "if", condition: "shou > saidai",
+                                body: [
+                                    { type: "assign", name: "saidai", value: "shou" },
+                                    { type: "assign", name: "touban", value: "i" }
+                                ]
+                            }
+                        ]
+                    },
+                    { type: "assign", name: "giseki[touban]", value: "__BLANK_blank_b__" }
+                ]
+            },
+            {
+                type: "for", varName: "i", start: "0", end: "2", step: "1",
+                body: [ { type: "print", value: "tou[i] + \"  \" + giseki[i] + \"議席\"" } ]
+            }
+        ],
+        choices: [
+            { label: "(giseki[i] + 1)", value: "(giseki[i] + 1)" },
+            { label: "k", value: "k" },
+            { label: "(i + 1)", value: "(i + 1)" },
+            { label: "giseki[touban] + 1", value: "giseki[touban] + 1" },
+            { label: "1", value: "1" },
+            { label: "giseki[touban]", value: "giseki[touban]" }
+        ],
+        answers: [
+            { values: ["(giseki[i] + 1)", "giseki[touban] + 1"], correct: true },
+            { values: ["(giseki[i] + 1)", "1"], correct: false,
+              hint: "わる数は正解です。でも giseki[touban] = 1 だと、何議席取っても「1」で上書きされてしまいます。同じ党が2議席目を取っても1のままなので、配り終えたときの合計が5議席になりません（A党1・B党1・C党0）。いま持っている数に1を足しましょう" },
+            { values: ["(giseki[i] + 1)", "giseki[touban]"], correct: false,
+              hint: "わる数は正解です。でも giseki[touban] = giseki[touban] は「何も変えない」ので、議席が1つも増えません。商もずっと同じままで、結果は全部0議席になります" },
+            { values: ["k", "giseki[touban] + 1"], correct: false,
+              hint: "議席を増やすところは正解です。でも k でわると、全部の党を同じ数でわることになります。それでは順位がずっと変わらず、いちばん票の多いB党が5議席を独り占めします（B党5議席）。わる数は党ごとに変わる「その党の議席 + 1」です" },
+            { values: ["k", "1"], correct: false,
+              hint: "2か所とも違います。k でわると順位が変わらずB党ばかりが選ばれ、さらに giseki[touban] = 1 で上書きされるので、B党1議席だけという結果になります" },
+            { values: ["k", "giseki[touban]"], correct: false,
+              hint: "2か所とも違います。k でわると順位が変わらないうえ、議席も増えないので、結果は全部0議席です" },
+            { values: ["(i + 1)", "giseki[touban] + 1"], correct: false,
+              hint: "議席を増やすところは正解です。でも i + 1 は「何番目の党か」であって、その党が持っている議席の数ではありません。A党は必ず1でわられるので商が下がらず、A党が5議席を独り占めします" },
+            { values: ["(i + 1)", "1"], correct: false,
+              hint: "2か所とも違います。i + 1 だとA党がずっと有利なうえ、giseki[touban] = 1 で上書きされるので、A党1議席だけになります" },
+            { values: ["(i + 1)", "giseki[touban]"], correct: false,
+              hint: "2か所とも違います。i + 1 は党の番号で、議席の数ではありません。さらに議席も増えないので、結果は全部0議席です" }
+        ],
+        defaultHint: "ドント式は「得票 ÷（いま持っている議席 + 1）」を全部の党で計算し、その商がいちばん大きい党に1議席を渡す、をくり返します。議席を取った党は、次からわる数が1つ大きくなるので商が下がり、ほかの党に順番が回ります。議席を渡すところは giseki[touban] = giseki[touban] + 1 と、いまの数に1を足します。答えは A党1議席・B党3議席・C党1議席です"
+    },
 }

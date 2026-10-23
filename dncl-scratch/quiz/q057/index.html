@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第57問 選挙の議席はどう配る？（ドント式）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="比例代表では、得票をそのまま比べるのではなく「ドント式」で議席を配ります。やり方は、各党の得票を 1, 2, 3 …と順番にわり、その商が大きい順に議席を渡していく、というものです。配列 tou に党名、hyou に得票（＝[900,1500,600]）、giseki にいま持っている議席（最初は全部0）が入っています。5議席を配るプログラムを完成させよう。商は「その党の得票 ÷（いま持っている議席 ＋ 1）」で求めます。議席を取った党は、次からわる数が大きくなるので商が下がります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,選挙の議席はどう配る？（ドント式）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第57問 選挙の議席はどう配る？（ドント式）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="比例代表では、得票をそのまま比べるのではなく「ドント式」で議席を配ります。やり方は、各党の得票を 1, 2, 3 …と順番にわり、その商が大きい順に議席を渡していく、というものです。配列 tou に党名、hyou に得票（＝[900,1500,600]）、giseki にいま持っている議席（最初は全部0）が入っています。5議席を配るプログラムを完成させよう。商は「その党の得票 ÷（いま持っている議席 ＋ 1）」で求めます。議席を取った党は、次からわる数が大きくなるので商が下がります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q057.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第57問 選挙の議席はどう配る？（ドント式）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="比例代表では、得票をそのまま比べるのではなく「ドント式」で議席を配ります。やり方は、各党の得票を 1, 2, 3 …と順番にわり、その商が大きい順に議席を渡していく、というものです。配列 tou に党名、hyou に得票（＝[900,1500,600]）、giseki にいま持っている議席（最初は全部0）が入っています。5議席を配るプログラムを完成させよう。商は「その党の得票 ÷（いま持っている議席 ＋ 1）」で求めます。議席を取った党は、次からわる数が大きくなるので商が下がります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q057.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html#quiz",
+      "name": "第57問 選挙の議席はどう配る？（ドント式）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "比例代表では、得票をそのまま比べるのではなく「ドント式」で議席を配ります。やり方は、各党の得票を 1, 2, 3 …と順番にわり、その商が大きい順に議席を渡していく、というものです。配列 tou に党名、hyou に得票（＝[900,1500,600]）、giseki にいま持っている議席（最初は全部0）が入っています。5議席を配るプログラムを完成させよう。商は「その党の得票 ÷（いま持っている議席 ＋ 1）」で求めます。議席を取った党は、次からわる数が大きくなるので商が下がります（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "(giseki[i] + 1) , giseki[touban] + 1"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "(giseki[i] + 1)"
+          },
+          {
+            "@type": "Answer",
+            "text": "k"
+          },
+          {
+            "@type": "Answer",
+            "text": "(i + 1)"
+          },
+          {
+            "@type": "Answer",
+            "text": "giseki[touban] + 1"
+          },
+          {
+            "@type": "Answer",
+            "text": "1"
+          },
+          {
+            "@type": "Answer",
+            "text": "giseki[touban]"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第57問 選挙の議席はどう配る？（ドント式）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q057/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q057";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第57問 選挙の議席はどう配る？（ドント式）</h1>
+            <p>比例代表では、得票をそのまま比べるのではなく「ドント式」で議席を配ります。やり方は、各党の得票を 1, 2, 3 …と順番にわり、その商が大きい順に議席を渡していく、というものです。配列 tou に党名、hyou に得票（＝[900,1500,600]）、giseki にいま持っている議席（最初は全部0）が入っています。5議席を配るプログラムを完成させよう。商は「その党の得票 ÷（いま持っている議席 ＋ 1）」で求めます。議席を取った党は、次からわる数が大きくなるので商が下がります（2か所の穴をうめよう）</p>
+            <p>難易度：★★★★☆（4／やや難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>tou = [&quot;A党&quot;,&quot;B党&quot;,&quot;C党&quot;]
+hyou = [900,1500,600]
+giseki = [0,0,0]
+k を 1 から 5 まで 1 ずつ増やしながら繰り返す:
+  saidai = 0
+  touban = 0
+  i を 0 から 2 まで 1 ずつ増やしながら繰り返す:
+    shou = hyou[i] / ［A］
+    もし shou &gt; saidai ならば:
+      saidai = shou
+      touban = i
+  giseki[touban] = ［B］
+i を 0 から 2 まで 1 ずつ増やしながら繰り返す:
+  表示する(tou[i] + &quot;  &quot; + giseki[i] + &quot;議席&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>(giseki[i] + 1)</code></li>
+                <li><code>k</code></li>
+                <li><code>(i + 1)</code></li>
+                <li><code>giseki[touban] + 1</code></li>
+                <li><code>1</code></li>
+                <li><code>giseki[touban]</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>ドント式は「得票 ÷（いま持っている議席 + 1）」を全部の党で計算し、その商がいちばん大きい党に1議席を渡す、をくり返します。議席を取った党は、次からわる数が1つ大きくなるので商が下がり、ほかの党に順番が回ります。議席を渡すところは giseki[touban] = giseki[touban] + 1 と、いまの数に1を足します。答えは A党1議席・B党3議席・C党1議席です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>(giseki[i] + 1)</code></li>
+            <li>空欄 ［B］ … <code>giseki[touban] + 1</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>(giseki[i] + 1)</code>　［B］<code>1</code> … わる数は正解です。でも giseki[touban] = 1 だと、何議席取っても「1」で上書きされてしまいます。同じ党が2議席目を取っても1のままなので、配り終えたときの合計が5議席になりません（A党1・B党1・C党0）。いま持っている数に1を足しましょう</li>
+            <li>［A］<code>(giseki[i] + 1)</code>　［B］<code>giseki[touban]</code> … わる数は正解です。でも giseki[touban] = giseki[touban] は「何も変えない」ので、議席が1つも増えません。商もずっと同じままで、結果は全部0議席になります</li>
+            <li>［A］<code>k</code>　［B］<code>giseki[touban] + 1</code> … 議席を増やすところは正解です。でも k でわると、全部の党を同じ数でわることになります。それでは順位がずっと変わらず、いちばん票の多いB党が5議席を独り占めします（B党5議席）。わる数は党ごとに変わる「その党の議席 + 1」です</li>
+            <li>［A］<code>k</code>　［B］<code>1</code> … 2か所とも違います。k でわると順位が変わらずB党ばかりが選ばれ、さらに giseki[touban] = 1 で上書きされるので、B党1議席だけという結果になります</li>
+            <li>［A］<code>k</code>　［B］<code>giseki[touban]</code> … 2か所とも違います。k でわると順位が変わらないうえ、議席も増えないので、結果は全部0議席です</li>
+            <li>［A］<code>(i + 1)</code>　［B］<code>giseki[touban] + 1</code> … 議席を増やすところは正解です。でも i + 1 は「何番目の党か」であって、その党が持っている議席の数ではありません。A党は必ず1でわられるので商が下がらず、A党が5議席を独り占めします</li>
+            <li>［A］<code>(i + 1)</code>　［B］<code>1</code> … 2か所とも違います。i + 1 だとA党がずっと有利なうえ、giseki[touban] = 1 で上書きされるので、A党1議席だけになります</li>
+            <li>［A］<code>(i + 1)</code>　［B］<code>giseki[touban]</code> … 2か所とも違います。i + 1 は党の番号で、議席の数ではありません。さらに議席も増えないので、結果は全部0議席です</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q056/index.html">第56問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
