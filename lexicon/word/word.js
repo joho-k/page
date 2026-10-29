@@ -21,7 +21,9 @@ const noHeader = params.get('state') === 'noheader';
 
 a.href = '../../index.html';
 a.className = 'back-to-list';
-a.textContent = '‹ 用語の辞典一覧';
+// スマホでは幅が足りないので「‹ 一覧」だけにする（word.css の .back-long）
+a.innerHTML = '‹&nbsp;<span class="back-long">用語の辞典</span>一覧';
+a.setAttribute('aria-label', '用語の辞典一覧');
 
 // タイトルの帯：左に「用語の辞典一覧に戻る」、まん中に用語名。帯ごと画面の上に貼りつける
 const pageTitle = main.querySelector('.page-title');
@@ -87,12 +89,14 @@ titleList.className = 'title-list';
 image.forEach((item, index) => {
     if (item.title) {
         const li = document.createElement('li');
+        li.dataset.index = index;
         const a = document.createElement('a');
         a.href = `#slide-${index}`;
         a.textContent = item.title;
 
         a.onclick = (e) => {
             e.preventDefault();
+            showView('slide');
             currentIndex = index;
             updateDisplayMode();
             const target =
@@ -134,13 +138,19 @@ nextBtn.onclick = () => {
     }
 };
 
-// 表示切り替えボタン
+// 表示切り替えボタン。スライド表示ではスライドの右上（全画面ボタンの隣）、一覧表示では一覧の上に置く
 const toggleBtn = document.createElement('button');
-toggleBtn.textContent = '一覧表示に切り替える';
 toggleBtn.className = 'toggle-button';
+function setToggleLabel() {
+    toggleBtn.innerHTML = displayMode === 'list'
+        ? '<i class="fa-solid fa-person-chalkboard"></i> スライド表示に切り替える'
+        : '<i class="fa-solid fa-list"></i> 一覧表示';
+    toggleBtn.setAttribute('aria-label', displayMode === 'list' ? 'スライド表示に切り替える' : '一覧表示に切り替える');
+}
+setToggleLabel();
 toggleBtn.onclick = () => {
     displayMode = displayMode === 'list' ? 'slide' : 'list';
-    toggleBtn.textContent = displayMode === 'list' ? 'スライド表示に切り替える' : '一覧表示に切り替える';
+    setToggleLabel();
     updateDisplayMode();
 };
 
@@ -172,7 +182,6 @@ if (termLead) {
 }
 side.appendChild(toc);
 side.appendChild(titleList);
-side.appendChild(toggleBtn);
 // 関連単語が無い用語では見出しごと出さない
 if (relatedWords.length !== 0) {
     side.appendChild(relatedWordsTitle);
@@ -187,6 +196,64 @@ if (!titleList.children.length) {
     titleList.remove();
 }
 
+// 実践（音を聞きくらべる・画像を作る など、スライドとは別のもの）は、スライドとは別の画面にする。
+// 静的HTMLでは main にそのまま書いてあるので、ここで箱に移し、スライドの上のタブで切りかえる
+// 実践が別のページ（practice/index.html）にある用語は、HTML にタブ（リンク）が書いてあるので、スライドの上に移すだけ
+const linkTabs = main.querySelector(':scope > .view-tabs');
+if (linkTabs) stage.prepend(linkTabs);
+const practiceItems = [...main.children].filter(el => !el.matches('.title-bar, .word-layout, .view-tabs, script'));
+let practice = null;
+const hasSlides = !!imageExplanation.querySelector('.image-row');
+const viewTabs = document.createElement('div');
+viewTabs.className = 'view-tabs';
+viewTabs.setAttribute('role', 'tablist');
+const slideTab = document.createElement('button');
+const practiceTab = document.createElement('button');
+if (practiceItems.length) {
+    practice = document.createElement('div');
+    practice.className = 'word-practice';
+    practice.append(...practiceItems);
+    stage.appendChild(practice);
+    const practiceHead = practice.querySelector('h3');
+    slideTab.innerHTML = '<i class="fa-solid fa-person-chalkboard"></i> スライドで学ぶ';
+    practiceTab.innerHTML = `<i class="fa-solid fa-hand-pointer"></i> 実践：${practiceHead ? practiceHead.textContent.trim() : '試してみよう'}`;
+    [slideTab, practiceTab].forEach(tab => { tab.className = 'view-tab'; tab.setAttribute('role', 'tab'); });
+    slideTab.onclick = () => showView('slide');
+    practiceTab.onclick = () => showView('practice');
+    viewTabs.append(slideTab, practiceTab);
+    // スライドが1枚も無い用語（二分探索など）は実践だけなので、タブを出さない
+    if (hasSlides) stage.prepend(viewTabs);
+}
+function isPracticeView() {
+    return stage.classList.contains('is-practice');
+}
+function showView(view) {
+    if (!practice) return;
+    const onPractice = view === 'practice';
+    stage.classList.toggle('is-practice', onPractice);
+    slideTab.classList.toggle('active', !onPractice);
+    practiceTab.classList.toggle('active', onPractice);
+    slideTab.setAttribute('aria-selected', String(!onPractice));
+    practiceTab.setAttribute('aria-selected', String(onPractice));
+    // 一覧表示の切り替えはスライドの画面でだけ使う
+    toggleBtn.hidden = onPractice;
+    if (onPractice && fsOn) setFullscreen(false);
+    // 実践の画面は URL の #practice で直接開ける
+    if (!hasSlides) return;
+    if (onPractice) history.replaceState(null, '', '#practice');
+    else if (location.hash === '#practice') history.replaceState(null, '', location.pathname + location.search);
+}
+// スライドの説明文にある「実際に聞いてみよう」などのリンク（#sampling-test など）は、実践の画面を開いてそこへ飛ぶ
+document.addEventListener('click', e => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link || !practice) return;
+    const target = document.getElementById(decodeURIComponent(link.getAttribute('href').slice(1)));
+    if (!target || !practice.contains(target)) return;
+    e.preventDefault();
+    showView('practice');
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
 const rows = document.querySelectorAll('.image-row');
 
 // 節の見出し（例：ランレングス法）。見出しは節の最初のスライドにしか無いので、
@@ -198,10 +265,21 @@ sectionBar.className = 'section-bar';
 stage.insertBefore(sectionBar, imageExplanation);
 function showSection(i) {
     sectionBar.textContent = sectionOf[i] || title;
+    // 目次では、いま見ている節に印を付ける
+    let current = null;
+    titleList.querySelectorAll('li').forEach(li => { if (+li.dataset.index <= i) current = li; });
+    titleList.querySelectorAll('li').forEach(li => li.classList.toggle('current', li === current));
+    // 目次が長くて枠の中でスクロールしているときは、印の付いた節が見える位置まで送る
+    if (current) {
+        const top = current.offsetTop - titleList.offsetTop;
+        if (top < titleList.scrollTop || top + current.offsetHeight > titleList.scrollTop + titleList.clientHeight) {
+            titleList.scrollTop = top - 8;
+        }
+    }
 }
 // 一覧表示では、画面のいちばん上に見えているスライドの節を出す
 window.addEventListener('scroll', () => {
-    if (displayMode !== 'list') return;
+    if (displayMode !== 'list' || isPracticeView()) return;
     const top = sectionBar.getBoundingClientRect().bottom;
     let idx = 0;
     rows.forEach((row, i) => { if (row.getBoundingClientRect().top <= top + 8) idx = i; });
@@ -274,13 +352,20 @@ stage.addEventListener('touchend', e => {
 
 // キーボードの ← → でもめくれる
 document.addEventListener('keydown', e => {
-    if (displayMode !== 'slide' || e.target.closest('input, textarea, select')) return;
+    if (displayMode !== 'slide' || isPracticeView() || e.target.closest('input, textarea, select')) return;
     if (e.key === 'ArrowLeft') prevBtn.click();
     if (e.key === 'ArrowRight') nextBtn.click();
 });
 
 // 初期段階でスライドモードにしておく
 updateDisplayMode();
+// #practice（または実践の中の見出し）付きの URL なら実践の画面から開く
+if (practice) {
+    const hashTarget = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    const openPractice = location.hash === '#practice' || (hashTarget && practice.contains(hashTarget));
+    showView(openPractice || !hasSlides ? 'practice' : 'slide');
+    if (hashTarget && openPractice) hashTarget.scrollIntoView();
+}
 
 // 原稿のテキストデータ化
 // console.log(image
@@ -296,6 +381,8 @@ function updateDisplayMode() {
         nextBtn.remove();
         pageNum.remove();
         fsBtn.remove();
+        toggleBtn.classList.remove('on-slide');
+        stage.insertBefore(toggleBtn, imageExplanation);
         if (nav) nav.classList.remove('show');
         // 一覧表示をしながら、今まで見ていたスライドまでスクロールする
         const target = document.getElementById(`slide-${currentIndex}`);
@@ -311,7 +398,8 @@ function updateDisplayMode() {
         // 「＜ ＞」はいま見ているスライドの上に置く
         const frame = rows[currentIndex] && rows[currentIndex].querySelector('.slide-frame');
         // ページ番号もスライドの上（右下）に出す。スライドの下に置くと、説明文が長いときに画面の外へ押し出される
-        if (frame) frame.append(prevBtn, nextBtn, pageNum, fsBtn);
+        toggleBtn.classList.add('on-slide');
+        if (frame) frame.append(prevBtn, nextBtn, pageNum, toggleBtn, fsBtn);
         pageNum.textContent = `${currentIndex + 1} / ${rows.length}`
         showSection(currentIndex);
 

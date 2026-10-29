@@ -231,38 +231,39 @@
 
 <script>
     // 単語のリストをデータとして管理
+    // slide: スライドで学べる / practice: 実際に試せるページ（用語のフォルダから見た場所。二分探索は用語のページそのものが実践）
     const wordListData = [
         {
             title: "情報とメディア",
             items: [
-                { title: "情報とは", link: "information" },
-                { title: "情報の特性", link: "info-properties" },
-                { title: "情報源", link: "info-sources" },
-                { title: "情報の検証", link: "info-verification" },
+                { title: "情報とは", link: "information", slide: true },
+                { title: "情報の特性", link: "info-properties", slide: true },
+                { title: "情報源", link: "info-sources", slide: true },
+                { title: "情報の検証", link: "info-verification", slide: true },
                 // { title: "メディア", link: null }
             ]
         },
         {
             title: "情報社会の法とセキュリティ",
             items: [
-                { title: "個人情報", link: "personal-information" },
-                { title: "産業財産権", link: "intellectual-property" },
-                { title: "著作権", link: "copyright" },
-                { title: "情報セキュリティ", link: "info-security" },
+                { title: "個人情報", link: "personal-information", slide: true },
+                { title: "産業財産権", link: "intellectual-property", slide: true },
+                { title: "著作権", link: "copyright", slide: true },
+                { title: "情報セキュリティ", link: "info-security", slide: true },
             ]
         },
         {
             title: "情報のデジタル表現",
             items: [
-                { title: "デジタル情報と進数表現", link: "digital-and-binary" },
-                { title: "データの大きさを表す単位", link: "data-size-units" },
-                { title: "文字のデジタル表現", link: "text-binaly" },
-                { title: "音のデジタル表現", link: "audio-digital" },
-                { title: "画像のデジタル表現", link: "image-digital" },
-                { title: "色のデジタル表現", link: "color-digital" },
-                { title: "動画のデジタル表現", link: "video-digital" },
-                { title: "データの圧縮", link: "data-compression" },
-                { title: "情報デザイン", link: "info-design" },
+                { title: "デジタル情報と進数表現", link: "digital-and-binary", slide: true },
+                { title: "データの大きさを表す単位", link: "data-size-units", slide: true },
+                { title: "文字のデジタル表現", link: "text-binaly", slide: true },
+                { title: "音のデジタル表現", link: "audio-digital", slide: true, practice: "practice/index.html" },
+                { title: "画像のデジタル表現", link: "image-digital", slide: true, practice: "practice/index.html" },
+                { title: "色のデジタル表現", link: "color-digital", slide: true, practice: "practice/index.html" },
+                { title: "動画のデジタル表現", link: "video-digital", slide: true },
+                { title: "データの圧縮", link: "data-compression", slide: true },
+                { title: "情報デザイン", link: "info-design", slide: true },
             ]
         },
         {
@@ -275,7 +276,7 @@
         {
             title: "アルゴリズム",
             items: [
-                { title: "二分探索", link: "algorithm-binary-search" },
+                { title: "二分探索", link: "algorithm-binary-search", practice: "index.html" },
             ]
         },
         {
@@ -311,9 +312,9 @@
         {
             title: "情報の暗号化",
             items: [
-                { title: "暗号化とは", link: "encryption" },
-                { title: "共通鍵暗号方式", link: "common-key" },
-                { title: "公開鍵暗号方式", link: "public-key" }
+                { title: "暗号化とは", link: "encryption", slide: true },
+                { title: "共通鍵暗号方式", link: "common-key", slide: true },
+                { title: "公開鍵暗号方式", link: "public-key", slide: true }
             ]
         }
     ];
@@ -346,6 +347,24 @@
                         link.textContent = item.title;
                         listItem.className += "list-word"
                         listItem.appendChild(link);
+
+                        // スライド・実践があるかどうかの印（行の右はし）。
+                        // 「実践」の札は押すとそのまま実践のページへ行くので、用語のリンクの外に置く（リンクの中にリンクは置けない）
+                        if (item.slide) {
+                            const slideMark = document.createElement('span');
+                            slideMark.className = 'word-mark slide';
+                            slideMark.innerHTML = '<span class="word-mark-text">スラ<br>イド</span>';
+                            link.appendChild(slideMark);
+                        }
+                        if (item.practice) {
+                            const practiceMark = document.createElement('a');
+                            practiceMark.className = 'word-mark practice';
+                            practiceMark.href = `word/${item.link}/${item.practice}`;
+                            practiceMark.textContent = '実践';
+                            practiceMark.setAttribute('aria-label', `${item.title}の実践`);
+                            listItem.classList.add('has-practice');
+                            listItem.appendChild(practiceMark);
+                        }
                     } else {
                         const text = document.createTextNode(item.title + ' ');
                         listItem.appendChild(text);

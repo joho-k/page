@@ -7,14 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>色のデジタル表現 | 情報I用語集</title>
+    <title>画像のデジタル表現とは？画素とデータサイズの求め方｜情報I用語集</title>
     <meta name="description"
-        content="画像はどのようにデジタルで保存されるのか？ビットマップや解像度、色の表現など、画像のデジタル化の仕組みを図とともにやさしく解説します。情報Ⅰや共通テスト対策にも役立ちます。">
+        content="画像を細かいマス（画素）に区切り、色を数に置きかえて0と1で表す仕組みを図解で解説。画像のデジタル化の流れと、画像のデータサイズの求め方がわかります。情報I・共通テスト対策に。">
     <meta name="keywords" content="画像のデジタル化,ビットマップ,ラスタ画像,ピクセル,解像度,色情報,ビット数,情報Ⅰ,共通テスト,画像表現,デジタル画像,情報1,デジタルデータ">
 
-    <meta property="og:title" content="画像のデジタル表現 | 情報Iの用語解説">
+    <meta property="og:title" content="画像のデジタル表現とは？画素とデータサイズの求め方｜情報I用語集">
     <meta property="og:description"
-        content="画像はどのようにデジタルで保存されるのか？ビットマップや解像度、色の表現など、画像のデジタル化の仕組みを図とともにやさしく解説します。情報Ⅰや共通テスト対策にも役立ちます。">
+        content="画像を細かいマス（画素）に区切り、色を数に置きかえて0と1で表す仕組みを図解で解説。画像のデジタル化の流れと、画像のデータサイズの求め方がわかります。情報I・共通テスト対策に。">
 
     <link rel="icon" href="../../../img/logo.ico">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
@@ -45,88 +45,6 @@
     <link rel="stylesheet" href="../../../header.css">
 
     <!-- 共通部分ここまで -->
-    <style>
-        body {
-            padding: 1em;
-        }
-
-        .image-editor,
-        .width-height,
-        .color-input-preview,
-        #colorInputsContainer {
-            display: flex;
-        }
-
-        .left,
-        .canvas-area {
-            width: 50%;
-        }
-
-        #properties {
-            margin-bottom: 10px;
-        }
-
-        .width-height {
-            align-items: baseline;
-        }
-
-        #colorInputsContainer {
-            flex-wrap: wrap;
-            gap: 1em;
-        }
-
-        label {
-            display: block;
-            margin-top: 1em;
-            font-weight: bold;
-        }
-
-        select,
-        input[type="text"],
-        textarea,
-        button {
-            padding: 0.4em;
-            margin-top: 0.3em;
-        }
-
-        #binaryInput {
-            width: 100%;
-            border: 3px solid black;
-        }
-
-        button {
-            margin-top: 1em;
-        }
-
-        canvas {
-            border: 1px solid #333;
-            margin-top: 1em;
-            image-rendering: pixelated;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-        }
-
-        #errorMessage {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        /* スマホ表示用（画面幅が768px以下の時） */
-        @media screen and (max-width: 768px) {
-
-            .image-editor,
-            #colorInputsContainer {
-                display: block;
-            }
-
-            .left,
-            .canvas-area {
-                width: 100%;
-            }
-        }
-    </style>
     <!-- seo-aio -->
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://joho-kyoshitsu.com/lexicon/word/image-digital/index.html">
@@ -137,8 +55,8 @@
     <meta property="og:image" content="https://joho-kyoshitsu.com/img/logo_transparent.png">
     <meta property="og:locale" content="ja_JP">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="画像のデジタル表現 | 情報Iの用語解説">
-    <meta name="twitter:description" content="画像はどのようにデジタルで保存されるのか？ビットマップや解像度、色の表現など、画像のデジタル化の仕組みを図とともにやさしく解説します。情報Ⅰや共通テスト対策にも役立ちます。">
+    <meta name="twitter:title" content="画像のデジタル表現とは？画素とデータサイズの求め方｜情報I用語集">
+    <meta name="twitter:description" content="画像を細かいマス（画素）に区切り、色を数に置きかえて0と1で表す仕組みを図解で解説。画像のデジタル化の流れと、画像のデータサイズの求め方がわかります。情報I・共通テスト対策に。">
     <meta name="twitter:image" content="https://joho-kyoshitsu.com/img/logo_transparent.png">
     <script type="application/ld+json">
 {
@@ -148,7 +66,7 @@
       "@type": "DefinedTerm",
       "@id": "https://joho-kyoshitsu.com/lexicon/word/image-digital/index.html#term",
       "name": "画像のデジタル表現",
-      "description": "画像はどのようにデジタルで保存されるのか？ビットマップや解像度、色の表現など、画像のデジタル化の仕組みを図とともにやさしく解説します。情報Ⅰや共通テスト対策にも役立ちます。",
+      "description": "画像を細かいマス（画素）に区切り、色を数に置きかえて0と1で表す仕組みを図解で解説。画像のデジタル化の流れと、画像のデータサイズの求め方がわかります。情報I・共通テスト対策に。",
       "url": "https://joho-kyoshitsu.com/lexicon/word/image-digital/index.html",
       "inDefinedTermSet": {
         "@type": "DefinedTermSet",
@@ -193,47 +111,10 @@
         <main>
             <h1 class="page-title">画像のデジタル表現</h1>
             <p class="term-lead">画像を細かいマス（画素）に区切り、それぞれの色を数に置きかえて、0と1で表すこと。</p>
-            <h3>ビットデータから画像生成</h3>
-            <div id="imageEditor" class="image-editor">
-                <div class="left">
-                    <div id="properties">
-                        <div class="width-height">
-                            <label>横幅:</label>
-                            <select id="widthSelect"></select>
-                            <span>ピクセル×</span>
-                            <label>高さ:</label>
-                            <select id="heightSelect"></select>
-                            <span>ピクセル</span>
-                        </div>
-
-                        <label>カラーコード（ビット数）</label>
-                        <select id="bitCountSelect" onchange="updateColorInputs()">
-                            <option value="1" selected>1ビット（2色）</option>
-                            <option value="2">2ビット（4色）</option>
-                            <option value="3">3ビット（8色）</option>
-                        </select>
-                    </div>
-                    <div id="colorInputsContainer"></div>
-
-                    <label>0と1のデータ</label>
-                    <textarea id="binaryInput" rows="6"
-                        placeholder="例: 010101...">0000001111000011111000001000000111100</textarea>
-                    <button onclick="printSpecificArea()">画像を印刷</button>
-                </div>
-                <div class="canvas-area">
-                    <h4>生成された画像データ</h4>
-                    <label style="text-align: center;">
-                        <input type="checkbox" id="showBitsCheckbox" checked>
-                        ピクセル上にビット列を表示
-                    </label>
-                    <label style="text-align: center;">
-                        <input type="checkbox" id="borderCheckbox" checked>
-                        ピクセルに枠線を表示
-                    </label>
-                    <p><canvas id="canvas"></canvas></p>
-                    <p id="errorMessage"></p>
-                </div>
-            </div>
+            <nav class="view-tabs" aria-label="表示の切り替え">
+                <a class="view-tab active" aria-current="page"><i class="fa-solid fa-person-chalkboard"></i> スライドで学ぶ</a>
+                <a class="view-tab" href="practice/index.html"><i class="fa-solid fa-hand-pointer"></i> 実践：ビットデータから画像生成</a>
+            </nav>
             <div id="image-explanation" class="content-item">
                 <!-- ここからベタ打ち。word.jsの createImageHTML を使う。 -->
                 <div class="image-row" id="slide-0">
@@ -357,330 +238,6 @@
         </main>
     </div>
 </body>
-<script>
-    /** サンプルデータ 
-     * 
-     *  00000000111111111111111100000000
-        00000011111111111111111111000000
-        00001111010111111111010111110000
-        00111111010111111111010111111100
-        11111111111111111111111111111111
-        11111111111111111111111111111111
-        11111010111111111111111110101111
-        11111111111111111111111111111111
-        11111111111111111111111111111111
-        11111111111111111111111111111111
-        11110111111111111111111111011111
-        11110111111111111111111111011111
-        00111101010101010101010101111100
-        00001111111111111111111111110000
-        00000011111111111111111111000000
-        00000000111111111111111100000000
-     * 
-     **/
-    const valueColor = ["#000000", "#FFFF00", "#FFFFFF", "#0000FF", "#FF0000", "#00FF00", "#FFA500", "#808080"]
-
-    function populateSizeSelectors() {
-        const widthSelect = document.getElementById('widthSelect');
-        const heightSelect = document.getElementById('heightSelect');
-        for (let i = 1; i <= 16; i++) {
-            widthSelect.innerHTML += `<option value="${i}">${i}</option>`;
-            heightSelect.innerHTML += `<option value="${i}">${i}</option>`;
-        }
-        widthSelect.value = 5;
-        heightSelect.value = 5;
-    }
-
-    function updateColorInputs() {
-        const container = document.getElementById('colorInputsContainer');
-        const bitCount = parseInt(document.getElementById('bitCountSelect').value);
-
-        container.innerHTML = '<span>カラーコードについては<a href="../color-digital/index.html" target="_blank">こちら</a></span>';
-
-        const colorKeys = [];
-        for (let i = 0; i < Math.pow(2, bitCount); i++) {
-            const key = i.toString(2).padStart(bitCount, '0');
-            colorKeys.push(key);
-        }
-
-        colorKeys.forEach((key, index) => {
-            const div = document.createElement('div');
-            div.className = 'color-item';
-
-            const label = document.createElement('label');
-            label.htmlFor = `color-${key}`;
-            label.textContent = `${key} のカラーコード`;
-
-            const colorInputPreview = document.createElement('div');
-            colorInputPreview.className = "color-input-preview";
-
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.id = `color-${key}`;
-            input.value = valueColor[index];
-
-            const preview = document.createElement('div');
-            preview.className = 'preview-box';
-            preview.style.width = '30px';
-            preview.style.height = '30px';
-            preview.style.border = '1px solid #ccc';
-            preview.style.backgroundColor = input.value;
-
-            // 入力変更時にプレビューを更新
-            input.addEventListener('input', () => {
-                preview.style.backgroundColor = input.value;
-            });
-
-            div.appendChild(label);
-            colorInputPreview.appendChild(input);
-            colorInputPreview.appendChild(preview);
-            div.appendChild(colorInputPreview)
-            container.appendChild(div);
-        });
-    }
-
-    function drawImage() {
-        const w = parseInt(document.getElementById('widthSelect').value);
-        const h = parseInt(document.getElementById('heightSelect').value);
-        const bitCount = parseInt(document.getElementById('bitCountSelect').value);
-        const binary = document.getElementById('binaryInput').value.trim().replace(/\s/g, '');
-        const totalPixels = w * h;
-        const chunkSize = bitCount;
-        const imageBits = totalPixels * chunkSize;
-        const chunks = [];
-
-        for (let i = 0; i < binary.length; i += chunkSize) {
-            chunks.push(binary.slice(i, i + chunkSize));
-        }
-
-        const nowBits = chunks.join("").length;
-        const isIncomplete = nowBits < imageBits;
-        while (chunks.length < totalPixels) {
-            chunks.push("___");
-        }
-
-        const colorMap = {};
-        for (let i = 0; i < Math.pow(2, bitCount); i++) {
-            const key = i.toString(2).padStart(bitCount, '0');
-            const color = document.getElementById(`color-${key}`).value.trim();
-            colorMap[key] = color;
-        }
-
-        const canvas = document.getElementById('canvas');
-        const scale = 30;
-        canvas.width = w * scale;
-        canvas.height = h * scale;
-        const ctx = canvas.getContext('2d');
-
-        const showBits = document.getElementById('showBitsCheckbox').checked;
-
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                const index = y * w + x;
-                const key = chunks[index];
-                if (key === "___") {
-                    ctx.font = `${scale * 0.8}px sans-serif`; // 例: scaleが20なら16px
-                    ctx.lineWidth = 2; // 線を太く
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = "#ffffff";
-                    ctx.fillRect(x * scale, y * scale, scale, scale);
-                    ctx.fillStyle = "#ff0000";
-                    ctx.strokeText("×", x * scale + scale / 2, y * scale + scale / 2);
-                } else {
-                    const color = colorMap[key] || '#FF00FF';
-                    ctx.fillStyle = color;
-                    ctx.fillRect(x * scale, y * scale, scale, scale);
-
-                    if (showBits) {
-                        ctx.font = `${scale * 0.4}px sans-serif`;
-                        ctx.fillStyle = getTextColor(color);
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillText(key, x * scale + scale / 2, y * scale + scale / 2);
-                    }
-                }
-                // 枠線表示チェックがONなら描画
-                if (document.getElementById('borderCheckbox').checked) {
-                    ctx.strokeStyle = '#000000';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(x * scale, y * scale, scale, scale);
-                }
-            }
-        }
-
-        // エラーメッセージ表示
-        const errorEl = document.getElementById("errorMessage");
-        if (isIncomplete) {
-            errorEl.textContent = "データが不完全です！(0と1が足りません)";
-        } else if (nowBits > imageBits) {
-            errorEl.textContent = "データが不完全です！(0と1が多いです)"
-        } else {
-            errorEl.textContent = "";
-        }
-    }
-
-    function setupRealtimeRedraw() {
-        document.getElementById('widthSelect').addEventListener('change', drawImage);
-        document.getElementById('heightSelect').addEventListener('change', drawImage);
-        document.getElementById('showBitsCheckbox').addEventListener('change', drawImage);
-        document.getElementById('borderCheckbox').addEventListener('change', drawImage);
-        document.getElementById('bitCountSelect').addEventListener('change', () => {
-            updateColorInputs(); // 色欄更新後に drawImage を呼ぶ
-            drawImage();
-        });
-
-        let previousValue = "";
-
-        const binaryInput = document.getElementById('binaryInput');
-
-        binaryInput.addEventListener('input', (e) => {
-            const newValue = e.target.value;
-
-            // カーソル位置（末尾でなくても対応）
-            const selectionStart = e.target.selectionStart;
-            const lengthDiff = newValue.length - previousValue.length;
-
-            let added = '';
-            if (lengthDiff > 0) {
-                // 差分ぶんだけ、直前に挿入された部分を取得
-                added = newValue.slice(selectionStart - lengthDiff, selectionStart);
-                if (added !== "0" && added !== "1") {
-                    alert("半角の0と1のみ入力できます。0と1以外の文字は削除してください。")
-                }
-            }
-
-            previousValue = newValue;
-            drawImage();
-        });
-    }
-
-    function getTextColor(bgColor) {
-        const rgb = hexToRGB(bgColor);
-        const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b);
-        return luminance > 128 ? '#000000' : '#ffffff'; // 明るい → 黒文字、暗い → 白文字
-    }
-
-    function hexToRGB(hex) {
-        const parsed = hex.replace('#', '');
-        const bigint = parseInt(parsed, 16);
-        return {
-            r: (bigint >> 16) & 255,
-            g: (bigint >> 8) & 255,
-            b: bigint & 255
-        };
-    }
-    function printSpecificArea() {
-        const area = document.getElementById("imageEditor");
-
-        let imageProperty = "<ul>";
-
-        // 引き継ぎのために、選択中の値を明示的にvalue属性にセット
-        const selects = document.querySelectorAll("#imageEditor select");
-        selects.forEach(sel => {
-            switch (sel.id) {
-                case "widthSelect":
-                    imageProperty += `<li>横幅: <ul><li>${sel.value}ピクセル</ul></li></li>`
-                    break;
-                case "heightSelect":
-                    imageProperty += `<li>高さ: <ul><li>${sel.value}ピクセル</ul></li></li>`
-                    break;
-                case "bitCountSelect":
-                    imageProperty += `<li>カラーコードビット数: <ul><li>${sel.value}ビット</ul></li></li>`
-                    break;
-            }
-        });
-
-        const binalyData = document.getElementById("binaryInput").value;
-
-        const clonedArea = area.cloneNode(true); // DOMを複製
-
-        // 一旦leftを消す
-        const leftArea = clonedArea.querySelector(".left");
-        if (leftArea) leftArea.remove();
-
-        // 新しい左側のクラス
-        const newLeftArea = document.createElement("div");
-        newLeftArea.classList.add("left");
-
-        newLeftArea.innerHTML = `
-            <h4>画像の情報</h4>
-            ${imageProperty}
-            ${generateColorListHTML()}
-            <li>0と1のデータ<ul><li>${binalyData}</li></ul></li></ul>
-        `
-
-        clonedArea.prepend(newLeftArea);
-
-        // 新しいウィンドウを開く
-        const printWindow = window.open('', '', 'width=1000,height=800');
-
-        printWindow.document.write(`
-        <html>
-        <head>
-            <title>印刷プレビュー</title>
-            <style>.image-editor {
-                display: flex;
-            }
-            .left, .canvas-area {
-                width: 50%;
-            }
-            li {
-                overflow-wrap: break-word;
-            }
-            </style>
-        </head>
-        <body>
-            ${clonedArea.outerHTML}
-        </body>
-        </html>
-    `);
-        printWindow.document.close();
-
-        // canvas の内容もコピー
-        printWindow.onload = () => {
-            // 元のcanvasと複製先canvasを取得
-            const originalCanvas = area.querySelector('canvas');
-            const copiedCanvas = printWindow.document.querySelector('canvas');
-
-            if (originalCanvas && copiedCanvas) {
-                const ctx = copiedCanvas.getContext('2d');
-                copiedCanvas.width = originalCanvas.width;
-                copiedCanvas.height = originalCanvas.height;
-                ctx.drawImage(originalCanvas, 0, 0);
-            }
-
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-        };
-    }
-
-    function generateColorListHTML() {
-        const bitCount = parseInt(document.getElementById('bitCountSelect').value);
-        let html = '<li>カラーコード一覧<ul>';
-
-        for (let i = 0; i < Math.pow(2, bitCount); i++) {
-            const key = i.toString(2).padStart(bitCount, '0');
-            const colorInput = document.getElementById(`color-${key}`);
-            if (!colorInput) continue;
-            const color = colorInput.value;
-
-            html += `<li>
-                    <span style="display:inline-block;width:1em;height:1em;background:${color};border:1px solid #000;margin-right:0.5em;"></span>
-                    ${key} = ${color}
-                </li>`;
-        }
-
-        return html + "</ul></li>";
-    }
-
-
-    populateSizeSelectors();
-    updateColorInputs();
-    setupRealtimeRedraw(); // ←これを必ず呼ぶ
-    drawImage(); // 初回描画
-</script>
 
 <script>
     // 用語
