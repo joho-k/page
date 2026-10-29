@@ -124,3 +124,83 @@ a:hover {
 li {
     margin-bottom: 5px;
 }
+/*
+ * 目次：カテゴリの高さがばらばらで、横に並べると下に大きな空白ができていた。
+ * 段組み（上から下へ流す）にして、すき間なく詰める。見た目（カード）はそのまま
+ */
+.word-list-container {
+    display: block;
+    columns: 3 320px;
+    column-gap: 16px;
+    padding: 8px;
+}
+
+.item {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 16px;
+    break-inside: avoid;
+}
+
+/* 用語ごとの「スライド」「実践」の印。用語ページのタブと同じ色 */
+.item .item-list li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.word-marks {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.word-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: bold;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.word-mark.slide {
+    background: var(--bg);
+    color: var(--primary);
+    box-shadow: var(--neu-raised-sm);
+}
+
+.word-mark.practice {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: var(--neu-raised-sm);
+}
+
+/* 「スライド」は「スラ／イド」の2行にして札を小さくする */
+.word-mark-text {
+    display: inline-block;
+    line-height: 1.1;
+    text-align: center;
+}
+.word-mark {
+    border-radius: 8px;
+    padding: 3px 7px;
+}
+/* 「実践」の札も「スラ／イド」と同じ高さにそろえる */
+.word-marks { align-items: stretch; }
+
+/* 「実践」の札は用語のリンクとは別のリンク（押すと実践のページへ）。行の右はしに並べる */
+.item .item-list li.has-practice { display: flex; align-items: stretch; }
+.item .item-list li.has-practice > a:first-child { flex: 1; min-width: 0; padding-right: 6px; }
+.item .item-list li .word-mark.slide { margin-left: auto; }
+.item .item-list li > a.word-mark.practice {
+    align-self: center; margin-right: 16px; padding: 3px 9px;
+    color: #fff; text-decoration: none; font-size: .75rem;
+}
+.item .item-list li > a.word-mark.practice:hover { background: var(--primary-light, #55DCFD); color: var(--primary); text-decoration: none; }
+/* 「スラ／イド」と「実践」の札の高さをそろえる */
+.item .item-list .word-mark { height: 30px; box-sizing: border-box; justify-content: center; }

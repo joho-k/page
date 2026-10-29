@@ -55,8 +55,20 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/audio-digital/practice/index.html</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://joho-kyoshitsu.com/lexicon/word/color-digital/index.html</loc>
     <lastmod>2026-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/color-digital/practice/index.html</loc>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -99,6 +111,12 @@
   <url>
     <loc>https://joho-kyoshitsu.com/lexicon/word/image-digital/index.html</loc>
     <lastmod>2025-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://joho-kyoshitsu.com/lexicon/word/image-digital/practice/index.html</loc>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

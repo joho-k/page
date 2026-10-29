@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!-- ここから全ページ共通 -->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>音質劣化を聞き比べ｜サンプリング周波数・量子化ビット数の実験｜情報I用語集</title>
+    <meta name="description" content="サンプリング周波数や量子化ビット数を下げると音はどう変わる？元の音声と劣化させた音声をその場で再生し、波形と聞き比べて確かめられます。ステレオ音声も体験できます。">
+    <meta name="keywords" content="">
+
+    <meta property="og:title" content="音質劣化を聞き比べ｜サンプリング周波数・量子化ビット数の実験｜情報I用語集">
+    <meta property="og:description" content="サンプリング周波数や量子化ビット数を下げると音はどう変わる？元の音声と劣化させた音声をその場で再生し、波形と聞き比べて確かめられます。ステレオ音声も体験できます。">
+
+    <link rel="icon" href="../../../../img/logo.ico">
+    <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../word.css">
+
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v6.4.2/css/all.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHYWTV27F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RXHYWTV27F');
+    </script>
+
+
+    <script src="../../../../common.js"></script>
+    <link rel="stylesheet" href="../../../../header.css">
+
+    <!-- 共通部分ここまで -->
+    <!-- seo-aio -->
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/lexicon/word/audio-digital/practice/index.html">
+    <link rel="apple-touch-icon" href="../../../../img/logo.ico">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/lexicon/word/audio-digital/practice/index.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/img/logo_transparent.png">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="音質劣化を聞き比べ｜サンプリング周波数・量子化ビット数の実験｜情報I用語集">
+    <meta name="twitter:description" content="サンプリング周波数や量子化ビット数を下げると音はどう変わる？元の音声と劣化させた音声をその場で再生し、波形と聞き比べて確かめられます。ステレオ音声も体験できます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/img/logo_transparent.png">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://joho-kyoshitsu.com/lexicon/word/audio-digital/practice/index.html#page",
+      "name": "音質劣化を聞き比べ｜サンプリング周波数・量子化ビット数の実験｜情報I用語集",
+      "description": "サンプリング周波数や量子化ビット数を下げると音はどう変わる？元の音声と劣化させた音声をその場で再生し、波形と聞き比べて確かめられます。ステレオ音声も体験できます。",
+      "url": "https://joho-kyoshitsu.com/lexicon/word/audio-digital/practice/index.html",
+      "inLanguage": "ja",
+      "about": { "@id": "https://joho-kyoshitsu.com/lexicon/word/audio-digital/index.html#term" },
+      "isPartOf": { "@type": "WebSite", "name": "情報の教室", "url": "https://joho-kyoshitsu.com/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://joho-kyoshitsu.com/index.html" },
+        { "@type": "ListItem", "position": 2, "name": "用語の辞典", "item": "https://joho-kyoshitsu.com/lexicon/index.html" },
+        { "@type": "ListItem", "position": 3, "name": "音声のデジタル表現", "item": "https://joho-kyoshitsu.com/lexicon/word/audio-digital/index.html" },
+        { "@type": "ListItem", "position": 4, "name": "実践：音質劣化再生テスト・波形表示", "item": "https://joho-kyoshitsu.com/lexicon/word/audio-digital/practice/index.html" }
+      ]
+    }
+  ]
+}
+    </script>
+    <!-- /seo-aio -->
+
+    <style>
+        .sampling,
+        .quantization {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body id="word-body" class="practice-page">
+    <div class="content">
+        <header>
+        </header>
+        <main>
+            <div class="title-bar">
+                <a class="back-to-list" href="../../../index.html" aria-label="用語の辞典一覧">‹&nbsp;<span class="back-long">用語の辞典</span>一覧</a>
+                <h1 class="page-title">音声のデジタル表現｜実践</h1>
+            </div>
+            <nav class="view-tabs" aria-label="表示の切り替え">
+                <a class="view-tab" href="../index.html"><i class="fa-solid fa-person-chalkboard"></i> スライドで学ぶ</a>
+                <a class="view-tab active" aria-current="page"><i class="fa-solid fa-hand-pointer"></i> 実践：音質劣化再生テスト・波形表示</a>
+            </nav>
+            <p class="practice-lead">サンプリング周波数や量子化ビット数を下げた音声を、その場で再生して聞き比べられます。波形も表示されるので、音質がどう変わるかを目と耳で確かめましょう。</p>
+            <div class="word-practice">
+            <h3>音質劣化再生テスト・波形表示</h3>
+            <label for="zoomRange">ズーム: </label>
+            <input type="range" id="zoomRange" min="1" max="32" step="1" value="1">
+
+            <canvas id="waveform" width="1000" height="200"></canvas>
+
+            <p class="info">押すと音声が再生されます。音量に注意してください。</p>
+            <div id="ordinal-buttons"></div>
+            <h4 id="sampling-test">サンプリング周波数の削減</h4>
+            <div class="sampling">
+                <div id="sampling-buttons">
+                    <!-- 動的に追加 -->
+                </div>
+            </div>
+            <h4 id="quantization-test">量子化ビット数の削減</h4>
+            <div class="quantization">
+                <div id="quantization-buttons">
+                    <!-- 動的に追加 -->
+                </div>
+            </div>
+            <h4 id="stereo-test">ステレオ</h4>
+            <div class="stereo">
+                <button id="stereo-button" onclick="playStereoAudio()">ステレオ音声</button>
+            </div>
+            </div>
+            <p class="practice-back"><a href="../index.html">‹ 「音声のデジタル表現」をスライドで学ぶ</a></p>
+        </main>
+    </div>
+</body>
+<script>
+    let zoomLevel = 1;
+    let currentBuffer = null; // 今表示・再生中のバッファ
+
+    function drawWaveform(buffer = originalBuffer) {
+        const canvas = document.getElementById("waveform");
+        const ctx = canvas.getContext("2d");
+
+        if (!buffer) return;
+
+        const data = buffer.getChannelData(0);
+        const length = data.length;
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerY = height / 2;
+        const samplesPerPixel = Math.floor(length / (width * zoomLevel));
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.beginPath();
+
+        for (let x = 0; x < width; x++) {
+            const start = x * samplesPerPixel;
+            const end = Math.min(start + samplesPerPixel, length);
+            let min = 1.0, max = -1.0;
+            for (let i = start; i < end; i++) {
+                const val = data[i];
+                if (val < min) min = val;
+                if (val > max) max = val;
+            }
+            const y1 = centerY + min * centerY;
+            const y2 = centerY + max * centerY;
+            ctx.moveTo(x, y1);
+            ctx.lineTo(x, y2);
+        }
+
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // ズームスライダーイベント
+    document.getElementById("zoomRange").addEventListener("input", e => {
+        zoomLevel = parseInt(e.target.value);
+        drawWaveform(currentBuffer || originalBuffer);
+    });
+
+    const audioFilePath = '../audio/sample_audio1.wav';
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let originalBuffer = null;
+
+    async function loadAudio() {
+        const response = await fetch(audioFilePath);
+        const arrayBuffer = await response.arrayBuffer();
+        originalBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        currentBuffer = originalBuffer;
+        drawWaveform();
+    }
+
+    async function playStereoAudio() {
+        const response = await fetch('../audio/stereo.wav');
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        const source = audioCtx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioCtx.destination);
+        source.start();
+    }
+
+    function playBuffer(buffer) {
+        const source = audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioCtx.destination);
+        source.start();
+    }
+
+    function downsampleBuffer(buffer, factor) {
+        const originalData = buffer.getChannelData(0);
+        const length = buffer.length;
+        const sampleRate = buffer.sampleRate;
+
+        const newBuffer = audioCtx.createBuffer(1, length, sampleRate);
+        const newData = newBuffer.getChannelData(0);
+
+        for (let i = 0; i < length; i += factor) {
+            newData[i] = originalData[i];
+            // その他の点は 0 のまま（無音）
+        }
+
+        return newBuffer;
+    }
+
+    function quantizeBuffer(buffer, bitReduction) {
+        const originalData = buffer.getChannelData(0);
+        const length = buffer.length;
+        const sampleRate = buffer.sampleRate;
+
+        const newBuffer = audioCtx.createBuffer(1, length, sampleRate);
+        const newData = newBuffer.getChannelData(0);
+
+        const bits = 16 + bitReduction;
+        const levels = Math.pow(2, bits);
+
+        for (let i = 0; i < length; i++) {
+            const v = originalData[i];
+            newData[i] = Math.round(v * (levels / 2 - 1)) / (levels / 2 - 1);
+        }
+
+        return newBuffer;
+    }
+
+    function createButtons() {
+        const ordinalContainer = document.getElementById('ordinal-buttons');
+        const samplingContainer = document.getElementById('sampling-buttons');
+        const quantizationContainer = document.getElementById('quantization-buttons');
+
+        const ordinalBtn = document.createElement('button');
+        ordinalBtn.innerText = `元音声データ\n(サンプリング周波数:44100Hz, 量子化ビット数16ビット)`;
+        ordinalBtn.onclick = () => {
+            const downsampled = downsampleBuffer(originalBuffer, 1);
+            currentBuffer = downsampled;
+            playBuffer(downsampled);
+            drawWaveform(downsampled);
+        };
+        ordinalContainer.appendChild(ordinalBtn);
+
+        [2, 4, 8, 16, 32].forEach(factor => {
+            const btn = document.createElement('button');
+            btn.innerText = `1/${factor}\n(${44100 / factor}Hz)`;
+            btn.onclick = () => {
+                const downsampled = downsampleBuffer(originalBuffer, factor);
+                currentBuffer = downsampled;
+                playBuffer(downsampled);
+                drawWaveform(downsampled);
+            };
+            samplingContainer.appendChild(btn);
+        });
+
+        [-2, -4, -6, -8, -10, -12].forEach(bits => {
+            const btn = document.createElement('button');
+            btn.innerText = `${bits}ビット\n(${16 + bits}ビット)`;
+            btn.onclick = () => {
+                const quantized = quantizeBuffer(originalBuffer, bits);
+                currentBuffer = quantized;
+                playBuffer(quantized);
+                drawWaveform(quantized);
+            };
+            quantizationContainer.appendChild(btn);
+        });
+    }
+
+    loadAudio().then(createButtons);
+</script>
+
+</html>
