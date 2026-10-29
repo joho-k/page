@@ -4461,4 +4461,57 @@ window.quizData = {
         ],
         defaultHint: "ドント式は「得票 ÷（いま持っている議席 + 1）」を全部の党で計算し、その商がいちばん大きい党に1議席を渡す、をくり返します。議席を取った党は、次からわる数が1つ大きくなるので商が下がり、ほかの党に順番が回ります。議席を渡すところは giseki[touban] = giseki[touban] + 1 と、いまの数に1を足します。答えは A党1議席・B党3議席・C党1議席です"
     },
+    q058: {
+        title: "いちばん多く出た目は？（最頻値）",
+        addedAt: "2026-10-29",
+        difficulty: 4,
+        question: "さいころを12回ふった結果が配列 me に入っています。まず配列 kosu で目ごとに出た回数を数え、そのあと1の目から6の目まで順に調べて、いちばん多く出た目（最頻値）を表示します。回数が同じ目がいくつかあるときは、小さいほうの目を答えることにします。2か所の穴を埋めて、プログラムを完成させよう",
+        ast: [
+            { type: "assign", name: "me", value: "[3,5,2,5,3,1,5,3,6,3,5,4]" },
+            { type: "assign", name: "kosu", value: "[0,0,0,0,0,0,0]" },
+            {
+                type: "for", varName: "i", start: "0", end: "11", step: "1",
+                body: [
+                    { type: "assign", name: "m", value: "me[i]" },
+                    { type: "assign", name: "kosu[m]", value: "kosu[m] + 1" }
+                ]
+            },
+            { type: "assign", name: "saidai", value: "0" },
+            { type: "assign", name: "saihin", value: "0" },
+            {
+                type: "for", varName: "j", start: "1", end: "6", step: "1",
+                body: [
+                    {
+                        type: "if", condition: "kosu[j] __BLANK_blank_a__ saidai",
+                        body: [
+                            { type: "assign", name: "saidai", value: "kosu[j]" },
+                            { type: "assign", name: "saihin", value: "__BLANK_blank_b__" }
+                        ]
+                    }
+                ]
+            },
+            { type: "print", value: "\"いちばん多く出た目は\" + saihin" }
+        ],
+        choices: [
+            { label: ">", value: ">" },
+            { label: ">=", value: ">=" },
+            { label: "<", value: "<" },
+            { label: "j", value: "j" },
+            { label: "kosu[j]", value: "kosu[j]" }
+        ],
+        answers: [
+            { values: [">", "j"], correct: true },
+            { values: [">=", "j"], correct: false,
+              hint: "記録する値は正解です。でも >= だと、いまの最大と同じ回数のときも入れかえてしまいます。3の目と5の目はどちらも4回なので、あとから調べる5の目に上書きされ、答えが5になります。同じ回数なら小さいほうの目を残したいので、「より大きい」ときだけ入れかえましょう" },
+            { values: ["<", "j"], correct: false,
+              hint: "向きが逆です。saidai は0から始まるので、kosu[j] < 0 になる目は1つもありません。一度も入れかわらず、答えが0のままになります" },
+            { values: [">", "kosu[j]"], correct: false,
+              hint: "くらべる記号は正解です。でも saihin に kosu[j] を入れると、記録されるのは「目」ではなく「出た回数」です。表示が「いちばん多く出た目は4」となりますが、4は3の目が出た回数です。答えたいのは何の目か、つまり j です" },
+            { values: [">=", "kosu[j]"], correct: false,
+              hint: "2か所とも違います。kosu[j] は出た回数なので、目ではなく回数の4が表示されます。さらに >= だと同じ回数のときに大きい目へ入れかわってしまいます" },
+            { values: ["<", "kosu[j]"], correct: false,
+              hint: "2か所とも違います。saidai は0から始まるので kosu[j] < 0 は一度も成り立たず、答えは0のままです。記録するのも回数ではなく目の j です" }
+        ],
+        defaultHint: "前半で kosu[m] = kosu[m] + 1 として、出た目 m の箱を1つずつ増やします。数え終わると kosu[3] と kosu[5] がどちらも4回です。後半は「いままでの最大 saidai より多い目」が見つかったら、その回数と目 j を記録します。> なら同じ4回の5の目では入れかわらないので、先に見つけた3の目が残ります。答えは「いちばん多く出た目は3」です"
+    },
 }

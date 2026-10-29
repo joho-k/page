@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第58問 いちばん多く出た目は？（最頻値）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="さいころを12回ふった結果が配列 me に入っています。まず配列 kosu で目ごとに出た回数を数え、そのあと1の目から6の目まで順に調べて、いちばん多く出た目（最頻値）を表示します。回数が同じ目がいくつかあるときは、小さいほうの目を答えることにします。2か所の穴を埋めて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,いちばん多く出た目は？（最頻値）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第58問 いちばん多く出た目は？（最頻値）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="さいころを12回ふった結果が配列 me に入っています。まず配列 kosu で目ごとに出た回数を数え、そのあと1の目から6の目まで順に調べて、いちばん多く出た目（最頻値）を表示します。回数が同じ目がいくつかあるときは、小さいほうの目を答えることにします。2か所の穴を埋めて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q058.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第58問 いちばん多く出た目は？（最頻値）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="さいころを12回ふった結果が配列 me に入っています。まず配列 kosu で目ごとに出た回数を数え、そのあと1の目から6の目まで順に調べて、いちばん多く出た目（最頻値）を表示します。回数が同じ目がいくつかあるときは、小さいほうの目を答えることにします。2か所の穴を埋めて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q058.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html#quiz",
+      "name": "第58問 いちばん多く出た目は？（最頻値）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "さいころを12回ふった結果が配列 me に入っています。まず配列 kosu で目ごとに出た回数を数え、そのあと1の目から6の目まで順に調べて、いちばん多く出た目（最頻値）を表示します。回数が同じ目がいくつかあるときは、小さいほうの目を答えることにします。2か所の穴を埋めて、プログラムを完成させよう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "> , j"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": ">"
+          },
+          {
+            "@type": "Answer",
+            "text": ">="
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": "j"
+          },
+          {
+            "@type": "Answer",
+            "text": "kosu[j]"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第58問 いちばん多く出た目は？（最頻値）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q058/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q058";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第58問 いちばん多く出た目は？（最頻値）</h1>
+            <p>さいころを12回ふった結果が配列 me に入っています。まず配列 kosu で目ごとに出た回数を数え、そのあと1の目から6の目まで順に調べて、いちばん多く出た目（最頻値）を表示します。回数が同じ目がいくつかあるときは、小さいほうの目を答えることにします。2か所の穴を埋めて、プログラムを完成させよう</p>
+            <p>難易度：★★★★☆（4／やや難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>me = [3,5,2,5,3,1,5,3,6,3,5,4]
+kosu = [0,0,0,0,0,0,0]
+i を 0 から 11 まで 1 ずつ増やしながら繰り返す:
+  m = me[i]
+  kosu[m] = kosu[m] + 1
+saidai = 0
+saihin = 0
+j を 1 から 6 まで 1 ずつ増やしながら繰り返す:
+  もし kosu[j] ［A］ saidai ならば:
+    saidai = kosu[j]
+    saihin = ［B］
+表示する(&quot;いちばん多く出た目は&quot; + saihin)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>&gt;</code></li>
+                <li><code>&gt;=</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>j</code></li>
+                <li><code>kosu[j]</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>前半で kosu[m] = kosu[m] + 1 として、出た目 m の箱を1つずつ増やします。数え終わると kosu[3] と kosu[5] がどちらも4回です。後半は「いままでの最大 saidai より多い目」が見つかったら、その回数と目 j を記録します。&gt; なら同じ4回の5の目では入れかわらないので、先に見つけた3の目が残ります。答えは「いちばん多く出た目は3」です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>&gt;</code></li>
+            <li>空欄 ［B］ … <code>j</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>&gt;=</code>　［B］<code>j</code> … 記録する値は正解です。でも &gt;= だと、いまの最大と同じ回数のときも入れかえてしまいます。3の目と5の目はどちらも4回なので、あとから調べる5の目に上書きされ、答えが5になります。同じ回数なら小さいほうの目を残したいので、「より大きい」ときだけ入れかえましょう</li>
+            <li>［A］<code>&lt;</code>　［B］<code>j</code> … 向きが逆です。saidai は0から始まるので、kosu[j] &lt; 0 になる目は1つもありません。一度も入れかわらず、答えが0のままになります</li>
+            <li>［A］<code>&gt;</code>　［B］<code>kosu[j]</code> … くらべる記号は正解です。でも saihin に kosu[j] を入れると、記録されるのは「目」ではなく「出た回数」です。表示が「いちばん多く出た目は4」となりますが、4は3の目が出た回数です。答えたいのは何の目か、つまり j です</li>
+            <li>［A］<code>&gt;=</code>　［B］<code>kosu[j]</code> … 2か所とも違います。kosu[j] は出た回数なので、目ではなく回数の4が表示されます。さらに &gt;= だと同じ回数のときに大きい目へ入れかわってしまいます</li>
+            <li>［A］<code>&lt;</code>　［B］<code>kosu[j]</code> … 2か所とも違います。saidai は0から始まるので kosu[j] &lt; 0 は一度も成り立たず、答えは0のままです。記録するのも回数ではなく目の j です</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q057/index.html">第57問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
