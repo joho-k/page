@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第61問 2進数の1011はいくつ？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="コンピュータの中の数は2進数で表されています。2進数の各桁には「位の重み」があり、4桁なら左から 8, 4, 2, 1 です。桁の数字が1ならその重みのぶんだけ数え、0なら数えずに、全部の桁を合計すると10進数の値になります。配列 bits（＝[1,0,1,1]）には、2進数の1011が左の桁から順に入っています。重み omomi を8から始めて、右の桁へ進むたびに半分にしながら、10進数に直すプログラムを完成させよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,繰り返し,配列,2進数の1011はいくつ？">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第61問 2進数の1011はいくつ？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="コンピュータの中の数は2進数で表されています。2進数の各桁には「位の重み」があり、4桁なら左から 8, 4, 2, 1 です。桁の数字が1ならその重みのぶんだけ数え、0なら数えずに、全部の桁を合計すると10進数の値になります。配列 bits（＝[1,0,1,1]）には、2進数の1011が左の桁から順に入っています。重み omomi を8から始めて、右の桁へ進むたびに半分にしながら、10進数に直すプログラムを完成させよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q061.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第61問 2進数の1011はいくつ？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="コンピュータの中の数は2進数で表されています。2進数の各桁には「位の重み」があり、4桁なら左から 8, 4, 2, 1 です。桁の数字が1ならその重みのぶんだけ数え、0なら数えずに、全部の桁を合計すると10進数の値になります。配列 bits（＝[1,0,1,1]）には、2進数の1011が左の桁から順に入っています。重み omomi を8から始めて、右の桁へ進むたびに半分にしながら、10進数に直すプログラムを完成させよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q061.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html#quiz",
+      "name": "第61問 2進数の1011はいくつ？",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "コンピュータの中の数は2進数で表されています。2進数の各桁には「位の重み」があり、4桁なら左から 8, 4, 2, 1 です。桁の数字が1ならその重みのぶんだけ数え、0なら数えずに、全部の桁を合計すると10進数の値になります。配列 bits（＝[1,0,1,1]）には、2進数の1011が左の桁から順に入っています。重み omomi を8から始めて、右の桁へ進むたびに半分にしながら、10進数に直すプログラムを完成させよう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "* , /"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "*"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第61問 2進数の1011はいくつ？",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q061/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q061";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第61問 2進数の1011はいくつ？</h1>
+            <p>コンピュータの中の数は2進数で表されています。2進数の各桁には「位の重み」があり、4桁なら左から 8, 4, 2, 1 です。桁の数字が1ならその重みのぶんだけ数え、0なら数えずに、全部の桁を合計すると10進数の値になります。配列 bits（＝[1,0,1,1]）には、2進数の1011が左の桁から順に入っています。重み omomi を8から始めて、右の桁へ進むたびに半分にしながら、10進数に直すプログラムを完成させよう（2か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>bits = [1,0,1,1]
+omomi = 8
+kekka = 0
+i を 0 から 3 まで 1 ずつ増やしながら繰り返す:
+  atai = bits[i] ［A］ omomi
+  kekka = kekka + atai
+  omomi = omomi ［B］ 2
+表示する(&quot;2進数の1011は10進数で&quot; + kekka + &quot;です&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>+</code></li>
+                <li><code>-</code></li>
+                <li><code>*</code></li>
+                <li><code>/</code></li>
+                <li><code>%</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>左の桁から順に「桁の数字 * 重み」を計算すると、1の桁は重みのまま、0の桁は0になります。これを kekka にたしていき、右へ進むたびに重みを2でわって 8→4→2→1 と半分にします。1011 は 8 + 0 + 2 + 1 ＝ 11 です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>*</code></li>
+            <li>空欄 ［B］ … <code>/</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>+</code>　［B］<code>/</code> … 重みを半分にするところは正解です。でも + だと、桁の数字が0のところでも 0 + 4 ＝ 4 と重みのぶんが数えられてしまい、結果は18になります。1なら重みのまま、0なら0にしたいので、かけ算にしましょう</li>
+            <li>［A］<code>-</code>　［B］<code>/</code> … 重みを半分にするところは正解です。でも - だと 1 - 8 ＝ -7 とマイナスになり、結果は-12になります。1なら重みのまま、0なら0にしたいので、かけ算にしましょう</li>
+            <li>［A］<code>/</code>　［B］<code>/</code> … 重みを半分にするところは正解です。でも / だと 1 / 8 ＝ 0.125 と小さくなり、結果は1.625になります。1なら重みのまま、0なら0にしたいので、かけ算にしましょう</li>
+            <li>［A］<code>%</code>　［B］<code>/</code> … 重みを半分にするところは正解です。でも % はわり算のあまりで、1 % 8 ＝ 1 となり、桁の重みが値に反映されません。結果は2になります。1なら重みのまま、0なら0にしたいので、かけ算にしましょう</li>
+            <li>［A］<code>*</code>　［B］<code>*</code> … 桁の値を出すところは正解です。でも * だと重みが 8→16→32→64 と増えていき、結果は104になります。右の桁へ進むほど重みは 8→4→2→1 と半分になるので、2でわりましょう</li>
+            <li>［A］<code>*</code>　［B］<code>-</code> … 桁の値を出すところは正解です。でも - だと重みが 8→6→4→2 と2ずつ減るだけで、結果は14になります。2進数の重みは 8→4→2→1 と半分ずつ小さくなるので、2でわりましょう</li>
+            <li>［A］<code>*</code>　［B］<code>+</code> … 桁の値を出すところは正解です。でも + だと重みが 8→10→12→14 と増えていき、結果は34になります。右の桁へ進むほど重みは 8→4→2→1 と半分になるので、2でわりましょう</li>
+            <li>［A］<code>*</code>　［B］<code>%</code> … 桁の値を出すところは正解です。でも % は「あまり」なので、8 % 2 ＝ 0 で重みが0になり、それより右の桁が数えられません。結果は8になります。半分にするには2でわりましょう</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q057/index.html">第57問へ</a></li>
+                
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
