@@ -4461,4 +4461,32 @@ window.quizData = {
         ],
         defaultHint: "ドント式は「得票 ÷（いま持っている議席 + 1）」を全部の党で計算し、その商がいちばん大きい党に1議席を渡す、をくり返します。議席を取った党は、次からわる数が1つ大きくなるので商が下がり、ほかの党に順番が回ります。議席を渡すところは giseki[touban] = giseki[touban] + 1 と、いまの数に1を足します。答えは A党1議席・B党3議席・C党1議席です"
     },
+    q062: {
+        title: "ポイントカードの残り（代入で上書き）",
+        addedAt: "2026-11-02",
+        difficulty: 1,
+        question: "ポイントカードに100ポイントたまっています。買い物で50ポイント増えたあと、30ポイント使いました。いま残っているポイントが表示されるようにしよう。point = point + 50 のように書くと、「いまの point に 50 を足して、その結果を point に入れなおす」という意味になります",
+        ast: [
+            { type: "assign", name: "point", value: "100" },
+            { type: "assign", name: "point", value: "point + 50" },
+            { type: "assign", name: "point", value: "__BLANK_blank_a__ - 30" },
+            { type: "print", value: "\"残りは\" + point + \"ポイント\"" }
+        ],
+        choices: [
+            { label: "point", value: "point" },
+            { label: "100", value: "100" },
+            { label: "50", value: "50" },
+            { label: "30", value: "30" }
+        ],
+        answers: [
+            { values: ["point"], correct: true },
+            { values: ["100"], correct: false,
+              hint: "100 - 30 ＝ 70 となり、買い物で増えた50ポイントが消えてしまいます。100 は最初の値です。いまの値は point に入っているので、それを使いましょう" },
+            { values: ["50"], correct: false,
+              hint: "50 - 30 ＝ 20 となり、もともとの100ポイントが消えてしまいます。50 は増えた分だけの数です。全部のポイントは point に入っています" },
+            { values: ["30"], correct: false,
+              hint: "30 - 30 ＝ 0 となり、ポイントが全部なくなってしまいます。30 は使った分の数です。使う前のポイントは point に入っています" }
+        ],
+        defaultHint: "= は「同じ」ではなく「右を計算して、左の変数に入れる」という意味です。point は 100 → 100 + 50 ＝ 150 → 150 - 30 ＝ 120 と、行が進むたびに新しい値に上書きされます。答えは120ポイントです"
+    },
 }

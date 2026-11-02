@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第62問 ポイントカードの残り（代入で上書き）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="ポイントカードに100ポイントたまっています。買い物で50ポイント増えたあと、30ポイント使いました。いま残っているポイントが表示されるようにしよう。point = point + 50 のように書くと、「いまの point に 50 を足して、その結果を point に入れなおす」という意味になります｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度1）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,変数と代入,ポイントカードの残り（代入で上書き）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第62問 ポイントカードの残り（代入で上書き）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="ポイントカードに100ポイントたまっています。買い物で50ポイント増えたあと、30ポイント使いました。いま残っているポイントが表示されるようにしよう。point = point + 50 のように書くと、「いまの point に 50 を足して、その結果を point に入れなおす」という意味になります｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度1）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q062.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第62問 ポイントカードの残り（代入で上書き）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="ポイントカードに100ポイントたまっています。買い物で50ポイント増えたあと、30ポイント使いました。いま残っているポイントが表示されるようにしよう。point = point + 50 のように書くと、「いまの point に 50 を足して、その結果を point に入れなおす」という意味になります｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度1）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q062.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html#quiz",
+      "name": "第62問 ポイントカードの残り（代入で上書き）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 変数と代入",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "ポイントカードに100ポイントたまっています。買い物で50ポイント増えたあと、30ポイント使いました。いま残っているポイントが表示されるようにしよう。point = point + 50 のように書くと、「いまの point に 50 を足して、その結果を point に入れなおす」という意味になります",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "point"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "point"
+          },
+          {
+            "@type": "Answer",
+            "text": "100"
+          },
+          {
+            "@type": "Answer",
+            "text": "50"
+          },
+          {
+            "@type": "Answer",
+            "text": "30"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第62問 ポイントカードの残り（代入で上書き）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q062/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q062";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第62問 ポイントカードの残り（代入で上書き）</h1>
+            <p>ポイントカードに100ポイントたまっています。買い物で50ポイント増えたあと、30ポイント使いました。いま残っているポイントが表示されるようにしよう。point = point + 50 のように書くと、「いまの point に 50 を足して、その結果を point に入れなおす」という意味になります</p>
+            <p>難易度：★☆☆☆☆（1／入門）。単元：変数と代入。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>point = 100
+point = point + 50
+point = ［A］ - 30
+表示する(&quot;残りは&quot; + point + &quot;ポイント&quot;)</code></pre>
+            <p>空欄 ［A］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>point</code></li>
+                <li><code>100</code></li>
+                <li><code>50</code></li>
+                <li><code>30</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>= は「同じ」ではなく「右を計算して、左の変数に入れる」という意味です。point は 100 → 100 + 50 ＝ 150 → 150 - 30 ＝ 120 と、行が進むたびに新しい値に上書きされます。答えは120ポイントです</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>point</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>100</code> … 100 - 30 ＝ 70 となり、買い物で増えた50ポイントが消えてしまいます。100 は最初の値です。いまの値は point に入っているので、それを使いましょう</li>
+            <li>［A］<code>50</code> … 50 - 30 ＝ 20 となり、もともとの100ポイントが消えてしまいます。50 は増えた分だけの数です。全部のポイントは point に入っています</li>
+            <li>［A］<code>30</code> … 30 - 30 ＝ 0 となり、ポイントが全部なくなってしまいます。30 は使った分の数です。使う前のポイントは point に入っています</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/hFkzjGTo498">第1回 変数と代入</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q057/index.html">第57問へ</a></li>
+                
+                <li><a href="../../index.html?topic=variable#problems">変数と代入の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
