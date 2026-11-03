@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第63問 100日後は何曜日？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="今日は水曜日です。100日後は何曜日になるでしょうか。配列 youbi には日曜日から土曜日までの曜日が入っていて、youbi[0] が日です。曜日は7日でひとまわりするので、7日のまとまりを取りのぞいて、残った日数の分だけ進めます。今日の番号 kyou と、曜日の番号 ban を求める計算を考えよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,配列,100日後は何曜日？">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q063/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第63問 100日後は何曜日？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="今日は水曜日です。100日後は何曜日になるでしょうか。配列 youbi には日曜日から土曜日までの曜日が入っていて、youbi[0] が日です。曜日は7日でひとまわりするので、7日のまとまりを取りのぞいて、残った日数の分だけ進めます。今日の番号 kyou と、曜日の番号 ban を求める計算を考えよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q063/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q063.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第63問 100日後は何曜日？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="今日は水曜日です。100日後は何曜日になるでしょうか。配列 youbi には日曜日から土曜日までの曜日が入っていて、youbi[0] が日です。曜日は7日でひとまわりするので、7日のまとまりを取りのぞいて、残った日数の分だけ進めます。今日の番号 kyou と、曜日の番号 ban を求める計算を考えよう（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度2）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q063.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q063/index.html#quiz",
+      "name": "第63問 100日後は何曜日？",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q063/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "今日は水曜日です。100日後は何曜日になるでしょうか。配列 youbi には日曜日から土曜日までの曜日が入っていて、youbi[0] が日です。曜日は7日でひとまわりするので、7日のまとまりを取りのぞいて、残った日数の分だけ進めます。今日の番号 kyou と、曜日の番号 ban を求める計算を考えよう（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "3 , %"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "2"
+          },
+          {
+            "@type": "Answer",
+            "text": "3"
+          },
+          {
+            "@type": "Answer",
+            "text": "4"
+          },
+          {
+            "@type": "Answer",
+            "text": "%"
+          },
+          {
+            "@type": "Answer",
+            "text": "/"
+          },
+          {
+            "@type": "Answer",
+            "text": "-"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第63問 100日後は何曜日？",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q063/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q063";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第63問 100日後は何曜日？</h1>
+            <p>今日は水曜日です。100日後は何曜日になるでしょうか。配列 youbi には日曜日から土曜日までの曜日が入っていて、youbi[0] が日です。曜日は7日でひとまわりするので、7日のまとまりを取りのぞいて、残った日数の分だけ進めます。今日の番号 kyou と、曜日の番号 ban を求める計算を考えよう（2か所の穴をうめよう）</p>
+            <p>難易度：★★☆☆☆（2／やさしい）。単元：配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>youbi = [&quot;日&quot;,&quot;月&quot;,&quot;火&quot;,&quot;水&quot;,&quot;木&quot;,&quot;金&quot;,&quot;土&quot;]
+kyou = ［A］
+nissu = 100
+goukei = kyou + nissu
+ban = goukei ［B］ 7
+表示する(nissu + &quot;日後は&quot; + youbi[ban] + &quot;曜日です&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>2</code></li>
+                <li><code>3</code></li>
+                <li><code>4</code></li>
+                <li><code>%</code></li>
+                <li><code>/</code></li>
+                <li><code>-</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>水曜日は youbi[3] なので kyou は 3 です。3 + 100 ＝ 103 を 7 でわると 14 あまり 5。14週間たつと同じ曜日にもどるので、のこりの5だけを見ます。103 % 7 ＝ 5 なので youbi[5] の金が答えです。何日先でも、あまりを使えば 0 から 6 の番号におさまります</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>3</code></li>
+            <li>空欄 ［B］ … <code>%</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>2</code>　［B］<code>%</code> … % は正解です。でも youbi[2] は火です。配列の番号は0から始まるので、日0・月1・火2・水3 と数えます。2 だと 102 % 7 ＝ 4 で、木曜日になってしまいます</li>
+            <li>［A］<code>4</code>　［B］<code>%</code> … % は正解です。でも 4 は、1から数えたときの水曜日の位置です。配列の番号は0から始まるので youbi[4] は木です。4 だと 104 % 7 ＝ 6 で、土曜日になってしまいます</li>
+            <li>［A］<code>3</code>　［B］<code>/</code> … kyou は正解です。でも / だと 103 / 7 ＝ 14.71… と小数になります。配列の番号は 0 から 6 の整数です。7でわった「あまり」が、残った日数を教えてくれます</li>
+            <li>［A］<code>3</code>　［B］<code>-</code> … kyou は正解です。でも - だと 103 - 7 ＝ 96 で、7日のまとまりを1回取りのぞいただけです。youbi の番号は 0 から 6 までなので、96 番は見つかりません。7のまとまりを全部取りのぞくには、あまりを求めます</li>
+            <li>［A］<code>2</code>　［B］<code>/</code> … 2か所とも違います。youbi[2] は火なので、水は 3 番です。また / だと 102 / 7 ＝ 14.57… と小数になり、配列の番号に使えません</li>
+            <li>［A］<code>4</code>　［B］<code>/</code> … 2か所とも違います。番号は0から始まるので、水は 3 番です。また / だと 104 / 7 ＝ 14.85… と小数になり、配列の番号に使えません</li>
+            <li>［A］<code>2</code>　［B］<code>-</code> … 2か所とも違います。youbi[2] は火なので、水は 3 番です。また - だと 102 - 7 ＝ 95 で、youbi の番号 0 から 6 の中に入りません</li>
+            <li>［A］<code>4</code>　［B］<code>-</code> … 2か所とも違います。番号は0から始まるので、水は 3 番です。また - だと 104 - 7 ＝ 97 で、youbi の番号 0 から 6 の中に入りません</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q057/index.html">第57問へ</a></li>
+                
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
