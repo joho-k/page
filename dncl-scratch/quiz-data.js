@@ -4461,4 +4461,59 @@ window.quizData = {
         ],
         defaultHint: "ドント式は「得票 ÷（いま持っている議席 + 1）」を全部の党で計算し、その商がいちばん大きい党に1議席を渡す、をくり返します。議席を取った党は、次からわる数が1つ大きくなるので商が下がり、ほかの党に順番が回ります。議席を渡すところは giseki[touban] = giseki[touban] + 1 と、いまの数に1を足します。答えは A党1議席・B党3議席・C党1議席です"
     },
+    q064: {
+        title: "晴れは最長で何日つづいた？（連続の数え方）",
+        addedAt: "2026-11-04",
+        difficulty: 3,
+        question: "配列 tenki には8日間の天気が入っています（1が晴れ、0が雨）。晴れが「連続して」いちばん長く続いた日数を求めて表示したいです。晴れの日は renzoku を1増やし、それまでの最長 saichou をこえたら更新します。雨の日には連続が途切れます。空欄に入るものを選んでください。",
+        ast: [
+            { type: "assign", name: "tenki", value: "[1,1,0,1,1,1,0,1]" },
+            { type: "assign", name: "renzoku", value: "0" },
+            { type: "assign", name: "saichou", value: "0" },
+            {
+                type: "for", varName: "i", start: "0", end: "7", step: "1",
+                body: [
+                    {
+                        type: "ifelse", condition: "tenki[i] == 1",
+                        ifBody: [
+                            { type: "assign", name: "renzoku", value: "renzoku + 1" },
+                            {
+                                type: "if", condition: "renzoku > saichou",
+                                body: [
+                                    { type: "assign", name: "saichou", value: "__BLANK_blank_a__" }
+                                ]
+                            }
+                        ],
+                        elseBody: [
+                            { type: "assign", name: "renzoku", value: "__BLANK_blank_b__" }
+                        ]
+                    }
+                ]
+            },
+            { type: "print", value: "\"いちばん長い晴れの連続は\" + saichou + \"日\"" }
+        ],
+        choices: [
+            { label: "renzoku", value: "renzoku" },
+            { label: "saichou", value: "saichou" },
+            { label: "i", value: "i" },
+            { label: "0", value: "0" },
+            { label: "1", value: "1" }
+        ],
+        answers: [
+            { values: ["renzoku", "0"], correct: true },
+            { values: ["renzoku", "1"], correct: false,
+              hint: "最長を更新するところは正解です。でも雨の日に renzoku = 1 にすると、雨の日を「晴れ1日目」と数えてしまいます。4〜6日目の3日連続が4日に増えて、結果は4日になります。雨で連続が途切れたら、数え直しは0からです" },
+            { values: ["renzoku", "saichou"], correct: false,
+              hint: "最長を更新するところは正解です。でも雨の日に renzoku = saichou にすると、途切れたはずの連続がそれまでの最長から続きになってしまいます。結果は6日になります。雨の日は連続をリセットしましょう" },
+            { values: ["renzoku", "renzoku"], correct: false,
+              hint: "最長を更新するところは正解です。でも renzoku = renzoku は「何も変えない」ので、雨の日でも連続が途切れません。これでは晴れの日の合計（6日）を数えているだけです" },
+            { values: ["i", "0"], correct: false,
+              hint: "雨の日のリセットは正解です。でも i は「何日目か（配列の番号）」であって、連続した日数ではありません。saichou に番号が入ってしまい、結果は4日になります。いま数えている連続の日数を入れましょう" },
+            { values: ["saichou", "0"], correct: false,
+              hint: "雨の日のリセットは正解です。でも saichou = saichou は何も変えないので、最長がずっと0のままです。更新するときは、いまの連続の日数 renzoku を入れます" },
+            { values: ["1", "0"], correct: false,
+              hint: "雨の日のリセットは正解です。でも saichou = 1 だと、何日続いても最長は1日のままです。いまの連続の日数 renzoku を入れましょう" }
+        ],
+        defaultHint: "renzoku は「いま続いている晴れの日数」、saichou は「これまででいちばん長かった日数」です。晴れなら renzoku を1増やし、saichou をこえたら saichou に renzoku を入れて更新します。雨なら連続が途切れるので renzoku を0に戻します。tenki は 晴晴雨晴晴晴雨晴 なので、答えは3日です"
+    },
 }
