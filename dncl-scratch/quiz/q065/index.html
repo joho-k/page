@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第65問 回文にするには何か所直す？（前と後ろからくらべる）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="前から読んでも後ろから読んでも同じ並びを「回文」といいます。配列 kazu に入っている7個の数字を回文にするには、何か所の数字を直せばよいかを数えます。前から i 番目と、後ろから i 番目（番号 j）をくらべて、ちがっていたら naosu を1増やします。kazu の番号は0から6までで、真ん中の kazu[3] はくらべる相手がいないので、くらべるのは i が0から2までの3組です。2か所の穴をうめて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,回文にするには何か所直す？（前と後ろからくらべる）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q065/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第65問 回文にするには何か所直す？（前と後ろからくらべる）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="前から読んでも後ろから読んでも同じ並びを「回文」といいます。配列 kazu に入っている7個の数字を回文にするには、何か所の数字を直せばよいかを数えます。前から i 番目と、後ろから i 番目（番号 j）をくらべて、ちがっていたら naosu を1増やします。kazu の番号は0から6までで、真ん中の kazu[3] はくらべる相手がいないので、くらべるのは i が0から2までの3組です。2か所の穴をうめて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q065/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q065.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第65問 回文にするには何か所直す？（前と後ろからくらべる）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="前から読んでも後ろから読んでも同じ並びを「回文」といいます。配列 kazu に入っている7個の数字を回文にするには、何か所の数字を直せばよいかを数えます。前から i 番目と、後ろから i 番目（番号 j）をくらべて、ちがっていたら naosu を1増やします。kazu の番号は0から6までで、真ん中の kazu[3] はくらべる相手がいないので、くらべるのは i が0から2までの3組です。2か所の穴をうめて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度4）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q065.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q065/index.html#quiz",
+      "name": "第65問 回文にするには何か所直す？（前と後ろからくらべる）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q065/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "前から読んでも後ろから読んでも同じ並びを「回文」といいます。配列 kazu に入っている7個の数字を回文にするには、何か所の数字を直せばよいかを数えます。前から i 番目と、後ろから i 番目（番号 j）をくらべて、ちがっていたら naosu を1増やします。kazu の番号は0から6までで、真ん中の kazu[3] はくらべる相手がいないので、くらべるのは i が0から2までの3組です。2か所の穴をうめて、プログラムを完成させよう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "- , !="
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "-"
+          },
+          {
+            "@type": "Answer",
+            "text": "+"
+          },
+          {
+            "@type": "Answer",
+            "text": "!="
+          },
+          {
+            "@type": "Answer",
+            "text": "=="
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第65問 回文にするには何か所直す？（前と後ろからくらべる）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q065/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q065";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第65問 回文にするには何か所直す？（前と後ろからくらべる）</h1>
+            <p>前から読んでも後ろから読んでも同じ並びを「回文」といいます。配列 kazu に入っている7個の数字を回文にするには、何か所の数字を直せばよいかを数えます。前から i 番目と、後ろから i 番目（番号 j）をくらべて、ちがっていたら naosu を1増やします。kazu の番号は0から6までで、真ん中の kazu[3] はくらべる相手がいないので、くらべるのは i が0から2までの3組です。2か所の穴をうめて、プログラムを完成させよう</p>
+            <p>難易度：★★★★☆（4／やや難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>kazu = [1,2,3,4,3,2,5]
+naosu = 0
+i を 0 から 2 まで 1 ずつ増やしながら繰り返す:
+  j = 6 ［A］ i
+  もし kazu[i] ［B］ kazu[j] ならば:
+    naosu = naosu + 1
+表示する(&quot;直すのは&quot; + naosu + &quot;か所&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>-</code></li>
+                <li><code>+</code></li>
+                <li><code>!=</code></li>
+                <li><code>==</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>前から i 番目の相手は、後ろから i 番目です。番号でいうと i = 0 なら 6、i = 1 なら 5、i = 2 なら 4 なので、j = 6 - i です。その2つがちがう（!=）ときだけ naosu を1増やします。kazu は 1,2,3,4,3,2,5 なので、1と5の組だけがちがい、答えは1か所です（5を1に直せば回文になります）</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>-</code></li>
+            <li>空欄 ［B］ … <code>!=</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>-</code>　［B］<code>==</code> … 相手の番号 j の求め方は正解です。でも == だと「同じだったら」数えるので、直さなくてよい組を数えてしまいます。結果は2か所になります。数えたいのは、前と後ろが「ちがう」組です</li>
+            <li>［A］<code>+</code>　［B］<code>!=</code> … != は正解です。でも j = 6 + i だと、j が 6, 7, 8 と増えていきます。kazu の番号は6までなので、7や8は配列の外です（このエディタでは0として計算され、結果は3か所になります）。i が1つ進んだら、後ろの番号は1つもどる、つまり引き算です</li>
+            <li>［A］<code>+</code>　［B］<code>==</code> … 2か所とも違います。j = 6 + i だと後ろの番号が配列の外へ出てしまい、さらに == では同じ組を数えてしまいます。結果は0か所になります。後ろからは 6, 5, 4 と番号をへらし、ちがう組（!=）を数えましょう</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q057/index.html">第57問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
