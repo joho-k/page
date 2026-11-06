@@ -4461,4 +4461,61 @@ window.quizData = {
         ],
         defaultHint: "ドント式は「得票 ÷（いま持っている議席 + 1）」を全部の党で計算し、その商がいちばん大きい党に1議席を渡す、をくり返します。議席を取った党は、次からわる数が1つ大きくなるので商が下がり、ほかの党に順番が回ります。議席を渡すところは giseki[touban] = giseki[touban] + 1 と、いまの数に1を足します。答えは A党1議席・B党3議席・C党1議席です"
     },
+    q066: {
+        title: "20までに素数はいくつ？（エラトステネスのふるい）",
+        addedAt: "2026-11-06",
+        difficulty: 5,
+        question: "「エラトステネスのふるい」で、20までの素数の個数を数えます。配列 furui の番号0〜20に、まだ消されていない数は1、消された数は0を入れておきます（0と1は素数ではないので最初から0）。i を2から4まで動かし、i がまだ残っていれば、i の倍数を i * i から順に n（20）まで0にして消します。最後に、残った1の数を数えます。2か所の穴をうめて、プログラムを完成させよう",
+        ast: [
+            { type: "assign", name: "n", value: "20" },
+            { type: "assign", name: "furui", value: "[0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]" },
+            {
+                type: "for", varName: "i", start: "2", end: "4", step: "1",
+                body: [
+                    {
+                        type: "if", condition: "furui[i] == 1",
+                        body: [
+                            { type: "assign", name: "j", value: "i * i" },
+                            {
+                                type: "while", condition: "j __BLANK_blank_a__ n",
+                                body: [
+                                    { type: "assign", name: "furui[j]", value: "0" },
+                                    { type: "assign", name: "j", value: "j + __BLANK_blank_b__" }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            { type: "assign", name: "kosu", value: "0" },
+            {
+                type: "for", varName: "k", start: "2", end: "20", step: "1",
+                body: [
+                    {
+                        type: "if", condition: "furui[k] == 1",
+                        body: [
+                            { type: "assign", name: "kosu", value: "kosu + 1" }
+                        ]
+                    }
+                ]
+            },
+            { type: "print", value: "\"20までの素数は\" + kosu + \"個\"" }
+        ],
+        choices: [
+            { label: "<=", value: "<=" },
+            { label: "<", value: "<" },
+            { label: "i", value: "i" },
+            { label: "1", value: "1" }
+        ],
+        answers: [
+            { values: ["<=", "i"], correct: true },
+            { values: ["<", "i"], correct: false,
+              hint: "j を i ずつ増やすのは正解です。でも j < n だと、j が20ちょうどのときに止まってしまい、20が消されずに残ります。結果は9個になります。n（20）も消す対象なので「以下」の <= です" },
+            { values: ["<=", "1"], correct: false,
+              hint: "<= は正解です。でも j を1ずつ増やすと、i の倍数だけでなく i * i から先の数を全部消してしまいます。2のときに4〜20がすべて消え、結果は2個（2と3）になります。消したいのは i の倍数なので、i ずつ進めます" },
+            { values: ["<", "1"], correct: false,
+              hint: "2か所とも違います。1ずつ進めると倍数以外の数まで消え、さらに < では20が消えずに残ります。結果は3個（2・3・20）になります。i の倍数だけを、20まで（<=）消しましょう" }
+        ],
+        defaultHint: "i の倍数は i * i, i * i + i, i * i + 2i, … と i ずつ増えるので、j = j + i です。n（20）も消す対象なので、くり返す条件は j <= n です。2の倍数（4,6,…,20）と3の倍数（9,12,15,18）が消え、4はすでに消えているので飛ばします。残るのは 2,3,5,7,11,13,17,19 で、答えは8個です"
+    },
 }
