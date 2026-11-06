@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第66問 20までに素数はいくつ？（エラトステネスのふるい）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="「エラトステネスのふるい」で、20までの素数の個数を数えます。配列 furui の番号0〜20に、まだ消されていない数は1、消された数は0を入れておきます（0と1は素数ではないので最初から0）。i を2から4まで動かし、i がまだ残っていれば、i の倍数を i * i から順に n（20）まで0にして消します。最後に、残った1の数を数えます。2か所の穴をうめて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,条件分岐,繰り返し,配列,20までに素数はいくつ？（エラトステネスのふるい）">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q066/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第66問 20までに素数はいくつ？（エラトステネスのふるい）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="「エラトステネスのふるい」で、20までの素数の個数を数えます。配列 furui の番号0〜20に、まだ消されていない数は1、消された数は0を入れておきます（0と1は素数ではないので最初から0）。i を2から4まで動かし、i がまだ残っていれば、i の倍数を i * i から順に n（20）まで0にして消します。最後に、残った1の数を数えます。2か所の穴をうめて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q066/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q066.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第66問 20までに素数はいくつ？（エラトステネスのふるい）｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="「エラトステネスのふるい」で、20までの素数の個数を数えます。配列 furui の番号0〜20に、まだ消されていない数は1、消された数は0を入れておきます（0と1は素数ではないので最初から0）。i を2から4まで動かし、i がまだ残っていれば、i の倍数を i * i から順に n（20）まで0にして消します。最後に、残った1の数を数えます。2か所の穴をうめて、プログラムを完成させよう｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度5）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q066.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q066/index.html#quiz",
+      "name": "第66問 20までに素数はいくつ？（エラトステネスのふるい）",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q066/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 条件分岐, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "「エラトステネスのふるい」で、20までの素数の個数を数えます。配列 furui の番号0〜20に、まだ消されていない数は1、消された数は0を入れておきます（0と1は素数ではないので最初から0）。i を2から4まで動かし、i がまだ残っていれば、i の倍数を i * i から順に n（20）まで0にして消します。最後に、残った1の数を数えます。2か所の穴をうめて、プログラムを完成させよう",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<= , i"
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "<="
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": "i"
+          },
+          {
+            "@type": "Answer",
+            "text": "1"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第66問 20までに素数はいくつ？（エラトステネスのふるい）",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q066/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q066";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第66問 20までに素数はいくつ？（エラトステネスのふるい）</h1>
+            <p>「エラトステネスのふるい」で、20までの素数の個数を数えます。配列 furui の番号0〜20に、まだ消されていない数は1、消された数は0を入れておきます（0と1は素数ではないので最初から0）。i を2から4まで動かし、i がまだ残っていれば、i の倍数を i * i から順に n（20）まで0にして消します。最後に、残った1の数を数えます。2か所の穴をうめて、プログラムを完成させよう</p>
+            <p>難易度：★★★★★（5／難しい）。単元：条件分岐・繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>n = 20
+furui = [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+i を 2 から 4 まで 1 ずつ増やしながら繰り返す:
+  もし furui[i] == 1 ならば:
+    j = i * i
+    j ［A］ n の間繰り返す:
+      furui[j] = 0
+      j = j + ［B］
+kosu = 0
+k を 2 から 20 まで 1 ずつ増やしながら繰り返す:
+  もし furui[k] == 1 ならば:
+    kosu = kosu + 1
+表示する(&quot;20までの素数は&quot; + kosu + &quot;個&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>&lt;=</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>i</code></li>
+                <li><code>1</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>i の倍数は i * i, i * i + i, i * i + 2i, … と i ずつ増えるので、j = j + i です。n（20）も消す対象なので、くり返す条件は j &lt;= n です。2の倍数（4,6,…,20）と3の倍数（9,12,15,18）が消え、4はすでに消えているので飛ばします。残るのは 2,3,5,7,11,13,17,19 で、答えは8個です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>&lt;=</code></li>
+            <li>空欄 ［B］ … <code>i</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>&lt;</code>　［B］<code>i</code> … j を i ずつ増やすのは正解です。でも j &lt; n だと、j が20ちょうどのときに止まってしまい、20が消されずに残ります。結果は9個になります。n（20）も消す対象なので「以下」の &lt;= です</li>
+            <li>［A］<code>&lt;=</code>　［B］<code>1</code> … &lt;= は正解です。でも j を1ずつ増やすと、i の倍数だけでなく i * i から先の数を全部消してしまいます。2のときに4〜20がすべて消え、結果は2個（2と3）になります。消したいのは i の倍数なので、i ずつ進めます</li>
+            <li>［A］<code>&lt;</code>　［B］<code>1</code> … 2か所とも違います。1ずつ進めると倍数以外の数まで消え、さらに &lt; では20が消えずに残ります。結果は3個（2・3・20）になります。i の倍数だけを、20まで（&lt;=）消しましょう</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/I7Da9CiT0LQ">第2回 条件分岐</a></li>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q057/index.html">第57問へ</a></li>
+                
+                <li><a href="../../index.html?topic=branch#problems">条件分岐の問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
