@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>第68問 エレベーターに何人乗れる？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ</title>
+    <meta name="description" content="重さの上限が300kgのエレベーターに、並んでいる順に人が乗っていきます。配列 omosa に並んでいる人の体重（＝[62,75,58,80,25,70]）が入っています。次の人が乗っても合計が300kg以下なら乗れる、こえるならそこで締め切ります。何人まで乗れるかを表示するプログラムを完成させよう。配列の番号は0から始まります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="keywords" content="情報I プログラミング,DNCL,共通テスト,繰り返し,配列,エレベーターに何人乗れる？">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://joho-kyoshitsu.com/dncl-scratch/quiz/q068/index.html">
+
+    <!-- オープングラフ -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="情報の教室">
+    <meta property="og:title" content="第68問 エレベーターに何人乗れる？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta property="og:description" content="重さの上限が300kgのエレベーターに、並んでいる順に人が乗っていきます。配列 omosa に並んでいる人の体重（＝[62,75,58,80,25,70]）が入っています。次の人が乗っても合計が300kg以下なら乗れる、こえるならそこで締め切ります。何人まで乗れるかを表示するプログラムを完成させよう。配列の番号は0から始まります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta property="og:url" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/q068/index.html">
+    <meta property="og:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q068.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="第68問 エレベーターに何人乗れる？｜共通テスト「情報I」プログラミング演習 | 共テプロトレ">
+    <meta name="twitter:description" content="重さの上限が300kgのエレベーターに、並んでいる順に人が乗っていきます。配列 omosa に並んでいる人の体重（＝[62,75,58,80,25,70]）が入っています。次の人が乗っても合計が300kg以下なら乗れる、こえるならそこで締め切ります。何人まで乗れるかを表示するプログラムを完成させよう。配列の番号は0から始まります（2か所の穴をうめよう）｜DNCL（共通テスト用プログラム表記）の穴埋め問題（難易度3）。ブラウザ上でプログラムを実際に動かしながら解けます。">
+    <meta name="twitter:image" content="https://joho-kyoshitsu.com/dncl-scratch/quiz/img/q068.png">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Quiz",
+      "@id": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q068/index.html#quiz",
+      "name": "第68問 エレベーターに何人乗れる？",
+      "url": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q068/index.html",
+      "educationalLevel": "高等学校",
+      "learningResourceType": "演習問題",
+      "teaches": "プログラミング, DNCL, アルゴリズム, 繰り返し, 配列",
+      "inLanguage": "ja",
+      "isAccessibleForFree": true,
+      "about": {
+        "@type": "Thing",
+        "name": "DNCL（共通テスト用プログラム表記）"
+      },
+      "hasPart": {
+        "@type": "Question",
+        "eduQuestionType": "Multiple choice",
+        "text": "重さの上限が300kgのエレベーターに、並んでいる順に人が乗っていきます。配列 omosa に並んでいる人の体重（＝[62,75,58,80,25,70]）が入っています。次の人が乗っても合計が300kg以下なら乗れる、こえるならそこで締め切ります。何人まで乗れるかを表示するプログラムを完成させよう。配列の番号は0から始まります（2か所の穴をうめよう）",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "0 , <="
+        },
+        "suggestedAnswer": [
+          {
+            "@type": "Answer",
+            "text": "0"
+          },
+          {
+            "@type": "Answer",
+            "text": "1"
+          },
+          {
+            "@type": "Answer",
+            "text": "<="
+          },
+          {
+            "@type": "Answer",
+            "text": "<"
+          },
+          {
+            "@type": "Answer",
+            "text": ">="
+          },
+          {
+            "@type": "Answer",
+            "text": ">"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://joho-kyoshitsu.com/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "共テプロトレ",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "第68問 エレベーターに何人乗れる？",
+          "item": "https://joho-kyoshitsu.com/dncl-scratch/quiz/q068/index.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 画面（エディタ）は editor.html を正として quiz-page.js が組み立てる。
+        window.QUIZ_ID = "q068";
+        window.DNCL_BASE = "../../";
+    </script>
+    <script src="../quiz-page.js"></script>
+</head>
+
+<body>
+    <noscript>
+        <article>
+            <h1>第68問 エレベーターに何人乗れる？</h1>
+            <p>重さの上限が300kgのエレベーターに、並んでいる順に人が乗っていきます。配列 omosa に並んでいる人の体重（＝[62,75,58,80,25,70]）が入っています。次の人が乗っても合計が300kg以下なら乗れる、こえるならそこで締め切ります。何人まで乗れるかを表示するプログラムを完成させよう。配列の番号は0から始まります（2か所の穴をうめよう）</p>
+            <p>難易度：★★★☆☆（3／標準）。単元：繰り返し・配列。共通テスト「情報I」で使われるDNCL（共通テスト用プログラム表記）の穴埋め問題です。JavaScriptを有効にすると、このページでプログラムを組み立てて実行しながら解けます。</p>
+
+            <h2>プログラム</h2>
+            <pre><code>omosa = [62,75,58,80,25,70]
+gokei = 0
+ninzu = ［A］
+gokei + omosa[ninzu] ［B］ 300 の間繰り返す:
+  gokei = gokei + omosa[ninzu]
+  ninzu = ninzu + 1
+表示する(ninzu + &quot;人まで乗れます（合計&quot; + gokei + &quot;kg）&quot;)</code></pre>
+            <p>空欄 ［A］・［B］ に当てはまるものを、次の選択肢から選びます。</p>
+
+            <h2>選択肢</h2>
+            <ul>
+                <li><code>0</code></li>
+                <li><code>1</code></li>
+                <li><code>&lt;=</code></li>
+                <li><code>&lt;</code></li>
+                <li><code>&gt;=</code></li>
+                <li><code>&gt;</code></li>
+            </ul>
+
+            <h2>ヒント</h2>
+            <p>配列の番号は0から始まるので、1人目は omosa[0] です。ninzu は「次に乗る人の番号」と「乗った人数」を両方表していて、0から始めます。「次の人が乗っても300kg以下なら乗れる」ので、条件は gokei + omosa[ninzu] &lt;= 300 です。62+75+58+80=275kg、5人目の25kgでちょうど300kg（乗れる）、6人目の70kgで370kg（乗れない）なので、答えは「5人まで乗れます（合計300kg）」です</p>
+
+            <h2>解答</h2>
+            <ul>
+            <li>空欄 ［A］ … <code>0</code></li>
+            <li>空欄 ［B］ … <code>&lt;=</code></li>
+            </ul>
+            <h2>よくある間違い</h2>
+            <ul>
+            <li>［A］<code>0</code>　［B］<code>&lt;</code> … 番号のはじまりは正解です。でも &lt; だと「300kgより軽いときだけ乗れる」になります。4人で275kg、5人目（25kg）が乗るとちょうど300kgですが、&lt; では 300 &lt; 300 が偽なので乗れず「4人」になってしまいます。「300kg以下」はちょうど300kgもふくむので &lt;= です</li>
+            <li>［A］<code>0</code>　［B］<code>&gt;=</code> … 番号のはじまりは正解です。でも &gt;= だと「合計が300kg以上のあいだ乗る」になります。1人目で 0 + 62 &gt;= 300 が偽なので、くり返しが1回も動かず「0人」になります。乗れるのは合計が300kg以下のときです</li>
+            <li>［A］<code>0</code>　［B］<code>&gt;</code> … 番号のはじまりは正解です。でも &gt; だと「合計が300kgをこえるあいだ乗る」という逆の意味になり、1人目の 0 + 62 &gt; 300 が偽なので「0人」になります</li>
+            <li>［A］<code>1</code>　［B］<code>&lt;=</code> … くらべる記号は正解です。でも ninzu を1から始めると、最初に見るのが omosa[1]（2人目の75kg）になり、1人目の62kgがとばされます。配列の番号は0から始まるので、ninzu = 0 です。さらに ninzu は乗った人数も表すので、1から始めると人数も1多くなってしまいます</li>
+            <li>［A］<code>1</code>　［B］<code>&lt;</code> … 2か所とも違います。1から始めると1人目（omosa[0]）がとばされ、人数も1多く数えてしまいます。また「300kg以下」はちょうど300kgもふくむので &lt; ではなく &lt;= です</li>
+            <li>［A］<code>1</code>　［B］<code>&gt;=</code> … 2か所とも違います。1から始めると1人目がとばされます。さらに &gt;= だと 0 + 75 &gt;= 300 が偽で1回もくり返さず、だれも乗っていないのに「1人」と表示されます</li>
+            <li>［A］<code>1</code>　［B］<code>&gt;</code> … 2か所とも違います。1から始めると1人目がとばされます。さらに &gt; だと1回もくり返さず、だれも乗っていないのに「1人」と表示されます</li>
+            </ul>
+
+            <h2>この単元の解説動画</h2>
+            <ul>
+                <li><a href="https://youtu.be/Lo0sNwFWQ3g">第3回 繰り返し</a></li>
+                <li><a href="https://youtu.be/IHeEIbfMA3Q">第4回 配列</a></li>
+            </ul>
+
+            <h2>ほかの問題</h2>
+            <ul>
+                <li><a href="../q057/index.html">第57問へ</a></li>
+                
+                <li><a href="../../index.html?topic=loop#problems">繰り返しの問題をすべて見る</a></li>
+                <li><a href="../../index.html?topic=array#problems">配列の問題をすべて見る</a></li>
+                <li><a href="../../index.html#problems">問題一覧</a></li>
+            </ul>
+        </article>
+    </noscript>
+</body>
+
+</html>
